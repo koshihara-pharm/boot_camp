@@ -13,8 +13,9 @@
 1. [docs/01_bootcamp_boshu.md](docs/01_bootcamp_boshu.md) — 募集要項（条件、日程、応募に必要なもの、題材の考え方）
 2. [docs/02_project_ideas.md](docs/02_project_ideas.md) — プロジェクトアイデア集（薬のアプリに近い項目）
 3. [docs/03_kodomo_kusuri_komarigoto.md](docs/03_kodomo_kusuri_komarigoto.md) — 子どもの薬で親が困ること（調べて分かったことと、まだ仮説のこと）
+4. [docs/04_bootcamp_susumekata.md](docs/04_bootcamp_susumekata.md) — BootCamp の進め方の資料（デモの作り方、プロダクトの考え方、広め方）の要約と、このプロジェクトへの当てはめ
 
-この2つは原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
+01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
 
 ## 締切
