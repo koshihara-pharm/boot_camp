@@ -15,6 +15,7 @@
 3. [docs/03_kodomo_kusuri_komarigoto.md](docs/03_kodomo_kusuri_komarigoto.md) — 子どもの薬で親が困ること（調べて分かったことと、まだ仮説のこと）
 4. [docs/04_bootcamp_susumekata.md](docs/04_bootcamp_susumekata.md) — BootCamp の進め方の資料（デモの作り方、プロダクトの考え方、広め方）の要約と、このプロジェクトへの当てはめ
 5. [docs/05_shoni_kusuri_needs.md](docs/05_shoni_kusuri_needs.md) — 小児の薬のニーズ、今あるサービス、お金を払う人（マネタイズの3案）
+6. [docs/06_hoikuen_shorui.md](docs/06_hoikuen_shorui.md) — 保育園に出す薬と病気の書類（与薬依頼書、坐薬の指示書、意見書、登園届、アレルギーの指導表）
 
 01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。

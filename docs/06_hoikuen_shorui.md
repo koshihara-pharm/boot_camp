@@ -1,0 +1,38 @@
+# 保育園に出す、薬と病気の書類
+
+- 作成: 2026-10-10
+- 目的: 親が保育園とのやりとりでどんな書類を書いているかを知り、アプリや薬局が手伝える部分を探す
+- 様式は自治体と園ごとに違う。ここにあるのは例。実際には通っている園と自治体の様式で確かめる
+
+## 書類の一覧
+
+| 書類 | 書く人 | いつ | 中身 | 出どころ |
+|---|---|---|---|---|
+| 与薬依頼書（与薬依頼票） | 親 | 園で薬を飲ませてほしいとき。薬が変わるたびに書き直し | 医師名、薬の種類、飲ませ方、保管方法など。薬の説明書のコピーを付ける園が多い | [厚労省 参考資料](https://www.mhlw.go.jp/stf/shingi/2r9852000000zj6g-att/2r9852000000zjc8.pdf)、[北本市](https://www.city.kitamoto.lg.jp/material/files/group/24/yoyakuyousiki2.pdf)、[横浜市](https://ko.city.yokohama.lg.jp/kosodate-kyoiku/hoiku-yoji/shisetsu/shisetsutaisaku/shitukoujou/kansen/20190528074218539.files/0028_20240322.pdf) |
+| 坐薬（ダイアップなど）の指示書・意見書 | 主治医（＋親の依頼書） | 熱性けいれん予防の坐薬を園に預けるとき | 病名、薬の名前と量、使う条件（何度で）、保護者の到着を待てない理由、保管方法、中止の条件 | [北本市 様式4](https://www.city.kitamoto.lg.jp/material/files/group/24/yoyakuyousiki4.pdf)、[横浜市](https://ko.city.yokohama.lg.jp/kosodate-kyoiku/hoiku-yoji/shisetsu/shisetsutaisaku/shitukoujou/kansen/20190528074218539.files/0024_20240322.pdf) |
+| 医師の意見書（登園許可書） | 医師 | 麻しん、水痘、おたふくかぜ、百日咳などのあと、登園を再開するとき | 病名、登園してよい日。作成費用を親が払う自治体もある | [狛江市](https://chitosek.or.jp/admin/wp-content/uploads/2024/04/21komae_iken.pdf)、[港区](https://www.city.minato.tokyo.jp/documents/142798/aishiikensyor511.pdf)、[東大和市](https://www.city.higashiyamato.lg.jp/_res/projects/default_project/_page_/001/007/774/0324iken.pdf) |
+| 登園届 | 親 | インフルエンザ、溶連菌、手足口病などのあと、登園を再開するとき（医師の診断を受けたうえで親が書く） | 病名、受診日、医療機関名など。対象の病気は自治体で違う | [白井市](https://www.city.shiroi.chiba.jp/material/files/group/15/ikennsyonenngounasi.pdf)、[八千代市](https://www.city.yachiyo.lg.jp/uploaded/attachment/28797.pdf) |
+| アレルギー疾患生活管理指導表 | 主治医が書き、親が園に出す | 食物アレルギー、ぜん息などで園の配慮が必要なとき。エピペンを預けるときも | 病型、除去する食物、緊急時の対応（エピペンなど） | [厚労省 アレルギー対応ガイドライン](https://www.mhlw.go.jp/stf/shingi/2r9852000001hqa7-att/2r9852000001hqki.pdf)、[東京都 Q&A](https://www.hokeniryo.metro.tokyo.lg.jp/allergy/pdf/pri05_QA.pdf) |
+| 病児・病後児保育の連絡票 | 親（＋医師） | 病児保育を使うとき | 症状、薬の名前と使い方（頓服を含む） | [所沢市](https://www.city.tokorozawa.saitama.jp/kosodatekyouiku/hoikuen/ichijihoiku/kyuujitsubyougoji.files/20230613_renrakuhyou_kureyon.pdf) |
+
+国の元になるのは「保育所における感染症対策ガイドライン（2018年改訂版、2023年5月一部改訂）」。医師の意見書と保護者の登園届の参考様式が別添に付いている（[こども家庭庁の改訂について 厚労省資料](https://www.mhlw.go.jp/content/10900000/20231010_policies_hoiku_25.pdf)）。本文の別添は未確認。
+
+## 与薬のルール（園の例）
+
+- 園が飲ませるのは、医師が処方した薬だけ。市販薬、前の残り、兄弟の薬は受け付けない（[さくらばし保育園](https://www.nichiikids.net/nursery/sakurabashi/item/2024/04/b7d996c7685781370b512072fcde3bb7.pdf)）
+- 与薬は原則として親がする。園が代わりにするのは、慢性の病気など限られた場合だけ、という自治体もある（[北本市](https://www.city.kitamoto.lg.jp/material/files/group/24/yoyakuyousiki2.pdf)）
+- 「熱が出たら」のような頓服は預からない園がある（[椎名町ちとせ保育園](https://www.chitosek.or.jp/admin/wp-content/uploads/2021/02/与薬について　R2年度版.pdf)）
+- 1回分ずつ持たせる、容器に名前を書く、など（[さくらばし保育園](https://www.nichiikids.net/nursery/sakurabashi/item/2024/04/b7d996c7685781370b512072fcde3bb7.pdf)）
+- 園は薬を鍵のかかる場所に保管し、複数の保育士で人違いや二重投与を確認する（[厚労省 参考資料](https://www.mhlw.go.jp/stf/shingi/2r9852000000zj6g-att/2r9852000000zjc8.pdf)）
+
+## 気づいたこと（アイデアの材料。まだ確かめていない）
+
+1. **与薬依頼書に書く中身の多くは、薬局が渡す「薬の説明書」に載っている。** 薬の名前、飲ませ方、保管方法など。薬局が依頼書の下書きを作れれば、親は書き写さずに済む
+2. **園で飲ませずに済むのが、親にも園にも一番楽。** 1日2回（朝・夕）で済む飲み方にできるか、を医師に相談する道もある。薬剤師として現場でどうしているかを確認する
+3. **坐薬やエピペンは医師の書類が必要。** アプリが関わるのは、親が書類をそろえる手順の案内と、期限（書き直しの時期）のお知らせくらい
+4. **登園届・意見書は病気のあとに出す。** 「いつから登園できるか」の目安は自治体の様式に書いてある。アプリが自分で判断するのではなく、自治体の様式へ案内する形なら手伝える
+
+## 確かめること
+
+- ユーザーの子どもの園では、薬について何を出しているか（与薬依頼書の様式、頓服の扱い）
+- 窓口で「保育園の分どうしたらいい？」と聞かれることはあるか。薬局では今どう対応しているか（昼の分を分ける、依頼書の書き方を教える、など）
