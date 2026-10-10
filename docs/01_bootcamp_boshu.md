@@ -46,7 +46,8 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
   - 公開 GitHub リポジトリ（中身のあるもの）
   - 公開している Web サイトの URL
   - 公開できない GUI ツール等は動作を撮影した動画
-- 応募フォームから提出（チームでも1人ずつ）
+- 応募フォーム: https://forms.gle/7YfB88xamaDz4xdb7 （チームでも1人ずつ）
+- 「非エンジニア/PM/営業の方でも簡単なもので良いので、Vibe Coding で必ずプロダクトを作成してください」（原文）
 
 ## 題材についての考え方（審査・発表の軸）
 
@@ -73,3 +74,18 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
 - クラウドや AI の実費は自己負担（Coding Agent は $100 以上のプラン推奨）
 - 作ったものの権利は作成した参加者に帰属
 - SS が提供するのは Slack チャンネルとアドバイスのみ
+
+## 過去の参加者のレポートと最終発表
+
+出どころ: GitHub 版の募集ページ https://github.com/SingularitySociety/societys_statement/blob/main/bootcamp.md （2026-10-10 確認）
+
+- [第1回 BootCamp 最終発表](https://note.com/singsoc/n/nb895ca875d60)
+- [BootCamp 2nd 最終発表会](https://note.com/singsoc/n/n6db0d7c98bf0)
+- [エンジニア未経験のPMがChatGPTを使って簡単なプログラミングだけでプロダクトを作った話](https://note.com/singsoc/n/n55d035a3e9f9)
+- [地域課題への挑戦 — 若葉台コミュニティラジオ](https://note.com/yuki0627/n/n5b371547f148)
+- [無名カードの挑戦＠AITs名刺トレカ](https://note.com/singsoc/n/n0eced6210355)
+- [おしゃべり猫型ロボット「ミーア」](https://kazulog.fun/business/singularity-society-boot-camp/)
+- [visionOSアプリ、Teegardenの開発物語](https://note.com/singsoc/n/n1fefbc0fcaca)
+- [Vision Proで空間ジェスチャーアプリを作った物語](https://note.com/singsoc/n/n86955f6b092a)
+
+作り方の参考: [demo.md](https://github.com/SingularitySociety/societys_statement/blob/main/bootcamp/demo.md)（完成版ではなく、価値の本質だけを示す最小のデモを作る。HTML 1枚や固定データでもよい。3〜5人に見せて反応を見る）
