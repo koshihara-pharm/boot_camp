@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>おくすり なにに混ぜる？</title>
-<meta name="description" content="子どもの粉薬の味、何に混ぜていいか、飲ませ方が分かり、飲めたらスタンプを押せるページ（デモ版）">
+<title>こどもおくすりサポート</title>
+<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方、飲んだ記録、家族や保育園への共有、のめた！スタンプ（デモ版）">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
@@ -291,14 +291,124 @@
   }
   .day li .emoji { font-size: 32px; }
   .day li .time { color: var(--muted); font-size: 15px; }
+  .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 16px; }
+  .nav button, .secondary {
+    min-height: 52px;
+    font-size: 17px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font-display);
+  }
+  .nav b { color: var(--accent); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .row > * { flex: 1 1 140px; }
+  .primary {
+    min-height: 52px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    background: var(--accent);
+    color: var(--accent-text);
+    cursor: pointer;
+    font-family: var(--font-display);
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+  }
+  .danger { color: var(--bad); }
+
+  .med {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+  .med h3 { margin: 0; font-size: 20px; }
+  .med .who { color: var(--muted); font-size: 15px; }
+  .med dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0 0; font-size: 16px; }
+  .med dt { color: var(--muted); }
+  .med dd { margin: 0; min-width: 0; }
+  .progress { margin-top: 12px; }
+  .progress .bar { height: 12px; border-radius: 999px; background: var(--taste-bg); overflow: hidden; }
+  .progress .fill { height: 100%; background: var(--stamp); }
+  .progress p { margin: 4px 0 0; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .done-badge { display: inline-block; margin-top: 8px; padding: 4px 10px; border-radius: 999px; background: var(--best-bg); font-weight: bold; }
+
+  .share { margin-top: 24px; }
+  .share textarea {
+    width: 100%;
+    min-height: 220px;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+  .tabs { display: flex; gap: 8px; margin: 8px 0; }
+  .tabs button {
+    flex: 1;
+    min-height: 44px;
+    font-size: 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .tabs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  .status { font-size: 15px; color: var(--good); min-height: 1.6em; margin: 4px 0 0; }
+
+  form.med-form { display: grid; gap: 16px; margin-top: 12px; }
+  .field label, .field legend { display: block; font-weight: bold; margin-bottom: 4px; }
+  .field small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .field input[type="text"], .field input[type="number"], .field input[type="date"], .field select {
+    width: 100%;
+    font-size: 18px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+  }
+  fieldset.field { border: none; padding: 0; margin: 0; }
+  .checks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .checks label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 48px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    font-weight: normal;
+    margin: 0;
+    cursor: pointer;
+  }
+  .checks input { width: 20px; height: 20px; }
+  .note-box { font-size: 15px; color: var(--muted); background: var(--taste-bg); border-radius: 12px; padding: 10px 12px; margin: 0; }
 </style>
 </head>
 <body>
 <main>
   <section id="pick">
-    <div class="toplinks"><button class="link-button" id="open-book" type="button">スタンプ帳</button></div>
-    <h1>おくすり なにに混ぜる？</h1>
-    <p class="lead">子どもの粉薬の味、何に混ぜていいか、飲ませ方が分かります。飲めたらスタンプを押しましょう。</p>
+    <h1>こどもおくすりサポート</h1>
+    <p class="lead">子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方が分かります。飲めたらスタンプ。記録は家族や保育園に送れます。</p>
+    <div class="nav">
+      <button type="button" data-go="record">おくすり記録 <b id="med-count"></b></button>
+      <button type="button" data-go="stamps">スタンプ帳</button>
+    </div>
     <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
     <ul id="list" class="list"></ul>
   </section>
@@ -306,6 +416,7 @@
   <section id="detail" hidden>
     <button class="back" data-go="" type="button">← 薬を選びなおす</button>
     <div id="card" class="card"></div>
+    <div class="row"><button class="secondary" type="button" id="add-from-drug">この薬を「おくすり記録」に入れる</button></div>
 
     <h2 class="section-title">飲ませ方のコツ</h2>
     <p class="section-lead">どの粉薬にも使える方法です。押すと説明が開きます。</p>
@@ -319,6 +430,79 @@
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
+  </section>
+
+  <section id="record" hidden>
+    <button class="back" data-go="" type="button">← もどる</button>
+    <h1>おくすり記録</h1>
+    <p class="lead">いま飲んでいる薬です。記録はこのスマホの中だけに保存され、送るかどうかはあなたが決めます。</p>
+    <div id="med-list"></div>
+    <div class="row"><button class="primary" type="button" data-go="record-new">＋ 薬を追加する</button></div>
+
+    <div class="share" id="share">
+      <h2 class="section-title">家族や保育園に伝える</h2>
+      <div class="tabs" role="group" aria-label="伝える相手">
+        <button type="button" id="tab-family" aria-pressed="true">家族に</button>
+        <button type="button" id="tab-school" aria-pressed="false">保育園に</button>
+      </div>
+      <textarea id="share-text" readonly aria-label="送る文章"></textarea>
+      <div class="row">
+        <a class="primary" id="share-line" href="#" target="_blank" rel="noopener">LINEで送る</a>
+        <button class="secondary" type="button" id="copy">文章をコピー</button>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+    </div>
+  </section>
+
+  <section id="record-new" hidden>
+    <button class="back" data-go="record" type="button">← おくすり記録にもどる</button>
+    <h1>薬を追加する</h1>
+    <p class="note-box">薬袋や薬の説明書に書いてあるとおりに入れてください。量や回数を、このページが決めることはありません。</p>
+    <form class="med-form" id="med-form">
+      <div class="field">
+        <label for="f-drug">薬の名前</label>
+        <select id="f-drug" required></select>
+      </div>
+      <div class="field" id="f-other-wrap" hidden>
+        <label for="f-other">薬の名前（リストにない薬）</label>
+        <input type="text" id="f-other" placeholder="例: ○○シロップ">
+      </div>
+      <div class="field">
+        <label for="f-child">お子さんの呼び名（なくてもOK）</label>
+        <input type="text" id="f-child" placeholder="例: はるくん">
+      </div>
+      <fieldset class="field">
+        <legend>飲む時間</legend>
+        <div class="checks">
+          <label><input type="checkbox" name="times" value="朝" checked>朝</label>
+          <label><input type="checkbox" name="times" value="昼">昼</label>
+          <label><input type="checkbox" name="times" value="夕" checked>夕</label>
+          <label><input type="checkbox" name="times" value="寝る前">寝る前</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="f-dose">1回の量</label>
+        <input type="text" id="f-dose" placeholder="例: 1包、5mL">
+        <small>薬袋に書いてある量</small>
+      </div>
+      <div class="field">
+        <label for="f-days">何日分</label>
+        <input type="number" id="f-days" min="1" max="60" value="5" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label for="f-start">飲みはじめた日</label>
+        <input type="date" id="f-start">
+      </div>
+      <div class="field">
+        <label for="f-clinic">処方した医療機関（なくてもOK）</label>
+        <input type="text" id="f-clinic" placeholder="保育園の依頼書に書くときに使います">
+      </div>
+      <div class="field">
+        <label for="f-note">メモ（なくてもOK）</label>
+        <input type="text" id="f-note" placeholder="例: アイスに混ぜたら飲めた">
+      </div>
+      <button class="primary" type="submit">追加する</button>
+    </form>
   </section>
 
   <section id="book" hidden>
@@ -360,25 +544,12 @@
     { key: "warn", title: "！ 効き目に影響することがある", cls: "g-warn",
       text: "混ぜる前に、薬剤師に確認してください。" },
   ];
-  const STORE_KEY = "okusuri.stamps.v1";
+  const TIME_ORDER = ["朝", "昼", "夕", "寝る前"];
+  const STAMPS_KEY = "okusuri.stamps.v1";
+  const MEDS_KEY = "okusuri.meds.v1";
+  const OTHER = "__other__";
 
-  function groupOf(code) {
-    const mark = code.replace("*", "");
-    if (mark === "o") return code.endsWith("*") ? "best" : "ok";
-    if (mark === "ox") return "split";
-    if (mark === "x") return "bad";
-    if (mark === "ov" || mark === "xv") return "warn";
-    return "none";
-  }
-
-  function warnLabel(code) {
-    return code.startsWith("ov") ? "味は問題なし" : "飲みにくくもなる";
-  }
-
-  function toKatakana(s) {
-    return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
-  }
-
+  // ---- 小さな道具 ----
   function el(tag, attrs = {}, children = []) {
     const node = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
@@ -389,36 +560,37 @@
     return node;
   }
 
-  function sourceLine(sources) {
-    const parts = ["出どころ: "];
-    sources.forEach((s, i) => {
-      if (i > 0) parts.push("、");
-      parts.push(el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }));
-    });
-    return el("p", { class: "source" }, parts);
-  }
-
-  // スタンプの記録（このスマホの中だけ）
-  function loadStamps() {
+  function load(key) {
     try {
-      return JSON.parse(localStorage.getItem(STORE_KEY)) || [];
+      return JSON.parse(localStorage.getItem(key)) || [];
     } catch {
       return [];
     }
   }
 
-  function saveStamps(stamps) {
+  function save(key, value) {
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify(stamps));
+      localStorage.setItem(key, JSON.stringify(value));
     } catch {
       // 保存できない環境（プライベートモードなど）では、この画面の中だけで覚える
     }
   }
 
-  let stamps = loadStamps();
+  function toKatakana(s) {
+    return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  }
 
   function dayKey(date) {
-    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+  }
+
+  function parseDay(key) {
+    const [y, m, d] = key.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function shortDate(date) {
+    return (date.getMonth() + 1) + "/" + date.getDate();
   }
 
   function dayLabel(date) {
@@ -434,34 +606,103 @@
     return date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0");
   }
 
+  function sourceLine(sources) {
+    const parts = ["出どころ: "];
+    sources.forEach((s, i) => {
+      if (i > 0) parts.push("、");
+      parts.push(el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }));
+    });
+    return el("p", { class: "source" }, parts);
+  }
+
+  // ---- 食べ物との相性 ----
+  function groupOf(code) {
+    const mark = code.replace("*", "");
+    if (mark === "o") return code.endsWith("*") ? "best" : "ok";
+    if (mark === "ox") return "split";
+    if (mark === "x") return "bad";
+    if (mark === "ov" || mark === "xv") return "warn";
+    return "none";
+  }
+
+  function warnLabel(code) {
+    return code.startsWith("ov") ? "味は問題なし" : "飲みにくくもなる";
+  }
+
+  function foodsIn(drug, keys) {
+    return drug.foods
+      .map((code, i) => ({ food: FOODS[i], group: groupOf(code) }))
+      .filter((f) => keys.includes(f.group))
+      .map((f) => f.food);
+  }
+
+  // ---- 記録 ----
+  let stamps = load(STAMPS_KEY);
+  let meds = load(MEDS_KEY);
+
+  function medEnd(med) {
+    const end = parseDay(med.start);
+    end.setDate(end.getDate() + Number(med.days) - 1);
+    return end;
+  }
+
+  function medTotal(med) {
+    return med.times.length * Number(med.days);
+  }
+
+  function stampsFor(med) {
+    const from = parseDay(med.start);
+    const to = medEnd(med);
+    to.setDate(to.getDate() + 1);
+    return stamps.filter((s) => s.drug === med.drug && new Date(s.at) >= from && new Date(s.at) < to);
+  }
+
+  function todayStampsForDrug(name) {
+    const today = dayKey(new Date());
+    return stamps.filter((s) => s.drug === name && dayKey(new Date(s.at)) === today);
+  }
+
+  function activeMedFor(name) {
+    const today = new Date();
+    return meds.find((m) => m.drug === name && parseDay(m.start) <= today && today <= new Date(medEnd(m).getTime() + 86400000));
+  }
+
+  // ---- 画面 ----
+  const screens = {
+    pick: document.getElementById("pick"),
+    detail: document.getElementById("detail"),
+    record: document.getElementById("record"),
+    recordNew: document.getElementById("record-new"),
+    book: document.getElementById("book"),
+  };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
-  const pick = document.getElementById("pick");
-  const detail = document.getElementById("detail");
-  const book = document.getElementById("book");
   const card = document.getElementById("card");
   const stampBar = document.getElementById("stamp-bar");
   const overlay = document.getElementById("overlay");
-  let current = null;
+  let currentDrugName = null;
+  let pendingDrug = null;
+  let shareMode = "family";
+
+  function go(hash) {
+    location.hash = hash;
+  }
 
   function renderList() {
     const query = toKatakana(q.value.trim()).toUpperCase();
-    const hits = DRUGS.filter((d) => d.name.toUpperCase().includes(query));
+    const hits = DRUGS.map((d, i) => ({ d, i })).filter(({ d }) => d.name.toUpperCase().includes(query));
     list.replaceChildren(
-      ...hits.map((d) => {
+      ...hits.map(({ d, i }) => {
         const button = el("button", { type: "button", text: d.name });
-        button.addEventListener("click", () => { location.hash = encodeURIComponent(d.name); });
+        button.addEventListener("click", () => go("drug-" + i));
         return el("li", {}, [button]);
       })
     );
     if (hits.length === 0) {
       list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
-  }
-
-  function todayStampsFor(drug) {
-    const today = dayKey(new Date());
-    return stamps.filter((s) => s.drug === drug.name && dayKey(new Date(s.at)) === today);
+    const active = meds.filter((m) => new Date() <= new Date(medEnd(m).getTime() + 86400000)).length;
+    document.getElementById("med-count").textContent = active > 0 ? "（" + active + "）" : "";
   }
 
   function renderCard(drug) {
@@ -473,7 +714,7 @@
       el("div", { class: "taste" }, [el("b", { text: "あじ" }), drug.taste]),
     ];
 
-    const todays = todayStampsFor(drug);
+    const todays = todayStampsForDrug(drug.name);
     if (todays.length > 0) {
       parts.push(el("p", { class: "today" }, ["きょうのスタンプ ", el("span", { text: todays.map((s) => s.emoji).join(" ") })]));
     }
@@ -512,7 +753,6 @@
     }
 
     parts.push(sourceLine([{ name: SOURCE.title + "（" + SOURCE.revised + "）", url: SOURCE.url }]));
-
     card.replaceChildren(...parts);
   }
 
@@ -524,6 +764,117 @@
         sourceLine(h.sources),
       ]))
     );
+  }
+
+  function renderRecord() {
+    const target = document.getElementById("med-list");
+    const share = document.getElementById("share");
+    if (meds.length === 0) {
+      target.replaceChildren(el("p", { class: "empty", text: "まだ薬はありません。「＋ 薬を追加する」から、いま飲んでいる薬を入れてください。" }));
+      share.hidden = true;
+      return;
+    }
+    share.hidden = false;
+    target.replaceChildren(...meds.map((med) => {
+      const total = medTotal(med);
+      const done = stampsFor(med).length;
+      const today = todayStampsForDrug(med.drug).length;
+      const pct = Math.min(100, Math.round((done / total) * 100));
+      const drugIndex = DRUGS.findIndex((d) => d.name === med.drug);
+
+      const info = el("dl", {}, [
+        el("dt", { text: "飲む時間" }), el("dd", { text: med.times.join("・") }),
+        el("dt", { text: "1回の量" }), el("dd", { text: med.dose || "（未入力）" }),
+        el("dt", { text: "期間" }), el("dd", { text: shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "（" + med.days + "日分）" }),
+      ]);
+      if (med.note) info.append(el("dt", { text: "メモ" }), el("dd", { text: med.note }));
+
+      const progress = el("div", { class: "progress" }, [
+        el("div", { class: "bar", role: "img", "aria-label": done + " / " + total + " 回" }, [el("div", { class: "fill", style: "width:" + pct + "%" })]),
+        el("p", { text: "スタンプ " + done + " / " + total + " 回（きょう " + today + " / " + med.times.length + " 回）" }),
+      ]);
+
+      const actions = el("div", { class: "row" });
+      const stampButton = el("button", { class: "primary", type: "button", text: "のめた！" });
+      stampButton.addEventListener("click", () => addStamp(med.drug));
+      actions.append(stampButton);
+      if (drugIndex >= 0) {
+        const open = el("button", { class: "secondary", type: "button", text: "混ぜ方を見る" });
+        open.addEventListener("click", () => go("drug-" + drugIndex));
+        actions.append(open);
+      }
+      const remove = el("button", { class: "secondary danger", type: "button", text: "記録から消す" });
+      remove.addEventListener("click", () => {
+        meds = meds.filter((m) => m.id !== med.id);
+        save(MEDS_KEY, meds);
+        renderRecord();
+      });
+      actions.append(remove);
+
+      const box = el("div", { class: "med" }, [
+        el("h3", { text: med.drug }),
+      ]);
+      if (med.child) box.append(el("div", { class: "who", text: med.child }));
+      box.append(info, progress);
+      if (done >= total) box.append(el("div", { class: "done-badge", text: "🏅 さいごまで のめたね！" }));
+      box.append(actions);
+      return box;
+    }));
+    renderShare();
+  }
+
+  function familyText() {
+    const now = new Date();
+    const lines = ["【おくすりメモ】" + shortDate(now) + " " + timeLabel(now)];
+    for (const med of meds) {
+      lines.push("");
+      lines.push("■ " + med.drug + (med.child ? "（" + med.child + "）" : ""));
+      lines.push("・" + med.times.join("・") + " / " + (med.dose ? "1回 " + med.dose + " / " : "") + med.days + "日分（" + shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "）");
+      const todays = todayStampsForDrug(med.drug);
+      lines.push("・きょう: " + (todays.length ? todays.map((s) => timeLabel(new Date(s.at)) + " のめた").join("、") : "まだ") + "（" + todays.length + " / " + med.times.length + " 回）");
+      const drug = DRUGS.find((d) => d.name === med.drug);
+      if (drug) {
+        const good = foodsIn(drug, ["best", "ok"]);
+        const bad = foodsIn(drug, ["bad", "warn"]);
+        if (good.length) lines.push("・混ぜていい: " + good.join("、"));
+        if (bad.length) lines.push("・混ぜないほうがいい: " + bad.join("、"));
+      }
+      if (med.note) lines.push("・メモ: " + med.note);
+    }
+    return lines.join("\n");
+  }
+
+  function schoolText() {
+    const lunch = meds.filter((m) => m.times.includes("昼"));
+    const lines = ["【保育園 与薬依頼用メモ】", "園の用紙に書き写してください。"];
+    if (lunch.length === 0) {
+      lines.push("", "昼に飲む薬は入っていません。園で飲ませる薬はないかもしれません。");
+      return lines.join("\n");
+    }
+    for (const med of lunch) {
+      lines.push("");
+      if (med.child) lines.push("お子さん: " + med.child);
+      lines.push("薬の名前: " + med.drug);
+      lines.push("1回の量: " + (med.dose || "（薬袋を見て記入）"));
+      lines.push("飲ませる時間: 昼");
+      lines.push("期間: " + shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "（" + med.days + "日分）");
+      lines.push("処方した医療機関: " + (med.clinic || "（記入）"));
+      const drug = DRUGS.find((d) => d.name === med.drug);
+      if (drug) {
+        const good = foodsIn(drug, ["best", "ok"]);
+        if (good.length) lines.push("飲ませ方の参考（混ぜていい食べ物）: " + good.join("、"));
+      }
+    }
+    return lines.join("\n");
+  }
+
+  function renderShare() {
+    const text = shareMode === "family" ? familyText() : schoolText();
+    document.getElementById("share-text").value = text;
+    document.getElementById("share-line").href = "https://line.me/R/share?text=" + encodeURIComponent(text);
+    document.getElementById("tab-family").setAttribute("aria-pressed", String(shareMode === "family"));
+    document.getElementById("tab-school").setAttribute("aria-pressed", String(shareMode === "school"));
+    document.getElementById("copy-status").textContent = "";
   }
 
   function renderBook() {
@@ -550,50 +901,140 @@
     );
   }
 
-  function addStamp() {
-    if (!current) return;
+  // ---- 薬を追加するフォーム ----
+  function prepareForm() {
+    const select = document.getElementById("f-drug");
+    if (select.options.length === 0) {
+      select.append(...DRUGS.map((d) => el("option", { value: d.name, text: d.name })));
+      select.append(el("option", { value: OTHER, text: "リストにない薬" }));
+    }
+    if (pendingDrug) select.value = pendingDrug;
+    pendingDrug = null;
+    document.getElementById("f-other-wrap").hidden = select.value !== OTHER;
+    const start = document.getElementById("f-start");
+    if (!start.value) start.value = dayKey(new Date());
+  }
+
+  document.getElementById("f-drug").addEventListener("change", (e) => {
+    document.getElementById("f-other-wrap").hidden = e.target.value !== OTHER;
+  });
+
+  document.getElementById("med-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const selected = document.getElementById("f-drug").value;
+    const drug = selected === OTHER ? document.getElementById("f-other").value.trim() : selected;
+    const times = TIME_ORDER.filter((t) => document.querySelector('input[name="times"][value="' + t + '"]').checked);
+    if (!drug) {
+      document.getElementById("f-other").focus();
+      return;
+    }
+    if (times.length === 0) {
+      document.querySelector('input[name="times"]').focus();
+      return;
+    }
+    meds.push({
+      id: String(Date.now()),
+      drug,
+      child: document.getElementById("f-child").value.trim(),
+      times,
+      dose: document.getElementById("f-dose").value.trim(),
+      days: Math.max(1, Number(document.getElementById("f-days").value) || 1),
+      start: document.getElementById("f-start").value || dayKey(new Date()),
+      clinic: document.getElementById("f-clinic").value.trim(),
+      note: document.getElementById("f-note").value.trim(),
+    });
+    save(MEDS_KEY, meds);
+    e.target.reset();
+    go("record");
+  });
+
+  // ---- スタンプ ----
+  let lastStampDrug = null;
+
+  function addStamp(name) {
     const emoji = STAMPS[Math.floor(Math.random() * STAMPS.length)];
-    stamps.push({ drug: current.name, at: new Date().toISOString(), emoji });
-    saveStamps(stamps);
+    stamps.push({ drug: name, at: new Date().toISOString(), emoji });
+    save(STAMPS_KEY, stamps);
+    lastStampDrug = name;
     document.getElementById("big-stamp").textContent = emoji;
-    const count = todayStampsFor(current).length;
-    document.getElementById("praise-detail").textContent = "きょう " + count + "こめ のスタンプ";
+
+    const med = activeMedFor(name);
+    let title = "のめたね！すごい！";
+    let detail = "きょう " + todayStampsForDrug(name).length + "こめ のスタンプ";
+    if (med) {
+      const done = stampsFor(med).length;
+      const total = medTotal(med);
+      if (done === total) {
+        title = "さいごまで のめたね！";
+        detail = med.days + "日分、ぜんぶ のめました 🏅";
+      } else if (done < total) {
+        detail += "（あと " + (total - done) + " 回）";
+      }
+    }
+    document.getElementById("praise-title").textContent = title;
+    document.getElementById("praise-detail").textContent = detail;
     overlay.hidden = false;
     document.getElementById("close-praise").focus();
   }
 
   function closePraise() {
     overlay.hidden = true;
-    if (current) renderCard(current);
+    route(false);
   }
 
-  function undoStamp() {
-    stamps.pop();
-    saveStamps(stamps);
+  document.getElementById("stamp").addEventListener("click", () => { if (currentDrugName) addStamp(currentDrugName); });
+  document.getElementById("close-praise").addEventListener("click", closePraise);
+  document.getElementById("undo").addEventListener("click", () => {
+    if (lastStampDrug) {
+      stamps.pop();
+      save(STAMPS_KEY, stamps);
+      lastStampDrug = null;
+    }
     closePraise();
-  }
+  });
 
-  function route() {
-    const hash = decodeURIComponent(location.hash.slice(1));
-    current = DRUGS.find((d) => d.name === hash) || null;
-    const showBook = hash === "スタンプ帳";
-    pick.hidden = Boolean(current) || showBook;
-    detail.hidden = !current;
-    book.hidden = !showBook;
-    stampBar.hidden = !current;
-    if (current) renderCard(current);
-    if (showBook) renderBook();
-    window.scrollTo(0, 0);
+  // ---- 伝える ----
+  document.getElementById("tab-family").addEventListener("click", () => { shareMode = "family"; renderShare(); });
+  document.getElementById("tab-school").addEventListener("click", () => { shareMode = "school"; renderShare(); });
+  document.getElementById("copy").addEventListener("click", async () => {
+    const box = document.getElementById("share-text");
+    const status = document.getElementById("copy-status");
+    try {
+      await navigator.clipboard.writeText(box.value);
+      status.textContent = "コピーしました。LINE やメールに貼りつけて送れます。";
+    } catch {
+      box.focus();
+      box.select();
+      status.textContent = "文章を選びました。長押しでコピーしてください。";
+    }
+  });
+
+  // ---- 画面の切り替え ----
+  function route(scroll = true) {
+    const hash = location.hash.slice(1);
+    const match = hash.match(/^drug-(\d+)$/);
+    const drug = match ? DRUGS[Number(match[1])] : null;
+    currentDrugName = drug ? drug.name : null;
+
+    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "stamps"].includes(hash)));
+    screens.detail.hidden = !drug;
+    screens.record.hidden = hash !== "record";
+    screens.recordNew.hidden = hash !== "record-new";
+    screens.book.hidden = hash !== "stamps";
+    stampBar.hidden = !drug;
+
+    if (drug) renderCard(drug);
+    if (hash === "record") renderRecord();
+    if (hash === "record-new") prepareForm();
+    if (hash === "stamps") renderBook();
+    if (!screens.pick.hidden) renderList();
+    if (scroll) window.scrollTo(0, 0);
   }
 
   q.addEventListener("input", renderList);
-  document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { location.hash = b.dataset.go; }));
-  document.getElementById("open-book").addEventListener("click", () => { location.hash = encodeURIComponent("スタンプ帳"); });
-  document.getElementById("stamp").addEventListener("click", addStamp);
-  document.getElementById("close-praise").addEventListener("click", closePraise);
-  document.getElementById("undo").addEventListener("click", undoStamp);
-  window.addEventListener("hashchange", route);
-  renderList();
+  document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
+  document.getElementById("add-from-drug").addEventListener("click", () => { pendingDrug = currentDrugName; go("record-new"); });
+  window.addEventListener("hashchange", () => route());
   renderHowto();
   route();
 </script>
