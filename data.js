@@ -193,3 +193,47 @@ const DRUGS = [
     notes: [],
   },
 ];
+
+// 飲ませ方のコツ（どの粉薬にも共通）。中身は薬剤師が出どころと照らして確認する
+const HOWTO = [
+  {
+    title: "少しの水でねって、ほっぺの内側にぬる",
+    body: "粉薬に水を少したらして練り、だんごのようにします。ほっぺの内側や上あごにつけて、すぐに水や白湯を飲ませます。粉薬がまだ上手に飲めない赤ちゃんに。",
+    sources: [
+      { name: "千葉県こども病院", url: "https://www.pref.chiba.lg.jp/kodomo/shokai/documents/karu-08.pdf" },
+      { name: "マイナビニュース", url: "https://news.mynavi.jp/article/20171221-557615/" },
+    ],
+  },
+  {
+    title: "少しの水でとかして、スポイトやスプーンで",
+    body: "少しの水でとかし、スポイトやスプーンで、ほっぺの内側に少しずつ流しこみます。",
+    sources: [
+      { name: "千葉県こども病院", url: "https://www.pref.chiba.lg.jp/kodomo/shokai/documents/karu-08.pdf" },
+    ],
+  },
+  {
+    title: "味の濃いものに混ぜる",
+    body: "チョコアイスやココアなど、味の濃いものに混ぜると苦味が隠れやすくなります。混ぜたらすぐに飲ませます。何に混ぜていいかは、上の表で薬ごとに確かめてください。",
+    sources: [
+      { name: "熊本 くすりの話", url: "https://kmh.or.jp/wp/wp-content/uploads/2023/04/okusuri_14.pdf" },
+      { name: "PMDA くすりQ&A", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
+    ],
+  },
+  {
+    title: "服薬ゼリーで包む",
+    body: "ゼリーで薬を包むようにして飲ませます。ゼリーと薬は混ぜ合わせません。抗生物質などは、ふつうのゼリーだと色が変わったり苦くなることがあります。",
+    sources: [
+      { name: "龍角散 おくすり飲めたね（商品説明）", url: "https://shop.tsuruha.co.jp/10049903.html" },
+    ],
+  },
+  {
+    title: "赤ちゃんは、おなかがすいているときに",
+    body: "乳児は、おなかがすいているとき（授乳の前など）のほうが飲ませやすいとされています。",
+    sources: [
+      { name: "診断と治療社", url: "https://shindan.co.jp/np/filedata/00265800_23.pdf" },
+    ],
+  },
+];
+
+// 「のめた！」のときに出るスタンプ
+const STAMPS = ["🐻", "🐰", "🦁", "🐼", "🐸", "🐥", "🦄", "🍓", "🌟", "🚗"];

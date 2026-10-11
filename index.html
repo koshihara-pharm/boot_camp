@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>おくすり なにに混ぜる？</title>
-<meta name="description" content="子どもの粉薬を、アイスやジュースに混ぜていいかがすぐ分かるページ（デモ版）">
+<meta name="description" content="子どもの粉薬の味、何に混ぜていいか、飲ませ方が分かり、飲めたらスタンプを押せるページ（デモ版）">
 <style>
   :root {
     --bg: #fffaf3;
@@ -13,6 +13,7 @@
     --muted: #6b6b6b;
     --line: #eadfce;
     --accent: #e2725b;
+    --accent-text: #ffffff;
     --good: #2f8f5b;
     --good-bg: #e6f4ec;
     --best-bg: #fff1c9;
@@ -22,6 +23,7 @@
     --bad-bg: #fbe9e7;
     --warn: #7b3fa0;
     --warn-bg: #f3e8fa;
+    --taste-bg: #fdeee8;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -31,6 +33,7 @@
       --muted: #b3aba0;
       --line: #443f39;
       --accent: #f08a73;
+      --accent-text: #1d1b19;
       --good: #7fd3a3;
       --good-bg: #1f3a2b;
       --best-bg: #4a3d12;
@@ -40,6 +43,7 @@
       --bad-bg: #432421;
       --warn: #d4a6f0;
       --warn-bg: #36263f;
+      --taste-bg: #3a2a24;
     }
   }
   * { box-sizing: border-box; }
@@ -51,9 +55,19 @@
     font-size: 18px;
     line-height: 1.6;
   }
-  main { max-width: 560px; margin: 0 auto; padding: 16px 16px 48px; }
+  main { max-width: 560px; margin: 0 auto; padding: 16px 16px 120px; }
   h1 { font-size: 26px; margin: 8px 0 4px; }
   .lead { color: var(--muted); margin: 0 0 16px; font-size: 16px; }
+  .toplinks { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+  .link-button {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+  }
   input[type="search"] {
     width: 100%;
     font-size: 20px;
@@ -97,8 +111,19 @@
     margin-top: 8px;
   }
   .card h2 { font-size: 24px; margin: 0; }
-  .taste { color: var(--muted); margin: 2px 0 0; font-size: 16px; }
-  .group { border-radius: 14px; padding: 12px 14px; margin-top: 14px; }
+  .taste {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--taste-bg);
+    font-size: 18px;
+  }
+  .taste b { margin-right: 6px; }
+  .today { margin-top: 10px; font-size: 16px; color: var(--muted); }
+  .today span { font-size: 24px; }
+  .section-title { font-size: 20px; margin: 24px 0 4px; }
+  .section-lead { color: var(--muted); font-size: 15px; margin: 0 0 4px; }
+  .group { border-radius: 14px; padding: 12px 14px; margin-top: 12px; }
   .group h3 { font-size: 18px; margin: 0 0 8px; }
   .group p { margin: 0 0 8px; font-size: 15px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -119,34 +144,141 @@
   .g-bad h3 { color: var(--bad); }
   .g-warn { background: var(--warn-bg); }
   .g-warn h3 { color: var(--warn); }
-  details.g-none { margin-top: 14px; color: var(--muted); font-size: 16px; }
+  details.g-none { margin-top: 12px; color: var(--muted); font-size: 16px; }
   details.g-none summary { cursor: pointer; padding: 6px 0; }
   .notes { margin: 16px 0 0; padding-left: 1.2em; }
   .notes li { margin-bottom: 6px; }
-  .section-title { font-size: 18px; margin: 24px 0 8px; }
+  .howto { display: grid; gap: 10px; margin-top: 8px; }
+  .howto details {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 4px 14px;
+  }
+  .howto summary { cursor: pointer; padding: 10px 0; font-size: 18px; font-weight: bold; }
+  .howto p { margin: 0 0 8px; }
   .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
   .tips li { margin-bottom: 6px; }
-  .source, .disclaimer { font-size: 14px; color: var(--muted); margin-top: 16px; }
+  .source, .disclaimer { font-size: 14px; color: var(--muted); }
+  .source { margin: 4px 0 10px; }
   .source a, .tips a { color: var(--accent); }
   .disclaimer {
     border-top: 1px solid var(--line);
     padding-top: 12px;
     margin-top: 28px;
   }
+
+  .stamp-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    display: flex;
+    justify-content: center;
+  }
+  .stamp-bar[hidden] { display: none; }
+  .stamp-button {
+    width: 100%;
+    max-width: 528px;
+    min-height: 64px;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-text);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .stamp-button:active { transform: scale(0.98); }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 10;
+  }
+  .overlay[hidden] { display: none; }
+  .praise {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 28px 20px 20px;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+  .big-stamp {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+    border: 6px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 96px;
+    animation: pop 0.5s ease-out;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+    70% { transform: scale(1.1) rotate(8deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .big-stamp { animation: none; }
+  }
+  .praise h2 { font-size: 28px; margin: 16px 0 4px; }
+  .praise p { margin: 0 0 16px; color: var(--muted); font-size: 16px; }
+  .praise .stamp-button { font-size: 20px; min-height: 56px; }
+  .undo {
+    margin-top: 10px;
+    font-size: 15px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .day { margin-top: 20px; }
+  .day h3 { font-size: 18px; margin: 0 0 8px; }
+  .day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .day li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 8px 12px;
+  }
+  .day li .emoji { font-size: 32px; }
+  .day li .time { color: var(--muted); font-size: 15px; }
 </style>
 </head>
 <body>
 <main>
   <section id="pick">
+    <div class="toplinks"><button class="link-button" id="open-book" type="button">スタンプ帳</button></div>
     <h1>おくすり なにに混ぜる？</h1>
-    <p class="lead">子どもの粉薬を、アイスやジュースに混ぜていいか。薬の名前を選ぶとすぐ分かります。</p>
+    <p class="lead">子どもの粉薬の味、何に混ぜていいか、飲ませ方が分かります。飲めたらスタンプを押しましょう。</p>
     <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
     <ul id="list" class="list"></ul>
   </section>
 
   <section id="detail" hidden>
-    <button class="back" id="back" type="button">← 薬を選びなおす</button>
+    <button class="back" data-go="" type="button">← 薬を選びなおす</button>
     <div id="card" class="card"></div>
+
+    <h2 class="section-title">飲ませ方のコツ</h2>
+    <p class="section-lead">どの粉薬にも使える方法です。押すと説明が開きます。</p>
+    <div id="howto" class="howto"></div>
 
     <h2 class="section-title">どの薬でも気をつけること</h2>
     <ul class="tips">
@@ -158,11 +290,33 @@
     </ul>
   </section>
 
+  <section id="book" hidden>
+    <button class="back" data-go="" type="button">← もどる</button>
+    <h1>スタンプ帳</h1>
+    <p class="lead">記録はこのスマホの中だけに保存されます。</p>
+    <div id="book-list"></div>
+  </section>
+
   <p class="disclaimer">
     このページは、薬の量、薬どうしの飲み合わせ、薬をやめるかどうかは判断しません。迷ったときは、薬をもらった薬局か医師に聞いてください。<br>
-    デモ版です。データは2016年の資料をもとにしているため、今の製品と違う場合があります。
+    デモ版です。混ぜていいかのデータは2016年の資料をもとにしているため、今の製品と違う場合があります。
   </p>
 </main>
+
+<div class="stamp-bar" id="stamp-bar" hidden>
+  <button class="stamp-button" id="stamp" type="button">のめた！ スタンプをおす</button>
+</div>
+
+<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="praise-title">
+  <div class="praise">
+    <div class="big-stamp" id="big-stamp" aria-hidden="true"></div>
+    <h2 id="praise-title">のめたね！すごい！</h2>
+    <p id="praise-detail"></p>
+    <button class="stamp-button" id="close-praise" type="button">やったね</button>
+    <br>
+    <button class="undo" id="undo" type="button">まちがえた（とりけす）</button>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script>
@@ -175,6 +329,7 @@
     { key: "warn", title: "！ 効き目に影響することがある", cls: "g-warn",
       text: "混ぜる前に、薬剤師に確認してください。" },
   ];
+  const STORE_KEY = "okusuri.stamps.v1";
 
   function groupOf(code) {
     const mark = code.replace("*", "");
@@ -203,11 +358,60 @@
     return node;
   }
 
+  function sourceLine(sources) {
+    const parts = ["出どころ: "];
+    sources.forEach((s, i) => {
+      if (i > 0) parts.push("、");
+      parts.push(el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }));
+    });
+    return el("p", { class: "source" }, parts);
+  }
+
+  // スタンプの記録（このスマホの中だけ）
+  function loadStamps() {
+    try {
+      return JSON.parse(localStorage.getItem(STORE_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveStamps(stamps) {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(stamps));
+    } catch {
+      // 保存できない環境（プライベートモードなど）では、この画面の中だけで覚える
+    }
+  }
+
+  let stamps = loadStamps();
+
+  function dayKey(date) {
+    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+  }
+
+  function dayLabel(date) {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    if (dayKey(date) === dayKey(today)) return "きょう";
+    if (dayKey(date) === dayKey(yesterday)) return "きのう";
+    return (date.getMonth() + 1) + "月" + date.getDate() + "日";
+  }
+
+  function timeLabel(date) {
+    return date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0");
+  }
+
   const q = document.getElementById("q");
   const list = document.getElementById("list");
   const pick = document.getElementById("pick");
   const detail = document.getElementById("detail");
+  const book = document.getElementById("book");
   const card = document.getElementById("card");
+  const stampBar = document.getElementById("stamp-bar");
+  const overlay = document.getElementById("overlay");
+  let current = null;
 
   function renderList() {
     const query = toKatakana(q.value.trim()).toUpperCase();
@@ -224,14 +428,26 @@
     }
   }
 
+  function todayStampsFor(drug) {
+    const today = dayKey(new Date());
+    return stamps.filter((s) => s.drug === drug.name && dayKey(new Date(s.at)) === today);
+  }
+
   function renderCard(drug) {
     const buckets = { best: [], ok: [], split: [], bad: [], warn: [], none: [] };
     drug.foods.forEach((code, i) => buckets[groupOf(code)].push({ food: FOODS[i], code }));
 
     const parts = [
       el("h2", { text: drug.name }),
-      el("p", { class: "taste", text: "味・におい: " + drug.taste }),
+      el("div", { class: "taste" }, [el("b", { text: "あじ" }), drug.taste]),
     ];
+
+    const todays = todayStampsFor(drug);
+    if (todays.length > 0) {
+      parts.push(el("p", { class: "today" }, ["きょうのスタンプ ", el("span", { text: todays.map((s) => s.emoji).join(" ") })]));
+    }
+
+    parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     for (const g of GROUPS) {
       const items = buckets[g.key];
@@ -264,27 +480,90 @@
       parts.push(el("ul", { class: "notes" }, notes.map((n) => el("li", { text: n }))));
     }
 
-    const link = el("a", { href: SOURCE.url, target: "_blank", rel: "noopener", text: SOURCE.title });
-    parts.push(el("p", { class: "source" }, ["出どころ: ", link, "（" + SOURCE.revised + "）"]));
+    parts.push(sourceLine([{ name: SOURCE.title + "（" + SOURCE.revised + "）", url: SOURCE.url }]));
 
     card.replaceChildren(...parts);
   }
 
-  function route() {
-    const name = decodeURIComponent(location.hash.slice(1));
-    const drug = DRUGS.find((d) => d.name === name);
-    pick.hidden = Boolean(drug);
-    detail.hidden = !drug;
-    if (drug) {
-      renderCard(drug);
-      window.scrollTo(0, 0);
+  function renderHowto() {
+    document.getElementById("howto").replaceChildren(
+      ...HOWTO.map((h) => el("details", {}, [
+        el("summary", { text: h.title }),
+        el("p", { text: h.body }),
+        sourceLine(h.sources),
+      ]))
+    );
+  }
+
+  function renderBook() {
+    const target = document.getElementById("book-list");
+    if (stamps.length === 0) {
+      target.replaceChildren(el("p", { class: "empty", text: "まだスタンプはありません。薬のページで「のめた！」を押すと、ここにたまります。" }));
+      return;
     }
+    const byDay = new Map();
+    for (const s of [...stamps].reverse()) {
+      const date = new Date(s.at);
+      const key = dayKey(date);
+      if (!byDay.has(key)) byDay.set(key, { label: dayLabel(date), items: [] });
+      byDay.get(key).items.push(s);
+    }
+    target.replaceChildren(
+      ...[...byDay.values()].map((day) => el("div", { class: "day" }, [
+        el("h3", { text: day.label + "（" + day.items.length + "こ）" }),
+        el("ul", {}, day.items.map((s) => el("li", {}, [
+          el("span", { class: "emoji", text: s.emoji }),
+          el("div", {}, [el("div", { text: s.drug }), el("div", { class: "time", text: timeLabel(new Date(s.at)) })]),
+        ]))),
+      ]))
+    );
+  }
+
+  function addStamp() {
+    if (!current) return;
+    const emoji = STAMPS[Math.floor(Math.random() * STAMPS.length)];
+    stamps.push({ drug: current.name, at: new Date().toISOString(), emoji });
+    saveStamps(stamps);
+    document.getElementById("big-stamp").textContent = emoji;
+    const count = todayStampsFor(current).length;
+    document.getElementById("praise-detail").textContent = "きょう " + count + "こめ のスタンプ";
+    overlay.hidden = false;
+    document.getElementById("close-praise").focus();
+  }
+
+  function closePraise() {
+    overlay.hidden = true;
+    if (current) renderCard(current);
+  }
+
+  function undoStamp() {
+    stamps.pop();
+    saveStamps(stamps);
+    closePraise();
+  }
+
+  function route() {
+    const hash = decodeURIComponent(location.hash.slice(1));
+    current = DRUGS.find((d) => d.name === hash) || null;
+    const showBook = hash === "スタンプ帳";
+    pick.hidden = Boolean(current) || showBook;
+    detail.hidden = !current;
+    book.hidden = !showBook;
+    stampBar.hidden = !current;
+    if (current) renderCard(current);
+    if (showBook) renderBook();
+    window.scrollTo(0, 0);
   }
 
   q.addEventListener("input", renderList);
-  document.getElementById("back").addEventListener("click", () => { location.hash = ""; });
+  document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { location.hash = b.dataset.go; }));
+  document.getElementById("open-book").addEventListener("click", () => { location.hash = encodeURIComponent("スタンプ帳"); });
+  document.getElementById("stamp").addEventListener("click", addStamp);
+  document.getElementById("close-praise").addEventListener("click", closePraise);
+  document.getElementById("undo").addEventListener("click", undoStamp);
   window.addEventListener("hashchange", route);
   renderList();
+  renderHowto();
   route();
 </script>
 </body>
