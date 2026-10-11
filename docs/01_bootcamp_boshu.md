@@ -113,3 +113,20 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
 - 医療の現場の人が、自分の職場の困りごとをスマホ用 Web アプリにした例がすでにある。審査で評価される形に近い
 - README の最初に「公開 URL」「QR コード」「何ができるか」「データをどこに保存するか」を書くと、見る人にすぐ伝わる
 - 本番データを出せないときは、ダミーを公開して「本番は非公開」と明記する、という分け方が使える
+
+## 運営側（Singularity Society と関係者）が公開している、実際に作ったもの（2026-10-11 調べ）
+
+| 作ったもの | 中身 | アイデア集の対応する項目 |
+|---|---|---|
+| [Reqmo](https://github.com/SingularitySociety/reqmo) | オープンソースのオンデマンド配車システム（配車エンジン、管理画面、バスの動きのシミュレーター、AI で配車設定を調整する画面） | デマンド乗合タクシー予約・配車システム（公共） |
+| [free-3d-models](https://github.com/SingularitySociety/free-3d-models) | ShapeScript で書いた無料の 3D モデル集 | 3D プリンタ向けの設計ツール（ハードウェア） |
+| [eCart](https://github.com/SingularitySociety/eCart) | 電動の運搬カート | モビリティ（ハードウェア） |
+| [Paper AI](https://github.com/SingularitySociety/paper_ai_v2) | arXiv の論文を定期的に探して要約し、Slack に投稿するボット。目的は「ブートキャンプメンバー間での論文学習」 | — |
+| [egroups](https://github.com/SingularitySociety/egroups)、[firepresso](https://github.com/SingularitySociety/firepresso) | Firebase で作ったグループウェア、ブログ・ホームページの仕組み | — |
+| [AI地政学](https://github.com/SingularitySociety/ai_geography) | AI チップ、人型ロボット、自動運転の業界動向のまとめ | — |
+| [World Models](https://github.com/SingularitySociety/WorldModels) | LLM が苦手な「常識」の問題集（ベンチマーク） | — |
+| [GraphAI](https://github.com/receptron/graphai) | AI の処理をつなぐ仕組み（運営の技術） | GraphAI の各項目 |
+| [MulmoCast](https://github.com/receptron/mulmocast-cli) | AI 時代のマルチメディア発表ツール（運営の技術） | MulmoCast の各項目 |
+| [MulmoClaude](https://github.com/receptron/mulmoclaude) | 自分専用の AI アシスタントを育てる道具（運営の技術。2期の募集要項で「安全な Vibe Coding」に使うと紹介） | — |
+
+アイデア集の多くの項目は「まだ作られていない案」で、作ったものの一覧は公開されていない。参加者の週報（`SingularitySociety/bootcamp004`）は非公開。
