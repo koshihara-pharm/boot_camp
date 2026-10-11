@@ -93,3 +93,21 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
 - [Vision Proで空間ジェスチャーアプリを作った物語](https://note.com/singsoc/n/n86955f6b092a)
 
 作り方の参考: [demo.md](https://github.com/SingularitySociety/societys_statement/blob/main/bootcamp/demo.md)（完成版ではなく、価値の本質だけを示す最小のデモを作る。HTML 1枚や固定データでもよい。3〜5人に見せて反応を見る）
+
+## 過去の参加者が公開している成果物（2026-10-11 調べ）
+
+応募時に出したものの一覧は公開されていない。参加者の週報は `SingularitySociety/bootcamp004` の `reports/` にあるが、このリポジトリは非公開（参加者のみ）。
+
+公開されていて見られたもの:
+
+- 第4回1期 Vibe Coding コース（個人参加）の参加記録: https://github.com/yukihiroyamaguchi569/ss-bootcamp004
+  - 院内感染対策ラウンドアプリ「めぐる君」: https://github.com/yukihiroyamaguchi569/ict-round （公開アプリ https://ict-round.conect.llc/ ）。スマホ・タブレットでラウンドを記録し、Word の報告書を出す。データはブラウザ内に保存（localStorage）。README に公開 URL と QR コード、機能一覧、データの保存の考え方を書いている
+  - ゲーム型 AI 研修「地獄のICT」: https://github.com/yukihiroyamaguchi569/hell-ict （医療従事者向け。シナリオはダミーを公開し、本番は非公開）
+  - Twitter クローン（Supabase の学習用）
+- 1期全体の傾向（募集ページより）: Supabase や Firebase を使った Web アプリ、手元で動かすローカルツール
+- 過去回の参加レポート（note など。この作業環境からは開けない）: 上の「過去の参加者のレポートと最終発表」を参照
+
+このプロジェクトへの示唆:
+- 医療の現場の人が、自分の職場の困りごとをスマホ用 Web アプリにした例がすでにある。審査で評価される形に近い
+- README の最初に「公開 URL」「QR コード」「何ができるか」「データをどこに保存するか」を書くと、見る人にすぐ伝わる
+- 本番データを出せないときは、ダミーを公開して「本番は非公開」と明記する、という分け方が使える
