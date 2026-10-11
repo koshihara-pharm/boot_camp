@@ -143,3 +143,20 @@
   - いいねやブックマークは「お金を払う」とは別。この機能だけで課金するのは難しいかもしれない。無料の入り口にして、ほかの機能（保育園の書類、家族共有）や服薬ゼリーなどの紹介でお金にする道を考える
   - 1件の投稿なので、ほかの投稿や検索の数でも確かめる
 - 広め方への示唆: 届けたい親は X にいる。公開したら、この話題に関心のある人たちに、まず役に立つ形で届ける（docs/04 の「先に貢献」）
+
+## 11. 「味・混ぜ方・飲ませ方・飲めたスタンプ」をまとめたものはあるか（2026-10-11 調べ）
+
+検索した範囲では、まとめたサイトやアプリは見つからなかった。部品ごとには、次のものがある。
+アプリストアを直接は調べていないので、ユーザーが App Store / Google Play で「子ども 薬」「服薬 スタンプ」などを検索して確かめる。
+
+| 部品 | 今あるもの | 足りないところ |
+|---|---|---|
+| 味・何に混ぜるか | 病院薬剤部の PDF の表（aih-net.com、国立成育医療研究センター）。[EPARK お薬手帳の飲み合わせ検索](https://okusuritecho.epark.jp/renew/medicine_combination)（薬どうしと飲食物。子どもの「味」は対象外）。[おしえて!小児用量](https://dr-ar-navi.jp/blog/app/application/post-18/)（シロップの色・味もあるが医療者向け、2012年版） | 親がスマホで、薬を選んで引けるものがない |
+| 飲ませ方 | 記事や PDF（[HugKum](https://hugkum.sho.jp/367847)、[いこーよ](https://iko-yo.net/articles/2015)、[熊本 くすりの話](https://kmh.or.jp/wp/wp-content/uploads/2023/04/okusuri_14.pdf)、[都立病院機構](https://www.tmhp.jp/kikou/iryokenkou/minnanoiryokenkou_column_takingmedicine.html)、[BuzzFeed 小児科医の助言](https://www.buzzfeed.com/jp/masahikosakamoto/kodomo-kusuri)）。[龍角散 おくすり飲めたね](https://www.ryukakusan.co.jp/okusurinometane/)（服薬ゼリー） | 読み物で、薬ごとに出てこない |
+| 記録・お知らせ | [お薬ノート](https://apps.apple.com/jp/app/%E3%81%8A%E8%96%AC%E3%83%8E%E3%83%BC%E3%83%88-%E6%9C%8D%E8%96%AC-%E8%96%AC%E6%AD%B4%E7%AE%A1%E7%90%86/id508677361)（家族の服薬管理）、[MyTherapy](https://www.mytherapyapp.com/ja)、[Hanaサポート（東和薬品）](https://www.towayakuhin.co.jp/healthcare/hanasupport/user.php)（キャラクターと記録）、[しつこいお薬アラーム](https://fytte.jp/news/healthcare/86560/) | 大人向け。子ども向けの作りではない |
+| 飲めたらスタンプ | [こそだてスタンプ帳](https://apps.apple.com/jp/app/%E3%81%93%E3%81%9D%E3%81%A0%E3%81%A6%E3%82%B9%E3%82%BF%E3%83%B3%E3%83%97%E5%B8%B3-%E5%AD%90%E4%BE%9B%E3%81%97%E3%81%A4%E3%81%91%E3%82%A2%E3%83%97%E3%83%AA/id1347089344)（歯みがきやトイレなどのしつけ用。薬専用ではない）。海外は紙のごほうび表（[Amazon](https://www.amazon.com/I-Can-Do-Medicine-Chart/dp/B00BI7DJVG)、[無料の印刷用](https://3boysandadog.com/free-printable-medicine-chart-for-kids/)）、[Encurage](https://apps.apple.com/us/app/medication-reminder-encurage/id1417312275)（子どもの服薬お知らせ） | 日本の子どもの薬専用のものは見当たらない |
+
+読み取れること:
+- 親は今、表の PDF、記事、服薬アプリ、しつけアプリ、紙のシールを別々に使っている（使っていない）状態
+- 「薬を選ぶ → 何に混ぜるか分かる → 飲ませ方のコツ → 飲めたらスタンプ → 家族に共有」を1つにまとめたものはない（未確認だが、検索では見つからない）
+- 小児科門前の薬剤師が中身を確認している、という点は、どの既存サービスにもない
