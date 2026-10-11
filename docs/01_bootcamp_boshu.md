@@ -104,6 +104,8 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
   - 院内感染対策ラウンドアプリ「めぐる君」: https://github.com/yukihiroyamaguchi569/ict-round （公開アプリ https://ict-round.conect.llc/ ）。スマホ・タブレットでラウンドを記録し、Word の報告書を出す。データはブラウザ内に保存（localStorage）。README に公開 URL と QR コード、機能一覧、データの保存の考え方を書いている
   - ゲーム型 AI 研修「地獄のICT」: https://github.com/yukihiroyamaguchi569/hell-ict （医療従事者向け。シナリオはダミーを公開し、本番は非公開）
   - Twitter クローン（Supabase の学習用）
+- おしゃべり猫型ロボット「ミーア」（過去回の参加者。参加記は kazulog.fun）: 手のひらサイズの猫型ロボット。100種類以上の表情で話しかけ、方言や性格を変えられる。税込 9,800円で販売されていた。今後は天気、カレンダー、健康データと連携したリマインドを予定（https://moov.ooo/article/668dfba514ee9d129655b683）。BootCamp から実際に売る製品になった例
+- 名前だけ分かっていて、中身を確かめられなかったもの: 若葉台コミュニティラジオ（地域の課題）、AITs 名刺トレカ、visionOS アプリ Teegarden、Vision Pro の空間ジェスチャーアプリ、エンジニア未経験の PM が ChatGPT で作ったプロダクト。どれも note の記事で、この作業環境からは開けない
 - 1期全体の傾向（募集ページより）: Supabase や Firebase を使った Web アプリ、手元で動かすローカルツール
 - 過去回の参加レポート（note など。この作業環境からは開けない）: 上の「過去の参加者のレポートと最終発表」を参照
 
