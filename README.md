@@ -31,6 +31,10 @@
 - このサイトは、薬の量、薬どうしの飲み合わせ、薬をやめるかどうかは判断しません。量や回数は薬袋のとおりに親が入力します。迷ったときは、薬をもらった薬局か医師に聞いてください
 - 混ぜていいかのデータは 2016 年の資料をもとにしているため、今の製品と違う場合があります
 
+## 作り方
+
+アプリ（`index.html`・`data.js`）と、読み物ページ（Notion + Wraptas。CSS は `wraptas/`）の作り方・公開・更新の手順は [docs/10_site_tsukurikata.md](docs/10_site_tsukurikata.md) にあります。
+
 ## このリポジトリについて
 
 Singularity Society BootCamp（第4回 2期 Vibe Coding コース）への応募のためのプロジェクトです。調べたことや決めたことは [docs/](docs/) にあります。

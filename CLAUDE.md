@@ -21,6 +21,7 @@
 7. [docs/07_demo_data.md](docs/07_demo_data.md) — デモの元データ（散剤と飲食物の飲み合わせ一覧）の出どころと使い方
 8. [docs/08_monetize.md](docs/08_monetize.md) — マネタイズ（似たアプリのお金の取り方、このアプリでの候補と進め方）
 9. [docs/09_jisseki.md](docs/09_jisseki.md) — これまでの実績（応募フォーム用）。薬局向け Web 制作の副業リポジトリ https://github.com/koshihara-pharm/homepage_small_business の要約
+10. [docs/10_site_tsukurikata.md](docs/10_site_tsukurikata.md) — サイトの作り方（アプリ＝index.html と data.js、読み物ページ＝Notion + Wraptas。公開と更新の手順、公開前チェックリスト）
 
 01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
@@ -65,6 +66,7 @@
 - 親が自分で直接使うもの（個人向け）。薬局が使う業務ツールではない（2026-10-10 ユーザーの希望）
 - 進め方: まず無料の Web サイトで人を集め、価値を出してからマネタイズする（2026-10-11 ユーザーと決定）。その間も、使われた数を数える（個人情報は取らない）、親に「いくらなら払う？」を聞く、マネタイズを始める目安を決める、の3つはやる
 - 形: まずスマホ用の Web サイト（index.html と data.js だけで動く。サーバーなし）。のちにアプリ
+- 読み物ページ: Notion で書き Wraptas で公開する（homepage_small_business のフェス型ペライチにならう）。Notion「こどもおくすりサポート」 https://app.notion.com/p/3f7d62ff1e0081cda91ce9afe80f7d36 （2026-10-12 時点で非公開の下書き）、CSS は wraptas/okusuri-theme.css
 - 機能（BootCamp 提出版）:
   1. 飲ませ方のコツ（出どころ付き）
   2. 家にある食べ物との飲み合わせ（混ぜていいか）
