@@ -137,7 +137,7 @@ const DRUGS = [
     taste: "甘い・無香料",
     foods: ["o", "x", "-", "o", "o", "o", "x", "o", "ox", "o", "o", "o"],
     notes: [
-      "約40℃以上で乳酸菌が死に、60℃以上でのり状になる",
+      "約40℃以上で乳酸菌が死に、60℃以上で添加物のデンプンがのり状になる",
       "薬そのものが甘いため、そのままで飲みやすい",
     ],
   },
@@ -198,22 +198,23 @@ const DRUGS = [
 const HOWTO = [
   {
     title: "少しの水でねって、ほっぺの内側にぬる",
-    body: "粉薬に水を少したらして練り、だんごのようにします。ほっぺの内側や上あごにつけて、すぐに水や白湯を飲ませます。粉薬がまだ上手に飲めない赤ちゃんに。",
+    body: "粉薬に水を少したらして練り、だんごのようにします。ほっぺの内側や上あごにつけて、すぐに水や白湯を飲ませます。舌の先は苦味を感じやすいので避けます。粉薬がまだ上手に飲めない赤ちゃんに。",
     sources: [
+      { name: "PMDA くすりQ&A", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
       { name: "千葉県こども病院", url: "https://www.pref.chiba.lg.jp/kodomo/shokai/documents/karu-08.pdf" },
-      { name: "マイナビニュース", url: "https://news.mynavi.jp/article/20171221-557615/" },
     ],
   },
   {
     title: "少しの水でとかして、スポイトやスプーンで",
-    body: "少しの水でとかし、スポイトやスプーンで、ほっぺの内側に少しずつ流しこみます。",
+    body: "飲ませる直前に少しの水でとかし、スポイトやスプーンで、ほっぺの内側に沿わせて少しずつ流しこみます。むせないように、上体を起こして飲ませます。はじめに多めの水でとくと、飲み残しのもとになります。",
     sources: [
+      { name: "熊本市", url: "https://www.city.kumamoto.jp/kiji00331285/5_31285_410254_up_23WIW8YZ.pdf" },
       { name: "千葉県こども病院", url: "https://www.pref.chiba.lg.jp/kodomo/shokai/documents/karu-08.pdf" },
     ],
   },
   {
     title: "味の濃いものに混ぜる",
-    body: "チョコアイスやココアなど、味の濃いものに混ぜると苦味が隠れやすくなります。混ぜたらすぐに飲ませます。何に混ぜていいかは、上の表で薬ごとに確かめてください。",
+    body: "チョコアイスやココアなど、味の濃いものの少しだけに混ぜると苦味が隠れやすくなります。混ぜたらすぐに飲ませます。ミルクやおかゆなど毎日の主食には混ぜません（それ自体を嫌いになることがあります）。何に混ぜていいかは、上の表で薬ごとに確かめてください。",
     sources: [
       { name: "熊本 くすりの話", url: "https://kmh.or.jp/wp/wp-content/uploads/2023/04/okusuri_14.pdf" },
       { name: "PMDA くすりQ&A", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
@@ -221,16 +222,17 @@ const HOWTO = [
   },
   {
     title: "服薬ゼリーで包む",
-    body: "ゼリーで薬を包むようにして飲ませます。ゼリーと薬は混ぜ合わせません。抗生物質などは、ふつうのゼリーだと色が変わったり苦くなることがあります。",
+    body: "器にゼリーを入れて薬をのせ、ゼリーで包みこむようにスプーンですくって飲ませます。フルーツ味のゼリーは、薬と混ぜると苦味を感じやすくなることがあります。抗生物質や苦い薬には、チョコ味など向けのものがあります。",
     sources: [
-      { name: "龍角散 おくすり飲めたね（商品説明）", url: "https://shop.tsuruha.co.jp/10049903.html" },
+      { name: "龍角散 おくすり飲めたね（販売店の商品説明）", url: "https://netshop.create-sd.co.jp/shop/g/g4987240601838/" },
     ],
   },
   {
     title: "赤ちゃんは、おなかがすいているときに",
-    body: "乳児は、おなかがすいているとき（授乳の前など）のほうが飲ませやすいとされています。",
+    body: "乳児は、おなかがすいているとき（授乳の前など）のほうが飲ませやすく、吐きにくいとされています。おなかがいっぱいだと飲めずに吐いてしまうことがあります。",
     sources: [
       { name: "診断と治療社", url: "https://shindan.co.jp/np/filedata/00265800_23.pdf" },
+      { name: "札幌市立病院", url: "https://www.city.sapporo.jp/hospital/medicine/howtotake_child.html" },
     ],
   },
 ];
