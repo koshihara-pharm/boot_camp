@@ -1,0 +1,20 @@
+{
+  "_説明": "こどもおくすりサポートの読み物ページを Wraptas に載せるための設定。homepage_small_business/tools/wraptas/ にコピーして使う（apply.mjs がそこにあるため）。<> の所を差し替える。cssFile はコピー先から見た場所に直す。実行: node apply.mjs tasks.okusuri.json --dry → 確認 → node apply.mjs tasks.okusuri.json",
+  "sites": [
+    {
+      "siteName": "<公開先のサイト名。sumobiji-ph.jp に載せるなら 薬局採用ページ制作>",
+      "siteId": "<公開先の siteId。sumobiji-ph.jp なら sumobiji-ph>",
+      "permalinks": [
+        { "notionUrl": "https://<ワークスペース>.notion.site/<こどもおくすりサポートの32桁のページID>", "slug": "okusuri" }
+      ],
+      "pageSettings": [
+        {
+          "slug": "okusuri",
+          "title": "こどもおくすりサポート｜子どもが少しでも薬を飲めるように",
+          "description": "粉薬の味、家にある食べ物と混ぜていいか、飲ませ方のコツが分かり、飲めたらスタンプ。飲んだ記録は家族や保育園に送れます。小児科の門前薬局で働く、子育て中の薬剤師がつくっています。",
+          "cssFile": "<コピー先から見た okusuri-theme.css の場所>"
+        }
+      ]
+    }
+  ]
+}

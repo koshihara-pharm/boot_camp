@@ -1,0 +1,314 @@
+@charset "UTF-8";
+/* ============================================================
+   Wraptas用カスタムCSS — こどもおくすりサポート（ペライチ）
+   元：homepage_small_business/templates/wraptas_event-theme.css（フェス型。2026-09-06 タクロックフェス）
+       を 2026-10-12 にコピーし、色と書体だけ差し替えた。構造（ヒーロー → h2 ごとのセクション）は同じ
+   貼り先：Wraptas 管理画面 → ページ設定 → 「このページ専用の追加CSS」
+   前提：サイトデザイン編集「セクションを区切るブロック＝h2」ON
+         （先頭セクション #section-first がヒーロー、以降 h2 ごとに .separatedSection）
+   構成：ヒーロー（キャッチ＋説明＋カード3つ）→ WHY → FEATURES → HOW TO → MIX → SAFETY → ABOUT → SOURCES
+   着せ替え：--accent（差し色）と --ink（ヒーローの地色）を変えるだけ
+   ============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap");
+
+:root {
+  --content-width: 820px;        /* 本文幅。画像が横に広がりすぎないよう一般的なWEBサイト並みに */
+  --side-pad: clamp(1.25rem, 5vw, 3rem); /* 左右の余白。狭い画面でも文字が端に付かない */
+  --column--space: 1.75rem;      /* カラム間の余白（Wraptasの変数を上書き） */
+  --ink: #17403b;              /* 深い青緑（ヒーローの地色・本文の見出し） */
+  --paper: #ffffff;
+  --paper-soft: #eef6f4;       /* 偶数セクションの薄い背景（アプリと同じ青緑の地） */
+  --accent: #e8a317;           /* 差し色（アプリの「のめた！」スタンプの丸と同じ黄） */
+  --accent-ink: #17403b;       /* 差し色の上に載せる文字色 */
+  --muted: #5d6e6b;
+  --theme-color: #1f7a70;      /* テーブル見出し等の流用先（アプリのボタンの青緑） */
+  --display: "Bebas Neue", "Noto Sans JP", sans-serif;
+  --body: "Zen Maru Gothic", "Noto Sans JP", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
+}
+
+/* ---------- 日本語の折り返し（全テーマ共通の基準。2026-09-09 追加／09-10 詳細度を修正） ----------
+   「す。」だけが次行に落ちる孤立行と、「体/調」のように語の途中で切れるのを防ぐ。
+     word-break: auto-phrase … 文節（意味の切れ目）で折り返す（Chrome 119+）
+     text-wrap: pretty       … 最終行が極端に短くならないよう調整（Chrome 117+）
+     text-wrap: balance      … 各行の長さを揃える。行数の少ない見出し向き
+     line-break: strict      … 句読点・小書き仮名の禁則を厳密に
+   ※:where() で詳細度0にすると Wraptas 既定の .notion-text{word-break:break-word} に負けて
+     語中で切れる（2026-09-10 実測）。素のクラス選択子で書き、後から読まれる利点で勝たせること。
+   検品：node tools/wraptas/typocheck.mjs <URL> [幅]（PCと390pxの両方で回す） */
+.notion-link, a, .notion-text, .notion-callout, .notion-callout-text, .notion-quote,
+.notion-page-title-text, .notion-list-item, .notion-property, .notion-table-cell, details > div,
+figcaption, .notion-asset-caption, td, th, li {
+  word-break: auto-phrase;
+  line-break: strict;
+  text-wrap: pretty;
+}
+.notion-h1, .notion-h2, .notion-h3, .title, summary,
+.notion-callout :is(b, strong) {
+  word-break: auto-phrase;
+  line-break: strict;
+  text-wrap: balance;
+}
+
+/* ---------- ベース ---------- */
+.page { font-family: var(--body); color: var(--ink); background: var(--paper); }
+.container { padding: 0; max-width: 100%; }
+.contents { margin: 0 auto; max-width: 100% !important; }
+.titleSection, .breadcrumbs, .headerBreadcrumb, .pageDatetime,
+.titleSection__contentsWrapper .search, .search-form, form[role="search"], .notion-search { display: none !important; }
+.separatedSection__contentsWrapper, .contentsFooterSection__contentsWrapper, .footer__contentsWrapper {
+  margin: auto; padding: 0 var(--side-pad); max-width: calc(var(--content-width) + var(--side-pad) * 2);
+}
+.separatedSection { padding: 4rem 0; }
+.separatedSection:nth-child(even) { background: var(--paper-soft); }
+.contentsFooterSection { padding: 1rem 0; }
+.notion-text { line-height: 1.9; }
+
+/* アイコン類は一切出さない（Notion感を消す） */
+.notion-callout-icon, .notion-callout .notion-icon, .notion-page-icon, .breadcrumb .icon, .breadcrumb img, .titleSection .icon { display: none !important; }
+.notion-callout { padding-left: 1rem; }
+.notion-callout-text { margin-left: 0 !important; }
+
+/* ============================================================
+   セクション分割OFF（サイトデザイン編集「セクションを区切るブロック＝利用しない」）のときの受け皿
+   .separatedSection が生成されず本文幅・左右余白が効かなくなるため、.contents の直下ブロックに
+   同じ幅と余白を持たせる。先頭5ブロック（隠しタイトル／ポスター／キャッチ／日付／CTA）を黒ヒーローに。
+   ※型「フェス型」の書き出し順が前提（format_event-onepage.md §本文）
+   ============================================================ */
+.page[data-section-separate="false"] .contents { max-width: 100% !important; padding: 0 !important; }
+.page[data-section-separate="false"] .contents > .title { display: none; }
+.page[data-section-separate="false"] .contents > * {
+  box-sizing: border-box;
+  max-width: calc(var(--content-width) + var(--side-pad) * 2);
+  margin-left: auto; margin-right: auto;
+  padding-left: var(--side-pad); padding-right: var(--side-pad);
+}
+/* 先頭5ブロック＝全幅の黒ヒーロー（中身だけ本文幅に収める） */
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) {
+  background: var(--ink);
+  color: #fff; --fg-color: #fff; --fg-color-1: #fff; --text-color: #fff;
+  max-width: none; width: 100%; margin: 0; text-align: center;
+  padding-left: max(var(--side-pad), calc((100% - var(--content-width)) / 2));
+  padding-right: max(var(--side-pad), calc((100% - var(--content-width)) / 2));
+}
+.page[data-section-separate="false"] .contents > :nth-child(2) { padding-top: 3rem; }
+.page[data-section-separate="false"] .contents > :nth-child(5) { padding-bottom: 3.5rem; }
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) img { max-width: 440px; margin: 0 auto; }
+.page[data-section-separate="false"] .contents > .notion-h1 {
+  font-family: var(--body); font-weight: 900; font-size: 2.2rem; line-height: 1.35; letter-spacing: .04em;
+  color: #fff; border: none;
+}
+.page[data-section-separate="false"] .contents > .notion-h1::after { display: none; }
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-text,
+.page[data-section-separate="false"] .contents > p.notion-text:first-of-type { font-size: 1.05rem; line-height: 1.8; color: #ddd; }
+.page[data-section-separate="false"] .contents > p.notion-text:first-of-type :is(b,strong) {
+  font-family: var(--display); font-size: 2.4rem; letter-spacing: .06em; color: var(--accent);
+  font-weight: 400; display: block; line-height: 1; margin-bottom: .4rem;
+}
+/* CTA 3つ（チケット・グッズ・公式X）：普段は3つとも白枠・透明で揃え、選んだとき（ホバー／タップ）だけ黄色に塗る
+   （2026-09-11 ユーザー指示「チケットだけがずっと黄色いから、選択したら黄色くなるように」。塗りの規則は下の :hover） */
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout {
+  border-radius: 999px; padding: .9rem 1rem; text-align: center; border: 2px solid #fff;
+  background: transparent !important; box-shadow: none; min-height: auto;
+}
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout :is(b,strong) {
+  display: block; font-size: .8rem; letter-spacing: .12em; color: #fff; opacity: .8;
+}
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout a {
+  color: #fff; font-weight: 900; font-size: 1.05rem; text-decoration: none; display: block; border: none;
+}
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-teal_background_co,
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-purple_background_co {
+  background: transparent !important; border-color: #fff;
+}
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-teal_background_co :is(b,strong),
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-purple_background_co :is(b,strong),
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-teal_background_co a,
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout.notion-purple_background_co a { color: #fff; }
+/* 見出し2ごとの帯（背景色の交互）は作れないので、代わりに上下の余白で区切る */
+.page[data-section-separate="false"] .contents > .notion-h2 { margin-top: 4rem; }
+@media (max-width: 640px) {
+  .page[data-section-separate="false"] .contents > .notion-h1 { font-size: 1.5rem; }
+  .page[data-section-separate="false"] .contents > p.notion-text:first-of-type :is(b,strong) { font-size: 2rem; }
+  .page[data-section-separate="false"] .contents > :nth-child(2) { padding-top: 1.5rem; }
+  .page[data-section-separate="false"] .contents > .notion-h2 { margin-top: 2.75rem; }
+}
+
+/* ---------- ヒーロー（先頭セクション） ---------- */
+#section-first {
+  background: var(--ink);
+  color: #fff;
+  --fg-color: #fff; --fg-color-1: #fff; --text-color: #fff;
+  padding: 3rem 0 3.5rem;
+  text-align: center;
+}
+#section-first .notion-asset-wrapper { margin: 0 auto 1.5rem; max-width: 440px; }
+#section-first .notion-asset-wrapper img { border-radius: 10px; box-shadow: 0 18px 50px rgba(0,0,0,.55); }
+#section-first .notion-h1 {
+  font-family: var(--body); font-weight: 900; font-size: 2.2rem; line-height: 1.35; letter-spacing: .04em;
+  color: #fff; margin: .5rem 0 1rem; border: none; text-align: center;
+}
+#section-first .notion-h1::after { display: none; }
+#section-first .notion-text { font-size: 1.05rem; line-height: 1.8; color: #ddd; margin: 0 auto 1.5rem; }
+#section-first .notion-text :is(b,strong) { font-family: var(--display); font-size: 2.4rem; letter-spacing: .06em; color: var(--accent); font-weight: 400; display: block; line-height: 1; margin-bottom: .4rem; }
+
+/* CTA 3つ：普段は3つとも白枠・透明、選んだときだけ黄色（塗りの規則は下の :hover） */
+#section-first .notion-column .notion-callout {
+  border-radius: 999px; padding: .9rem 1rem; text-align: center; border: 2px solid #fff;
+  background: transparent !important; box-shadow: none; min-height: auto;
+}
+#section-first .notion-column .notion-callout :is(b,strong) { display: block; font-size: .8rem; letter-spacing: .12em; color: #fff; opacity: .8; }
+#section-first .notion-column .notion-callout a { color: #fff; font-weight: 900; font-size: 1.05rem; text-decoration: none; display: block; border: none; }
+#section-first .notion-column .notion-callout.notion-teal_background_co,
+#section-first .notion-column .notion-callout.notion-purple_background_co {
+  background: transparent !important; border-color: #fff;
+}
+#section-first .notion-column .notion-callout.notion-teal_background_co :is(b,strong),
+#section-first .notion-column .notion-callout.notion-purple_background_co :is(b,strong),
+#section-first .notion-column .notion-callout.notion-teal_background_co a,
+#section-first .notion-column .notion-callout.notion-purple_background_co a { color: #fff; }
+/* ホバー／タップ：白枠のボタン（グッズ・公式X）も黄色に塗りつぶす（2026-09-11 ユーザー指摘「触っても黄色くならない」）。
+   以前は opacity .85 だけで、白枠ボタンは見た目がほぼ変わらなかった。
+   あわせてボタン全体をリンクの押せる範囲にする（文字の上だけでなく、丸い枠のどこを押しても飛ぶ）。
+   :active はスマホでタップした瞬間、:focus-within はキーボード操作用 */
+#section-first .notion-column .notion-callout,
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout {
+  position: relative; cursor: pointer; transition: background-color .2s, border-color .2s, transform .2s, box-shadow .2s;
+}
+#section-first .notion-column .notion-callout a::after,
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout a::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+}
+#section-first .notion-column .notion-callout:is(.notion-blue_background_co, .notion-teal_background_co, .notion-purple_background_co, .notion-default_co):is(:hover, :active, :focus-within),
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout:is(.notion-blue_background_co, .notion-teal_background_co, .notion-purple_background_co, .notion-default_co):is(:hover, :active, :focus-within) {
+  background: var(--accent) !important; border-color: var(--accent) !important;
+  transform: translateY(-2px); box-shadow: 0 10px 28px rgba(245, 196, 0, .28);
+}
+#section-first .notion-column .notion-callout:is(:hover, :active, :focus-within) :is(b, strong, a),
+.page[data-section-separate="false"] .contents > :nth-child(-n+5) .notion-callout:is(:hover, :active, :focus-within) :is(b, strong, a) {
+  color: var(--accent-ink) !important;
+}
+@media (hover: none) {
+  /* スマホは指を離すとホバーが残り続けることがあるので、持ち上げ効果だけ切る */
+  #section-first .notion-column .notion-callout:hover { transform: none; }
+}
+
+/* ---------- 見出し2：英字ラベル（青span）を大きく、和文を小さく下に ---------- */
+.notion-h2 {
+  font-family: var(--body); font-weight: 700; font-size: 1rem; letter-spacing: .2em; color: var(--muted);
+  text-align: center; margin: 0 0 2.2rem; padding: 0 0 1.1rem; position: relative; border: none;
+}
+.notion-h2::before { display: none; }
+.notion-h2::after {
+  content: ""; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 56px; height: 6px; background: var(--accent); border: none;
+}
+.notion-h2 .notion-blue {
+  display: block; font-family: var(--display); font-weight: 400; font-size: 3.4rem; line-height: 1;
+  letter-spacing: .08em; color: var(--ink); margin-bottom: .35rem;
+}
+
+/* ---------- カード共通（カラム内コールアウト） ---------- */
+.notion-column .notion-callout {
+  background: #fff !important; border: 1px solid #e6e6e2; border-radius: 16px; padding: 1.25rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05); min-height: 8rem;
+}
+.notion-column .notion-callout .notion-callout-text { font-size: .95rem; line-height: 1.75; }
+.notion-column .notion-callout :is(b,strong) { display: block; font-size: 1.1rem; margin-bottom: .4rem; letter-spacing: .02em; }
+.notion-column .notion-callout a { color: var(--ink); font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--accent); }
+.notion-column .notion-callout a:hover { background: var(--accent); }
+
+/* SET LIST：h2直後の縦長画像（セットリスト画像）は幅を抑えて中央に。曲目カードは左寄せで行間ゆったり */
+.notion-h2 + .notion-asset-wrapper-image { max-width: 560px !important; }
+.notion-h2 + .notion-asset-wrapper-image img { box-shadow: 0 6px 24px rgba(0,0,0,.10); }
+.notion-h2 + .notion-asset-wrapper-image + .notion-row .notion-callout,
+.notion-h2 + .notion-asset-wrapper-image ~ .notion-column .notion-callout { text-align: left; }
+
+/* SCHEDULE：橙コールアウト＝時刻を大きく */
+.notion-callout.notion-orange_background_co { border-top: 6px solid var(--accent); text-align: center; }
+.notion-callout.notion-orange_background_co :is(b,strong) {
+  font-family: var(--display); font-size: 3rem; line-height: 1; letter-spacing: .04em; margin-bottom: .5rem; color: var(--ink);
+}
+
+/* TICKET：青／緑コールアウト＝太枠カード＋黄ボタン */
+.separatedSection:not(#section-first) .notion-callout.notion-blue_background_co,
+.separatedSection:not(#section-first) .notion-callout.notion-teal_background_co {
+  background: #fff !important; border: 3px solid var(--ink); border-radius: 18px; padding: 1.5rem; min-height: 11rem;
+}
+.separatedSection:not(#section-first) .notion-callout.notion-blue_background_co a,
+.separatedSection:not(#section-first) .notion-callout.notion-teal_background_co a {
+  display: inline-block; margin-top: .9rem; padding: .7rem 1.4rem; border-radius: 999px; border: none;
+  background: var(--accent); color: var(--accent-ink); font-weight: 900;
+}
+.separatedSection:not(#section-first) .notion-callout.notion-blue_background_co a:hover,
+.separatedSection:not(#section-first) .notion-callout.notion-teal_background_co a:hover { opacity: .85; }
+
+/* JOIN：紫＝X、灰＝メンバー向け */
+.separatedSection:not(#section-first) .notion-callout.notion-purple_background_co { background: var(--ink) !important; color: #fff; --fg-color: #fff; border: none; }
+.separatedSection:not(#section-first) .notion-callout.notion-purple_background_co :is(b,strong) { color: var(--accent); }
+.separatedSection:not(#section-first) .notion-callout.notion-purple_background_co a { color: #fff; border-bottom-color: var(--accent); }
+.notion-callout.notion-gray_background_co { background: #fff !important; border: 1px dashed #bbb; }
+
+/* ---------- 画像 ----------
+   横いっぱいに張り付かせない：単独画像は本文幅の 92% まで・中央寄せ、上下に余白 */
+.notion-asset-wrapper { margin: .5rem auto 1.5rem; }
+.notion-asset-wrapper img { border-radius: 12px; display: block; margin: 0 auto; max-width: 100%; }
+.separatedSection__contentsWrapper > .notion-asset-wrapper-image { max-width: 92%; }
+.separatedSection__contentsWrapper > .notion-asset-wrapper-image img { box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+.notion-column .notion-asset-wrapper img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.notion-column .notion-asset-wrapper { margin: 0 0 1.25rem; }
+.notion-column { padding-bottom: .25rem; }
+
+/* ---------- テーブル（会場情報）：左列を黒に ---------- */
+.notion-simple-table-table { width: 100% !important; table-layout: fixed; font-size: .95rem; }
+.notion-simple-table-table col { width: auto !important; }
+.notion-simple-table-table td.notion-simple-table-column { width: auto !important; min-width: 0; white-space: normal; padding: .6rem .7rem; word-break: keep-all; }
+.notion-simple-table[data-rowheader="true"] .notion-simple-table-column:first-child { font-weight: 700; color: #fff; background: var(--ink); width: 30% !important; }
+.notion-simple-table-table, .notion-simple-table-column { border-color: #ddd !important; }
+
+/* ---------- 地図 ---------- */
+.notion-embed, .notion-embed iframe { width: 100%; }
+.notion-embed iframe { height: 340px; border-radius: 12px; border: 0; }
+
+/* ---------- MOVIE：X（Twitter）のCM埋め込みを中央に ----------
+   埋め込み自体は wraptas_event-body.html のスクリプトが widgets.js に差し替える（素のiframeはx.comが拒否して空白） */
+.notion-asset-wrapper-embed.is-tweet { max-width: 560px; margin: 0 auto 1rem; }
+.notion-asset-wrapper-embed.is-tweet > div { position: static !important; height: auto !important; padding: 0 !important; min-height: 0 !important; overflow: visible !important; }
+.notion-asset-wrapper-embed.is-tweet .twitter-tweet { margin: 0 auto !important; max-width: 550px !important; }
+.notion-asset-wrapper-embed.is-tweet figcaption { text-align: center; }
+
+/* JOIN：カラム外の紫コールアウト（公式X）を全幅の黒カードに */
+.separatedSection:not(#section-first) > .separatedSection__contentsWrapper > .notion-callout.notion-purple_background_co {
+  border-radius: 18px; padding: 1.75rem 1.5rem; text-align: center;
+}
+.separatedSection:not(#section-first) > .separatedSection__contentsWrapper > .notion-callout.notion-purple_background_co :is(b,strong) { display: block; font-size: 1.2rem; margin-bottom: .4rem; }
+.separatedSection:not(#section-first) > .separatedSection__contentsWrapper > .notion-callout.notion-purple_background_co a {
+  display: inline-block; margin-top: .9rem; padding: .7rem 1.4rem; border-radius: 999px; border: none;
+  background: var(--accent); color: var(--accent-ink); font-weight: 900; text-decoration: none;
+}
+
+/* ---------- 区切り線・フッター文言・編集メモ ---------- */
+.notion-hr { border-color: #ddd; margin: 2.5rem 0 1.5rem; }
+details { font-size: .85rem; color: var(--muted); margin-top: 2rem; }
+summary { font-size: .85rem; border-bottom: 1px dashed #ccc; color: var(--muted); }
+details > div { padding-top: .5rem; }
+
+/* サイト共通フッター（あれば）を黒に */
+.footer { background: var(--ink); color: #fff; --fg-color: #fff; --fg-color-1: #fff; padding: 2em 0; margin-top: 0; }
+
+/* ---------- スマホ ---------- */
+@media (max-width: 640px) {
+  .separatedSection { padding: 2.5rem 0; }
+  #section-first { padding: 1.5rem 0 2.5rem; }
+  #section-first .notion-h1 { font-size: 1.5rem; }
+  #section-first .notion-text :is(b,strong) { font-size: 2rem; }
+  .notion-h2 .notion-blue { font-size: 2.6rem; }
+  .notion-column .notion-callout { min-height: auto; }
+  .notion-callout.notion-orange_background_co :is(b,strong) { font-size: 2.4rem; }
+  /* スマホではカラムが縦積みになるので、正方形トリミングをやめて写真の横を切らない */
+  .notion-column .notion-asset-wrapper img { aspect-ratio: auto; height: auto; object-fit: contain; }
+  .notion-column .notion-asset-wrapper { margin: 0 0 1rem; }
+  .separatedSection__contentsWrapper > .notion-asset-wrapper-image { max-width: 100%; }
+  .notion-embed iframe { height: 260px; }
+}
+
+/* 保存→反映の実測（2026-09-11）：CSSはWraptas側（Firestore）に保存され、保存が通れば公開側・previewとも1分以内に同時反映 */

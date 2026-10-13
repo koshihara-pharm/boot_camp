@@ -93,3 +93,40 @@ Vibe Coding コース限定のオンライン・インキュベーション。�
 - [Vision Proで空間ジェスチャーアプリを作った物語](https://note.com/singsoc/n/n86955f6b092a)
 
 作り方の参考: [demo.md](https://github.com/SingularitySociety/societys_statement/blob/main/bootcamp/demo.md)（完成版ではなく、価値の本質だけを示す最小のデモを作る。HTML 1枚や固定データでもよい。3〜5人に見せて反応を見る）
+
+## 過去の参加者が公開している成果物（2026-10-11 調べ）
+
+応募時に出したものの一覧は公開されていない。参加者の週報は `SingularitySociety/bootcamp004` の `reports/` にあるが、このリポジトリは非公開（参加者のみ）。
+
+公開されていて見られたもの:
+
+- 第4回1期 Vibe Coding コース（個人参加）の参加記録: https://github.com/yukihiroyamaguchi569/ss-bootcamp004
+  - 院内感染対策ラウンドアプリ「めぐる君」: https://github.com/yukihiroyamaguchi569/ict-round （公開アプリ https://ict-round.conect.llc/ ）。スマホ・タブレットでラウンドを記録し、Word の報告書を出す。データはブラウザ内に保存（localStorage）。README に公開 URL と QR コード、機能一覧、データの保存の考え方を書いている
+  - ゲーム型 AI 研修「地獄のICT」: https://github.com/yukihiroyamaguchi569/hell-ict （医療従事者向け。シナリオはダミーを公開し、本番は非公開）
+  - Twitter クローン（Supabase の学習用）
+- おしゃべり猫型ロボット「ミーア」（過去回の参加者。参加記は kazulog.fun）: 手のひらサイズの猫型ロボット。100種類以上の表情で話しかけ、方言や性格を変えられる。税込 9,800円で販売されていた。今後は天気、カレンダー、健康データと連携したリマインドを予定（https://moov.ooo/article/668dfba514ee9d129655b683）。BootCamp から実際に売る製品になった例
+- 名前だけ分かっていて、中身を確かめられなかったもの: 若葉台コミュニティラジオ（地域の課題）、AITs 名刺トレカ、visionOS アプリ Teegarden、Vision Pro の空間ジェスチャーアプリ、エンジニア未経験の PM が ChatGPT で作ったプロダクト。どれも note の記事で、この作業環境からは開けない
+- 1期全体の傾向（募集ページより）: Supabase や Firebase を使った Web アプリ、手元で動かすローカルツール
+- 過去回の参加レポート（note など。この作業環境からは開けない）: 上の「過去の参加者のレポートと最終発表」を参照
+
+このプロジェクトへの示唆:
+- 医療の現場の人が、自分の職場の困りごとをスマホ用 Web アプリにした例がすでにある。審査で評価される形に近い
+- README の最初に「公開 URL」「QR コード」「何ができるか」「データをどこに保存するか」を書くと、見る人にすぐ伝わる
+- 本番データを出せないときは、ダミーを公開して「本番は非公開」と明記する、という分け方が使える
+
+## 運営側（Singularity Society と関係者）が公開している、実際に作ったもの（2026-10-11 調べ）
+
+| 作ったもの | 中身 | アイデア集の対応する項目 |
+|---|---|---|
+| [Reqmo](https://github.com/SingularitySociety/reqmo) | オープンソースのオンデマンド配車システム（配車エンジン、管理画面、バスの動きのシミュレーター、AI で配車設定を調整する画面） | デマンド乗合タクシー予約・配車システム（公共） |
+| [free-3d-models](https://github.com/SingularitySociety/free-3d-models) | ShapeScript で書いた無料の 3D モデル集 | 3D プリンタ向けの設計ツール（ハードウェア） |
+| [eCart](https://github.com/SingularitySociety/eCart) | 電動の運搬カート | モビリティ（ハードウェア） |
+| [Paper AI](https://github.com/SingularitySociety/paper_ai_v2) | arXiv の論文を定期的に探して要約し、Slack に投稿するボット。目的は「ブートキャンプメンバー間での論文学習」 | — |
+| [egroups](https://github.com/SingularitySociety/egroups)、[firepresso](https://github.com/SingularitySociety/firepresso) | Firebase で作ったグループウェア、ブログ・ホームページの仕組み | — |
+| [AI地政学](https://github.com/SingularitySociety/ai_geography) | AI チップ、人型ロボット、自動運転の業界動向のまとめ | — |
+| [World Models](https://github.com/SingularitySociety/WorldModels) | LLM が苦手な「常識」の問題集（ベンチマーク） | — |
+| [GraphAI](https://github.com/receptron/graphai) | AI の処理をつなぐ仕組み（運営の技術） | GraphAI の各項目 |
+| [MulmoCast](https://github.com/receptron/mulmocast-cli) | AI 時代のマルチメディア発表ツール（運営の技術） | MulmoCast の各項目 |
+| [MulmoClaude](https://github.com/receptron/mulmoclaude) | 自分専用の AI アシスタントを育てる道具（運営の技術。2期の募集要項で「安全な Vibe Coding」に使うと紹介） | — |
+
+アイデア集の多くの項目は「まだ作られていない案」で、作ったものの一覧は公開されていない。参加者の週報（`SingularitySociety/bootcamp004`）は非公開。
