@@ -61,6 +61,33 @@
 - E7: https://chpa.org/health-in-hand-foundation/our-initiatives/up-and-away 、https://archive.cdc.gov/www_cdc_gov/media/releases/2011/p1213_Medicine_overdose.html
 - 日本: くすり教育スライド https://www.rad-ar.or.jp/finder/release/release--2025-03-26.pdf 、勇者ジョーザ https://kyodonewsprwire.jp/release/202010085438 、絵本ポポロン https://forbesjapan.com/articles/detail/73734 、マヤとくすりやさんのぼうけん https://www.yakuji.co.jp/?p=134983
 
+## ゲーム（2026-10-13 追加）
+
+| # | ゲーム | 国 | 誰に | 中身 | 根拠 |
+|---|---|---|---|---|---|
+| G1 | Re-Mission（HopeLab） | 米国 | 13〜29 歳のがん患者 | 体の中で、ナノボットが薬を武器にがん細胞とたたかう。「薬を飲むと体の中で何が起きるか」を遊びで分からせる | 34 施設 375 人のランダム化試験（Pediatrics 2008）。ふつうのゲームを遊んだ組より、飲み薬の抗がん剤と抗菌薬をきちんと飲めた（血液検査とふたの記録で確かめた） |
+| G2 | Monster Manor（Sanofi、Diabetes UK、Ayogo） | 英国 | 6〜13 歳の 1 型糖尿病 | 血糖を測って記録するたびに、くす玉を割ってモンスターを集められる。記録は家族と医師も見られる | 賞の候補になったが、効果の研究は見つからなかった |
+| G3 | 吸入薬を使う幼児向けのお話アプリ（ノルウェー科学技術大学、2013年） | ノルウェー | 吸入薬を使う小さい子 | 薬を使う子どものお話。使えたら金の星 | 研究段階 |
+| G4 | e-Bug のゲーム（Body Busters など） | 英国・欧州 | 9〜15 歳 | ばい菌と抗菌薬。473 人の研究で知識が上がった | 上の E5 |
+| G5 | 錠剤を飲むチャレンジ（遊びとして） | カナダ、豪州 | 5 歳以上 | 小さいお菓子から順に大きくする「チャレンジ」。5 歳未満には向かない、と豪州の記事 | 上の 2 |
+
+日本では:
+- 子どもが「薬を飲む」ことを遊びで練習・記録するゲームは見つからなかった
+- 塩野義製薬の ADHD の子ども向けゲーム型アプリは「薬の代わりの治療」で、薬を飲む助けではない
+- お医者さんごっこのアプリ（海外製）は日本でも遊べるが、自分の薬を飲むこととはつながっていない
+
+### このアプリでの案（ゲーム）
+1. **「のめた！」で集めるコレクション**（G2 にならう）: スタンプを押すたびに、キャラクターや絵が 1 つずつそろう。最後まで飲みきると完成。今のスタンプをそのまま広げられる
+2. **からだの中の「たたかい」の絵**（G1 にならう、1〜6 歳向けにやさしく）: 飲むと、からだの中でキャラクターががんばる短いアニメ。薬ごとの効き目は言わない。中身は薬剤師が確かめる
+3. **錠剤チャレンジ**（G5）: 5 歳以上。段階ごとにメダル。のどに詰まらせない注意つき
+
+出どころ（ゲーム）:
+- G1: https://hopelab.org/history 、https://news.uthscsa.edu/video-game-helps-cancer-patients-13-29-adhere-to-treatment
+- G2: https://www.mobihealthnews.com/news/sanofi-launches-mobile-game-kids-type-1-diabetes-uk 、https://pharmafile.com/news/sanofi-launches-monster-manor-diabetes-app/
+- G3: https://norwegianscitechnews.com/?p=20158
+- G5: https://theconversation.com/how-do-you-teach-a-child-to-swallow-a-pill-hint-use-lollies-154552
+- 塩野義製薬: https://news.livedoor.com/article/detail/31463152/
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
