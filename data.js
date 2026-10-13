@@ -2,7 +2,7 @@
 // 内容は薬剤師が元の資料と照らして確認する。資料の情報は docs/07_demo_data.md を参照。
 
 const SOURCE = {
-  title: "散剤と飲食物の飲み合わせ（味）一覧",
+  title: "飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」",
   revised: "2016年7月改訂",
   url: "https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf",
 };

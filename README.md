@@ -22,7 +22,7 @@
 
 ## データの出どころ
 
-- 薬と食べ物の相性、薬の味: 「散剤と飲食物の飲み合わせ（味）一覧」2016年7月改訂（[PDF](https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf)）から、小児科でよく出る 25 種類を選んで使っています。詳しくは [docs/07_demo_data.md](docs/07_demo_data.md)
+- 薬と食べ物の相性、薬の味: 飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」2016年7月改訂（[PDF](https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf)）から、小児科でよく出る 25 種類を選んで使っています。詳しくは [docs/07_demo_data.md](docs/07_demo_data.md)
 - どの薬にも共通の注意: [PMDA くすりQ&A](https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html)
 - 飲ませ方のコツ: 千葉県こども病院、マイナビニュース、熊本 くすりの話、PMDA、龍角散の商品説明、診断と治療社（各項目に出どころを表示）
 
