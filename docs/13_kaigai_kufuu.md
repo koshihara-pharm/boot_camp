@@ -26,6 +26,41 @@
 4. **ごほうびの数をだんだん増やす**（8）: 「最後まで飲みきったらごほうび」に、途中のごほうび（3 回でひとつ、など）を足す
 5. **やらないもの**: 薬に味をつける（1）、薬の形を変える（7）は、薬局や製薬会社の仕事。アプリでは扱わない（CLAUDE.md の「医療上の判断をしない」）
 
+## 教育系のコンテンツ（2026-10-13 追加。ユーザー「教育系で日本にないものがいい」）
+
+| # | コンテンツ | 国 | 誰に | 中身 | 日本では |
+|---|---|---|---|---|---|
+| E1 | 錠剤を飲む練習の動画（Alberta Children's Hospital、AboutKidsHealth、Hamilton Health Sciences） | カナダ | 子どもと親 | 病院が作った動画。お菓子の大きさを少しずつ上げる練習、頭の向き、水の飲み方。ピエロ（ホスピタルクラウン）が練習する動画もある。Alberta は約 19 分 | 病院の動画・プログラムは見つからなかった |
+| E2 | KidzMed（e ラーニング） | 英国 | 医療者と家族 | 15 分の e ラーニングと配布資料で、錠剤を飲む 6 ステップを教える。イングランド、スコットランド、ウェールズに広がる | 見つからなかった |
+| E3 | Medicines for Children | 英国 | 親 | 220 以上の薬の説明書と「飲ませ方」の動画。小児科学会と小児薬剤師の会 | 親向けにここまでそろったものは見つからなかった |
+| E4 | Medikidz（漫画） | 英国（ニュージーランドの医師 2 人が始めた） | 10〜15 歳 | 体の部分ごとに 5 人のヒーロー。体の形をした星「メディランド」で病気と治療を説明。100 冊以上、医師と元マーベルの作家が書き、患者の子どもも原稿を確かめる。製薬会社などの支援で作った巻もある | 見つからなかった |
+| E5 | e-Bug（授業とゲーム） | 英国・欧州（英国の公衆衛生機関が中心） | 7〜15 歳と先生 | ばい菌、手洗い、抗菌薬の正しい使い方。ゲーム「Body Busters」など。473 人の研究で知識が上がった | 日本語版は見つからなかった |
+| E6 | Kids Health Info（アプリと動画） | オーストラリア（Royal Children's Hospital Melbourne） | 親と子ども | 病院が作る説明書、動画、ポッドキャスト。アプリに子ども向けの動画コーナー | 似た病院サイトはあるが、子ども向け動画まで一つのアプリにまとめたものは見つからなかった |
+| E7 | Up and Away（薬のしまい方） | 米国（CDC と業界団体） | 親 | 子どもの手の届かない、見えない所にしまう。2 歳児の 150 人に 1 人が薬の飲みすぎで救急に、という数字から始まった | 消費者庁などの注意はあるが、ここまで大きなキャンペーンは見つからなかった |
+
+日本にあるもの（比べるため）:
+- くすり教育（くすりの適正使用協議会）: 中学生が中心。2025年3月に小学 5・6 年生向けのスライド（45 枚）を出した。**未就学児向けは見つからなかった**
+- 茨城県薬剤師会と日本大学の教材「勇者ジョーザの冒険」（2021年。小学生向け、予告編の動画あり）
+- 絵本: 薬剤師が作った『ベンゼンじまのポポロン』。会社の調べで、読み聞かせのあと「飲ませるのに困った」親が約 78% から約 35% に（査読なし、人数不明）。2026年5月に『マヤとくすりやさんのぼうけん』の日本語版
+
+**分かったこと**: 日本の薬の教育は「学校の高学年・中学生」に向いていて、**いちばん薬で困る 1〜6 歳（docs/03）向けのものがほとんどない**。海外は、病院が「飲む練習」の動画や、親向けの飲ませ方の動画まで出している。
+
+### このアプリでの案（教育）
+1. **飲む前に見る短いお話（1〜6 歳）**: 「おくすりは、からだの中でばいきんとたたかう」のような 30 秒の絵と文。飲ませる前に親が見せる。中身は薬剤師が書くか確かめる（AI が作った説明をそのまま出さない）。病気や薬ごとの効き目は書かず、「薬を飲むと体を助けてくれる」程度にとどめる
+2. **錠剤の練習モード**（上の案 2 を、E1・E2 にならって動画や絵で）
+3. **親向けの「飲ませ方」動画**（E3 にならう。形ごと: 粉薬、水薬、坐薬、目薬）。ユーザーが薬剤師として出演すれば、ほかにない強みになる
+4. **薬のしまい方**（E7）: 記録の画面に「手の届かない、見えない所に」を一言
+
+出どころ（教育）:
+- E1: https://www.ohsu.edu/school-of-medicine/snack-lab/instructional-videos-swallowing-pills 、https://aboutkidshealth.ca/pill-swallowing 、https://hamiltonhealthsciences.ca/?p=14351
+- E2: https://learninghub.nhs.uk/catalogue/KidzMed/about 、https://cavuhb.nhs.wales/our-services/paediatrics/kidzmedz-cymru/
+- E3: https://www.rcpch.ac.uk/resources/medicines-for-children
+- E4: https://www.conquer-magazine.com/issues/2016/vol-2-no-4-august-2016/meet-the-medikidz-medical-comic-books-for-kids 、https://healthmanagement.org/c/icu/news/comic-books-explain-icu-stroke-to-kids
+- E5: https://pmc.ncbi.nlm.nih.gov/articles/PMC6376338 、https://pubmed.ncbi.nlm.nih.gov/20841757/
+- E6: https://www.rch.org.au/rch/apps/khi_app/Kids_Health_Info_app/
+- E7: https://chpa.org/health-in-hand-foundation/our-initiatives/up-and-away 、https://archive.cdc.gov/www_cdc_gov/media/releases/2011/p1213_Medicine_overdose.html
+- 日本: くすり教育スライド https://www.rad-ar.or.jp/finder/release/release--2025-03-26.pdf 、勇者ジョーザ https://kyodonewsprwire.jp/release/202010085438 、絵本ポポロン https://forbesjapan.com/articles/detail/73734 、マヤとくすりやさんのぼうけん https://www.yakuji.co.jp/?p=134983
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
