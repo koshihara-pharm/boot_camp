@@ -1,0 +1,65 @@
+# 使えそうな資料の一覧
+
+- 作成: 2026-10-13
+- 探し方: Web 検索。この作業環境からは多くのサイトを直接開けないため、**中身は検索結果の要約で確かめただけ**。使う前に、ユーザー（薬剤師）が原本を開いて確かめる
+- 病院・薬局が作った表は、それぞれ作った所に権利がある。アプリに載せるときは docs/07 と同じ考え方（事実だけを、別の形にして、出どころを書く。一般公開の前に許可をお願いする）
+
+## A. 薬と食べ物の飲み合わせの表（病院の薬剤部など）
+
+| 優先 | 資料 | 作った所 | 時期 | 中身・特徴 | URL |
+|---|---|---|---|---|---|
+| ◎ | お薬の飲み合わせ表 | JA北海道厚生連 帯広厚生病院 薬剤部 | 2024年12月作成 | **見つかった中で一番新しい**。アスベリン散、オゼックス、エリスロシンなど。ヨーグルト、アイス、練乳などとの飲みやすさ。備考欄あり | https://www.dou-kouseiren.com/byouin/obihiro/about/vt1bv7000000987n-att/fvprkl0000005bkm.pdf |
+| ◎ | 粉薬の味と飲み合わせの表（kona.pdf） | 神奈川県立こども医療センター 薬剤科 | 未確認 | 商品名ごとに**香り・味、苦味、ざらつき**の列と、水、茶、オレンジジュース、りんごジュース、スポーツドリンク、牛乳、ヨーグルトとの相性。「味」の機能に使いやすい | https://kcmc.kanagawa-pho.jp/data/media/kanagawa-pho/page/department/medicament/kona.pdf |
+| ○ | 粉薬と飲食物の飲み合わせ一覧表 | hokushin-hosp.jp の病院（病院名は未確認） | 2021年11月改訂 | 「アイスクリームは少し溶かしてから混ぜるとよく混ざり飲みやすい」という注記あり。参考文献は飯塚病院の表と同じ系統（小児科臨床、Pharma Medica） | https://www.hokushin-hosp.jp/cms/wp-content/uploads/2022/08/%E7%B2%89%E8%96%AC%E3%81%A8%E9%A3%B2%E9%A3%9F%E7%89%A9%E3%81%AE%E9%A3%B2%E3%81%BF%E5%90%88%E3%82%8F%E3%81%9B%E4%B8%80%E8%A6%A7%E8%A1%A82021%E5%B9%B411%E6%9C%88%E6%94%B9%E8%A8%82.pdf （旧版 https://www.hokushin-hosp.jp/cms/wp-content/uploads/2021/02/mix-medicine.pdf ） |
+| ○ | 服用補助食品の相性表 | 国立成育医療研究センター | 元は2010年の日経DI | ドライシロップと、ココア、牛乳、アイス、お茶、ヨーグルト、ジュース、乳酸菌飲料、スポーツ飲料の相性（docs/05 の 7） | https://www.ncchd.go.jp/hospital/about/section/medicine/nomiawase.pdf |
+| ○ | 散剤と飲食物の飲み合わせ（味）一覧 | 飯塚病院 薬剤部 | 2016年7月改訂 | 今アプリで使っている表（docs/07） | https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf |
+| △ | 散剤と服用補助食品の飲み合わせ一覧表 | e-classa.net（作り手は未確認） | 未確認 | におい、味、水、茶、ジュース、スポーツ飲料など | https://www.e-classa.net/contents/santa/file/message/.pdf |
+
+**使い方の案**: 1 つの表に頼らず、**複数の病院の表を突き合わせる**。「3 つの病院の表で ○」のように出せば、
+- 1 つの表の読み違いや古さに左右されにくい（2016年版の弱点を補える）
+- どこか 1 か所の表を写した形にならない（事実を集めて、自分たちの形で見せる）
+- 表どうしで評価が分かれる所は「資料によって評価が分かれる」として、今の △ の表示がそのまま使える
+
+## B. 飲ませ方の資料（公的機関・病院）
+
+| 優先 | 資料 | 作った所 | 中身 | URL |
+|---|---|---|---|---|
+| ◎ | お薬の飲ませ方 | 東京都 保健医療局 | 公的機関。シロップはよく振ってから、ほっぺの内側に流しこむ。哺乳瓶の乳首を使う方法 | https://www.hokeniryo.metro.tokyo.lg.jp/anzen/iyaku/baby/kusuri |
+| ◎ | ちいさなお子さまへのおくすりの上手な飲ませ方・使い方ハンドブック | 旭川厚生病院（JA北海道厚生連。作成元の詳細は未確認） | **粉薬、シロップ、錠剤、坐薬、塗り薬**がそろっている。今のアプリは粉薬だけなので、広げるときの土台になる | https://dou-kouseiren.com/byouin/asahikawa/about/vt1bv7000000k21d-att/vt1bv7000000k242.pdf |
+| ○ | 子どもの薬の飲ませ方 | 札幌市立病院 | 苦い粉薬の対処。坐薬を入れたあとに便が出たとき | https://www.city.sapporo.jp/hospital/medicine/howtotake_child.html |
+| ○ | 第10話 小児への薬の飲ませ方の工夫と注意点 | 磐田市立総合病院 | マクロライド系の一部は酸性の飲み物で苦くなる、など | https://www.hospital.iwata.shizuoka.jp/medicine/010/ |
+| ○ | かるがも 第008号 | 千葉県こども病院 | 粉薬をほっぺの内側にぬる、スポイト（今のアプリの出どころの 1 つ）。きょうだいに同じ薬を使わない。2003年と古い | https://www.pref.chiba.lg.jp/kodomo/shokai/documents/karu-08.pdf |
+| ○ | 保護者向けのお便り（お薬の上手な飲ませ方） | 岐阜市（学校薬剤師会） | 2023年8月 | https://www.city.gifu.lg.jp/_res/projects/default_project/_page_/001/003/647/kodomo287.pdf.pdf |
+| ○ | 保育園の保健だより | 大田区（保育園看護師） | 2023年。練って上あごやほっぺにつける、スポイト、飲めたらたくさんほめる | https://www.city.ota.tokyo.jp/seikatsu/kodomo/hoiku/hoken/sukoyaka.files/r5kosodate8gatu.pdf |
+| ○ | 薬の保管などの案内 | 大阪母子医療センター | 保管方法、冷蔵の指示 | https://www.wch.opho.jp/data/media/opho_center/page/hospital/consultation/mamechishiki/chiryou_11.pdf |
+| ○ | 冊子「子どもの薬」 | 広島国際大学 | 保育園や薬局で配った冊子。保管、坐薬の入れ方 | https://www.hirokoku-u.ac.jp/assets/files/profile/pr/press/2015/No.25.pdf |
+
+## C. 研究・専門誌（根拠を確かめる用）
+
+| 資料 | 中身 | URL |
+|---|---|---|
+| 薬学雑誌 128巻3号（2008） | 飲料と混ぜたときの pH と苦味の測定 | https://yakushi.pharm.or.jp/FULL_TEXT/128_3/pdf/479.pdf |
+| 薬学雑誌 123巻8号 | 糖分の多いゼリー菓子がアセトアミノフェンの吸収を遅らせる、という報告。服薬補助に使うときの注意 | https://yakushi.pharm.or.jp/FULL_TEXT/123_8/pdf/665.pdf |
+| 日経DI（ムコダインの先発品と後発品の違い） | クラリスなどとカルボシステインを混ぜると苦くなる。後発品で苦味が違う（会員向け） | https://medical.nikkeibp.co.jp/leaf/mem/pub/di/column/matsumoto/201603/546000.html |
+
+## D. 診療所・薬局・メディアの記事（低め。表現の参考）
+
+- 山見小児科「薬の味・飲み合わせ・食べ合わせ」: https://getwell.jp/%E8%96%AC/%E8%96%AC%E3%81%AE%E5%91%B3%E3%83%BB%E9%A3%B2%E3%81%BF%E5%90%88%E3%82%8F%E3%81%9B%E3%83%BB%E9%A3%9F%E3%81%B9%E5%90%88%E3%82%8F%E3%81%9B
+- 汐入耳鼻咽喉科「子供の抗生物質の味や飲み合わせ」: http://sioiri.life.coocan.jp/jibika/drugs3.html
+- くるみ薬局「粉薬と食品の味ののみ合わせ一覧」: https://kurumi-pharmacy.jp/2018/08/08/%E7%B2%89%E8%96%AC%E3%81%A8%E9%A3%9F%E5%93%81%E3%81%AE%E5%91%B3%E3%81%AE%E3%81%AE%E3%81%BF%E5%90%88%E3%82%8F%E3%81%9B%E4%B8%80%E8%A6%A7/
+- ファルマラボ（薬剤師向け）「小児の粉薬に合う飲食物の飲み合わせ」: https://www.38-8931.com/pharma-labo/carrer/skill/howto_child_medicine.php
+- ミナカラ「クラリスドライシロップの苦味を感じさせない飲ませ方」: https://minacolor.com/articles/2654
+- 看護roo「達人が明かす『服薬を嫌がる小児』への秘策」（docs/07）: https://www.kango-roo.com/work/3513/
+
+## E. 探して見つからなかったもの
+
+- 製薬会社が公式に出している「飲食物との混合」の一覧（薬ごとの患者向け資料、インタビューフォームの配合変化の欄を個別に当たる必要がある）
+- 服薬ゼリー（おくすり飲めたね）と抗生物質の相性の一覧。龍角散は別の商品「らくらく服薬ゼリー」を抗生物質や苦い薬向けとしている
+- 日本薬剤師会、日本小児科学会、くすりの適正使用協議会が出した保護者向けの飲ませ方の資料
+- 静岡県立こども病院、兵庫県立こども病院の薬剤部の資料
+
+## 次にやること（案）
+
+1. ユーザーが A の ◎ 2 つ（帯広厚生病院 2024年、神奈川県立こども医療センター）を開き、使えそうか見る
+2. 使えそうなら、アプリの 25 種類について、飯塚病院の表と突き合わせる（画像を送ってもらえれば Claude が読み取る）
+3. B の東京都と旭川のハンドブックをもとに、飲ませ方のコツを、シロップ・坐薬まで広げる（参加後の毎週の機能追加の候補）

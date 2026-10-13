@@ -22,6 +22,7 @@
 8. [docs/08_monetize.md](docs/08_monetize.md) — マネタイズ（似たアプリのお金の取り方、このアプリでの候補と進め方）
 9. [docs/09_jisseki.md](docs/09_jisseki.md) — これまでの実績（応募フォーム用）。薬局向け Web 制作の副業リポジトリ https://github.com/koshihara-pharm/homepage_small_business の要約
 10. [docs/10_site_tsukurikata.md](docs/10_site_tsukurikata.md) — サイトの作り方（アプリ＝index.html と data.js、読み物ページ＝Notion + Wraptas。公開と更新の手順、公開前チェックリスト）
+11. [docs/11_shiryou_list.md](docs/11_shiryou_list.md) — 使えそうな資料の一覧（飲み合わせの表、飲ませ方、研究。複数の病院の表を突き合わせる案）
 
 01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
