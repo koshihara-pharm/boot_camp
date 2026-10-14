@@ -116,6 +116,42 @@
 - シール表: https://www.hmpgloballearningnetwork.com/site/thederm/site/cathlab/event/increasing-treatment-compliance-sticker-charts
 - くすりのピクトグラム: https://www.rad-ar.or.jp/news/pdf/rad-ar-news16-3-2005sep.pdf
 
+## 散剤（粉薬）向けで、小さい子が楽しめるもの（2026-10-14 追加）
+
+ユーザー: 「錠剤ではなく散剤のコンテンツは？ 教育は早いから、楽しめる系がいい」
+
+**分かったこと: 散剤の楽しいコンテンツは、海外では見つからなかった**
+- 欧米の子どもの薬は水薬が中心。粉は顆粒（例: モンテルカストの顆粒をりんごのピューレや母乳に混ぜ、15 分以内に）くらいで、説明書はあるが「楽しい」ものはない
+- 韓国（가루약）と台湾（藥粉）は粉薬を使う国だが、出てくるのは飲ませ方のコツ（少しの水で練って上あごに、ジャムで練る、牛乳には混ぜない）だけで、絵本・動画・ゲームは見つからなかった
+- → **粉薬を楽しくするコンテンツは、世界でも空いている**。日本は粉薬の国なので、ここで作れば先頭に立てる
+
+**粉薬にも使える、小さい子向けの楽しい工夫（海外）**
+
+| # | 工夫 | どこ | 中身 | 根拠 |
+|---|---|---|---|---|
+| P1 | 歌で予告する | 米国 St. Jude 小児病院 | 「この歌が終わったら、おくすりの時間だよ」と、歌の終わりを合図にする。毎日同じ流れにする | 病院の親向けの手引き |
+| P2 | ぬいぐるみに先に飲ませる | 米国 St. Jude、世界のテディベア病院 | 人形やぬいぐるみで先に練習する。テディベア病院（子どもがぬいぐるみの「親」になって診てもらう）は 40 か国ほど | テディベア病院のまとめの研究: 10 研究のうちランダム化 3 つ、2 つで不安が下がった。日本でも医学生の「ぬいぐるみ病院」が約 30 大学にある（イベント。家で薬を飲むときに使うものではない） |
+| P3 | 「飲む？」でなく「どうやって飲む？」を選ばせる | 米国のチャイルドライフ、台湾 衛生福利部 | 「おくすりの時間だよ」と言い、飲むかどうかは聞かない。順番や場所、道具を選ばせる。おどしたり、たたいたりしない | 専門職の手引き、台湾の公的機関 |
+| P4 | 子ども向け番組の歌 | 米国 CoComelon「Sick Song」、Daniel Tiger | かぜの JJ が薬をいやがり、ママが歌で「水・休む・薬」を教える。Daniel Tiger はアレルギーや注射の回で「薬は体を助ける」 | 番組（研究なし） |
+| P5 | 「薬はおかしだよ」と言わない | 台湾（国家衛生研究院の記事） | おかしと思って、あとで勝手に飲む危険がある。飲む目的を伝える | 公的機関の注意 |
+
+### このアプリでの案（散剤×楽しい×1〜6 歳）
+1. **おくすりの歌タイマー**（P1）: 「のめた！」の前に 30 秒の歌（または音）が流れ、終わったら「おくすりの時間」。毎日同じ流れになる
+2. **ぬいぐるみと一緒に**（P2）: 「くまさんにも のませてあげてね」→ 子どもがぬいぐるみに飲ませるまねをする → 本人が飲む → 2 人分のスタンプ
+3. **選べるのは「混ぜていい食べ物」だけ**（P3 ＋このアプリのデータ）: 「アイスとヨーグルト、どっちにする？」の 2 択を、その薬で両方の表が ○ の食べ物から出す。**表のデータと楽しさをつなげられるのは、このアプリだけ**
+4. **おくすりだんごづくり**（飲ませ方のコツ 1 を遊びに）: 少しの水で練ってだんごにする手順を、絵で「こねこね → まるめる → ほっぺにぺたっ」と見せる
+5. **やってはいけない**: 「おかしだよ」と言わない（P5）。アプリの言葉にも使わない
+
+どれも中身（歌の言葉、だんごの手順）は薬剤師が確かめる。効き目や量には触れない。
+
+出どころ（散剤・楽しい系）:
+- 顆粒の飲ませ方: https://www.kkh.com.sg/patient-care/medicine/montelukast/dosage 、https://www.pss.org.sg/sites/default/files/public-resource/Montelukast_0.pdf
+- 韓国: https://www.wikitree.co.kr/articles/984348 、https://v.daum.net/v/p68YZMOJpf
+- 台湾: https://mohw.gov.tw/cp-16-27034-1.html 、https://www.commonhealth.com.tw/article/60717
+- P1・P2: https://together.stjude.org/en-us/diagnosis-treatment/medication-management/helping-toddler-or-preschooler-take-medicine-by-mouth.html
+- テディベア病院のまとめ: https://phsu.edu/_resources/documents/Effectiveness-of-pretend-medical-play-in-improving-childrens-health-outcomes-and-well-being-a-systematic-review.pdf 、日本（みえぬいぐるみ病院）: https://www.pref.mie.lg.jp/common/content/000266142.pdf
+- P4: https://www.yidio.com/show/cocomelon-kids-songs-and-nursery-rhymes/season-5/episode-1/links.html 、https://www.neighborhoodarchive.com/dtn/episodes/303a
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
