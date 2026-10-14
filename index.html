@@ -284,6 +284,46 @@
     cursor: pointer;
   }
 
+  .choose-open {
+    width: 100%;
+    min-height: 60px;
+    padding: 8px 16px;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: inherit;
+    color: inherit;
+    border: 3px dashed var(--stamp);
+    border-radius: 999px;
+    background: var(--card);
+    cursor: pointer;
+  }
+  .choose-open small { display: block; font-size: 14px; font-weight: normal; color: var(--muted); }
+  .choice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 8px; }
+  .choice-pair.one { grid-template-columns: 1fr; justify-items: center; }
+  .choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 150px;
+    padding: 16px 8px;
+    border: 3px solid var(--line);
+    border-radius: 20px;
+    background: var(--card);
+    color: inherit;
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .choice:active { transform: scale(0.97); }
+  .choice .emo { font-size: 64px; line-height: 1; }
+  .choice.picked { width: 70%; border-color: var(--stamp); animation: pop 0.5s ease-out; cursor: default; }
+  @media (prefers-reduced-motion: reduce) {
+    .choice.picked { animation: none; }
+  }
+
   .day { margin-top: 20px; }
   .day h3 { font-size: 18px; margin: 0 0 8px; }
   .day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
@@ -311,6 +351,7 @@
   }
   .nav b { color: var(--accent); }
   .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .row[hidden] { display: none; }
   .row > * { flex: 1 1 140px; }
   .primary {
     min-height: 52px;
@@ -422,6 +463,7 @@
 
   <section id="detail" hidden>
     <button class="back" data-go="" type="button">← 薬を選びなおす</button>
+    <div class="row" id="choose-row"><button class="choose-open" type="button" id="choose-open">👧 どっちで のむ？<small>子どもが 2 つから選べます</small></button></div>
     <div id="card" class="card"></div>
     <div class="row"><button class="secondary" type="button" id="add-from-drug">この薬を「おくすり記録」に入れる</button></div>
 
@@ -537,6 +579,18 @@
     <button class="stamp-button" id="close-praise" type="button">やったね</button>
     <br>
     <button class="undo" id="undo" type="button">まちがえた（とりけす）</button>
+  </div>
+</div>
+
+<div class="overlay" id="choose" hidden role="dialog" aria-modal="true" aria-labelledby="choose-title">
+  <div class="praise">
+    <h2 id="choose-title">どっちで のむ？</h2>
+    <div class="choice-pair" id="choice-pair"></div>
+    <p id="choose-note" hidden>おとなの方へ: 少しの量に混ぜて、すぐに飲ませてください。えらべる食べ物は、病院の表で「飲みやすい」となっていて、表どうしで評価が分かれないものだけです。</p>
+    <button class="stamp-button" id="choose-done" type="button" hidden>とじる</button>
+    <button class="undo" id="choose-other" type="button">ほかのにする</button>
+    <br>
+    <button class="undo" id="choose-close" type="button">やめる</button>
   </div>
 </div>
 
@@ -882,6 +936,12 @@
       ]);
 
       const actions = el("div", { class: "row" });
+      const drug = DRUGS[drugIndex];
+      if (drug && choiceFoods(drug).length >= 2) {
+        const pick = el("button", { class: "secondary", type: "button", text: "👧 どっちで のむ？" });
+        pick.addEventListener("click", () => openChoose(med.drug));
+        actions.append(pick);
+      }
       const stampButton = el("button", { class: "primary", type: "button", text: "のめた！" });
       stampButton.addEventListener("click", () => addStamp(med.drug));
       actions.append(stampButton);
@@ -1035,6 +1095,99 @@
     go("record");
   });
 
+  // ---- どっちで のむ？（子どもが 2 つから選ぶ） ----
+  // 選択肢は foodsIn(drug, "good") の食べ物だけ（表で飲みやすく、ほかの表と評価が分かれないもの）。
+  // コーヒー牛乳はカフェインを含むので、小さい子の選択肢には出さない。シロップ（薬局で出す単シロップ）は家にないことが多いので出さない
+  const KID_FOODS = {
+    "アイスクリーム": ["🍨", "アイス"],
+    "水": ["💧", "おみず"],
+    "プリン": ["🍮", "プリン"],
+    "牛乳": ["🥛", "ぎゅうにゅう"],
+    "お茶": ["🍵", "おちゃ"],
+    "ヨーグルト": ["🥣", "ヨーグルト"],
+    "ゼリー": ["🍧", "ゼリー"],
+    "りんごジュース": ["🍎", "りんごジュース"],
+    "オレンジジュース": ["🍊", "オレンジジュース"],
+    "スポーツ飲料": ["🥤", "スポーツドリンク"],
+    "ココア": ["🍫", "ココア"],
+    "乳酸菌飲料": ["🧃", "にゅうさんきんドリンク"],
+  };
+  const choose = document.getElementById("choose");
+  const choicePair = document.getElementById("choice-pair");
+  let chooseFoods = [];
+  let shownPair = [];
+
+  function choiceFoods(drug) {
+    return foodsIn(drug, "good").filter((food) => KID_FOODS[food]);
+  }
+
+  function pickPair() {
+    for (let tries = 0; tries < 10; tries++) {
+      const a = chooseFoods[Math.floor(Math.random() * chooseFoods.length)];
+      const rest = chooseFoods.filter((f) => f !== a);
+      const b = rest[Math.floor(Math.random() * rest.length)];
+      const same = shownPair.includes(a) && shownPair.includes(b);
+      if (!same || chooseFoods.length === 2) return [a, b];
+    }
+    return chooseFoods.slice(0, 2);
+  }
+
+  function choiceButton(food) {
+    const [emo, label] = KID_FOODS[food];
+    return el("button", { class: "choice", type: "button", "aria-label": label }, [
+      el("span", { class: "emo", text: emo, "aria-hidden": "true" }),
+      el("span", { text: label }),
+    ]);
+  }
+
+  function showPair() {
+    shownPair = pickPair();
+    document.getElementById("choose-title").textContent = "どっちで のむ？";
+    choicePair.className = "choice-pair";
+    choicePair.replaceChildren(...shownPair.map((food) => {
+      const button = choiceButton(food);
+      button.addEventListener("click", () => picked(food));
+      return button;
+    }));
+    document.getElementById("choose-note").hidden = true;
+    document.getElementById("choose-done").hidden = true;
+    document.getElementById("choose-other").hidden = chooseFoods.length <= 2;
+    document.getElementById("choose-close").hidden = false;
+  }
+
+  function picked(food) {
+    document.getElementById("choose-title").textContent = KID_FOODS[food][1] + "で のもうね！";
+    const card = choiceButton(food);
+    card.classList.add("picked");
+    card.disabled = true;
+    choicePair.className = "choice-pair one";
+    choicePair.replaceChildren(card);
+    document.getElementById("choose-note").hidden = false;
+    document.getElementById("choose-done").hidden = false;
+    document.getElementById("choose-other").hidden = true;
+    document.getElementById("choose-close").hidden = true;
+    document.getElementById("choose-done").focus();
+  }
+
+  function openChoose(name) {
+    const drug = DRUGS.find((d) => d.name === name);
+    chooseFoods = drug ? choiceFoods(drug) : [];
+    if (chooseFoods.length < 2) return;
+    shownPair = [];
+    showPair();
+    choose.hidden = false;
+  }
+
+  function closeChoose() {
+    choose.hidden = true;
+  }
+
+  document.getElementById("choose-open").addEventListener("click", () => { if (currentDrugName) openChoose(currentDrugName); });
+  document.getElementById("choose-other").addEventListener("click", showPair);
+  document.getElementById("choose-close").addEventListener("click", closeChoose);
+  document.getElementById("choose-done").addEventListener("click", closeChoose);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !choose.hidden) closeChoose(); });
+
   // ---- スタンプ ----
   let lastStampDrug = null;
 
@@ -1110,7 +1263,10 @@
     screens.book.hidden = hash !== "stamps";
     stampBar.hidden = !drug;
 
-    if (drug) renderCard(drug);
+    if (drug) {
+      renderCard(drug);
+      document.getElementById("choose-row").hidden = choiceFoods(drug).length < 2;
+    }
     if (hash === "record") renderRecord();
     if (hash === "record-new") prepareForm();
     if (hash === "stamps") renderBook();
