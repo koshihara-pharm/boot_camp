@@ -152,6 +152,54 @@
 - テディベア病院のまとめ: https://phsu.edu/_resources/documents/Effectiveness-of-pretend-medical-play-in-improving-childrens-health-outcomes-and-well-being-a-systematic-review.pdf 、日本（みえぬいぐるみ病院）: https://www.pref.mie.lg.jp/common/content/000266142.pdf
 - P4: https://www.yidio.com/show/cocomelon-kids-songs-and-nursery-rhymes/season-5/episode-1/links.html 、https://www.neighborhoodarchive.com/dtn/episodes/303a
 
+## 海外の、子どもの薬を助ける IT ツール・サイト（2026-10-14 追加）
+
+| 種類 | 名前 | 国 | 中身 | お金 |
+|---|---|---|---|---|
+| 記録と家族で共有 | Dosie | 米国 | 子どもごとに薬と間隔を入れ、次の時間に知らせる。家族やシッターを招待でき、「だれが・いつ・何を」飲ませたか分かる。オフラインでも記録 | 無料＋広告なしの有料版 |
+| 〃 | Dosefully | 米国 | 熱さましの飲みすぎを防ぐ（24 時間の合計、アセトアミノフェンとイブプロフェンの間隔の警告）。招待コードで夫婦が同期 | 無料は子 1 人・薬 2 つ・7 日分まで。月 1.99 ドル、年 9.99 ドル、買い切り 19.99 ドル |
+| 〃 | Dosly | 米国 | 次に飲ませてよい時間、きょうの回数、体重からの量（熱さまし） | 年 19.99 ドル |
+| 〃 | DoseAlly Family | 米国 | 家族の服薬管理 | 月 3.99 ドル、年 24.99 ドル |
+| 〃 | Family HQ | 豪州 | 熱さましの記録、熱の経過を祖父母やシッターと共有 | 月 0.99 ドル |
+| 〃 | Pediary | — | 赤ちゃんの記録。祖父母・シッター・医師向けに PDF で出せる。アカウントなし、データを集めない | — |
+| 〃 | 열나요（熱が出た） | 韓国 | 体温、薬、症状、受診、予防接種を 1 本の時系列で。熱さましの時間に知らせる | — |
+| 体温計＋アプリ | Kinsa | 米国 | スマート体温計。年齢・熱・症状から家での過ごし方の目安。家族ごとに記録し、ほかの人や医師と共有。地域の病気のはやりを匿名データで見せる | 体温計の販売 |
+| 研究のアプリ | FeverApp | ドイツ | 小児科医と作った、熱の対応を記録するアプリ。国の研究費（6 つのモデル登録の 1 つ）。**小児科で配るコードで使い始める**。名前を入れずに使える | 無料（研究） |
+| 公的な案内 | HANDi Paediatric | 英国 NHS | 症状に答えると「家で様子を見る・かかりつけへ・救急へ」を案内。不要な救急受診を減らすのが目的 | 無料 |
+| 公的な情報 | NPS MedicineWise | 豪州 | 薬のリスト（バーコードで登録）とリマインダー。小児病院と作った「子どもへの薬の飲ませ方」動画 3 本（薬剤師、チャイルドライフ、看護師が出演） | 無料 |
+| 〃 | Medicines for Children（アプリ） | 英国 | 説明書と動画のサイト（上の E3）。親向けの服薬管理アプリを試作（2019 年）。公開されたかは未確認 | 無料 |
+| 子ども向けゲーム化 | KidPro | 英国ほか | 子ども用と親用の 2 つのアプリ。リスのキャラが毎日の予定を案内し、飲めたら星。星で着せかえ。製薬会社のコンテストで受賞（2017 年）。**試作どまり** | — |
+| 〃 | PillPell | イスラエル | 服薬をゲームにする。2015 年から活動なし | — |
+| 保育園 | 海外の保育園向けアプリ | 米国ほか | 与薬の同意を親がアプリで出す（薬の名前・量・回数・処方医・使い方が必須の欄、電子署名と日時）。職員が「いつ・だれが飲ませたか」を記録 | 保育園が払う |
+
+### 分かったこと
+1. **海外のアプリは「熱さましの記録と量」が中心**。次に飲ませてよい時間や体重からの量を出すものが多い。→ このアプリは「医療上の判断をしない」ので、ここはまねしない
+2. **お金の取り方**: 「無料は子ども 1 人まで、家族の同期・子ども何人でもは有料」が多い。月 1〜4 ドル、年 10〜25 ドル、買い切りもある（docs/08 の参考）
+3. **混ぜていいか・味・飲ませ方の楽しさを 1 つにしたものは、海外にもない**。粉薬向けも見つからなかった（上の「散剤」）。子ども向けのゲーム化アプリも、試作で止まっている
+4. **配り方のヒント**: ドイツの FeverApp は「小児科で配るコード」で広げている。→ 薬局の窓口で QR を渡して広げる形と同じ（副業先の薬局と相談するときの材料。勤め先の名前は公開資料に書かない）
+
+### このアプリでの案（IT ツール）
+1. **家族の同期**を、有料にする候補として残す（今は LINE で送る形。サーバーなし）。海外ではいちばんよくある有料の機能
+2. **PDF で出す**（Pediary）: 保育園に出す与薬のメモを、印刷できる形にする
+3. **窓口で QR を渡す**（FeverApp）: アプリの URL の QR を薬局に置いてもらう。数を数えるのは、個人情報を取らない方法で
+
+出どころ（IT ツール）:
+- Dosie: https://apps.apple.com/app/id6759206147
+- Dosefully: https://apps.apple.com/app/id6762197859
+- Dosly: https://apps.apple.com/app/id6768817225
+- DoseAlly: https://apps.apple.com/app/id6776180736
+- Family HQ: https://apps.appfollow.io/ios/familyhq/1512316420?country=au
+- Pediary: https://apps.apple.com/app/id6754193050
+- 열나요: https://apps.apple.com/kr/app/%EC%97%B4%EB%82%98%EC%9A%94-%EC%95%84%EC%9D%B4%EB%A5%BC-%EC%9C%84%ED%95%9C-%EC%97%B4-%ED%95%B4%EC%97%B4%EC%A0%9C-%EA%B4%80%EB%A6%AC/id1404162830?l=en-GB
+- Kinsa: https://home.kinsahealth.com/kinsa-app
+- FeverApp: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7528253/ 、https://pediatrics.jmir.org/2022/4/e35510
+- HANDi: https://www.royaldevon.nhs.uk/stay-well/handi-children-and-young-peoples-app/
+- NPS MedicineWise: https://www.ama.com.au/gp-network-news/giving-medicines-children-%E2%80%93-new-educational-resources 、https://www.nps.org.au/consumers
+- Medicines for Children アプリ: https://www.rcpch.ac.uk/news-events/news/medicines-children-app-will-help-parents-manage-their-childrens-medicines
+- KidPro: https://www.dataart.com/company/newsroom/media/winners-of-the-pfizer-healthcare-challenge-offer-a-gamified-app-for-children-and-their-parents
+- PillPell: https://startupim.com/company/pillpell
+- 保育園の与薬の同意: https://www.raftlabs.com/industries/childcare/parent-communication-app 、https://www.mangoapps.com/templates/forms/childcare-medication-authorization-and-administration-record
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
