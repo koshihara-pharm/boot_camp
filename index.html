@@ -678,7 +678,7 @@
   <div class="praise">
     <h2 id="choose-title">どっちで のむ？</h2>
     <div class="choice-pair" id="choice-pair"></div>
-    <p id="choose-note" hidden>おとなの方へ: 少しの量に混ぜて、すぐに飲ませてください。えらべる食べ物は、病院の表で「飲みやすい」となっていて、表どうしで評価が分かれないものだけです。</p>
+    <p id="choose-note" hidden>おとなの方へ: 少しの量に混ぜて、すぐに飲ませてください。えらべる食べ物は、病院の表で「飲みやすい」か「混ぜても味は変わらない」となっていて、表どうしで評価が分かれないものだけです。</p>
     <button class="stamp-button" id="choose-done" type="button" hidden>とじる</button>
     <button class="undo" id="choose-other" type="button">ほかのにする</button>
     <br>
@@ -811,6 +811,7 @@
     if (row) {
       row.foods.forEach((code, i) => {
         if (code === "o") add(NCCHD_FOODS[i], "good");
+        else if (code === "s") add(NCCHD_FOODS[i], "same");
         else if (code === "x") add(NCCHD_FOODS[i], "bad");
       });
     }
@@ -1239,7 +1240,7 @@
   });
 
   // ---- どっちで のむ？（子どもが 2 つから選ぶ） ----
-  // 選択肢は foodsIn(drug, "good") の食べ物だけ（表で飲みやすく、ほかの表と評価が分かれないもの）。
+  // 選択肢は、表で「飲みやすい」か「混ぜても味は変わらない」で、どの表でも「飲みにくい」「評価が分かれる」になっていない食べ物だけ。
   // コーヒー牛乳はカフェインを含むので、小さい子の選択肢には出さない。シロップ（薬局で出す単シロップ）は家にないことが多いので出さない
   const KID_FOODS = {
     "アイスクリーム": "アイス",
@@ -1261,7 +1262,9 @@
   let shownPair = [];
 
   function choiceFoods(drug) {
-    return foodsIn(drug, "good").filter((food) => KID_FOODS[food]);
+    return verdicts(drug)
+      .filter(([food, v]) => KID_FOODS[food] && (v.has("good") || v.has("same")) && !v.has("bad") && !v.has("split"))
+      .map(([food]) => food);
   }
 
   function pickPair() {
