@@ -8,9 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
-  /* 1カラムのスマホ用カード。やわらかい青緑の地に、薬ごとのカードとスタンプの丸を置く */
+  /* 1カラムのスマホ用。やわらかい青緑の地に、黄色いスタンプの丸を目印に置く。主役（飲ませる手助け）を上に、記録は下に */
   :root {
     --bg: #eef6f4;
+    --ink: #17403b;
+    --hero: #d9eee8;
+    --stamp-soft: #fff1cc;
+    --stamp-ink: #3b2a00;
     --card: #ffffff;
     --text: #1f2d2b;
     --muted: #5d6e6b;
@@ -34,6 +38,10 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #142120;
+      --ink: #cfeae4;
+      --hero: #1b332f;
+      --stamp-soft: #3a3016;
+      --stamp-ink: #2a1f00;
       --card: #1d2c2a;
       --text: #e8f1ef;
       --muted: #a3b5b1;
@@ -56,6 +64,10 @@
   }
   :root[data-theme="dark"] {
     --bg: #142120;
+    --ink: #cfeae4;
+    --hero: #1b332f;
+    --stamp-soft: #3a3016;
+    --stamp-ink: #2a1f00;
     --card: #1d2c2a;
     --text: #e8f1ef;
     --muted: #a3b5b1;
@@ -84,9 +96,68 @@
     font-size: 18px;
     line-height: 1.6;
   }
-  main { max-width: 560px; margin: 0 auto; padding: 16px 16px 120px; }
-  h1, h2, h3, .stamp-button, .howto summary { font-family: var(--font-display); }
-  h1 { font-size: 26px; margin: 8px 0 4px; text-wrap: balance; }
+  main {
+    max-width: 560px;
+    margin: 0 auto;
+    padding-block: 16px 120px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  h1, h2, h3, h4, .stamp-button, .howto summary { font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
+  h1 { font-size: 26px; margin: 8px 0 4px; }
+
+  .hero {
+    position: relative;
+    background: var(--hero);
+    border-radius: 28px;
+    padding: 22px 18px 18px;
+    overflow: hidden;
+  }
+  .hero .eyebrow { margin: 0; font-size: 14px; font-weight: bold; letter-spacing: 0.08em; color: var(--accent); font-family: var(--font-display); }
+  .hero h1 { font-size: 34px; line-height: 1.25; margin: 6px 0 8px; max-width: 9em; }
+  .hero .lead { margin: 0 0 16px; color: var(--text); }
+  .hero input[type="search"] { font-size: 18px; }
+  .hero-stamp {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    width: 92px;
+    height: 92px;
+    border: 5px solid var(--stamp);
+    border-radius: 50%;
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    transform: rotate(-12deg);
+  }
+  .hero-stamp::after {
+    content: "のめた！";
+    position: absolute;
+    bottom: -12px;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--stamp);
+    color: var(--stamp-ink);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .hero input[type="search"] { border-color: transparent; box-shadow: 0 2px 0 var(--line); }
+  .nav button { display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; font-size: 16px; padding: 0 8px; }
+  .nav .ic { font-size: 22px; }
+  .kana {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    padding: 14px 4px 2px;
+  }
+  .list .drug-name { display: block; font-size: 19px; color: var(--text); }
+  .list .drug-meta { display: block; font-size: 14px; color: var(--muted); }
+  .list .on-record { float: right; margin-left: 8px; font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 999px; background: var(--stamp-soft); color: var(--ink); }
   .lead { color: var(--muted); margin: 0 0 16px; font-size: 16px; }
   .toplinks { display: flex; justify-content: flex-end; margin-bottom: 4px; }
   .link-button {
@@ -108,15 +179,15 @@
     color: var(--text);
   }
   input[type="search"]:focus { outline: none; border-color: var(--accent); }
-  .list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+  .list { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 6px; }
   .list button {
     width: 100%;
     text-align: left;
     font-size: 19px;
-    padding: 14px 16px;
-    min-height: 56px;
+    padding: 10px 16px;
+    min-height: 60px;
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     background: var(--card);
     color: var(--text);
     cursor: pointer;
@@ -141,47 +212,60 @@
     padding: 18px 16px;
     margin-top: 8px;
   }
-  .card h2 { font-size: 24px; margin: 0; }
-  .taste {
-    margin-top: 12px;
-    padding: 10px 14px;
-    border-radius: 14px;
-    background: var(--taste-bg);
-    font-size: 18px;
-  }
-  .taste b { margin-right: 6px; }
+  .card h2 { font-size: 26px; margin: 0; line-height: 1.3; }
+  .taste { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: 16px; }
+  .taste b { font-family: var(--font-display); color: var(--muted); font-size: 14px; letter-spacing: 0.08em; margin-right: 2px; }
+  .taste span { padding: 4px 12px; border-radius: 999px; background: var(--taste-bg); }
   .today { margin-top: 10px; font-size: 16px; color: var(--muted); }
   .today span { font-size: 24px; }
   .section-title { font-size: 20px; margin: 24px 0 4px; }
   .section-lead { color: var(--muted); font-size: 15px; margin: 0 0 4px; }
-  .group { border-radius: 14px; padding: 12px 14px; margin-top: 12px; }
-  .group h3 { font-size: 18px; margin: 0 0 8px; }
-  .group p { margin: 0 0 8px; font-size: 15px; }
+  .group { margin-top: 16px; --tone: var(--muted); --tone-bg: var(--taste-bg); }
+  .group h3 { font-size: 17px; margin: 0 0 8px; color: var(--tone); }
+  .group p { margin: -4px 0 8px; font-size: 14px; color: var(--muted); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
-    font-size: 18px;
-    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 17px;
+    padding: 6px 14px 6px 10px;
     border-radius: 999px;
+    background: var(--tone-bg, var(--taste-bg));
+    color: var(--text);
+  }
+  .chip .fe { font-size: 20px; line-height: 1; }
+  .chip small { font-size: 12px; color: var(--muted); }
+  .g-best { --tone: var(--ink); --tone-bg: var(--best-bg); }
+  .g-ok { --tone: var(--good); --tone-bg: var(--good-bg); }
+  .g-split { --tone: var(--split); --tone-bg: var(--split-bg); }
+  .g-bad { --tone: var(--bad); --tone-bg: var(--bad-bg); }
+  .g-warn { --tone: var(--warn); --tone-bg: var(--warn-bg); }
+  .g-same { --tone: var(--muted); --tone-bg: var(--taste-bg); }
+  .alert {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 2px solid var(--split-bg);
     background: var(--card);
-    border: 1px solid var(--line);
   }
-  .chip small { font-size: 13px; color: var(--muted); margin-left: 4px; }
-  .g-best { background: var(--best-bg); }
-  .g-ok { background: var(--good-bg); }
-  .g-ok h3 { color: var(--good); }
-  .g-split { background: var(--split-bg); }
-  .g-split h3 { color: var(--split); }
-  .g-bad { background: var(--bad-bg); }
-  .g-bad h3 { color: var(--bad); }
-  .g-warn { background: var(--warn-bg); }
-  .g-warn h3 { color: var(--warn); }
-  .g-same { background: var(--taste-bg); }
-  .src-head {
-    font-size: 16px;
-    margin: 20px 0 0;
-    padding-top: 12px;
-    border-top: 1px dashed var(--line);
+  .alert h3 { color: var(--split); margin-top: 0; }
+  .src-tabs { display: flex; gap: 6px; margin: 14px 0 0; padding: 4px; border-radius: 999px; background: var(--taste-bg); }
+  .src-tabs button {
+    flex: 1;
+    min-height: 44px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 1.25;
+    cursor: pointer;
   }
+  .src-tabs button small { display: block; font-size: 12px; }
+  .src-tabs button[aria-pressed="true"] { background: var(--card); color: var(--ink); font-weight: bold; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+  .src-head { font-size: 15px; margin: 18px 0 0; color: var(--muted); }
   details.g-none { margin-top: 12px; color: var(--muted); font-size: 16px; }
   details.g-none summary { cursor: pointer; padding: 6px 0; }
   .notes { margin: 16px 0 0; padding-left: 1.2em; }
@@ -193,7 +277,10 @@
     border-radius: 14px;
     padding: 4px 14px;
   }
-  .howto summary { cursor: pointer; padding: 10px 0; font-size: 18px; font-weight: bold; }
+  .howto summary { cursor: pointer; padding: 12px 0; font-size: 17px; font-weight: bold; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .howto summary::-webkit-details-marker { display: none; }
+  .howto summary::after { content: "＋"; color: var(--accent); flex: none; }
+  .howto details[open] summary::after { content: "−"; }
   .howto p { margin: 0 0 8px; }
   .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
   .tips li { margin-bottom: 6px; }
@@ -294,7 +381,8 @@
     color: inherit;
     border: 3px dashed var(--stamp);
     border-radius: 999px;
-    background: var(--card);
+    background: var(--stamp-soft);
+    color: var(--ink);
     cursor: pointer;
   }
   .choose-open small { display: block; font-size: 14px; font-weight: normal; color: var(--muted); }
@@ -338,7 +426,7 @@
   }
   .day li .emoji { font-size: 32px; }
   .day li .time { color: var(--muted); font-size: 15px; }
-  .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 16px; }
+  .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 4px; }
   .nav button, .secondary {
     min-height: 52px;
     font-size: 17px;
@@ -451,13 +539,17 @@
 <body>
 <main>
   <section id="pick">
-    <h1>こどもおくすりサポート</h1>
-    <p class="lead">子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方が分かります。飲めたらスタンプ。記録は家族や保育園に送れます。</p>
-    <div class="nav">
-      <button type="button" data-go="record">おくすり記録 <b id="med-count"></b></button>
-      <button type="button" data-go="stamps">スタンプ帳</button>
+    <div class="hero">
+      <div class="hero-stamp" aria-hidden="true">🐻</div>
+      <p class="eyebrow">こどもおくすりサポート</p>
+      <h1>おくすり、<br>のめるかな？</h1>
+      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。<br>のめたら、スタンプをおそう。</p>
+      <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
     </div>
-    <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
+    <div class="nav">
+      <button type="button" data-go="record"><span class="ic" aria-hidden="true">📒</span>おくすり記録 <b id="med-count"></b></button>
+      <button type="button" data-go="stamps"><span class="ic" aria-hidden="true">⭐</span>スタンプ帳 <b id="stamp-count"></b></button>
+    </div>
     <ul id="list" class="list"></ul>
   </section>
 
@@ -789,21 +881,52 @@
     location.hash = hash;
   }
 
+  // 薬の一覧は五十音の行ごとに分ける（薬局の薬品棚と同じ並び）
+  const KANA_ROWS = [
+    ["あ行", "アイウエオヴ"], ["か行", "カキクケコガギグゲゴ"], ["さ行", "サシスセソザジズゼゾ"],
+    ["た行", "タチツテトダヂヅデド"], ["な行", "ナニヌネノ"], ["は行", "ハヒフヘホバビブベボパピプペポ"],
+    ["ま行", "マミムメモ"], ["や行", "ヤユヨ"], ["ら行", "ラリルレロ"], ["わ行", "ワヲン"],
+  ];
+
+  function kanaRow(name) {
+    const row = KANA_ROWS.find(([, chars]) => chars.includes(name[0]));
+    return row ? row[0] : "そのほか";
+  }
+
   function renderList() {
     const query = toKatakana(q.value.trim()).toUpperCase();
     const hits = DRUGS.map((d, i) => ({ d, i })).filter(({ d }) => d.name.toUpperCase().includes(query));
-    list.replaceChildren(
-      ...hits.map(({ d, i }) => {
-        const button = el("button", { type: "button", text: d.name });
-        button.addEventListener("click", () => go("drug-" + i));
-        return el("li", {}, [button]);
-      })
-    );
+    const items = [];
+    let lastRow = null;
+    for (const { d, i } of hits) {
+      const row = kanaRow(d.name);
+      if (row !== lastRow) {
+        items.push(el("li", { class: "kana", "aria-hidden": "true", text: row }));
+        lastRow = row;
+      }
+      const button = el("button", { type: "button" });
+      if (activeMedFor(d.name)) button.append(el("span", { class: "on-record", text: "記録中" }));
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + d.taste }));
+      button.addEventListener("click", () => go("drug-" + i));
+      items.push(el("li", {}, [button]));
+    }
+    list.replaceChildren(...items);
     if (hits.length === 0) {
       list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
     const active = meds.filter((m) => new Date() <= new Date(medEnd(m).getTime() + 86400000)).length;
     document.getElementById("med-count").textContent = active > 0 ? "（" + active + "）" : "";
+    document.getElementById("stamp-count").textContent = stamps.length > 0 ? "（" + stamps.length + "）" : "";
+  }
+
+  const FOOD_EMOJI = {
+    "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
+    "お茶": "🍵", "ヨーグルト": "🥣", "ゼリー": "🍧", "りんごジュース": "🍎", "オレンジジュース": "🍊",
+    "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
+  };
+
+  function foodChip(food) {
+    return el("span", { class: "chip" }, [el("span", { class: "fe", "aria-hidden": "true", text: FOOD_EMOJI[food] || "・" }), food]);
   }
 
   function chipBox(title, cls, text, chips) {
@@ -823,13 +946,13 @@
   function iizukaBlock(drug) {
     const buckets = { best: [], ok: [], split: [], bad: [], warn: [], none: [] };
     drug.foods.forEach((code, i) => buckets[groupOf(code)].push({ food: FOODS[i], code }));
-    const parts = [el("h4", { class: "src-head", text: "飯塚病院 薬剤部の表（" + SOURCE.revised + "）" })];
+    const parts = [];
 
     for (const g of GROUPS) {
       const items = buckets[g.key];
       if (items.length === 0) continue;
       const chips = items.map(({ food, code }) => {
-        const chip = el("span", { class: "chip", text: food });
+        const chip = foodChip(food);
         if (g.key === "warn") chip.append(el("small", { text: warnLabel(code) }));
         else if (g.key !== "best" && code.endsWith("*")) chip.append(el("small", { text: "メーカー推奨" }));
         return chip;
@@ -850,7 +973,7 @@
   }
 
   function ncchdBlock(drug, row) {
-    const parts = [el("h4", { class: "src-head", text: "国立成育医療研究センター 薬剤部の表（" + NCCHD_SOURCE.revised + "）" })];
+    const parts = [];
     const lead = [];
     if (row.name !== drug.name) lead.push("この表では「" + row.name + "」。");
     lead.push("この表での味: " + row.taste);
@@ -859,7 +982,7 @@
     for (const g of NCCHD_GROUPS) {
       const foods = NCCHD_FOODS.filter((_, i) => row.foods[i] === g.key);
       if (foods.length === 0) continue;
-      parts.push(chipBox(g.title, g.cls, "", foods.map((food) => el("span", { class: "chip", text: food }))));
+      parts.push(chipBox(g.title, g.cls, "", foods.map(foodChip)));
     }
     const none = NCCHD_FOODS.filter((_, i) => row.foods[i] === "-");
     if (none.length > 0) parts.push(noneBox(none, NCCHD_FOODS.length));
@@ -871,11 +994,14 @@
     return parts;
   }
 
+  // 2 つの表がある薬は、タブで切りかえる（薬ごとに選んだほうを覚えておく）
+  const tableTab = {};
+
   function renderCard(drug) {
     const row = ncchdOf(drug);
     const parts = [
       el("h2", { text: drug.name }),
-      el("div", { class: "taste" }, [el("b", { text: "あじ" }), drug.taste]),
+      el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...drug.taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
     const todays = todayStampsForDrug(drug.name);
@@ -887,12 +1013,29 @@
 
     const diff = conflicts(drug);
     if (diff.length > 0) {
-      parts.push(chipBox("！ 表によって評価がちがう", "g-split",
-        "下の 2 つの表で、飲みやすい・飲みにくいが分かれています。迷ったら薬剤師に聞いてください。",
-        diff.map((food) => el("span", { class: "chip", text: food }))));
+      const alert = chipBox("！ 表によって評価がちがう", "g-split alert",
+        "2 つの病院の表で、飲みやすい・飲みにくいが分かれています。迷ったら薬剤師に聞いてください。",
+        diff.map(foodChip));
+      parts.push(alert);
     }
-    if (drug.foods) parts.push(...iizukaBlock(drug));
-    if (row) parts.push(...ncchdBlock(drug, row));
+
+    const tabs = [];
+    if (drug.foods) tabs.push({ key: "iizuka", name: "飯塚病院", year: SOURCE.revised.replace("改訂", ""), render: () => iizukaBlock(drug) });
+    if (row) tabs.push({ key: "ncchd", name: "成育医療センター", year: NCCHD_SOURCE.revised, render: () => ncchdBlock(drug, row) });
+    let current = tabs.find((t) => t.key === tableTab[drug.name]) || tabs[0];
+
+    if (tabs.length > 1) {
+      const bar = el("div", { class: "src-tabs", role: "group", "aria-label": "どの病院の表を見るか" });
+      for (const t of tabs) {
+        const b = el("button", { type: "button", "aria-pressed": String(t === current) }, [t.name, el("small", { text: t.year })]);
+        b.addEventListener("click", () => { tableTab[drug.name] = t.key; renderCard(drug); });
+        bar.append(b);
+      }
+      parts.push(bar);
+    } else if (current) {
+      parts.push(el("h4", { class: "src-head", text: current.name + "の表（" + current.year + "）" }));
+    }
+    if (current) parts.push(...current.render());
 
     card.replaceChildren(...parts);
   }
@@ -1099,18 +1242,18 @@
   // 選択肢は foodsIn(drug, "good") の食べ物だけ（表で飲みやすく、ほかの表と評価が分かれないもの）。
   // コーヒー牛乳はカフェインを含むので、小さい子の選択肢には出さない。シロップ（薬局で出す単シロップ）は家にないことが多いので出さない
   const KID_FOODS = {
-    "アイスクリーム": ["🍨", "アイス"],
-    "水": ["💧", "おみず"],
-    "プリン": ["🍮", "プリン"],
-    "牛乳": ["🥛", "ぎゅうにゅう"],
-    "お茶": ["🍵", "おちゃ"],
-    "ヨーグルト": ["🥣", "ヨーグルト"],
-    "ゼリー": ["🍧", "ゼリー"],
-    "りんごジュース": ["🍎", "りんごジュース"],
-    "オレンジジュース": ["🍊", "オレンジジュース"],
-    "スポーツ飲料": ["🥤", "スポーツドリンク"],
-    "ココア": ["🍫", "ココア"],
-    "乳酸菌飲料": ["🧃", "にゅうさんきんドリンク"],
+    "アイスクリーム": "アイス",
+    "水": "おみず",
+    "プリン": "プリン",
+    "牛乳": "ぎゅうにゅう",
+    "お茶": "おちゃ",
+    "ヨーグルト": "ヨーグルト",
+    "ゼリー": "ゼリー",
+    "りんごジュース": "りんごジュース",
+    "オレンジジュース": "オレンジジュース",
+    "スポーツ飲料": "スポーツドリンク",
+    "ココア": "ココア",
+    "乳酸菌飲料": "にゅうさんきんドリンク",
   };
   const choose = document.getElementById("choose");
   const choicePair = document.getElementById("choice-pair");
@@ -1133,7 +1276,8 @@
   }
 
   function choiceButton(food) {
-    const [emo, label] = KID_FOODS[food];
+    const emo = FOOD_EMOJI[food];
+    const label = KID_FOODS[food];
     return el("button", { class: "choice", type: "button", "aria-label": label }, [
       el("span", { class: "emo", text: emo, "aria-hidden": "true" }),
       el("span", { text: label }),
@@ -1156,7 +1300,7 @@
   }
 
   function picked(food) {
-    document.getElementById("choose-title").textContent = KID_FOODS[food][1] + "で のもうね！";
+    document.getElementById("choose-title").textContent = KID_FOODS[food] + "で のもうね！";
     const card = choiceButton(food);
     card.classList.add("picked");
     card.disabled = true;
