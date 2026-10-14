@@ -88,6 +88,34 @@
 - G5: https://theconversation.com/how-do-you-teach-a-child-to-swallow-a-pill-hint-use-lollies-154552
 - 塩野義製薬: https://news.livedoor.com/article/detail/31463152/
 
+## 効果と満足度で比べる（2026-10-14 追加）
+
+満足度の数字を出しているものは、ほとんど見つからなかった。効果は、研究のしっかりさの順に並べた。
+
+| 順 | 何 | 効果 | 満足度 | 日本では |
+|---|---|---|---|---|
+| 1 | **絵の説明書＋記録表＋やって見せる＋言い直してもらう**（米国） | ランダム化試験が 2 つ。救急外来の親 245 人（Yin 2008）で、量のまちがいが減り、きちんと飲ませる率が上がった。退院する 6 歳以下の子の親 198 人（Carroll 2024、JAMA Netw Open）で、まちがいが減り、量と日数をよく覚えていた（ニュースでは 54% → 30%。論文では未確認）。1 回 1 分半〜3 分 | 数字なし | くすりの適正使用協議会の「くすりのピクトグラム」（51 種類）はあるが、親が子どもに飲ませるための絵の説明書と記録表の組み合わせは見つからなかった |
+| 2 | **Re-Mission（ゲーム）** | ランダム化試験 375 人。ふつうのゲームより、抗がん剤と抗菌薬をきちんと飲めた（血液検査とふたの記録） | 数字は未確認 | なし |
+| 3 | **錠剤を飲む練習** | まとめの研究（Patel 2015、Pediatrics）: 5 つの研究すべてで半分以上が飲めるようになり、3 つでは 3〜6 か月続いた（どれも比べる組なし）。英国 Pill School は 87% が 1 回で。KidzMed は 25 人中 21 人が水薬から錠剤へ、年 4.6 万ポンドの節約 | GOSH の例で「味がよくなった、ずっと楽」。KidzMed は「反応がよい」だけ | 病院の取り組みは見つからなかった |
+| 4 | **漫画**（Medikidz ほか） | Medikidz の関節炎の漫画で、知識テストが 63% → 80%、1 年後も 79%（比べる組なし）。手術前の漫画のランダム化試験（111 人、英国麻酔科学誌）で不安が下がった | 数字なし | 見つからなかった |
+| 5 | **e-Bug のゲーム** | 473 人で知識が上がった | 「Body Busters」がいちばん楽しまれた | 日本語版なし |
+| 6 | **シール表** | 嚢胞性線維症などでランダム化試験があると紹介されている（Stark ら）。小さい子の飲み薬だけの研究は見つからなかった | — | ある（このアプリのスタンプ） |
+
+### このアプリでの一番の候補
+- **1 の「絵の説明書＋記録」**。研究がいちばんしっかりしていて、日本にない。今の「おくすり記録」に近い
+  - 例: 記録した薬ごとに、「朝・昼・夕」「1 回の量（薬袋のとおりに親が入れたもの）」「何日分」を絵で見せるカード。家族や保育園に送るときも絵のまま
+  - 量はアプリが決めず、薬袋に書いてある量を親が入れる（CLAUDE.md の「医療上の判断をしない」）
+  - 研究では「やって見せる」「親に言い直してもらう」も組みになっている。アプリだけでは同じ効果が出るとは言えない（未検証）。薬局の窓口で一緒に使えれば近づく
+
+出どころ（効果と満足度）:
+- Yin 2008: https://psnet.ahrq.gov/issue/randomized-controlled-trial-pictogram-based-intervention-reduce-liquid-medication-dosing 、https://clinicaltrials.gov/study/NCT00537433
+- Carroll 2024: https://pmc.ncbi.nlm.nih.gov/articles/PMC10792470 、https://www.uspharmacist.com/article/improving-caregiver-health-literacy-reduces-pediatric-dosing-errors 、https://patientengagementhit.com/news/medication-errors-in-kids-cut-in-half-with-better-caregiver-education
+- Patel 2015: https://pubmed.ncbi.nlm.nih.gov/25896843
+- KidzMed: https://www.e-lfh.org.uk/wp-content/uploads/2020/11/KidzMed-archdischild-2019-317512.full_.pdf 、GOSH: https://pharmaceutical-journal.com/article/news/switching-children-from-liquids-to-tablets-can-improve-quality-of-life-and-save-money-gosh-project-shows
+- Medikidz: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5581922/ 、手術前の漫画: https://academic.oup.com/bja/article/117/1/95/1744510
+- シール表: https://www.hmpgloballearningnetwork.com/site/thederm/site/cathlab/event/increasing-treatment-compliance-sticker-charts
+- くすりのピクトグラム: https://www.rad-ar.or.jp/news/pdf/rad-ar-news16-3-2005sep.pdf
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
