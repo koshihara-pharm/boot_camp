@@ -200,6 +200,41 @@
 - PillPell: https://startupim.com/company/pillpell
 - 保育園の与薬の同意: https://www.raftlabs.com/industries/childcare/parent-communication-app 、https://www.mangoapps.com/templates/forms/childcare-medication-authorization-and-administration-record
 
+## 韓国・台湾の粉薬まわりの対策と IT（2026-10-14 追加）
+
+ユーザー: 「粉薬の服用について、日本にない韓国・台湾の対策、IT があれば」
+
+| 国 | 何 | 中身 | 日本では |
+|---|---|---|---|
+| 韓国 | **保育園アプリの電子「投薬依頼書」**（키즈노트 Kidsnote ほか） | カカオ系の保育園アプリ。連絡帳・お知らせ・写真と並んで「投薬依頼書」のメニューがあり、親がアプリで出す。2015 年から書類の電子化として強化。2.5 万以上の保育園・幼稚園が登録。別のアプリ（키즈사랑）は依頼書にサインする機能を 2020 年に追加 | コドモンなどの保護者アプリの説明に与薬の項目は見当たらず、横浜市などの様式は紙。**電子の与薬依頼は確認できなかった** |
+| 台湾 | **幼稚園アプリの電子「托藥單」**（園ごとのアプリ、愛托付など） | 親がアプリで、薬の日付・時間・量を書いて頼み、サインする。先生が飲ませた結果を返す。全国で 1 つの仕組みはなく、園ごと | 同上 |
+| 台湾 | **市が決めた与薬の 5 ステップ**（台南市 2019 年） | 依頼書の確認 → 処方と期限の確認 → 処方どおりに与える → すぐにサイン → 飲んだあとの様子を見る。保育施設に守らせる。記録は 6 か月残す（ほかの町の指針） | 園ごとのルール（docs/06） |
+| 台湾 | **子ども用の薬を優先し、すりつぶしを減らす病院の方針** | 台大病院は「子ども専用の製剤」を優先。台北栄総は 2010 年から、すりつぶしてよい薬を決めて減らす。長庚病院は子ども専用の薬 72 品目（水薬、顆粒、かんで飲む錠剤）。すりつぶすと安定性が下がり、量がずれる、という理由 | 薬を作る・出す側の話。アプリでは扱わない |
+| 台湾 | 親への公的な助言（衛生福利部） | 順番や場所を子どもに選ばせる。おどさない。「おかし」と言わない。飲む前に 5 つ聞く（何の薬、なぜ、どう使う、いつまで、注意は） | 似た助言はある |
+| 台湾 | 遊びで学ぶ授業（製薬会社×教育団体） | 小学校で、グループの話し合いとゲームで薬の安全を学ぶ。実際の授業でサイトではない | くすり教育（中学生中心） |
+| 韓国 | 熱さましの記録アプリ「열나요」 | 上の IT ツールの表 | — |
+| 韓国 | 粉薬の飲ませ方（薬剤師会の説明を引いた記事） | 少しの水で練って上あご・乳首に。ジャムで練る。牛乳には混ぜない（牛乳ぎらいになる）。吐いたらすぐにもう一度 | 日本の助言とほぼ同じ |
+
+**粉薬を楽しく飲ませるコンテンツや IT は、韓国・台湾でも見つからなかった**（韓国は、錠剤をすりつぶして粉にする調剤のやり方そのものが議論になっている）。
+
+### いちばんの発見と、このアプリでの案
+- **韓国・台湾には「与薬の依頼を保育園アプリで出す」しくみがあり、日本では見つからなかった**
+- このアプリは親向け（保育園が使うものではない）なので、保育園アプリにはならない。そのかわり:
+  1. 今の「保育園に」の文章を、韓国・台湾のアプリと同じ欄（薬の名前、日付、時間、1 回の量、飲ませ方、処方した医療機関、保護者の署名欄）にそろえる
+  2. 印刷できる形（PDF）にして、園の用紙に書き写す手間を減らす
+  3. 先生が「飲ませた」を返せるように、保育園と LINE で使える形にする案は、園ごとにルールが違う（docs/06）ので、まず保育園に聞いてから
+- 台南市の 5 ステップは、親が保育園に渡すときのチェックリストとして「保育園に」の画面に添えられる（出どころつき）
+
+出どころ（韓国・台湾）:
+- 키즈노트の投薬依頼書: https://inside.ampm.co.kr/item/126 、https://www.venturesquare.net/574928/ 、2.5 万施設: https://www.kakaocorp.com/page/detail/7808
+- 키즈사랑: https://apps.apple.com/at/app/%ED%82%A4%EC%A6%88%EC%82%AC%EB%9E%91-%ED%95%99%EB%B6%80%EB%AA%A8%EC%9A%A9/id1235318801
+- 韓国の粉薬の調剤の議論: https://www.dailypharm.com/user/news/113765 、https://www.thepharmacy.co.kr/기사-쪼개고-갈아-만든-가루약-효과·안전성-문
+- 台湾の托藥: https://news.ltn.com.tw/news/life/breakingnews/4329398 、https://ctrl.chcg.gov.tw/files/53_20251120140151428_線西鄉立幼兒園託藥指引.pdf 、https://apps.apple.com/us/app/id1631510828 、https://www.techbang.com/posts/56074-love-to-entrust-the-app-tandem-baby-child-care-institutions-and-parents-master-treasure-firsthand-news
+- 台湾の病院の方針: https://health.ntuh.gov.tw/health/NTUH_e_Net/NTUH_e_Net_no247/用藥FAQ_No247.pdf 、https://www.cgmh.org.tw/cgmn/cgmn_file/1203002.pdf 、https://www.commonhealth.com.tw/article/60717
+- 台湾 衛生福利部: https://mohw.gov.tw/cp-16-27034-1.html
+- 台湾の遊びの授業: https://www.ettoday.net/news/20231110/2614146.htm
+- 日本（コドモン、横浜市の様式）: https://apps.apple.com/jp/app/id1005539404 、https://ko.city.yokohama.lg.jp/kosodate-kyoiku/hoiku-yoji/shisetsu/shisetsutaisaku/shitukoujou/kansen/20190528074218539.files/0028_20240322.pdf
+
 ## 出どころ
 
 - FLAVORx: https://www.flavorx.com/pharmacies/products/pediatric/ 、https://drugstorenews.com/pharmacy/flavorx-marks-more-100-million-liquid-prescriptions-flavored 、カリフォルニア州の規制: https://kqed.org/news/11968605/new-california-rules-target-flavors-in-kids-medication-leading-pharmacies-to-end-service
