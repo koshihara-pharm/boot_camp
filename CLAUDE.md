@@ -32,8 +32,9 @@
 13. [docs/13_kaigai_kufuu.md](docs/13_kaigai_kufuu.md) — 海外の、子どもに薬を飲ませる工夫（日本にないもの）と、このアプリへの取り入れ案
 14. [docs/14_oubo_form.md](docs/14_oubo_form.md) — 応募フォームの下書き
 15. [docs/15_sanka_junbi.md](docs/15_sanka_junbi.md) — 参加が決まってから最初の1週間でやること（Slack 登録、自己紹介、GitHub の名簿）と Slack のルールの要点
+16. [docs/16_slack_rule.md](docs/16_slack_rule.md) — Singularity Society の Slack のルールの要約（名前、自己紹介、DM・メンション・スレッドの決まり、12時間以内の反応）
 
-01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
+01、02、04、16 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
 
 ## 締切
