@@ -30,14 +30,17 @@
 11. [docs/11_shiryou_list.md](docs/11_shiryou_list.md) — 使えそうな資料の一覧（飲み合わせの表、飲ませ方、研究。複数の病院の表を突き合わせる案）
 12. [docs/12_oubo_checklist.md](docs/12_oubo_checklist.md) — 応募の要件と今の状態、応募までにやること
 13. [docs/13_kaigai_kufuu.md](docs/13_kaigai_kufuu.md) — 海外の、子どもに薬を飲ませる工夫（日本にないもの）と、このアプリへの取り入れ案
+14. [docs/14_oubo_form.md](docs/14_oubo_form.md) — 応募フォームの下書き
+15. [docs/15_sanka_junbi.md](docs/15_sanka_junbi.md) — 参加が決まってから最初の1週間でやること（Slack 登録、自己紹介、GitHub の名簿）と Slack のルールの要点
 
 01、02、04 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
 
 ## 締切
 
-- 応募締切: 2026年10月23日 23:59 JST。先着20名程度で早期締切あり。目標はそれより前に提出する
-- 提出物: 動くプロトタイプの URL（公開 GitHub リポジトリ、または公開 Web）、これまでの実績、作りたいもの
+- **参加が決まった（2026-10-17 に運営のようこそメールを受け取った）**。応募は終わり
+- 最初の参加条件: メールから1週間以内（2026-10-24 まで）に、Slack 参加、Slack の名前の設定、`#p_bootcamp_4th_round2_lounge` での自己紹介、GitHub の名簿（SingularitySociety/bootcamp004-02）への自己紹介の PR。手順と下書きは docs/15
+- Slack は毎日見る。質問・依頼には12時間以内に反応する。Slack と GitHub の名簿は公開と同じ扱いで、個人情報を書かない
 
 ## 方針
 
