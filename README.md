@@ -25,7 +25,7 @@
 - 薬と食べ物の相性、薬の味: 飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」2016年7月改訂（[PDF](https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf)）から、小児科でよく出る 25 種類を選んで使っています。詳しくは [docs/07_demo_data.md](docs/07_demo_data.md)
 - 薬と食べ物の相性（2 つ目の資料）: 国立成育医療研究センター 薬剤部「粉薬と服薬補助食品の飲み合わせ」2018年（[PDF](https://www.ncchd.go.jp/hospital/about/section/medicine/nomiawase.pdf)。もとは日経ドラッグインフォメーション Online 2010年2月8日）。18 種類（うち 8 種類は飯塚病院の表にない薬）。2 つの表で評価がちがう所は、アプリでそう表示します。詳しくは [docs/11_shiryou_list.md](docs/11_shiryou_list.md)
 - どの薬にも共通の注意: [PMDA くすりQ&A](https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html)
-- 飲ませ方のコツ: 千葉県こども病院、マイナビニュース、熊本 くすりの話、PMDA、龍角散の商品説明、診断と治療社（各項目に出どころを表示）
+- 飲ませ方のコツ: 千葉県こども病院、マイナビニュース、熊本 くすりの話、PMDA、龍角散の商品説明、診断と治療社、くすりの適正使用協議会「子どもにくすりをのませるコツ」2022年（[ページ](https://www.rad-ar.or.jp/knowledge/post?slug=how-to-get-your-child-to-take-medicine)）（各項目に出どころを表示）
 
 ## 注意
 
