@@ -266,6 +266,11 @@
   .src-tabs button small { display: block; font-size: 12px; }
   .src-tabs button[aria-pressed="true"] { background: var(--card); color: var(--ink); font-weight: bold; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
   .src-head { font-size: 15px; margin: 18px 0 0; color: var(--muted); }
+  .fact-point { margin: 8px 0 4px; }
+  .refs { margin: 4px 0 10px; font-size: 14px; color: var(--muted); }
+  .refs ul { margin: 6px 0 0; padding-left: 1.2em; }
+  .refs li { margin-bottom: 6px; }
+  .refs a { color: var(--accent); }
   details.g-none { margin-top: 12px; color: var(--muted); font-size: 16px; }
   details.g-none summary { cursor: pointer; padding: 6px 0; }
   .notes { margin: 16px 0 0; padding-left: 1.2em; }
@@ -855,7 +860,7 @@
       }
       const button = el("button", { type: "button" });
       if (activeMedFor(d.name)) button.append(el("span", { class: "on-record", text: "記録中" }));
-      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + d.taste }));
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name] ? FACTS[d.name].taste : d.taste) }));
       button.addEventListener("click", () => go("drug-" + i));
       items.push(el("li", {}, [button]));
     }
@@ -943,14 +948,34 @@
     return parts;
   }
 
+  // 自分の言葉でまとめたカード（FACTS にある薬だけ）
+  function factBlock(f) {
+    const parts = [el("p", { class: "fact-point", text: f.point })];
+    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok", f.good.text, f.good.foods.map(foodChip)));
+    if (f.split) parts.push(chipBox("△ 資料によって分かれる", "g-split", f.split.text, f.split.foods.map(foodChip)));
+    if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad", f.avoid.text, f.avoid.foods.map(foodChip)));
+    if (f.tips.length > 0) {
+      parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
+      parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
+    }
+    parts.push(el("p", { class: "source", text: f.checked }));
+    parts.push(el("details", { class: "refs" }, [
+      el("summary", { text: "参考にした資料（" + f.refs.length + "）" }),
+      el("ul", {}, f.refs.map((k) => el("li", {}, [el("a", { href: FACT_REFS[k].url, target: "_blank", rel: "noopener", text: FACT_REFS[k].name })]))),
+    ]));
+    return parts;
+  }
+
   // 2 つの表がある薬は、タブで切りかえる（薬ごとに選んだほうを覚えておく）
   const tableTab = {};
 
   function renderCard(drug) {
     const row = ncchdOf(drug);
+    const fact = FACTS[drug.name];
+    const taste = fact ? fact.taste : drug.taste;
     const parts = [
       el("h2", { text: drug.name }),
-      el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...drug.taste.split("・").map((t) => el("span", { text: t }))]),
+      el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
     const todays = todayStampsForDrug(drug.name);
@@ -959,6 +984,12 @@
     }
 
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
+
+    if (fact) {
+      parts.push(...factBlock(fact));
+      card.replaceChildren(...parts);
+      return;
+    }
 
     const diff = conflicts(drug);
     if (diff.length > 0) {
