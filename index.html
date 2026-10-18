@@ -773,6 +773,11 @@
   // 混ぜないほうがいい（bad）: どれかの表で「飲みにくい」で、「飲みやすい」「変わらない」「評価が分かれる」がない。
   // 表どうし、または表の中で評価が分かれる食べ物は、どちらにも入れない
   function foodsIn(drug, verdict) {
+    const fact = FACTS[drug.name];
+    if (fact) {
+      const group = verdict === "good" ? fact.good : fact.avoid;
+      return group ? group.foods : [];
+    }
     const isGood = (v) => v.has("good") || v.has("same");
     return verdicts(drug)
       .filter(([, v]) => !v.has("split") && (verdict === "good" ? isGood(v) && !v.has("bad") : v.has("bad") && !isGood(v)))
@@ -950,10 +955,14 @@
 
   // 自分の言葉でまとめたカード（FACTS にある薬だけ）
   function factBlock(f) {
-    const parts = [el("p", { class: "fact-point", text: f.point })];
-    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok", f.good.text, f.good.foods.map(foodChip)));
-    if (f.split) parts.push(chipBox("△ 資料によって分かれる", "g-split", f.split.text, f.split.foods.map(foodChip)));
-    if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad", f.avoid.text, f.avoid.foods.map(foodChip)));
+    const parts = [];
+    if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
+    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok",
+      f.good.text || "2つの病院の資料のどちらでも、混ぜてよいとされています。", f.good.foods.map(foodChip)));
+    if (f.split) parts.push(chipBox("△ 資料によって分かれる", "g-split",
+      f.split.text || "資料によって評価が分かれます。迷ったら薬剤師に聞いてください。", f.split.foods.map(foodChip)));
+    if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad",
+      f.avoid.text || "2つの病院の資料のどちらでも、飲みにくくなるとされています。", f.avoid.foods.map(foodChip)));
     if (f.tips.length > 0) {
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
