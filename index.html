@@ -236,43 +236,16 @@
   }
   .chip .fe { font-size: 20px; line-height: 1; }
   .chip small { font-size: 12px; color: var(--muted); }
-  .g-best { --tone: var(--ink); --tone-bg: var(--best-bg); }
   .g-ok { --tone: var(--good); --tone-bg: var(--good-bg); }
   .g-split { --tone: var(--split); --tone-bg: var(--split-bg); }
   .g-bad { --tone: var(--bad); --tone-bg: var(--bad-bg); }
-  .g-warn { --tone: var(--warn); --tone-bg: var(--warn-bg); }
   .g-same { --tone: var(--muted); --tone-bg: var(--taste-bg); }
-  .alert {
-    margin-top: 12px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    border: 2px solid var(--split-bg);
-    background: var(--card);
-  }
-  .alert h3 { color: var(--split); margin-top: 0; }
-  .src-tabs { display: flex; gap: 6px; margin: 14px 0 0; padding: 4px; border-radius: 999px; background: var(--taste-bg); }
-  .src-tabs button {
-    flex: 1;
-    min-height: 44px;
-    border: none;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--muted);
-    font-family: var(--font-display);
-    font-size: 15px;
-    line-height: 1.25;
-    cursor: pointer;
-  }
-  .src-tabs button small { display: block; font-size: 12px; }
-  .src-tabs button[aria-pressed="true"] { background: var(--card); color: var(--ink); font-weight: bold; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
   .src-head { font-size: 15px; margin: 18px 0 0; color: var(--muted); }
   .fact-point { margin: 8px 0 4px; }
   .refs { margin: 4px 0 10px; font-size: 14px; color: var(--muted); }
   .refs ul { margin: 6px 0 0; padding-left: 1.2em; }
   .refs li { margin-bottom: 6px; }
   .refs a { color: var(--accent); }
-  details.g-none { margin-top: 12px; color: var(--muted); font-size: 16px; }
-  details.g-none summary { cursor: pointer; padding: 6px 0; }
   .notes { margin: 16px 0 0; padding-left: 1.2em; }
   .notes li { margin-bottom: 6px; }
   .howto { display: grid; gap: 10px; margin-top: 8px; }
@@ -639,15 +612,6 @@
 
 <script src="data.js"></script>
 <script>
-  const GROUPS = [
-    { key: "best", title: "◎ メーカーのおすすめ", cls: "g-best" },
-    { key: "ok", title: "○ 混ぜてだいじょうぶ", cls: "g-ok" },
-    { key: "split", title: "△ 資料によって評価が分かれる", cls: "g-split",
-      text: "飲めることもあれば、苦くなることもあります。" },
-    { key: "bad", title: "× 苦く・飲みにくくなりやすい", cls: "g-bad" },
-    { key: "warn", title: "！ 効き目に影響することがある", cls: "g-warn",
-      text: "混ぜる前に、薬剤師に確認してください。" },
-  ];
   const TIME_ORDER = ["朝", "昼", "夕", "寝る前"];
   const STAMPS_KEY = "okusuri.stamps.v1";
   const MEDS_KEY = "okusuri.meds.v1";
@@ -720,72 +684,11 @@
   }
 
   // ---- 食べ物との相性 ----
-  function groupOf(code) {
-    const mark = code.replace("*", "");
-    if (mark === "o") return code.endsWith("*") ? "best" : "ok";
-    if (mark === "ox") return "split";
-    if (mark === "x") return "bad";
-    if (mark === "ov" || mark === "xv") return "warn";
-    return "none";
-  }
-
-  function warnLabel(code) {
-    return code.startsWith("ov") ? "味は問題なし" : "飲みにくくもなる";
-  }
-
-  const NCCHD_GROUPS = [
-    { key: "o", title: "● 飲みやすくなる", cls: "g-ok" },
-    { key: "s", title: "▲ 混ぜても味は変わらない", cls: "g-same" },
-    { key: "x", title: "× 飲みにくくなる", cls: "g-bad" },
-  ];
-
-  function ncchdOf(drug) {
-    return NCCHD_ROWS.find((r) => r.drug === drug.name);
-  }
-
-  // 食べ物ごとに、2 つの表の評価（good / bad / split）を集める
-  function verdicts(drug) {
-    const map = new Map();
-    const add = (food, v) => {
-      if (!map.has(food)) map.set(food, new Set());
-      map.get(food).add(v);
-    };
-    if (drug.foods) {
-      drug.foods.forEach((code, i) => {
-        const g = groupOf(code);
-        if (g === "best" || g === "ok") add(FOODS[i], "good");
-        else if (g === "bad" || g === "warn") add(FOODS[i], "bad");
-        else if (g === "split") add(FOODS[i], "split");
-      });
-    }
-    const row = ncchdOf(drug);
-    if (row) {
-      row.foods.forEach((code, i) => {
-        if (code === "o") add(NCCHD_FOODS[i], "good");
-        else if (code === "s") add(NCCHD_FOODS[i], "same");
-        else if (code === "x") add(NCCHD_FOODS[i], "bad");
-      });
-    }
-    return [...map];
-  }
-
-  // 混ぜていい（good）: どれかの表で「飲みやすい」か「混ぜても味は変わらない」で、「飲みにくい」「評価が分かれる」がない。
-  // 混ぜないほうがいい（bad）: どれかの表で「飲みにくい」で、「飲みやすい」「変わらない」「評価が分かれる」がない。
-  // 表どうし、または表の中で評価が分かれる食べ物は、どちらにも入れない
+  // 家族・保育園へのメモに出す「混ぜていい」「混ぜないほうがいい」食べ物（カードの ○ と ×）
   function foodsIn(drug, verdict) {
     const fact = FACTS[drug.name];
-    if (fact) {
-      const group = verdict === "good" ? fact.good : fact.avoid;
-      return group ? group.foods : [];
-    }
-    const isGood = (v) => v.has("good") || v.has("same");
-    return verdicts(drug)
-      .filter(([, v]) => !v.has("split") && (verdict === "good" ? isGood(v) && !v.has("bad") : v.has("bad") && !isGood(v)))
-      .map(([food]) => food);
-  }
-
-  function conflicts(drug) {
-    return verdicts(drug).filter(([, v]) => (v.has("good") || v.has("same")) && v.has("bad")).map(([food]) => food);
+    const group = verdict === "good" ? fact.good : fact.avoid;
+    return group ? group.foods : [];
   }
 
   // ---- 記録 ----
@@ -865,7 +768,7 @@
       }
       const button = el("button", { type: "button" });
       if (activeMedFor(d.name)) button.append(el("span", { class: "on-record", text: "記録中" }));
-      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name] ? FACTS[d.name].taste : d.taste) }));
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name].taste || d.taste) }));
       button.addEventListener("click", () => go("drug-" + i));
       items.push(el("li", {}, [button]));
     }
@@ -895,74 +798,20 @@
     return box;
   }
 
-  function noneBox(foods, total) {
-    return el("details", { class: "g-none" }, [
-      el("summary", { text: foods.length === total ? "食べ物との相性のデータはありません" : "データなし（" + foods.length + "）" }),
-      el("p", { text: foods.join("、") }),
-    ]);
-  }
-
-  function iizukaBlock(drug) {
-    const buckets = { best: [], ok: [], split: [], bad: [], warn: [], none: [] };
-    drug.foods.forEach((code, i) => buckets[groupOf(code)].push({ food: FOODS[i], code }));
-    const parts = [];
-
-    for (const g of GROUPS) {
-      const items = buckets[g.key];
-      if (items.length === 0) continue;
-      const chips = items.map(({ food, code }) => {
-        const chip = foodChip(food);
-        if (g.key === "warn") chip.append(el("small", { text: warnLabel(code) }));
-        else if (g.key !== "best" && code.endsWith("*")) chip.append(el("small", { text: "メーカー推奨" }));
-        return chip;
-      });
-      parts.push(chipBox(g.title, g.cls, g.text, chips));
-    }
-    if (buckets.none.length > 0) parts.push(noneBox(buckets.none.map((b) => b.food), FOODS.length));
-
-    const notes = [...drug.notes];
-    if (notes.some((n) => n.includes("ハチミツ"))) {
-      notes.push("1歳未満の赤ちゃんにハチミツは使えません");
-    }
-    if (notes.length > 0) {
-      parts.push(el("ul", { class: "notes" }, notes.map((n) => el("li", { text: n }))));
-    }
-    parts.push(sourceLine([{ name: SOURCE.title + "（" + SOURCE.revised + "）", url: SOURCE.url }]));
-    return parts;
-  }
-
-  function ncchdBlock(drug, row) {
-    const parts = [];
-    const lead = [];
-    if (row.name !== drug.name) lead.push("この表では「" + row.name + "」。");
-    lead.push("この表での味: " + row.taste);
-    parts.push(el("p", { class: "section-lead", text: lead.join("") }));
-
-    for (const g of NCCHD_GROUPS) {
-      const foods = NCCHD_FOODS.filter((_, i) => row.foods[i] === g.key);
-      if (foods.length === 0) continue;
-      parts.push(chipBox(g.title, g.cls, "", foods.map(foodChip)));
-    }
-    const none = NCCHD_FOODS.filter((_, i) => row.foods[i] === "-");
-    if (none.length > 0) parts.push(noneBox(none, NCCHD_FOODS.length));
-
-    if (row.notes.length > 0) {
-      parts.push(el("ul", { class: "notes" }, row.notes.map((n) => el("li", { text: n }))));
-    }
-    parts.push(sourceLine([{ name: NCCHD_SOURCE.title + "（" + NCCHD_SOURCE.revised + "。" + NCCHD_SOURCE.basis + "）", url: NCCHD_SOURCE.url }]));
-    return parts;
-  }
-
   // 自分の言葉でまとめたカード（FACTS にある薬だけ）
+  // 1つの資料にしかない薬は、その資料の名前で書く
+  const BASIS_NAME = { iizuka: "飯塚病院", ncchd: "成育医療センター" };
+
   function factBlock(f) {
+    const one = BASIS_NAME[f.basis];
     const parts = [];
     if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
     if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok",
-      f.good.text || "2つの病院の資料のどちらでも、混ぜてよいとされています。", f.good.foods.map(foodChip)));
+      f.good.text || (one ? one + "の資料で、混ぜてよいとされています。" : "2つの病院の資料のどちらでも、混ぜてよいとされています。"), f.good.foods.map(foodChip)));
     if (f.split) parts.push(chipBox("△ 資料によって分かれる", "g-split",
-      f.split.text || "資料によって評価が分かれます。迷ったら薬剤師に聞いてください。", f.split.foods.map(foodChip)));
+      f.split.text || (one ? one + "の資料で、飲めることもあれば苦くなることもある、とされています。迷ったら薬剤師に聞いてください。" : "資料によって評価が分かれます。迷ったら薬剤師に聞いてください。"), f.split.foods.map(foodChip)));
     if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad",
-      f.avoid.text || "2つの病院の資料のどちらでも、飲みにくくなるとされています。", f.avoid.foods.map(foodChip)));
+      f.avoid.text || (one ? one + "の資料で、飲みにくくなるとされています。" : "2つの病院の資料のどちらでも、飲みにくくなるとされています。"), f.avoid.foods.map(foodChip)));
     if (f.tips.length > 0) {
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
@@ -975,13 +824,9 @@
     return parts;
   }
 
-  // 2 つの表がある薬は、タブで切りかえる（薬ごとに選んだほうを覚えておく）
-  const tableTab = {};
-
   function renderCard(drug) {
-    const row = ncchdOf(drug);
     const fact = FACTS[drug.name];
-    const taste = fact ? fact.taste : drug.taste;
+    const taste = fact.taste || drug.taste;
     const parts = [
       el("h2", { text: drug.name }),
       el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
@@ -994,38 +839,7 @@
 
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
-    if (fact) {
-      parts.push(...factBlock(fact));
-      card.replaceChildren(...parts);
-      return;
-    }
-
-    const diff = conflicts(drug);
-    if (diff.length > 0) {
-      const alert = chipBox("！ 表によって評価がちがう", "g-split alert",
-        "2 つの病院の表で、飲みやすい・飲みにくいが分かれています。迷ったら薬剤師に聞いてください。",
-        diff.map(foodChip));
-      parts.push(alert);
-    }
-
-    const tabs = [];
-    if (drug.foods) tabs.push({ key: "iizuka", name: "飯塚病院", year: SOURCE.revised.replace("改訂", ""), render: () => iizukaBlock(drug) });
-    if (row) tabs.push({ key: "ncchd", name: "成育医療センター", year: NCCHD_SOURCE.revised, render: () => ncchdBlock(drug, row) });
-    let current = tabs.find((t) => t.key === tableTab[drug.name]) || tabs[0];
-
-    if (tabs.length > 1) {
-      const bar = el("div", { class: "src-tabs", role: "group", "aria-label": "どの病院の表を見るか" });
-      for (const t of tabs) {
-        const b = el("button", { type: "button", "aria-pressed": String(t === current) }, [t.name, el("small", { text: t.year })]);
-        b.addEventListener("click", () => { tableTab[drug.name] = t.key; renderCard(drug); });
-        bar.append(b);
-      }
-      parts.push(bar);
-    } else if (current) {
-      parts.push(el("h4", { class: "src-head", text: current.name + "の表（" + current.year + "）" }));
-    }
-    if (current) parts.push(...current.render());
-
+    parts.push(...factBlock(fact));
     card.replaceChildren(...parts);
   }
 

@@ -1,242 +1,39 @@
-// 散剤と飲食物の飲み合わせ（味）一覧（2016年7月改訂）から、小児科でよく出る薬を選んで入力したもの。
-// foods: null の薬は、この表に入っていないか、下の FACTS（自分の言葉のカード）に移したもの。
-// 内容は薬剤師が元の資料と照らして確認する。資料の情報は docs/07_demo_data.md を参照。
-
-const SOURCE = {
-  title: "飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」",
-  revised: "2016年7月改訂",
-  url: "https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf",
-};
-
-// 表の列の順番（左ほど pH が大きい。アイスクリームは除く）
-const FOODS = [
-  "アイスクリーム",
-  "水",
-  "コーヒー牛乳",
-  "プリン",
-  "牛乳",
-  "シロップ",
-  "お茶",
-  "ヨーグルト",
-  "ゼリー",
-  "りんごジュース",
-  "オレンジジュース",
-  "スポーツ飲料",
-];
-
-// 記号の対応
-//   o  = ○ 飲みやすい、問題なし
-//   x  = × 飲みにくくなる
-//   ox = ○/× 文献により評価が異なる
-//   ov = ○/▼ 味は問題ないが、吸収などに影響あり
-//   xv = ×/▼ 飲みにくくなり、吸収などにも影響あり
-//   -  = データなし
-// 末尾の * = メーカー推奨（表で色つきのマス）
+// 薬の一覧（名前と味）。何に混ぜていいかは、下の FACTS（自分の言葉のカード）にある。
+// 病院の表そのもの（記号の並び）は、このリポジトリには置かない（docs/07「資料の使い方の方針」）。
 const DRUGS = [
-  {
-    name: "アスベリンドライシロップ",
-    taste: "甘い・オレンジ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "アスベリン散",
-    taste: "無味・無香料",
-    foods: ["o", "ox", "ox", "o", "o", "o", "o", "o", "ox", "x", "o", "ox"],
-    notes: [],
-  },
-  {
-    name: "アセトアミノフェン原末",
-    taste: "苦い・無香料",
-    foods: ["o", "x", "x", "x", "x", "x", "x", "o", "x", "x", "x", "x"],
-    notes: [],
-  },
-  {
-    name: "アレジオンドライシロップ",
-    taste: "甘い＋苦い・ヨーグルト風味",
-    foods: ["o*", "o*", "-", "-", "o*", "-", "-", "o*", "-", "-", "-", "-"],
-    notes: ["ほかに チョコレートシロップ、ミルクココア：○"],
-  },
-  {
-    name: "エリスロシンドライシロップ",
-    taste: "甘い・バニラ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "オゼックス細粒",
-    taste: "甘い・ストロベリー風味",
-    foods: ["o*", "o", "-", "o*", "ov", "-", "-", "x", "ox", "o", "x", "x"],
-    notes: ["ほかに イチゴジャム、ココア、ピーナッツクリーム：○"],
-  },
-  {
-    name: "オノンドライシロップ",
-    taste: "甘い・無香料",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "オラペネム細粒",
-    taste: "甘い＋やや苦い・ストロベリー風味",
-    foods: ["o", "o*", "-", "o", "o*", "-", "o", "x", "ox", "ox", "ox", "ox"],
-    notes: ["ココア、ハチミツ：○", "酸性の食品と混ぜると苦味が増す"],
-  },
-  {
-    name: "カルボシステインDS",
-    taste: "甘い・青りんご風味",
-    foods: ["o*", "-", "-", "-", "o*", "-", "x", "o*", "-", "o*", "o*", "o"],
-    notes: ["ほかに ピーチジュース、乳酸菌飲料：○"],
-  },
-  {
-    name: "カロナール細粒",
-    taste: "甘い、後に苦い・オレンジ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "キプレス細粒",
-    taste: "わずかに甘い・無香料",
-    foods: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"],
-    notes: ["光に弱く、溶かしたあと時間がたつと分解されるため、開封後15分以内に飲み切る"],
-  },
-  {
-    name: "クラバモックスドライシロップ",
-    taste: "甘い・ストロベリー風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "クラリスドライシロップ",
-    taste: "甘い＋やや苦い・ストロベリー風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "ザジテンドライシロップ",
-    taste: "甘い・ストロベリー風味",
-    foods: ["o", "x", "o", "o", "ox", "o", "ox", "ox", "o", "ox", "ox", "o"],
-    notes: ["薬そのものが十分甘いため、そのままで飲みやすい"],
-  },
-  {
-    name: "ジスロマック細粒",
-    taste: "甘い＋苦い・パイン・オレンジ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "シングレア細粒",
-    taste: "わずかに甘い・無香料",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "セファクロル細粒",
-    taste: "甘い、やや苦い・オレンジ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "セフゾン細粒",
-    taste: "甘い・ストロベリー風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "タミフルドライシロップ",
-    taste: "甘い・ミックスフルーツ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "テオドールドライシロップ",
-    taste: "甘い・すもも風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "トランサミン散",
-    taste: "苦い・無香料",
-    foods: ["o", "x", "o", "o", "o", "o", "o", "o", "o", "o", "o", "x"],
-    notes: [],
-  },
-  {
-    name: "ナウゼリンドライシロップ",
-    taste: "甘い・無香料",
-    foods: ["o", "o", "o", "o", "o", "o", "ox", "ox", "ox", "x", "x", "x"],
-    notes: ["そのまま飲むのがおすすめ（98%が白糖で飲みやすい）", "酸性の液体に溶かすと苦味が増す"],
-  },
-  {
-    name: "ビオフェルミンR散",
-    taste: "甘い・無香料",
-    foods: ["o", "x", "-", "o", "o", "o", "x", "o", "ox", "o", "o", "o"],
-    notes: [
-      "約40℃以上で乳酸菌が死に、60℃以上で添加物のデンプンがのり状になる",
-      "薬そのものが甘いため、そのままで飲みやすい",
-    ],
-  },
-  {
-    name: "フロモックス細粒",
-    taste: "甘い・ストロベリー風味",
-    foods: ["o*", "o", "x", "x", "o*", "o", "o*", "o*", "o", "ox*", "ox*", "ox"],
-    notes: [
-      "一番のおすすめは、そのまま口に入れて好きな飲み物で流しこむこと",
-      "苦味・渋みがあり、液体の中にしばらく置くと飲みにくくなる",
-    ],
-  },
-  {
-    name: "ペリアクチン散",
-    taste: "わずかに甘い・無香料",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "ホスミシンドライシロップ",
-    taste: "甘い・カルピス風味",
-    foods: ["o*", "o*", "o", "o", "o", "o", "o", "o", "o*", "ox", "o", "o"],
-    notes: ["薬そのものの味がよいので、飲食物との相性がよい"],
-  },
-  {
-    name: "ミヤBM細粒",
-    taste: "無味・無香料",
-    foods: ["o", "x", "-", "-", "o", "-", "o", "o", "-", "o", "o", "o"],
-    notes: ["薬そのものに味がないため、食べ物の味を損ねない"],
-  },
-  {
-    name: "ムコダインドライシロップ",
-    taste: "甘酸っぱい・ピーチ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "ムコサールドライシロップ",
-    taste: "甘い・ヨーグルト風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "メイアクトMS細粒",
-    taste: "甘い＋わずかな苦味・バナナ風味",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "メプチン顆粒",
-    taste: "甘い・無香料",
-    foods: null,
-    notes: [],
-  },
-  {
-    name: "ラックビー微粒N",
-    taste: "わずかに甘い・無香料",
-    foods: ["o", "o", "o", "o", "o", "o", "ox", "o", "ox", "o", "o", "o"],
-    notes: ["長い時間、水や熱にさらされると菌の数が減る"],
-  },
-  {
-    name: "ワイドシリン細粒",
-    taste: "甘い・ミックスフルーツ風味",
-    foods: null,
-    notes: [],
-  },
+  { name: "アスベリンドライシロップ", taste: "甘い・オレンジ風味" },
+  { name: "アスベリン散", taste: "無味・無香料" },
+  { name: "アセトアミノフェン原末", taste: "苦い・無香料" },
+  { name: "アレジオンドライシロップ", taste: "甘い＋苦い・ヨーグルト風味" },
+  { name: "エリスロシンドライシロップ", taste: "甘い・バニラ風味" },
+  { name: "オゼックス細粒", taste: "甘い・ストロベリー風味" },
+  { name: "オノンドライシロップ", taste: "甘い・無香料" },
+  { name: "オラペネム細粒", taste: "甘い＋やや苦い・ストロベリー風味" },
+  { name: "カルボシステインDS", taste: "甘い・青りんご風味" },
+  { name: "カロナール細粒", taste: "甘い、後に苦い・オレンジ風味" },
+  { name: "キプレス細粒", taste: "わずかに甘い・無香料" },
+  { name: "クラバモックスドライシロップ", taste: "甘い・ストロベリー風味" },
+  { name: "クラリスドライシロップ", taste: "甘い＋やや苦い・ストロベリー風味" },
+  { name: "ザジテンドライシロップ", taste: "甘い・ストロベリー風味" },
+  { name: "ジスロマック細粒", taste: "甘い＋苦い・パイン・オレンジ風味" },
+  { name: "シングレア細粒", taste: "わずかに甘い・無香料" },
+  { name: "セファクロル細粒", taste: "甘い、やや苦い・オレンジ風味" },
+  { name: "セフゾン細粒", taste: "甘い・ストロベリー風味" },
+  { name: "タミフルドライシロップ", taste: "甘い・ミックスフルーツ風味" },
+  { name: "テオドールドライシロップ", taste: "甘い・すもも風味" },
+  { name: "トランサミン散", taste: "苦い・無香料" },
+  { name: "ナウゼリンドライシロップ", taste: "甘い・無香料" },
+  { name: "ビオフェルミンR散", taste: "甘い・無香料" },
+  { name: "フロモックス細粒", taste: "甘い・ストロベリー風味" },
+  { name: "ペリアクチン散", taste: "わずかに甘い・無香料" },
+  { name: "ホスミシンドライシロップ", taste: "甘い・カルピス風味" },
+  { name: "ミヤBM細粒", taste: "無味・無香料" },
+  { name: "ムコダインドライシロップ", taste: "甘酸っぱい・ピーチ風味" },
+  { name: "ムコサールドライシロップ", taste: "甘い・ヨーグルト風味" },
+  { name: "メイアクトMS細粒", taste: "甘い＋わずかな苦味・バナナ風味" },
+  { name: "メプチン顆粒", taste: "甘い・無香料" },
+  { name: "ラックビー微粒N", taste: "わずかに甘い・無香料" },
+  { name: "ワイドシリン細粒", taste: "甘い・ミックスフルーツ風味" },
 ];
 
 // くすりの適正使用協議会「子どもにくすりをのませるコツ」（2022年4月21日。監修 石川洋一 明治薬科大学教授）
@@ -321,58 +118,15 @@ const HOWTO = [
   },
 ];
 
-// 2つめの表: 国立成育医療研究センター 薬剤部「粉薬と服薬補助食品の飲み合わせ」（2018年）
-// 表の記号は o = ● 飲みやすい、s = ▲ 変わらない、x = × 飲みにくい、- = データなし
-// drug はアプリの薬の名前（DRUGS の name）、name は表に書いてある名前
-const NCCHD_SOURCE = {
-  title: "国立成育医療研究センター 薬剤部「粉薬と服薬補助食品の飲み合わせ」",
-  revised: "2018年",
-  url: "https://www.ncchd.go.jp/hospital/about/section/medicine/nomiawase.pdf",
-  basis: "日経ドラッグインフォメーション Online（2010年2月8日掲載）より抜粋",
-};
-
-const NCCHD_FOODS = [
-  "ココア",
-  "プリン",
-  "牛乳",
-  "アイスクリーム",
-  "お茶",
-  "ヨーグルト",
-  "りんごジュース",
-  "オレンジジュース",
-  "乳酸菌飲料",
-  "スポーツ飲料",
-];
-
-// 同じ資料の 2 ページ目（飲みやすくなる食品・飲みにくくなる食品の絵の表）と 1 ページ目の記号が合わない所は notes に書いた
-const NCCHD_ROWS = [
-  { drug: "エリスロシンドライシロップ", name: "エリスロシンドライシロップ", taste: "甘い・バニラ",
-    foods: ["o", "o", "o", "o", "x", "x", "x", "x", "x", "x"], notes: [] },
-  { drug: "セファクロル細粒", name: "セファクロル細粒", taste: "甘い、やや苦い・オレンジ",
-    foods: ["s", "o", "o", "x", "x", "o", "x", "x", "x", "x"], notes: [] },
-  { drug: "シングレア細粒", name: "シングレア細粒", taste: "わずかに甘い・無香料",
-    foods: ["-", "-", "o", "-", "-", "o", "-", "-", "-", "-"], notes: ["そのままでもおいしい"] },
-  { drug: "テオドールドライシロップ", name: "テオドールドライシロップ", taste: "甘い・すもも",
-    foods: ["o", "o", "s", "o", "x", "o", "s", "s", "o", "s"], notes: [] },
-  { drug: "メプチン顆粒", name: "メプチン顆粒", taste: "甘い・無香料",
-    foods: ["s", "o", "s", "o", "s", "s", "s", "s", "o", "s"], notes: [] },
-  { drug: "アスベリンドライシロップ", name: "アスベリンドライシロップ", taste: "甘い・オレンジ",
-    foods: ["x", "o", "x", "s", "s", "s", "s", "s", "o", "s"],
-    notes: ["そのままでもおいしい", "同じ資料の別の表では、お茶は「飲みにくくなる」に入っている"] },
-  { drug: "ムコダインドライシロップ", name: "ムコダインドライシロップ", taste: "甘酸っぱい・ピーチ",
-    foods: ["x", "x", "o", "o", "x", "o", "o", "o", "s", "o"],
-    notes: ["同じ資料の別の表では、乳酸菌飲料は「飲みやすくなる」に入っている"] },
-  { drug: "カロナール細粒", name: "カロナール細粒", taste: "甘い、後に苦い・オレンジ",
-    foods: ["s", "s", "o", "o", "s", "x", "x", "x", "s", "x"], notes: [] },
-];
-
-// 自分の言葉でまとめたカード（2026-10-18 から）
-// 複数の資料を見比べて、そろっている事実だけを書く。表や文章は写さない（docs/07「資料の使い方の方針」）。
-// ここにある薬は、病院の表のかわりにこのカードを出す。
-// 2つの病院の資料の分け方（どちらにもある食べ物だけ）:
+// 自分の言葉でまとめたカード（2026-10-18 から。すべての薬）
+// 資料の事実だけを、自分の言葉と自分の分け方で書く。表や文章は写さない（docs/07「資料の使い方の方針」）。
+// 食べ物は、2つの病院の資料の両方にある 8 つ（アイスクリーム、プリン、牛乳、お茶、ヨーグルト、りんごジュース、オレンジジュース、スポーツ飲料）だけを使う。
+// 2つの資料にある薬の分け方:
 //   good  = 飯塚が ○、成育が ● か ▲（混ぜても味は変わらない）
 //   avoid = 飯塚が × で、成育も ×
 //   split = それ以外（飯塚が ○/×、または2つの資料で評価がちがう）
+// 1つの資料にしかない薬（basis: "iizuka" か "ncchd"）は、その資料の ○・●・▲ を good、× を avoid、○/× を split にする。
+// 飯塚の ○/▼（味は問題ないが効き目に影響）は avoid にして、コツに理由を書く。
 // good / split / avoid の text を省いたときは、index.html の決まった文が出る
 const FACT_REFS = {
   pmdaQ8: { name: "PMDA くすりQ&A「Q8 赤ちゃんに医師から処方された粉薬を飲ませるよい方法を教えてください。」", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
@@ -385,6 +139,9 @@ const FACT_REFS = {
 const TIP_JUST_BEFORE = "混ぜるのは、飲ませる直前に。混ぜたまま置いておくと、苦くなったり、効き目が落ちたりすることがあります。";
 const TWO_TABLES = ["pmdaQ8", "iizuka", "ncchd"];
 const CHECK_WAITING = "2026-10-18 に2つの病院の資料を見比べてまとめました（薬剤師の確認待ち）";
+const ONE_TABLE_IIZUKA = ["pmdaQ8", "iizuka"];
+const ONE_TABLE_NCCHD = ["pmdaQ8", "ncchd"];
+const CHECK_ONE_TABLE = "2026-10-18 に1つの病院の資料をもとにまとめました（資料は1つだけ。薬剤師の確認待ち）";
 
 const FACTS = {
   "クラリスドライシロップ": {
@@ -517,6 +274,200 @@ const FACTS = {
     tips: [TIP_JUST_BEFORE],
     refs: TWO_TABLES,
     checked: CHECK_WAITING,
+  },
+  "アスベリンドライシロップ": {
+    basis: "ncchd",
+    point: "そのままでも飲みやすい薬です（成育医療センターの資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    split: { foods: ["お茶"] },
+    avoid: { foods: ["牛乳"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "アスベリン散": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "オレンジジュース"] },
+    split: { foods: ["スポーツ飲料"] },
+    avoid: { foods: ["りんごジュース"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "アセトアミノフェン原末": {
+    basis: "iizuka",
+    point: "苦い粉です。",
+    good: { foods: ["アイスクリーム", "ヨーグルト"] },
+    avoid: { foods: ["プリン", "牛乳", "お茶", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "アレジオンドライシロップ": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "牛乳", "ヨーグルト"] },
+    tips: [TIP_JUST_BEFORE, "チョコレートシロップやミルクココアでも飲みやすいとされています（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "エリスロシンドライシロップ": {
+    basis: "ncchd",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳"] },
+    avoid: { foods: ["お茶", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "オゼックス細粒": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "プリン", "りんごジュース"] },
+    avoid: { foods: ["牛乳", "ヨーグルト", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE, "牛乳は、味は問題ありませんが、効き目に影響することがあります。混ぜる前に薬剤師に聞いてください（飯塚病院の資料）。", "イチゴジャム、ココア、ピーナッツクリームでも飲みやすいとされています（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "オラペネム細粒": {
+    basis: "iizuka",
+    point: "酸っぱいものに混ぜると、苦くなります（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶"] },
+    split: { foods: ["りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["ヨーグルト"] },
+    tips: [TIP_JUST_BEFORE, "ココアやはちみつでも飲みやすいとされています（飯塚病院の資料）。1歳未満の赤ちゃんには、はちみつを使わないでください（PMDA）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "カルボシステインDS": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["お茶"] },
+    tips: [TIP_JUST_BEFORE, "ピーチジュースや乳酸菌飲料でも飲みやすいとされています（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "カロナール細粒": {
+    basis: "ncchd",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶"] },
+    avoid: { foods: ["ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "キプレス細粒": {
+    basis: "iizuka",
+    point: "食べ物との相性は、参考にした資料には載っていません。",
+    tips: ["光に弱く、とかしてから時間がたつと薬が分解されます。開けたら15分以内に飲みきります（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ザジテンドライシロップ": {
+    basis: "iizuka",
+    point: "薬そのものが甘いので、そのままでも飲みやすい薬です（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "スポーツ飲料"] },
+    split: { foods: ["牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "シングレア細粒": {
+    basis: "ncchd",
+    point: "そのままでも飲みやすい薬です（成育医療センターの資料）。",
+    good: { foods: ["牛乳", "ヨーグルト"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "セファクロル細粒": {
+    basis: "ncchd",
+    good: { foods: ["プリン", "牛乳", "ヨーグルト"] },
+    avoid: { foods: ["アイスクリーム", "お茶", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "テオドールドライシロップ": {
+    basis: "ncchd",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["お茶"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "トランサミン散": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース"] },
+    avoid: { foods: ["スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ナウゼリンドライシロップ": {
+    basis: "iizuka",
+    point: "ほとんどが砂糖でできていて甘いので、そのまま飲むのがおすすめです。酸っぱい飲み物にとかすと苦くなります（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳"] },
+    split: { foods: ["お茶", "ヨーグルト"] },
+    avoid: { foods: ["りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ビオフェルミンR散": {
+    basis: "iizuka",
+    point: "薬そのものが甘いので、そのままでも飲みやすい薬です（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["お茶"] },
+    tips: [TIP_JUST_BEFORE, "熱いものに混ぜないでください。約40℃をこえると乳酸菌が死んでしまいます（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "フロモックス細粒": {
+    basis: "iizuka",
+    point: "一番のおすすめは、粉をそのまま口に入れて、好きな飲み物で流しこむ飲み方です。飲み物の中にしばらく置くと、苦く・しぶくなります（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "牛乳", "お茶", "ヨーグルト"] },
+    split: { foods: ["りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["プリン"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ホスミシンドライシロップ": {
+    basis: "iizuka",
+    point: "薬そのものの味がよく、たいていのものに混ぜられます（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "オレンジジュース", "スポーツ飲料"] },
+    split: { foods: ["りんごジュース"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ミヤBM細粒": {
+    basis: "iizuka",
+    point: "薬そのものに味がないので、食べ物の味をこわしません（飯塚病院の資料）。",
+    good: { foods: ["アイスクリーム", "牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ムコダインドライシロップ": {
+    basis: "ncchd",
+    good: { foods: ["アイスクリーム", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    avoid: { foods: ["プリン", "お茶"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "メプチン顆粒": {
+    basis: "ncchd",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_NCCHD,
+    checked: CHECK_ONE_TABLE,
+  },
+  "ラックビー微粒N": {
+    basis: "iizuka",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    split: { foods: ["お茶"] },
+    tips: [TIP_JUST_BEFORE, "水や熱に長くさらすと、菌が減ってしまいます。熱いものには混ぜないでください（飯塚病院の資料）。"],
+    refs: ONE_TABLE_IIZUKA,
+    checked: CHECK_ONE_TABLE,
   },
 };
 
