@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FB トリアージ</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --text: #23211d;
+    --muted: #6b665d;
+    --line: #e6e1d8;
+    --accent: #c4572a;
+    --high: #b3261e;
+    --high-bg: #fdecea;
+    --mid: #8a6400;
+    --mid-bg: #fdf5df;
+    --low: #4f5b66;
+    --low-bg: #eef1f4;
+    --done: #2f6b4f;
+    --done-bg: #e6f2ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1a18; --card: #252421; --text: #ece8e1; --muted: #a8a196; --line: #3a3833;
+      --accent: #f08a5d;
+      --high: #ff8a80; --high-bg: #3b2321;
+      --mid: #f2c14e; --mid-bg: #3a3120;
+      --low: #a9b6c2; --low-bg: #2a2f35;
+      --done: #8fd3b0; --done-bg: #20322a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --card: #252421; --text: #ece8e1; --muted: #a8a196; --line: #3a3833;
+    --accent: #f08a5d;
+    --high: #ff8a80; --high-bg: #3b2321;
+    --mid: #f2c14e; --mid-bg: #3a3120;
+    --low: #a9b6c2; --low-bg: #2a2f35;
+    --done: #8fd3b0; --done-bg: #20322a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    line-height: 1.7; font-size: 16px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 24px; }
+  h2 { font-size: 1.15rem; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--line); }
+  p { margin: 0 0 10px; }
+  .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px; text-align: center; }
+  .stat b { display: block; font-size: 1.6rem; line-height: 1.2; }
+  .stat span { font-size: 0.8rem; color: var(--muted); }
+  .stat.high b { color: var(--high); }
+  .stat.mid b { color: var(--mid); }
+  .stat.done b { color: var(--done); }
+  .fb {
+    background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--low);
+    border-radius: 12px; padding: 14px 16px; margin: 0 0 12px;
+  }
+  .fb.high { border-left-color: var(--high); }
+  .fb.mid { border-left-color: var(--mid); }
+  .fb.done { opacity: 0.85; }
+  .fb h3 { font-size: 1.02rem; margin: 6px 0 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 0.78rem; padding: 1px 8px; border-radius: 999px; background: var(--low-bg); color: var(--low); font-weight: 600; }
+  .tag.high { background: var(--high-bg); color: var(--high); }
+  .tag.mid { background: var(--mid-bg); color: var(--mid); }
+  .tag.done { background: var(--done-bg); color: var(--done); }
+  .meta { font-size: 0.85rem; color: var(--muted); margin: 0 0 6px; }
+  .next { font-size: 0.92rem; margin: 6px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--bg); }
+  .next b { color: var(--accent); }
+  ol.flow { padding-left: 1.4em; margin: 0; }
+  ol.flow li { margin-bottom: 6px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 12px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); white-space: nowrap; }
+  .note { font-size: 0.85rem; color: var(--muted); }
+  @media (max-width: 420px) { .summary { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>FB トリアージ</h1>
+  <p class="lead">自分のやりたいことと、メンターや参加者からもらった意見（FB）を、区分と優先度で仕分けたものです。2026-10-18 時点。元の記録は docs/17_kikanchu_yarukoto.md と docs/18_iken_kiroku.md。</p>
+
+  <div class="summary">
+    <div class="stat"><b>4</b><span>もらった意見</span></div>
+    <div class="stat high"><b>1</b><span>優先度 高</span></div>
+    <div class="stat mid"><b>1</b><span>検討中（中）</span></div>
+    <div class="stat done"><b>2</b><span>反映した</span></div>
+  </div>
+
+  <h2>最上位の考え</h2>
+  <div class="fb high">
+    <div class="tags"><span class="tag high">いつも最優先</span><span class="tag">考え方</span></div>
+    <h3>小さく、早く試す</h3>
+    <p class="meta">有本さん（Isamu）の助言 ／ 2026-10-18 ／ CLAUDE.md のいちばん上</p>
+    <p>AI は確率で動くので、大きな仕様を完璧に仕上げることはできない。最初に大きな計画や仕様を作ってもうまくいかない。まずはできるだけいろいろなものを小さく作る。作るうちに出てくる疑問や課題が学びになる。</p>
+    <p class="next"><b>仕分けのときも:</b> 大きい意見ややりたいことは、小さく分けた最初の1つだけを「次の一歩」にする</p>
+  </div>
+
+  <h2>自分のやりたいこと（優先度の高い順）</h2>
+  <p class="note">FB ではなく、自分の考え。元の記録は docs/17_kikanchu_yarukoto.md の「ユーザーがやりたいこと」。</p>
+
+  <div class="fb high">
+    <div class="tags"><span class="tag high">いちばん先</span><span class="tag">調べもの</span><span class="tag">未対応</span></div>
+    <h3>参考にするサイトの調査</h3>
+    <p class="meta">自分の考え ／ 2026-10-18</p>
+    <p>作る前に、参考にするサイトを調べる。何を参考にするか（見た目、中身、使いやすさ）を先に決めてから調べる。国内のまとめサイト（docs/05）、海外のツール（docs/13）、飲ませ方の資料（docs/11）はもう調べてあるので、それを土台にする。</p>
+    <p class="next"><b>次の一歩:</b> 「何を参考にしたいか」を1つ決める</p>
+  </div>
+
+  <div class="fb mid">
+    <div class="tags"><span class="tag mid">優先度 中</span><span class="tag">機能・安全</span><span class="tag">未対応</span></div>
+    <h3>粉に代わるシロップがあるかどうか</h3>
+    <p class="meta">自分の考え ／ 2026-10-18</p>
+    <p>粉が苦手な子のために、同じ成分のシロップがあるかを出す。「代替薬を提案する機能」の最初の一歩。変えるかどうかは医師が決めるので、出すのは「シロップがあるかどうか」と「医師・薬剤師に相談できます」まで。</p>
+    <p class="next"><b>次の一歩:</b> 参考サイトの調査のあとで、よく出る薬5つについて、シロップの有無を出どころ（添付文書など）つきで薬剤師として確かめる</p>
+  </div>
+
+  <h2>もらった意見（優先度の高い順）</h2>
+
+  <div class="fb high">
+    <div class="tags"><span class="tag high">優先度 高</span><span class="tag">機能・安全</span><span class="tag">検討中 → 別セッションで作業中</span></div>
+    <h3>2-1　一般名（ジェネリックの名前）でも薬を探せる</h3>
+    <p class="meta">参加者（薬剤師）から ／ Slack ／ 2026-10-18</p>
+    <p>薬袋の名前がジェネリックだと、今は検索で見つからず、ほかの機能が全部使えない（入口で止まる）。ただし、味や混ぜていいかの表は先発品の情報で、ジェネリックはちがうことがある。</p>
+    <p class="next"><b>次の一歩:</b> 一般名で見つけたときに出す文を決める（案A〜D。おすすめは案B）→ よく出る薬5つに一般名を足して、スマホで試す</p>
+  </div>
+
+  <div class="fb mid">
+    <div class="tags"><span class="tag mid">優先度 中</span><span class="tag">機能</span><span class="tag">検討中</span></div>
+    <h3>2-2　粉の色が分かる</h3>
+    <p class="meta">参加者（薬剤師）から ／ Slack ／ 2026-10-18</p>
+    <p>どれがどの薬か見分けるのに役立つ（兄弟の薬が混ざる困りごとにも）。ただ、子どもが飲むようになるかへの効き方は間接的。色は出どころのある資料（添付文書の「性状」など）から製品ごとに入れるので手間が大きい。</p>
+    <p class="next"><b>次の一歩:</b> 2-1 が終わってから、5つの薬で試す</p>
+  </div>
+
+  <div class="fb done">
+    <div class="tags"><span class="tag">優先度 中</span><span class="tag">考え方</span><span class="tag done">反映した</span></div>
+    <h3>1　親がサイトを開く場面を想定して機能を決める</h3>
+    <p class="meta">田沼さん（参加者兼メンター）から ／ Slack ／ 2026-10-18</p>
+    <p>受け取ったとき、準備しているとき、飲めなかった後の3つの場面で整理した。いちばん手薄なのは「飲めなかった後」。</p>
+    <p class="next"><b>反映先:</b> docs/19_bamen_seiri.md、CLAUDE.md の進め方のメモ</p>
+  </div>
+
+  <div class="fb done">
+    <div class="tags"><span class="tag high">最上位</span><span class="tag">考え方</span><span class="tag done">反映した</span></div>
+    <h3>3　小さく、早く試す。Vibe Coding とハーネスを学ぶ</h3>
+    <p class="meta">有本さん（Isamu）から ／ Slack ／ 2026-10-18</p>
+    <p>いちばん上の「最上位の考え」を見てください。</p>
+    <p class="next"><b>反映先:</b> CLAUDE.md のいちばん上「最上位の考え」</p>
+  </div>
+
+  <h2>仕分けのしかた</h2>
+  <div class="card">
+    <p><b>区分</b></p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>区分</th><th>どんな意見</th><th>行き先</th></tr>
+        <tr><td>安全</td><td>医療上の判断、個人情報、薬の情報の出どころ・許可</td><td>まず薬剤師（自分）が見る</td></tr>
+        <tr><td>機能</td><td>作るもの、直すもの</td><td>docs/19 の候補、docs/17</td></tr>
+        <tr><td>考え方</td><td>進め方、作り方の助言</td><td>CLAUDE.md</td></tr>
+        <tr><td>確認</td><td>意味がはっきりしない</td><td>相手に聞き返す</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <p><b>優先度（上から順に聞く）</b></p>
+    <ol class="flow">
+      <li>安全に関わる？ → はい なら <b style="color:var(--high)">高</b></li>
+      <li>それで子どもが飲むようになる？ → いいえ なら <b style="color:var(--low)">低</b>（今は作らない）</li>
+      <li>入口で止まっている？ → はい なら <b style="color:var(--high)">高</b></li>
+      <li>小さく作れる？ → いいえ なら、小さく分けた最初の1つだけを候補に</li>
+      <li>作り直しが高い？（保存するデータの形、資料の許可、個人情報）→ はい なら、作る前に決める</li>
+      <li>どれでもなければ <b style="color:var(--mid)">中</b></li>
+    </ol>
+  </div>
+  <p class="note">FB が来たら「FB きた」と Slack の文を貼るだけで、スキル fb-triage がこのページと docs/18 を更新します。決めるのは自分。</p>
+</main>
+</body>
+</html>

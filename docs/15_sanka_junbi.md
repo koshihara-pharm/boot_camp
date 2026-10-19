@@ -14,8 +14,8 @@ BootCamp（第4回 2期）への参加が決まった。運営（有本さん）
 | 2 | 申し込みのメールアドレスに届いた Slack の招待メールのリンクから登録する | ユーザー | 済み（2026-10-18 に確認） |
 | 3 | Slack の名前を決まりどおりに設定する（下を参照） | ユーザー | 済み（2026-10-18 に確認） |
 | 4 | `#p_bootcamp_4th_round2_lounge` に、**canvas で**自己紹介を投稿する。タイトルに「自己紹介」を入れる | ユーザー（下書きは下） | 済み（2026-10-18 に確認。田沼さんから返信あり → docs/18 の 1） |
-| 5 | GitHub の招待（`koshihara-pharm` 宛て。メールか GitHub の通知に届く）を承認する | ユーザー | 招待待ち |
-| 6 | https://github.com/SingularitySociety/bootcamp004-02 の名簿ページに自己紹介を書いて、プルリクエストを送る | Claude が作業、ユーザーが内容を確認 | 招待待ち（2026-10-17 時点で外からは見えない） |
+| 5 | GitHub の招待（`koshihara-pharm` 宛て。メールか GitHub の通知に届く）を承認する | ユーザー | 済み（2026-10-19 に確認。書き込み権限あり） |
+| 6 | https://github.com/SingularitySociety/bootcamp004-02 の名簿ページに自己紹介を書いて、プルリクエストを送る | Claude が作業、ユーザーが内容を確認 | PR を送った（2026-10-19、PR 69）。マージ待ち。下書きは private/meibo_shitagaki.md（GitHub に上げない） |
 
 ## Slack の名前
 

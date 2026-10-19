@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>スキルのまとめ</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --text: #23211d;
+    --muted: #6b665d;
+    --line: #e6e1d8;
+    --accent: #c4572a;
+    --accent-soft: #fbeee6;
+    --tag-bg: #eef3f0;
+    --tag-text: #2f5d4a;
+    --high: #b3261e;
+    --mid: #8a6400;
+    --low: #4f5b66;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1a18;
+      --card: #252421;
+      --text: #ece8e1;
+      --muted: #a8a196;
+      --line: #3a3833;
+      --accent: #f08a5d;
+      --accent-soft: #3a2a22;
+      --tag-bg: #233029;
+      --tag-text: #9fd1b9;
+      --high: #ff8a80;
+      --mid: #f2c14e;
+      --low: #a9b6c2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18;
+    --card: #252421;
+    --text: #ece8e1;
+    --muted: #a8a196;
+    --line: #3a3833;
+    --accent: #f08a5d;
+    --accent-soft: #3a2a22;
+    --tag-bg: #233029;
+    --tag-text: #9fd1b9;
+    --high: #ff8a80;
+    --mid: #f2c14e;
+    --low: #a9b6c2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 28px; }
+  h2 {
+    font-size: 1.2rem;
+    margin: 40px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--line);
+  }
+  h3 { font-size: 1.05rem; margin: 0 0 4px; }
+  p { margin: 0 0 12px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 0 0 12px;
+  }
+  .card.main { border-color: var(--accent); background: var(--accent-soft); }
+  .name {
+    display: inline-block;
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 1px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    word-break: break-all;
+  }
+  .when { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .when b { color: var(--text); }
+  ol.flow { padding-left: 1.4em; margin: 8px 0 0; }
+  ol.flow li { margin-bottom: 6px; }
+  .table-wrap { overflow-x: auto; margin: 8px 0 12px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .p-high { color: var(--high); font-weight: 700; }
+  .p-mid { color: var(--mid); font-weight: 700; }
+  .p-low { color: var(--low); font-weight: 700; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .grid .card { margin: 0; }
+  .note { font-size: 0.88rem; color: var(--muted); }
+  code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>スキルのまとめ</h1>
+  <p class="lead">Claude に「この手順でやって」を覚えさせておく仕組みが<b>スキル</b>です。ここでは、このプロジェクトで使えるスキルを、いつ使うかと一緒にまとめました。（2026-10-18）</p>
+
+  <h2>スキルってなに？</h2>
+  <div class="card">
+    <p>決まった仕事の<b>手順書</b>です。Claude は話の内容を見て、合うスキルがあれば、その手順に沿って作業します。</p>
+    <p>使い方は2つあります。</p>
+    <ol class="flow">
+      <li><b>ふつうに頼む</b>: 「FB きた」「意見もらった」のように言えば、Claude が合うスキルを選びます</li>
+      <li><b>名前で呼ぶ</b>: <code>/fb-triage</code> のように、<code>/</code> とスキルの名前を打ちます</li>
+    </ol>
+    <p class="note">スキルは、CLAUDE.md と同じ「ハーネス（AI に正しく作業させるための決まりや仕組み）」の1つです（CLAUDE.md の方針 6）。うまくいかないときは、手順書を直して育てます。</p>
+  </div>
+
+  <h2>このプロジェクトのスキル</h2>
+  <div class="card main">
+    <span class="name">fb-triage</span>
+    <h3>FB のトリアージ（仕分けと優先度づけ）</h3>
+    <p class="when"><b>こんなとき:</b> メンター、参加者、使ってくれた親から意見をもらったとき。Slack の文を貼って「FB きた」と言えば動きます。</p>
+    <ol class="flow">
+      <li><b>記録する</b> — docs/18 に1件ずつ書く。原文は貼らず要点に。本名や家族のことは書かない</li>
+      <li><b>仕分ける</b> — 下の4つの区分のどれかに入れる</li>
+      <li><b>優先度をつける</b> — 下の問いに順に答えて、高・中・低を決める</li>
+      <li><b>ユーザーが決める</b> — Claude は案と「次の一歩（小さく1つ）」を出すだけ。Slack の返事の下書きも出す（12時間以内に反応する決まり）</li>
+    </ol>
+
+    <h3 style="margin-top:16px">区分</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>区分</th><th>どんな意見</th><th>行き先</th></tr>
+        <tr><td>安全</td><td>医療上の判断、個人情報、薬の情報の出どころ・許可</td><td>まず薬剤師（自分）が見る</td></tr>
+        <tr><td>機能</td><td>作るもの、直すもの</td><td>docs/19 の候補、docs/17</td></tr>
+        <tr><td>考え方</td><td>進め方、作り方の助言</td><td>CLAUDE.md</td></tr>
+        <tr><td>確認</td><td>意味がはっきりしない</td><td>相手に聞き返す</td></tr>
+      </table>
+    </div>
+
+    <h3>優先度の決め方（上から順に）</h3>
+    <ol class="flow">
+      <li>安全に関わる？ → はい なら <span class="p-high">高</span></li>
+      <li>それで子どもが飲むようになる？ → いいえ なら <span class="p-low">低</span>（今は作らない）</li>
+      <li>入口で止まっている？（薬が検索で見つからない など） → はい なら <span class="p-high">高</span></li>
+      <li>小さく作れる？ → いいえ なら、小さく分けた最初の1つだけを候補に</li>
+      <li>作り直しが高い？（保存するデータの形、資料の許可、個人情報） → はい なら、作る前に決める</li>
+      <li>どれでもなければ <span class="p-mid">中</span></li>
+    </ol>
+
+    <h3>今のトリアージ結果</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>#</th><th>意見</th><th>区分</th><th>優先度</th><th>状態</th></tr>
+        <tr><td>2-1</td><td>一般名（ジェネリックの名前）でも探せる</td><td>機能・安全</td><td class="p-high">高</td><td>検討中</td></tr>
+        <tr><td>2-2</td><td>粉の色が分かる</td><td>機能</td><td class="p-mid">中</td><td>検討中</td></tr>
+        <tr><td>1</td><td>親がサイトを開く場面を想定する</td><td>考え方</td><td class="p-mid">中</td><td>反映した</td></tr>
+        <tr><td>3</td><td>まず小さく作り、Vibe Coding とハーネスを学ぶ</td><td>考え方</td><td class="p-mid">中</td><td>反映した</td></tr>
+      </table>
+    </div>
+    <p class="note">いちばん先は 2-1。次の一歩は「一般名で見つけたとき、画面に何と出すか」を薬剤師として1文で決めること。くわしくは docs/18。</p>
+  </div>
+
+  <h2>MulmoTerminal のスキル</h2>
+  <p>MulmoTerminal（たくさんの Claude を並べて動かす道具）を入れると付いてくるスキルです。困ったら、まず <b>help</b> か <b>config</b> に聞けば、合うスキルに案内してくれます。</p>
+  <div class="grid">
+    <div class="card">
+      <span class="name">mulmoterminal-help</span>
+      <h3>使い方を聞く</h3>
+      <p class="when"><b>こんなとき:</b> 「この機能はなに？」「どうやるの？」「新しいバージョンで何が変わった？」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-config</span>
+      <h3>設定の入口</h3>
+      <p class="when"><b>こんなとき:</b> 「何を変えられる？」「設定が効いていない」「今どう設定されている？」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-bug-report</span>
+      <h3>こわれた？を調べる</h3>
+      <p class="when"><b>こんなとき:</b> 「動かない」「おかしい」。設定のせいか本当の不具合かを調べてから、報告を作る</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-decisions</span>
+      <h3>前に決めたことを見る</h3>
+      <p class="when"><b>こんなとき:</b> 「これ前に決めたよね」。過去に聞かれたことと答えを読んで、同じ質問をくり返さない</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-dirs</span>
+      <h3>フォルダごとの色と並び</h3>
+      <p class="when"><b>こんなとき:</b> 「このプロジェクトに色をつけたい」「よく使うものを上に」「文字が小さい」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-header</span>
+      <h3>画面の上のボタン</h3>
+      <p class="when"><b>こんなとき:</b> 「ワンクリックで○○したい」「上にブランチ名や PR を出したい」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-keys</span>
+      <h3>キーボードのショートカット</h3>
+      <p class="when"><b>こんなとき:</b> 「Enter で改行したい / 送りたい」「コピーがうまくいかない」「待っている Claude にすぐ移りたい」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-notify</span>
+      <h3>通知の音</h3>
+      <p class="when"><b>こんなとき:</b> 「通知がうるさい / 少ない」「返事待ちのときだけ鳴らしたい」「スマホに通知が来ない」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-theme</span>
+      <h3>画面の色（テーマ）</h3>
+      <p class="when"><b>こんなとき:</b> 「自分の色の組み合わせを作りたい」「暗すぎる / 見にくい」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-model</span>
+      <h3>ちがう AI モデルを使う</h3>
+      <p class="when"><b>こんなとき:</b> 「安いモデルを使いたい」「プロジェクトごとにモデルを変えたい」</p>
+    </div>
+    <div class="card">
+      <span class="name">mulmoterminal-shared-app</span>
+      <h3>みんなで使うものを作る</h3>
+      <p class="when"><b>こんなとき:</b> アンケート、申し込みフォームなど、ほかの人が書きこむものを作って公開する</p>
+      <p class="note">親へのアンケート（「いくらなら払う？」など）に使えるかもしれません。個人情報を集めない作りにします。</p>
+    </div>
+  </div>
+
+  <h2>スキルを増やすとき</h2>
+  <div class="card">
+    <p>同じことを2〜3回 Claude に頼んだら、スキルにする合図です。「これをスキルにして」と言えば、手順書を作ります。</p>
+    <p class="note">このプロジェクトのスキルは <code>.claude/skills/</code> に置きます（fb-triage は <code>.claude/skills/fb-triage/SKILL.md</code>）。MulmoTerminal のスキルは自分のパソコンの <code>~/.claude/skills/</code> にあり、どのプロジェクトでも使えます。</p>
+  </div>
+</main>
+</body>
+</html>
