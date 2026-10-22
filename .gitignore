@@ -1,0 +1,5 @@
+# 進捗表の台帳（ユーザーの発言の要点が入るので GitHub に上げない）
+.claude/shinchokuhyou/
+
+# 公開しない資料の出どころ（勉強会のスライドの URL など）
+docs/_local/
