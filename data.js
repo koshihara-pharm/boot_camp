@@ -42,10 +42,14 @@ const RADAR_SOURCE = {
   url: "https://www.rad-ar.or.jp/knowledge/post?slug=how-to-get-your-child-to-take-medicine",
 };
 
-// 飲ませ方のコツ（どの粉薬にも共通）。中身は薬剤師が出どころと照らして確認する
+// 飲ませ方のコツ（年齢と薬の形で分ける）。中身は薬剤師が出どころと照らして確認する
+// ages: 年齢（baby 赤ちゃん / toddler 1〜3歳 / kid 4歳から / all どの年齢でも）
+// forms: 薬の形（powder 粉 / syrup シロップ / tablet 錠剤 / any どの形でも）。振り分けは 2026-10-25 にユーザー（薬剤師）が確認
 const HOWTO = [
   {
     title: "少しの水でねって、ほっぺの内側にぬる",
+    ages: ["baby"],
+    forms: ["powder"],
     body: "粉薬に水を少したらして練り、だんごのようにします。ほっぺの内側や上あごにつけて、すぐに水や白湯を飲ませます。舌の先は苦味を感じやすいので避けます。粉薬がまだ上手に飲めない赤ちゃんに。",
     sources: [
       { name: "PMDA くすりQ&A", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
@@ -54,6 +58,8 @@ const HOWTO = [
   },
   {
     title: "少しの水でとかして、スポイトやスプーンで",
+    ages: ["baby", "toddler"],
+    forms: ["powder"],
     body: "飲ませる直前に少しの水でとかし、スポイトやスプーンで、ほっぺの内側に沿わせて少しずつ流しこみます。むせないように、上体を起こして飲ませます。はじめに多めの水でとくと、飲み残しのもとになります。",
     sources: [
       { name: "熊本市", url: "https://www.city.kumamoto.jp/kiji00331285/5_31285_410254_up_23WIW8YZ.pdf" },
@@ -62,6 +68,8 @@ const HOWTO = [
   },
   {
     title: "味の濃いものに混ぜる",
+    ages: ["toddler", "kid"],
+    forms: ["powder"],
     body: "チョコアイスやココアなど、味の濃いものの少しだけに混ぜると苦味が隠れやすくなります。混ぜたらすぐに飲ませます。ミルクやおかゆなど毎日の主食には混ぜません（それ自体を嫌いになることがあります）。何に混ぜていいかは、上の表で薬ごとに確かめてください。",
     sources: [
       { name: "熊本 くすりの話", url: "https://kmh.or.jp/wp/wp-content/uploads/2023/04/okusuri_14.pdf" },
@@ -70,6 +78,8 @@ const HOWTO = [
   },
   {
     title: "すっぱい飲み物・食べ物に注意",
+    ages: ["all"],
+    forms: ["powder"],
     body: "オレンジジュース、スポーツ飲料、乳酸菌飲料、ヨーグルトなどのすっぱいものに混ぜると、薬の表面のコーティングがはがれて苦くなったり、薬の量が減って効き目が弱まることがあります。抗生物質のドライシロップや顆粒に多いです。混ぜた薬は、置いておかずにすぐ飲ませます。",
     sources: [
       { name: "国立成育医療研究センター 薬剤部", url: "https://www.ncchd.go.jp/hospital/about/section/medicine/nomiawase.pdf" },
@@ -78,6 +88,8 @@ const HOWTO = [
   },
   {
     title: "服薬ゼリーで包む",
+    ages: ["toddler", "kid"],
+    forms: ["powder"],
     body: "器にゼリーを入れて薬をのせ、ゼリーで包みこむようにスプーンですくって飲ませます。フルーツ味のゼリーは、薬と混ぜると苦味を感じやすくなることがあります。抗生物質や苦い薬には、チョコ味など向けのものがあります。",
     sources: [
       { name: "龍角散 おくすり飲めたね（販売店の商品説明）", url: "https://netshop.create-sd.co.jp/shop/g/g4987240601838/" },
@@ -85,6 +97,8 @@ const HOWTO = [
   },
   {
     title: "赤ちゃんは、おなかがすいているときに",
+    ages: ["baby"],
+    forms: ["any"],
     body: "乳児は、おなかがすいているとき（授乳の前など）のほうが飲ませやすく、吐きにくいとされています。おなかがいっぱいだと飲めずに吐いてしまうことがあります。",
     sources: [
       { name: "診断と治療社", url: "https://shindan.co.jp/np/filedata/00265800_23.pdf" },
@@ -93,26 +107,36 @@ const HOWTO = [
   },
   {
     title: "飲んだあとは口直し",
+    ages: ["all"],
+    forms: ["any"],
     body: "飲ませたあとに水やぬるま湯を飲ませて、口の中に残った薬を流します。このとき、ちゃんと飲みこめたか、吐き出していないかも見ておきます。",
     sources: [RADAR_SOURCE],
   },
   {
     title: "好きなキャラクターの容器で",
+    ages: ["toddler"],
+    forms: ["any"],
     body: "お子さんの好きなキャラクターの容器や、ふだん使わないめずらしい容器に入れると、楽しく飲んでくれることがあります。",
     sources: [RADAR_SOURCE],
   },
   {
     title: "笑顔で、飲めたらほめる",
+    ages: ["all"],
+    forms: ["any"],
     body: "親が心配そうだったりイライラしていたりすると、子どもは薬を「しかられる、いやなもの」と思うようになります。笑顔で、飲めたらほめて「うれしいこと」にします。シールを貼るなど、できた！と感じられる工夫もよいとされています。うまくいく方法はその日の気分でも変わるので、いくつか知っておくと楽です。",
     sources: [RADAR_SOURCE],
   },
   {
     title: "薬のことを話してあげる",
+    ages: ["kid"],
+    forms: ["any"],
     body: "言葉がわかるようになったら、「薬は病気を治すために使うもの」「飲むとよくなる」ことを、その子にわかる言葉で話してあげます。小学校に入るまでは、子どもだけで飲ませず、親が見て確かめます。",
     sources: [RADAR_SOURCE],
   },
   {
     title: "水で飲む「大人飲み」に挑戦",
+    ages: ["kid"],
+    forms: ["powder"],
     body: "大人の話が十分わかるようになったら、大人と同じように水で飲むことをすすめてみます。お友だちやきょうだいが水で上手に飲めていることを伝えると、やる気になることがあります。",
     sources: [RADAR_SOURCE],
   },
