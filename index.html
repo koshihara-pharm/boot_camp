@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>こどもおくすりサポート</title>
-<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方、飲んだ記録、家族や保育園への共有、のめた！スタンプ（デモ版）">
+<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方、飲んでいる薬の記録、家族や保育園への共有（デモ版）">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
@@ -99,11 +99,11 @@
   main {
     max-width: 560px;
     margin: 0 auto;
-    padding-block: 16px 120px;
+    padding-block: 16px 40px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
-  h1, h2, h3, h4, .stamp-button, .howto summary { font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
+  h1, h2, h3, h4, .howto summary { font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
   h1 { font-size: 26px; margin: 8px 0 4px; }
 
   .hero {
@@ -216,8 +216,6 @@
   .taste { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: 16px; }
   .taste b { font-family: var(--font-display); color: var(--muted); font-size: 14px; letter-spacing: 0.08em; margin-right: 2px; }
   .taste span { padding: 4px 12px; border-radius: 999px; background: var(--taste-bg); }
-  .today { margin-top: 10px; font-size: 16px; color: var(--muted); }
-  .today span { font-size: 24px; }
   .section-title { font-size: 20px; margin: 24px 0 4px; }
   .section-lead { color: var(--muted); font-size: 15px; margin: 0 0 4px; }
   .group { margin-top: 16px; --tone: var(--muted); --tone-bg: var(--taste-bg); }
@@ -271,99 +269,7 @@
     margin-top: 28px;
   }
 
-  .stamp-bar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, var(--bg) 70%, transparent);
-    display: flex;
-    justify-content: center;
-  }
-  .stamp-bar[hidden] { display: none; }
-  .stamp-button {
-    width: 100%;
-    max-width: 528px;
-    min-height: 64px;
-    font-size: 24px;
-    font-weight: bold;
-    border: none;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--accent-text);
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  .stamp-button:active { transform: scale(0.98); }
-
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    z-index: 10;
-  }
-  .overlay[hidden] { display: none; }
-  .praise {
-    background: var(--card);
-    border-radius: 24px;
-    padding: 28px 20px 20px;
-    width: 100%;
-    max-width: 360px;
-    text-align: center;
-  }
-  .big-stamp {
-    width: 180px;
-    height: 180px;
-    margin: 0 auto;
-    border: 6px solid var(--stamp);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 96px;
-    animation: pop 0.5s ease-out;
-  }
-  @keyframes pop {
-    0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
-    70% { transform: scale(1.1) rotate(8deg); opacity: 1; }
-    100% { transform: scale(1) rotate(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .big-stamp { animation: none; }
-  }
-  .praise h2 { font-size: 28px; margin: 16px 0 4px; }
-  .praise p { margin: 0 0 16px; color: var(--muted); font-size: 16px; }
-  .praise .stamp-button { font-size: 20px; min-height: 56px; }
-  .undo {
-    margin-top: 10px;
-    font-size: 15px;
-    background: none;
-    border: none;
-    color: var(--muted);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .day { margin-top: 20px; }
-  .day h3 { font-size: 18px; margin: 0 0 8px; }
-  .day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-  .day li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 8px 12px;
-  }
-  .day li .emoji { font-size: 32px; }
-  .day li .time { color: var(--muted); font-size: 15px; }
-  .nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0 4px; }
+  .nav { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0 4px; }
   .nav button, .secondary {
     min-height: 52px;
     font-size: 17px;
@@ -418,11 +324,6 @@
   .med dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0 0; font-size: 16px; }
   .med dt { color: var(--muted); }
   .med dd { margin: 0; min-width: 0; }
-  .progress { margin-top: 12px; }
-  .progress .bar { height: 12px; border-radius: 999px; background: var(--taste-bg); overflow: hidden; }
-  .progress .fill { height: 100%; background: var(--stamp); }
-  .progress p { margin: 4px 0 0; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .done-badge { display: inline-block; margin-top: 8px; padding: 4px 10px; border-radius: 999px; background: var(--best-bg); font-weight: bold; }
 
   .share { margin-top: 24px; }
   .share textarea {
@@ -489,7 +390,7 @@
       <div class="hero-stamp" aria-hidden="true">🐻</div>
       <p class="eyebrow">こどもおくすりサポート</p>
       <h1>おくすり、<br>のめるかな？</h1>
-      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。<br>のめたら、スタンプをおそう。</p>
+      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <h2 class="worry-title">どうしたの？</h2>
       <div class="worry">
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。味と、苦さをかくせる食べ物が出ます"><span class="ic" aria-hidden="true">😖</span>にがくて いやがる</button>
@@ -501,7 +402,6 @@
     </div>
     <div class="nav">
       <button type="button" data-go="record"><span class="ic" aria-hidden="true">📒</span>おくすり記録 <b id="med-count"></b></button>
-      <button type="button" data-go="stamps"><span class="ic" aria-hidden="true">⭐</span>スタンプ帳 <b id="stamp-count"></b></button>
     </div>
     <ul id="list" class="list"></ul>
   </section>
@@ -605,38 +505,15 @@
     </form>
   </section>
 
-  <section id="book" hidden>
-    <button class="back" data-go="" type="button">← もどる</button>
-    <h1>スタンプ帳</h1>
-    <p class="lead">記録はこのスマホの中だけに保存されます。</p>
-    <div id="book-list"></div>
-  </section>
-
   <p class="disclaimer">
     このページは、薬の量、薬どうしの飲み合わせ、薬をやめるかどうかは判断しません。迷ったときは、薬をもらった薬局か医師に聞いてください。<br>
     デモ版です。混ぜていいかのデータは、病院が出している2016年と2018年の資料をもとにしているため、今の製品と違う場合があります。
   </p>
 </main>
 
-<div class="stamp-bar" id="stamp-bar" hidden>
-  <button class="stamp-button" id="stamp" type="button">のめた！ スタンプをおす</button>
-</div>
-
-<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="praise-title">
-  <div class="praise">
-    <div class="big-stamp" id="big-stamp" aria-hidden="true"></div>
-    <h2 id="praise-title">のめたね！すごい！</h2>
-    <p id="praise-detail"></p>
-    <button class="stamp-button" id="close-praise" type="button">やったね</button>
-    <br>
-    <button class="undo" id="undo" type="button">まちがえた（とりけす）</button>
-  </div>
-</div>
-
 <script src="data.js"></script>
 <script>
   const TIME_ORDER = ["朝", "昼", "夕", "寝る前"];
-  const STAMPS_KEY = "okusuri.stamps.v1";
   const MEDS_KEY = "okusuri.meds.v1";
   const OTHER = "__other__";
 
@@ -684,15 +561,6 @@
     return (date.getMonth() + 1) + "/" + date.getDate();
   }
 
-  function dayLabel(date) {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    if (dayKey(date) === dayKey(today)) return "きょう";
-    if (dayKey(date) === dayKey(yesterday)) return "きのう";
-    return (date.getMonth() + 1) + "月" + date.getDate() + "日";
-  }
-
   function timeLabel(date) {
     return date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0");
   }
@@ -715,29 +583,12 @@
   }
 
   // ---- 記録 ----
-  let stamps = load(STAMPS_KEY);
   let meds = load(MEDS_KEY);
 
   function medEnd(med) {
     const end = parseDay(med.start);
     end.setDate(end.getDate() + Number(med.days) - 1);
     return end;
-  }
-
-  function medTotal(med) {
-    return med.times.length * Number(med.days);
-  }
-
-  function stampsFor(med) {
-    const from = parseDay(med.start);
-    const to = medEnd(med);
-    to.setDate(to.getDate() + 1);
-    return stamps.filter((s) => s.drug === med.drug && new Date(s.at) >= from && new Date(s.at) < to);
-  }
-
-  function todayStampsForDrug(name) {
-    const today = dayKey(new Date());
-    return stamps.filter((s) => s.drug === name && dayKey(new Date(s.at)) === today);
   }
 
   function activeMedFor(name) {
@@ -751,14 +602,11 @@
     detail: document.getElementById("detail"),
     record: document.getElementById("record"),
     recordNew: document.getElementById("record-new"),
-    book: document.getElementById("book"),
     howto: document.getElementById("howto-page"),
   };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
   const card = document.getElementById("card");
-  const stampBar = document.getElementById("stamp-bar");
-  const overlay = document.getElementById("overlay");
   let currentDrugName = null;
   let pendingDrug = null;
   let shareMode = "family";
@@ -803,9 +651,7 @@
       list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
     const active = meds.filter((m) => new Date() <= new Date(medEnd(m).getTime() + 86400000)).length;
-    document.getElementById("med-count").textContent = active > 0 ? "（" + active + "）" : "";
-    document.getElementById("stamp-count").textContent = stamps.length > 0 ? "（" + stamps.length + "）" : "";
-  }
+    document.getElementById("med-count").textContent = active > 0 ? "（" + active + "）" : "";  }
 
   const FOOD_EMOJI = {
     "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
@@ -858,11 +704,6 @@
       el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
-    const todays = todayStampsForDrug(drug.name);
-    if (todays.length > 0) {
-      parts.push(el("p", { class: "today" }, ["きょうのスタンプ ", el("span", { text: todays.map((s) => s.emoji).join(" ") })]));
-    }
-
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     parts.push(...factBlock(fact));
@@ -892,10 +733,6 @@
     }
     share.hidden = false;
     target.replaceChildren(...meds.map((med) => {
-      const total = medTotal(med);
-      const done = stampsFor(med).length;
-      const today = todayStampsForDrug(med.drug).length;
-      const pct = Math.min(100, Math.round((done / total) * 100));
       const drugIndex = DRUGS.findIndex((d) => d.name === med.drug);
 
       const info = el("dl", {}, [
@@ -905,15 +742,7 @@
       ]);
       if (med.note) info.append(el("dt", { text: "メモ" }), el("dd", { text: med.note }));
 
-      const progress = el("div", { class: "progress" }, [
-        el("div", { class: "bar", role: "img", "aria-label": done + " / " + total + " 回" }, [el("div", { class: "fill", style: "width:" + pct + "%" })]),
-        el("p", { text: "スタンプ " + done + " / " + total + " 回（きょう " + today + " / " + med.times.length + " 回）" }),
-      ]);
-
       const actions = el("div", { class: "row" });
-      const stampButton = el("button", { class: "primary", type: "button", text: "のめた！" });
-      stampButton.addEventListener("click", () => addStamp(med.drug));
-      actions.append(stampButton);
       if (drugIndex >= 0) {
         const open = el("button", { class: "secondary", type: "button", text: "混ぜ方を見る" });
         open.addEventListener("click", () => go("drug-" + drugIndex));
@@ -931,9 +760,7 @@
         el("h3", { text: med.drug }),
       ]);
       if (med.child) box.append(el("div", { class: "who", text: med.child }));
-      box.append(info, progress);
-      if (done >= total) box.append(el("div", { class: "done-badge", text: "🏅 さいごまで のめたね！" }));
-      box.append(actions);
+      box.append(info, actions);
       return box;
     }));
     renderShare();
@@ -946,8 +773,6 @@
       lines.push("");
       lines.push("■ " + med.drug + (med.child ? "（" + med.child + "）" : ""));
       lines.push("・" + med.times.join("・") + " / " + (med.dose ? "1回 " + med.dose + " / " : "") + med.days + "日分（" + shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "）");
-      const todays = todayStampsForDrug(med.drug);
-      lines.push("・きょう: " + (todays.length ? todays.map((s) => timeLabel(new Date(s.at)) + " のめた").join("、") : "まだ") + "（" + todays.length + " / " + med.times.length + " 回）");
       const drug = DRUGS.find((d) => d.name === med.drug);
       if (drug) {
         const good = foodsIn(drug, "good");
@@ -991,30 +816,6 @@
     document.getElementById("tab-family").setAttribute("aria-pressed", String(shareMode === "family"));
     document.getElementById("tab-school").setAttribute("aria-pressed", String(shareMode === "school"));
     document.getElementById("copy-status").textContent = "";
-  }
-
-  function renderBook() {
-    const target = document.getElementById("book-list");
-    if (stamps.length === 0) {
-      target.replaceChildren(el("p", { class: "empty", text: "まだスタンプはありません。薬のページで「のめた！」を押すと、ここにたまります。" }));
-      return;
-    }
-    const byDay = new Map();
-    for (const s of [...stamps].reverse()) {
-      const date = new Date(s.at);
-      const key = dayKey(date);
-      if (!byDay.has(key)) byDay.set(key, { label: dayLabel(date), items: [] });
-      byDay.get(key).items.push(s);
-    }
-    target.replaceChildren(
-      ...[...byDay.values()].map((day) => el("div", { class: "day" }, [
-        el("h3", { text: day.label + "（" + day.items.length + "こ）" }),
-        el("ul", {}, day.items.map((s) => el("li", {}, [
-          el("span", { class: "emoji", text: s.emoji }),
-          el("div", {}, [el("div", { text: s.drug }), el("div", { class: "time", text: timeLabel(new Date(s.at)) })]),
-        ]))),
-      ]))
-    );
   }
 
   // ---- 薬を追加するフォーム ----
@@ -1064,51 +865,6 @@
     go("record");
   });
 
-  // ---- スタンプ ----
-  let lastStampDrug = null;
-
-  function addStamp(name) {
-    const emoji = STAMPS[Math.floor(Math.random() * STAMPS.length)];
-    stamps.push({ drug: name, at: new Date().toISOString(), emoji });
-    save(STAMPS_KEY, stamps);
-    lastStampDrug = name;
-    document.getElementById("big-stamp").textContent = emoji;
-
-    const med = activeMedFor(name);
-    let title = "のめたね！すごい！";
-    let detail = "きょう " + todayStampsForDrug(name).length + "こめ のスタンプ";
-    if (med) {
-      const done = stampsFor(med).length;
-      const total = medTotal(med);
-      if (done === total) {
-        title = "さいごまで のめたね！";
-        detail = med.days + "日分、ぜんぶ のめました 🏅";
-      } else if (done < total) {
-        detail += "（あと " + (total - done) + " 回）";
-      }
-    }
-    document.getElementById("praise-title").textContent = title;
-    document.getElementById("praise-detail").textContent = detail;
-    overlay.hidden = false;
-    document.getElementById("close-praise").focus();
-  }
-
-  function closePraise() {
-    overlay.hidden = true;
-    route(false);
-  }
-
-  document.getElementById("stamp").addEventListener("click", () => { if (currentDrugName) addStamp(currentDrugName); });
-  document.getElementById("close-praise").addEventListener("click", closePraise);
-  document.getElementById("undo").addEventListener("click", () => {
-    if (lastStampDrug) {
-      stamps.pop();
-      save(STAMPS_KEY, stamps);
-      lastStampDrug = null;
-    }
-    closePraise();
-  });
-
   // ---- 伝える ----
   document.getElementById("tab-family").addEventListener("click", () => { shareMode = "family"; renderShare(); });
   document.getElementById("tab-school").addEventListener("click", () => { shareMode = "school"; renderShare(); });
@@ -1132,18 +888,15 @@
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
 
-    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "stamps", "howto"].includes(hash)));
+    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "howto"].includes(hash)));
     screens.detail.hidden = !drug;
     screens.record.hidden = hash !== "record";
     screens.recordNew.hidden = hash !== "record-new";
-    screens.book.hidden = hash !== "stamps";
     screens.howto.hidden = hash !== "howto";
-    stampBar.hidden = !drug;
 
     if (drug) renderCard(drug);
     if (hash === "record") renderRecord();
     if (hash === "record-new") prepareForm();
-    if (hash === "stamps") renderBook();
     if (!screens.pick.hidden) renderList();
     if (scroll) window.scrollTo(0, 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
