@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>こどもおくすりサポート</title>
-<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方、飲んでいる薬の記録、家族や保育園への共有（デモ版）">
+<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方（デモ版）">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
-  /* 1カラムのスマホ用。やわらかい青緑の地に、黄色いスタンプの丸を目印に置く。主役（飲ませる手助け）を上に、記録は下に */
+  /* 1カラムのスマホ用。やわらかい青緑の地に、黄色いスタンプの丸を目印に置く。主役は飲ませる手助け */
   :root {
     --bg: #eef6f4;
     --ink: #17403b;
@@ -157,7 +157,6 @@
   }
   .list .drug-name { display: block; font-size: 19px; color: var(--text); }
   .list .drug-meta { display: block; font-size: 14px; color: var(--muted); }
-  .list .on-record { float: right; margin-left: 8px; font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 999px; background: var(--stamp-soft); color: var(--ink); }
   .lead { color: var(--muted); margin: 0 0 16px; font-size: 16px; }
   .toplinks { display: flex; justify-content: flex-end; margin-bottom: 4px; }
   .link-button {
@@ -247,6 +246,19 @@
   .notes { margin: 16px 0 0; padding-left: 1.2em; }
   .notes li { margin-bottom: 6px; }
   .howto { display: grid; gap: 10px; margin-top: 8px; }
+  .pick-label { font-weight: bold; margin: 14px 0 6px; }
+  .pick-label small { font-weight: normal; color: var(--muted); font-size: 14px; margin-left: 4px; }
+  .pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .pick button {
+    min-height: 48px; font-size: 16px; font-weight: bold; line-height: 1.2;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text);
+    cursor: pointer; font-family: var(--font-display);
+  }
+  .pick button small { display: block; font-size: 11px; font-weight: normal; color: var(--muted); }
+  .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+  .pick button[aria-pressed="true"] small { color: var(--accent-text); }
+  .howto-count { color: var(--muted); font-size: 15px; margin: 14px 0 0; min-height: 1.4em; }
+  .note-soon { color: var(--muted); font-size: 15px; background: var(--taste-bg); border-radius: 12px; padding: 10px 12px; margin: 10px 0 0; }
   .howto details {
     background: var(--card);
     border: 1px solid var(--line);
@@ -269,18 +281,6 @@
     margin-top: 28px;
   }
 
-  .nav { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0 4px; }
-  .nav button, .secondary {
-    min-height: 52px;
-    font-size: 17px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--card);
-    color: var(--text);
-    cursor: pointer;
-    font-family: var(--font-display);
-  }
-  .nav b { color: var(--accent); }
   .worry-title { font-size: 20px; margin: 4px 0 8px; }
   .worry { display: grid; gap: 8px; margin: 0 0 4px; }
   .worry button {
@@ -290,97 +290,6 @@
   }
   .worry .ic { margin-right: 8px; }
   .worry-hint { color: var(--accent); font-size: 15px; min-height: 1.4em; margin: 4px 0 6px; }
-  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .row[hidden] { display: none; }
-  .row > * { flex: 1 1 140px; }
-  .primary {
-    min-height: 52px;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 14px;
-    background: var(--accent);
-    color: var(--accent-text);
-    cursor: pointer;
-    font-family: var(--font-display);
-    text-align: center;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 16px;
-  }
-  .danger { color: var(--bad); }
-
-  .med {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 16px;
-    margin-top: 12px;
-  }
-  .med h3 { margin: 0; font-size: 20px; }
-  .med .who { color: var(--muted); font-size: 15px; }
-  .med dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 10px 0 0; font-size: 16px; }
-  .med dt { color: var(--muted); }
-  .med dd { margin: 0; min-width: 0; }
-
-  .share { margin-top: 24px; }
-  .share textarea {
-    width: 100%;
-    min-height: 220px;
-    font-size: 15px;
-    line-height: 1.6;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--card);
-    color: var(--text);
-    font-family: var(--font-body);
-  }
-  .tabs { display: flex; gap: 8px; margin: 8px 0; }
-  .tabs button {
-    flex: 1;
-    min-height: 44px;
-    font-size: 16px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--card);
-    color: var(--text);
-    cursor: pointer;
-  }
-  .tabs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-  .status { font-size: 15px; color: var(--good); min-height: 1.6em; margin: 4px 0 0; }
-
-  form.med-form { display: grid; gap: 16px; margin-top: 12px; }
-  .field label, .field legend { display: block; font-weight: bold; margin-bottom: 4px; }
-  .field small { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
-  .field input[type="text"], .field input[type="number"], .field input[type="date"], .field select {
-    width: 100%;
-    font-size: 18px;
-    padding: 12px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--card);
-    color: var(--text);
-  }
-  fieldset.field { border: none; padding: 0; margin: 0; }
-  .checks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .checks label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: 48px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--card);
-    font-weight: normal;
-    margin: 0;
-    cursor: pointer;
-  }
-  .checks input { width: 20px; height: 20px; }
-  .note-box { font-size: 15px; color: var(--muted); background: var(--taste-bg); border-radius: 12px; padding: 10px 12px; margin: 0; }
 </style>
 </head>
 <body>
@@ -400,16 +309,12 @@
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
     </div>
-    <div class="nav">
-      <button type="button" data-go="record"><span class="ic" aria-hidden="true">📒</span>おくすり記録 <b id="med-count"></b></button>
-    </div>
     <ul id="list" class="list"></ul>
   </section>
 
   <section id="detail" hidden>
     <button class="back" data-go="" type="button">← 薬を選びなおす</button>
     <div id="card" class="card"></div>
-    <div class="row"><button class="secondary" type="button" id="add-from-drug">この薬を「おくすり記録」に入れる</button></div>
 
     <h2 class="section-title">飲ませ方のコツ</h2>
     <p class="section-lead">粉薬の飲ませ方と、飲む気分をつくる工夫です。押すと説明が開きます。</p>
@@ -428,81 +333,22 @@
   <section id="howto-page" hidden>
     <button class="back" data-go="" type="button">← もどる</button>
     <h1>飲ませ方のコツ</h1>
-    <p class="lead">粉薬の飲ませ方と、飲む気分をつくる工夫です。押すと説明が開きます。</p>
-    <div id="howto-all" class="howto"></div>
-  </section>
-
-  <section id="record" hidden>
-    <button class="back" data-go="" type="button">← もどる</button>
-    <h1>おくすり記録</h1>
-    <p class="lead">いま飲んでいる薬です。記録はこのスマホの中だけに保存され、送るかどうかはあなたが決めます。</p>
-    <div id="med-list"></div>
-    <div class="row"><button class="primary" type="button" data-go="record-new">＋ 薬を追加する</button></div>
-
-    <div class="share" id="share">
-      <h2 class="section-title">家族や保育園に伝える</h2>
-      <div class="tabs" role="group" aria-label="伝える相手">
-        <button type="button" id="tab-family" aria-pressed="true">家族に</button>
-        <button type="button" id="tab-school" aria-pressed="false">保育園に</button>
-      </div>
-      <textarea id="share-text" readonly aria-label="送る文章"></textarea>
-      <div class="row">
-        <a class="primary" id="share-line" href="#" target="_blank" rel="noopener">LINEで送る</a>
-        <button class="secondary" type="button" id="copy">文章をコピー</button>
-      </div>
-      <p class="status" id="copy-status" role="status"></p>
+    <p class="lead">年齢と薬の形を選ぶと、合うコツだけが出ます。押すと説明が開きます。</p>
+    <p class="pick-label" id="age-label">何歳？<small>（めやす）</small></p>
+    <div class="pick" role="group" aria-labelledby="age-label">
+      <button type="button" data-age="baby" aria-pressed="false">赤ちゃん<small>〜1歳ごろ</small></button>
+      <button type="button" data-age="toddler" aria-pressed="false">1〜3歳</button>
+      <button type="button" data-age="kid" aria-pressed="false">4歳から</button>
     </div>
-  </section>
-
-  <section id="record-new" hidden>
-    <button class="back" data-go="record" type="button">← おくすり記録にもどる</button>
-    <h1>薬を追加する</h1>
-    <p class="note-box">薬袋や薬の説明書に書いてあるとおりに入れてください。量や回数を、このページが決めることはありません。</p>
-    <form class="med-form" id="med-form">
-      <div class="field">
-        <label for="f-drug">薬の名前</label>
-        <select id="f-drug" required></select>
-      </div>
-      <div class="field" id="f-other-wrap" hidden>
-        <label for="f-other">薬の名前（リストにない薬）</label>
-        <input type="text" id="f-other" placeholder="例: ○○シロップ">
-      </div>
-      <div class="field">
-        <label for="f-child">お子さんの呼び名（なくてもOK）</label>
-        <input type="text" id="f-child" placeholder="例: はるくん">
-      </div>
-      <fieldset class="field">
-        <legend>飲む時間</legend>
-        <div class="checks">
-          <label><input type="checkbox" name="times" value="朝" checked>朝</label>
-          <label><input type="checkbox" name="times" value="昼">昼</label>
-          <label><input type="checkbox" name="times" value="夕" checked>夕</label>
-          <label><input type="checkbox" name="times" value="寝る前">寝る前</label>
-        </div>
-      </fieldset>
-      <div class="field">
-        <label for="f-dose">1回の量</label>
-        <input type="text" id="f-dose" placeholder="例: 1包、5mL">
-        <small>薬袋に書いてある量</small>
-      </div>
-      <div class="field">
-        <label for="f-days">何日分</label>
-        <input type="number" id="f-days" min="1" max="60" value="5" inputmode="numeric">
-      </div>
-      <div class="field">
-        <label for="f-start">飲みはじめた日</label>
-        <input type="date" id="f-start">
-      </div>
-      <div class="field">
-        <label for="f-clinic">処方した医療機関（なくてもOK）</label>
-        <input type="text" id="f-clinic" placeholder="保育園の依頼書に書くときに使います">
-      </div>
-      <div class="field">
-        <label for="f-note">メモ（なくてもOK）</label>
-        <input type="text" id="f-note" placeholder="例: アイスに混ぜたら飲めた">
-      </div>
-      <button class="primary" type="submit">追加する</button>
-    </form>
+    <p class="pick-label" id="form-label">薬の形は？</p>
+    <div class="pick" role="group" aria-labelledby="form-label">
+      <button type="button" data-form="powder" aria-pressed="false">粉</button>
+      <button type="button" data-form="syrup" aria-pressed="false">シロップ</button>
+      <button type="button" data-form="tablet" aria-pressed="false">錠剤</button>
+    </div>
+    <p class="howto-count" id="howto-count" role="status"></p>
+    <div id="howto-all" class="howto"></div>
+    <p class="note-soon" id="howto-soon" hidden></p>
   </section>
 
   <p class="disclaimer">
@@ -513,9 +359,6 @@
 
 <script src="data.js"></script>
 <script>
-  const TIME_ORDER = ["朝", "昼", "夕", "寝る前"];
-  const MEDS_KEY = "okusuri.meds.v1";
-  const OTHER = "__other__";
 
   // ---- 小さな道具 ----
   function el(tag, attrs = {}, children = []) {
@@ -528,41 +371,8 @@
     return node;
   }
 
-  function load(key) {
-    try {
-      return JSON.parse(localStorage.getItem(key)) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function save(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      // 保存できない環境（プライベートモードなど）では、この画面の中だけで覚える
-    }
-  }
-
   function toKatakana(s) {
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
-  }
-
-  function dayKey(date) {
-    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
-  }
-
-  function parseDay(key) {
-    const [y, m, d] = key.split("-").map(Number);
-    return new Date(y, m - 1, d);
-  }
-
-  function shortDate(date) {
-    return (date.getMonth() + 1) + "/" + date.getDate();
-  }
-
-  function timeLabel(date) {
-    return date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0");
   }
 
   function sourceLine(sources) {
@@ -574,42 +384,15 @@
     return el("p", { class: "source" }, parts);
   }
 
-  // ---- 食べ物との相性 ----
-  // 家族・保育園へのメモに出す「混ぜていい」「混ぜないほうがいい」食べ物（カードの ○ と ×）
-  function foodsIn(drug, verdict) {
-    const fact = FACTS[drug.name];
-    const group = verdict === "good" ? fact.good : fact.avoid;
-    return group ? group.foods : [];
-  }
-
-  // ---- 記録 ----
-  let meds = load(MEDS_KEY);
-
-  function medEnd(med) {
-    const end = parseDay(med.start);
-    end.setDate(end.getDate() + Number(med.days) - 1);
-    return end;
-  }
-
-  function activeMedFor(name) {
-    const today = new Date();
-    return meds.find((m) => m.drug === name && parseDay(m.start) <= today && today <= new Date(medEnd(m).getTime() + 86400000));
-  }
-
-  // ---- 画面 ----
   const screens = {
     pick: document.getElementById("pick"),
     detail: document.getElementById("detail"),
-    record: document.getElementById("record"),
-    recordNew: document.getElementById("record-new"),
     howto: document.getElementById("howto-page"),
   };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
   const card = document.getElementById("card");
   let currentDrugName = null;
-  let pendingDrug = null;
-  let shareMode = "family";
   let pendingFocus = null; // 「にがくて いやがる」なら "taste"、「まぜていい？」なら "mix"
 
   function go(hash) {
@@ -641,7 +424,6 @@
         lastRow = row;
       }
       const button = el("button", { type: "button" });
-      if (activeMedFor(d.name)) button.append(el("span", { class: "on-record", text: "記録中" }));
       button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name].taste || d.taste) }));
       button.addEventListener("click", () => go("drug-" + i));
       items.push(el("li", {}, [button]));
@@ -650,8 +432,7 @@
     if (query !== "" && hits.length === 0) {
       list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
-    const active = meds.filter((m) => new Date() <= new Date(medEnd(m).getTime() + 86400000)).length;
-    document.getElementById("med-count").textContent = active > 0 ? "（" + active + "）" : "";  }
+  }
 
   const FOOD_EMOJI = {
     "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
@@ -710,176 +491,41 @@
     card.replaceChildren(...parts);
   }
 
-  // コツは薬の画面と「のませかたが わからない」の画面の両方に出す
+  function howtoItem(h) {
+    return el("details", {}, [
+      el("summary", { text: h.title }),
+      el("p", { text: h.body }),
+      sourceLine(h.sources),
+    ]);
+  }
+
+  // 薬の画面の下には、コツを全部出す
   function renderHowto() {
-    for (const id of ["howto", "howto-all"]) {
-      document.getElementById(id).replaceChildren(
-        ...HOWTO.map((h) => el("details", {}, [
-          el("summary", { text: h.title }),
-          el("p", { text: h.body }),
-          sourceLine(h.sources),
-        ]))
-      );
-    }
+    document.getElementById("howto").replaceChildren(...HOWTO.map(howtoItem));
   }
 
-  function renderRecord() {
-    const target = document.getElementById("med-list");
-    const share = document.getElementById("share");
-    if (meds.length === 0) {
-      target.replaceChildren(el("p", { class: "empty", text: "まだ薬はありません。「＋ 薬を追加する」から、いま飲んでいる薬を入れてください。" }));
-      share.hidden = true;
-      return;
-    }
-    share.hidden = false;
-    target.replaceChildren(...meds.map((med) => {
-      const drugIndex = DRUGS.findIndex((d) => d.name === med.drug);
+  // 「のませかたが わからない」の画面は、選んだ年齢と薬の形に合うコツだけを出す（選んでいなければ全部）
+  let ageSel = null;
+  let formSel = null;
+  const FORM_NAME = { powder: "粉", syrup: "シロップ", tablet: "錠剤" };
 
-      const info = el("dl", {}, [
-        el("dt", { text: "飲む時間" }), el("dd", { text: med.times.join("・") }),
-        el("dt", { text: "1回の量" }), el("dd", { text: med.dose || "（未入力）" }),
-        el("dt", { text: "期間" }), el("dd", { text: shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "（" + med.days + "日分）" }),
-      ]);
-      if (med.note) info.append(el("dt", { text: "メモ" }), el("dd", { text: med.note }));
-
-      const actions = el("div", { class: "row" });
-      if (drugIndex >= 0) {
-        const open = el("button", { class: "secondary", type: "button", text: "混ぜ方を見る" });
-        open.addEventListener("click", () => go("drug-" + drugIndex));
-        actions.append(open);
-      }
-      const remove = el("button", { class: "secondary danger", type: "button", text: "記録から消す" });
-      remove.addEventListener("click", () => {
-        meds = meds.filter((m) => m.id !== med.id);
-        save(MEDS_KEY, meds);
-        renderRecord();
-      });
-      actions.append(remove);
-
-      const box = el("div", { class: "med" }, [
-        el("h3", { text: med.drug }),
-      ]);
-      if (med.child) box.append(el("div", { class: "who", text: med.child }));
-      box.append(info, actions);
-      return box;
-    }));
-    renderShare();
+  function matchesHowto(h) {
+    return (!ageSel || h.ages.includes(ageSel) || h.ages.includes("all"))
+      && (!formSel || h.forms.includes(formSel) || h.forms.includes("any"));
   }
 
-  function familyText() {
-    const now = new Date();
-    const lines = ["【おくすりメモ】" + shortDate(now) + " " + timeLabel(now)];
-    for (const med of meds) {
-      lines.push("");
-      lines.push("■ " + med.drug + (med.child ? "（" + med.child + "）" : ""));
-      lines.push("・" + med.times.join("・") + " / " + (med.dose ? "1回 " + med.dose + " / " : "") + med.days + "日分（" + shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "）");
-      const drug = DRUGS.find((d) => d.name === med.drug);
-      if (drug) {
-        const good = foodsIn(drug, "good");
-        const bad = foodsIn(drug, "bad");
-        if (good.length) lines.push("・混ぜていい: " + good.join("、"));
-        if (bad.length) lines.push("・混ぜないほうがいい: " + bad.join("、"));
-      }
-      if (med.note) lines.push("・メモ: " + med.note);
-    }
-    return lines.join("\n");
+  function renderHowtoPage() {
+    const hits = HOWTO.filter(matchesHowto);
+    document.getElementById("howto-all").replaceChildren(...hits.map(howtoItem));
+    document.getElementById("howto-count").textContent = ageSel || formSel ? "合うコツ " + hits.length + " こ" : "コツ " + hits.length + " こ";
+    // シロップと錠剤だけのコツは、まだない（2026-10-25 ユーザーと決定。あとで出どころのある資料から足す）
+    const onlyAny = formSel && !HOWTO.some((h) => h.forms.includes(formSel));
+    const soon = document.getElementById("howto-soon");
+    soon.hidden = !onlyAny;
+    if (onlyAny) soon.textContent = FORM_NAME[formSel] + "だけのコツは、じゅんび中です。上は、どの形の薬でも使えるコツです。";
+    document.querySelectorAll("[data-age]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.age === ageSel)));
+    document.querySelectorAll("[data-form]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.form === formSel)));
   }
-
-  function schoolText() {
-    const lunch = meds.filter((m) => m.times.includes("昼"));
-    const lines = ["【保育園 与薬依頼用メモ】", "園の用紙に書き写してください。"];
-    if (lunch.length === 0) {
-      lines.push("", "昼に飲む薬は入っていません。園で飲ませる薬はないかもしれません。");
-      return lines.join("\n");
-    }
-    for (const med of lunch) {
-      lines.push("");
-      if (med.child) lines.push("お子さん: " + med.child);
-      lines.push("薬の名前: " + med.drug);
-      lines.push("1回の量: " + (med.dose || "（薬袋を見て記入）"));
-      lines.push("飲ませる時間: 昼");
-      lines.push("期間: " + shortDate(parseDay(med.start)) + "〜" + shortDate(medEnd(med)) + "（" + med.days + "日分）");
-      lines.push("処方した医療機関: " + (med.clinic || "（記入）"));
-      const drug = DRUGS.find((d) => d.name === med.drug);
-      if (drug) {
-        const good = foodsIn(drug, "good");
-        if (good.length) lines.push("飲ませ方の参考（混ぜていい食べ物）: " + good.join("、"));
-      }
-    }
-    return lines.join("\n");
-  }
-
-  function renderShare() {
-    const text = shareMode === "family" ? familyText() : schoolText();
-    document.getElementById("share-text").value = text;
-    document.getElementById("share-line").href = "https://line.me/R/share?text=" + encodeURIComponent(text);
-    document.getElementById("tab-family").setAttribute("aria-pressed", String(shareMode === "family"));
-    document.getElementById("tab-school").setAttribute("aria-pressed", String(shareMode === "school"));
-    document.getElementById("copy-status").textContent = "";
-  }
-
-  // ---- 薬を追加するフォーム ----
-  function prepareForm() {
-    const select = document.getElementById("f-drug");
-    if (select.options.length === 0) {
-      select.append(...DRUGS.map((d) => el("option", { value: d.name, text: d.name })));
-      select.append(el("option", { value: OTHER, text: "リストにない薬" }));
-    }
-    if (pendingDrug) select.value = pendingDrug;
-    pendingDrug = null;
-    document.getElementById("f-other-wrap").hidden = select.value !== OTHER;
-    const start = document.getElementById("f-start");
-    if (!start.value) start.value = dayKey(new Date());
-  }
-
-  document.getElementById("f-drug").addEventListener("change", (e) => {
-    document.getElementById("f-other-wrap").hidden = e.target.value !== OTHER;
-  });
-
-  document.getElementById("med-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const selected = document.getElementById("f-drug").value;
-    const drug = selected === OTHER ? document.getElementById("f-other").value.trim() : selected;
-    const times = TIME_ORDER.filter((t) => document.querySelector('input[name="times"][value="' + t + '"]').checked);
-    if (!drug) {
-      document.getElementById("f-other").focus();
-      return;
-    }
-    if (times.length === 0) {
-      document.querySelector('input[name="times"]').focus();
-      return;
-    }
-    meds.push({
-      id: String(Date.now()),
-      drug,
-      child: document.getElementById("f-child").value.trim(),
-      times,
-      dose: document.getElementById("f-dose").value.trim(),
-      days: Math.max(1, Number(document.getElementById("f-days").value) || 1),
-      start: document.getElementById("f-start").value || dayKey(new Date()),
-      clinic: document.getElementById("f-clinic").value.trim(),
-      note: document.getElementById("f-note").value.trim(),
-    });
-    save(MEDS_KEY, meds);
-    e.target.reset();
-    go("record");
-  });
-
-  // ---- 伝える ----
-  document.getElementById("tab-family").addEventListener("click", () => { shareMode = "family"; renderShare(); });
-  document.getElementById("tab-school").addEventListener("click", () => { shareMode = "school"; renderShare(); });
-  document.getElementById("copy").addEventListener("click", async () => {
-    const box = document.getElementById("share-text");
-    const status = document.getElementById("copy-status");
-    try {
-      await navigator.clipboard.writeText(box.value);
-      status.textContent = "コピーしました。LINE やメールに貼りつけて送れます。";
-    } catch {
-      box.focus();
-      box.select();
-      status.textContent = "文章を選びました。長押しでコピーしてください。";
-    }
-  });
 
   // ---- 画面の切り替え ----
   function route(scroll = true) {
@@ -888,15 +534,11 @@
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
 
-    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "howto"].includes(hash)));
+    screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto"));
     screens.detail.hidden = !drug;
-    screens.record.hidden = hash !== "record";
-    screens.recordNew.hidden = hash !== "record-new";
     screens.howto.hidden = hash !== "howto";
 
     if (drug) renderCard(drug);
-    if (hash === "record") renderRecord();
-    if (hash === "record-new") prepareForm();
     if (!screens.pick.hidden) renderList();
     if (scroll) window.scrollTo(0, 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
@@ -915,9 +557,18 @@
     q.scrollIntoView({ behavior: "smooth", block: "center" });
   }));
   document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
-  document.getElementById("add-from-drug").addEventListener("click", () => { pendingDrug = currentDrugName; go("record-new"); });
+  // もう一度押すと、選ぶのをやめる
+  document.querySelectorAll("[data-age]").forEach((b) => b.addEventListener("click", () => {
+    ageSel = ageSel === b.dataset.age ? null : b.dataset.age;
+    renderHowtoPage();
+  }));
+  document.querySelectorAll("[data-form]").forEach((b) => b.addEventListener("click", () => {
+    formSel = formSel === b.dataset.form ? null : b.dataset.form;
+    renderHowtoPage();
+  }));
   window.addEventListener("hashchange", () => route());
   renderHowto();
+  renderHowtoPage();
   route();
 </script>
 </body>
