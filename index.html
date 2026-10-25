@@ -375,6 +375,15 @@
     font-family: var(--font-display);
   }
   .nav b { color: var(--accent); }
+  .worry-title { font-size: 20px; margin: 4px 0 8px; }
+  .worry { display: grid; gap: 8px; margin: 0 0 4px; }
+  .worry button {
+    min-height: 56px; font-size: 18px; text-align: left; padding: 0 16px;
+    border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--text);
+    cursor: pointer; font-family: var(--font-display);
+  }
+  .worry .ic { margin-right: 8px; }
+  .worry-hint { color: var(--accent); font-size: 15px; min-height: 1.4em; margin: 4px 0 6px; }
   .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .row[hidden] { display: none; }
   .row > * { flex: 1 1 140px; }
@@ -481,6 +490,13 @@
       <p class="eyebrow">こどもおくすりサポート</p>
       <h1>おくすり、<br>のめるかな？</h1>
       <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。<br>のめたら、スタンプをおそう。</p>
+      <h2 class="worry-title">どうしたの？</h2>
+      <div class="worry">
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。味と、苦さをかくせる食べ物が出ます"><span class="ic" aria-hidden="true">😖</span>にがくて いやがる</button>
+        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>のませかたが わからない</button>
+        <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、さけたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>まぜていい？</button>
+      </div>
+      <p class="worry-hint" id="worry-hint" role="status"></p>
       <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
     </div>
     <div class="nav">
@@ -507,6 +523,13 @@
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
+  </section>
+
+  <section id="howto-page" hidden>
+    <button class="back" data-go="" type="button">← もどる</button>
+    <h1>飲ませ方のコツ</h1>
+    <p class="lead">粉薬の飲ませ方と、飲む気分をつくる工夫です。押すと説明が開きます。</p>
+    <div id="howto-all" class="howto"></div>
   </section>
 
   <section id="record" hidden>
@@ -729,6 +752,7 @@
     record: document.getElementById("record"),
     recordNew: document.getElementById("record-new"),
     book: document.getElementById("book"),
+    howto: document.getElementById("howto-page"),
   };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
@@ -738,6 +762,7 @@
   let currentDrugName = null;
   let pendingDrug = null;
   let shareMode = "family";
+  let pendingFocus = null; // 「にがくて いやがる」なら "taste"、「まぜていい？」なら "mix"
 
   function go(hash) {
     location.hash = hash;
@@ -757,7 +782,8 @@
 
   function renderList() {
     const query = toKatakana(q.value.trim()).toUpperCase();
-    const hits = DRUGS.map((d, i) => ({ d, i })).filter(({ d }) => d.name.toUpperCase().includes(query));
+    // 一覧は薬の名前を入れたときだけ出す（トップは困りごとのボタンから始める）
+    const hits = query === "" ? [] : DRUGS.map((d, i) => ({ d, i })).filter(({ d }) => d.name.toUpperCase().includes(query));
     const items = [];
     let lastRow = null;
     for (const { d, i } of hits) {
@@ -773,7 +799,7 @@
       items.push(el("li", {}, [button]));
     }
     list.replaceChildren(...items);
-    if (hits.length === 0) {
+    if (query !== "" && hits.length === 0) {
       list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
     const active = meds.filter((m) => new Date() <= new Date(medEnd(m).getTime() + 86400000)).length;
@@ -843,14 +869,17 @@
     card.replaceChildren(...parts);
   }
 
+  // コツは薬の画面と「のませかたが わからない」の画面の両方に出す
   function renderHowto() {
-    document.getElementById("howto").replaceChildren(
-      ...HOWTO.map((h) => el("details", {}, [
-        el("summary", { text: h.title }),
-        el("p", { text: h.body }),
-        sourceLine(h.sources),
-      ]))
-    );
+    for (const id of ["howto", "howto-all"]) {
+      document.getElementById(id).replaceChildren(
+        ...HOWTO.map((h) => el("details", {}, [
+          el("summary", { text: h.title }),
+          el("p", { text: h.body }),
+          sourceLine(h.sources),
+        ]))
+      );
+    }
   }
 
   function renderRecord() {
@@ -1103,11 +1132,12 @@
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
 
-    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "stamps"].includes(hash)));
+    screens.pick.hidden = !(hash === "" || (!drug && !["record", "record-new", "stamps", "howto"].includes(hash)));
     screens.detail.hidden = !drug;
     screens.record.hidden = hash !== "record";
     screens.recordNew.hidden = hash !== "record-new";
     screens.book.hidden = hash !== "stamps";
+    screens.howto.hidden = hash !== "howto";
     stampBar.hidden = !drug;
 
     if (drug) renderCard(drug);
@@ -1116,9 +1146,21 @@
     if (hash === "stamps") renderBook();
     if (!screens.pick.hidden) renderList();
     if (scroll) window.scrollTo(0, 0);
+    // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
+    if (drug) {
+      if (pendingFocus === "mix") card.querySelector(".section-title").scrollIntoView();
+      pendingFocus = null;
+    }
   }
 
   q.addEventListener("input", renderList);
+  // 「にがくて いやがる」「まぜていい？」は、薬を選んでから答えが出るので、検索欄へ案内する
+  document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
+    pendingFocus = b.dataset.focus;
+    document.getElementById("worry-hint").textContent = b.dataset.hint;
+    q.focus();
+    q.scrollIntoView({ behavior: "smooth", block: "center" });
+  }));
   document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
   document.getElementById("add-from-drug").addEventListener("click", () => { pendingDrug = currentDrugName; go("record-new"); });
   window.addEventListener("hashchange", () => route());
