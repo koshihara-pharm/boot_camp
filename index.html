@@ -25,8 +25,6 @@
     --good: #2f7d4f;
     --good-bg: #e3f3e8;
     --best-bg: #fff2c4;
-    --split: #7d6200;
-    --split-bg: #fff8df;
     --bad: #b33a2e;
     --bad-bg: #fbe8e5;
     --warn: #7a3d9c;
@@ -52,8 +50,6 @@
       --good: #8fd6a9;
       --good-bg: #1d3a2a;
       --best-bg: #45390f;
-      --split: #f0d27a;
-      --split-bg: #3b3317;
       --bad: #f1a196;
       --bad-bg: #432522;
       --warn: #d4a9ef;
@@ -78,8 +74,6 @@
     --good: #8fd6a9;
     --good-bg: #1d3a2a;
     --best-bg: #45390f;
-    --split: #f0d27a;
-    --split-bg: #3b3317;
     --bad: #f1a196;
     --bad-bg: #432522;
     --warn: #d4a9ef;
@@ -234,7 +228,6 @@
   .chip .fe { font-size: 20px; line-height: 1; }
   .chip small { font-size: 12px; color: var(--muted); }
   .g-ok { --tone: var(--good); --tone-bg: var(--good-bg); }
-  .g-split { --tone: var(--split); --tone-bg: var(--split-bg); }
   .g-bad { --tone: var(--bad); --tone-bg: var(--bad-bg); }
   .g-same { --tone: var(--muted); --tone-bg: var(--taste-bg); }
   .src-head { font-size: 15px; margin: 18px 0 0; color: var(--muted); }
@@ -258,7 +251,19 @@
   .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
   .pick button[aria-pressed="true"] small { color: var(--accent-text); }
   .howto-count { color: var(--muted); font-size: 15px; margin: 14px 0 0; min-height: 1.4em; }
-  .note-soon { color: var(--muted); font-size: 15px; background: var(--taste-bg); border-radius: 12px; padding: 10px 12px; margin: 10px 0 0; }
+  /* 「飲ませ方」と「コツ」のタブ */
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--accent); border-radius: 14px; overflow: hidden; margin: 4px 0 14px; }
+  .tabs button { min-height: 48px; font-size: 17px; font-weight: bold; border: 0; background: var(--card); color: var(--accent); cursor: pointer; font-family: var(--font-display); }
+  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-text); }
+  .flow-note { margin: 12px 0 0; padding: 10px 12px; border-left: 5px solid var(--accent); border-radius: 8px; background: var(--taste-bg); color: var(--text); font-size: 17px; font-weight: bold; font-family: var(--font-display); }
+  .water-note { margin: 8px 0 0; background: var(--split-bg); border-radius: 12px; padding: 10px 12px; font-size: 15px; }
+  .flow-group { margin: 16px 0 0; font-weight: bold; color: var(--accent); }
+  .flow-ask { margin: 14px 0 0; background: var(--warn-bg); border-radius: 12px; padding: 10px 12px; font-size: 15px; }
+  .howto ol { margin: 0 0 10px; padding-left: 1.3em; }
+  .howto li { margin-bottom: 6px; }
+  .howto .step-next { margin: 4px 0 12px; }
+  .step-next { display: block; width: 100%; min-height: 52px; font-size: 16px; font-weight: bold; border: 0; border-radius: 14px; background: var(--accent); color: var(--accent-text); cursor: pointer; font-family: var(--font-display); }
+  #method-refs { margin-top: 16px; }
   .howto details {
     background: var(--card);
     border: 1px solid var(--line);
@@ -272,15 +277,9 @@
   .howto p { margin: 0 0 8px; }
   .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
   .tips li { margin-bottom: 6px; }
-  .source, .disclaimer { font-size: 14px; color: var(--muted); }
+  .source { font-size: 14px; color: var(--muted); }
   .source { margin: 4px 0 10px; }
   .source a, .tips a { color: var(--accent); }
-  .disclaimer {
-    border-top: 1px solid var(--line);
-    padding-top: 12px;
-    margin-top: 28px;
-  }
-
   .worry-title { font-size: 20px; margin: 4px 0 8px; }
   .worry { display: grid; gap: 8px; margin: 0 0 4px; }
   .worry button {
@@ -299,15 +298,16 @@
       <div class="hero-stamp" aria-hidden="true">🐻</div>
       <p class="eyebrow">こどもおくすりサポート</p>
       <h1>おくすり、<br>のめるかな？</h1>
-      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
+      <p class="lead"><b>粉薬（こなぐすり）</b>のためのページです。薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <h2 class="worry-title">どうしたの？</h2>
       <div class="worry">
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。味と、苦さをかくせる食べ物が出ます"><span class="ic" aria-hidden="true">😖</span>にがくて いやがる</button>
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>のませかたが わからない</button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、さけたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>まぜていい？</button>
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>くすりの あじ</button>
       </div>
       <p class="worry-hint" id="worry-hint" role="status"></p>
-      <input id="q" type="search" placeholder="薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="薬の名前で探す">
+      <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
     </div>
     <ul id="list" class="list"></ul>
   </section>
@@ -317,8 +317,8 @@
     <div id="card" class="card"></div>
 
     <h2 class="section-title">飲ませ方のコツ</h2>
-    <p class="section-lead">粉薬の飲ませ方と、飲む気分をつくる工夫です。押すと説明が開きます。</p>
-    <div id="howto" class="howto"></div>
+    <!-- 「のませかたが わからない」の画面と同じタブを、薬を開いたときはここへ動かす -->
+    <div id="detail-howto-slot"></div>
 
     <h2 class="section-title">どの薬でも気をつけること</h2>
     <ul class="tips">
@@ -332,32 +332,35 @@
 
   <section id="howto-page" hidden>
     <button class="back" data-go="" type="button">← もどる</button>
-    <h1>飲ませ方のコツ</h1>
-    <p class="lead">年齢と薬の形を選ぶと、合うコツだけが出ます。押すと説明が開きます。</p>
-    <p class="pick-label" id="age-label">何歳？<small>（めやす）</small></p>
-    <div class="pick" role="group" aria-labelledby="age-label">
-      <button type="button" data-age="baby" aria-pressed="false">赤ちゃん<small>〜1歳ごろ</small></button>
-      <button type="button" data-age="toddler" aria-pressed="false">1〜3歳</button>
-      <button type="button" data-age="kid" aria-pressed="false">4歳から</button>
+    <h1>粉薬の飲ませ方</h1>
+    <div id="howto-page-slot"><div id="howto-tabs">
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="steps" aria-selected="true">飲ませ方</button>
+      <button type="button" role="tab" data-tab="tips" aria-selected="false">コツ</button>
     </div>
-    <p class="pick-label" id="form-label">薬の形は？</p>
-    <div class="pick" role="group" aria-labelledby="form-label">
-      <button type="button" data-form="powder" aria-pressed="false">粉</button>
-      <button type="button" data-form="syrup" aria-pressed="false">シロップ</button>
-      <button type="button" data-form="tablet" aria-pressed="false">錠剤</button>
+    <div id="tab-steps">
+      <p class="pick-label" id="flow-age-label">何歳？</p>
+      <div class="pick" role="group" aria-labelledby="flow-age-label" id="flow-ages"></div>
+      <div id="age-flow" aria-live="polite"></div>
+      <p class="source" id="method-refs"></p>
     </div>
-    <p class="howto-count" id="howto-count" role="status"></p>
-    <div id="howto-all" class="howto"></div>
-    <p class="note-soon" id="howto-soon" hidden></p>
+    <div id="tab-tips" hidden>
+      <p class="lead">年齢を押すと、その年齢に合うコツが出ます。押すと説明が開きます。</p>
+      <p class="pick-label" id="age-label">何歳？<small>（めやす）</small></p>
+      <div class="pick" role="group" aria-labelledby="age-label">
+        <button type="button" data-age="baby" aria-pressed="false">赤ちゃん<small>〜1歳ごろ</small></button>
+        <button type="button" data-age="toddler" aria-pressed="false">1〜3歳</button>
+        <button type="button" data-age="kid" aria-pressed="false">4歳から</button>
+      </div>
+      <p class="howto-count" id="howto-count" role="status"></p>
+      <div id="howto-all" class="howto"></div>
+    </div>
+    </div></div>
   </section>
-
-  <p class="disclaimer">
-    このページは、薬の量、薬どうしの飲み合わせ、薬をやめるかどうかは判断しません。迷ったときは、薬をもらった薬局か医師に聞いてください。<br>
-    デモ版です。混ぜていいかのデータは、病院が出している2016年と2018年の資料をもとにしているため、今の製品と違う場合があります。
-  </p>
 </main>
 
-<script src="data.js"></script>
+<!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
+<script src="data.js?v=2026-10-27b"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -375,8 +378,8 @@
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
   }
 
-  function sourceLine(sources) {
-    const parts = ["出どころ: "];
+  function sourceLine(sources, label = "出どころ: ") {
+    const parts = [label];
     sources.forEach((s, i) => {
       if (i > 0) parts.push("、");
       parts.push(el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }));
@@ -411,21 +414,50 @@
     return row ? row[0] : "そのほか";
   }
 
+  // 一般名（ジェネリックの名前）に当たるか。薬袋の名前は「クラリスロマイシンDS10%小児用「タカタ」」のように長いので、どちら向きにも含むかを見る
+  function genericHit(d, query) {
+    return !!d.generic && (d.generic.includes(query) || query.includes(d.generic));
+  }
+
+  // 一般名で見つけたときは、風味（メーカーでちがう）を出さず、甘い・苦いの目安だけを出す（docs/18 の 2-1）
+  function tasteHint(d) {
+    return d.taste.split("・")[0];
+  }
+
+  // 「クラリスドライシロップ（先発品）」。先発品と言い切れない薬には（先発品）をつけない
+  function originName(d) {
+    return d.name + (d.notOriginal ? "" : "（先発品）");
+  }
+
   function renderList() {
     const query = toKatakana(q.value.trim()).toUpperCase();
     // 一覧は薬の名前を入れたときだけ出す（トップは困りごとのボタンから始める）
-    const hits = query === "" ? [] : DRUGS.map((d, i) => ({ d, i })).filter(({ d }) => d.name.toUpperCase().includes(query));
+    // 一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+    const hits = [];
+    if (query !== "") {
+      DRUGS.forEach((d, i) => {
+        if (d.name.toUpperCase().includes(query)) hits.push({ d, i, label: d.name, viaGeneric: false });
+        if (genericHit(d, query)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+      });
+      hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
+    }
     const items = [];
     let lastRow = null;
-    for (const { d, i } of hits) {
-      const row = kanaRow(d.name);
+    for (const { d, i, label, viaGeneric } of hits) {
+      const row = kanaRow(label);
       if (row !== lastRow) {
         items.push(el("li", { class: "kana", "aria-hidden": "true", text: row }));
         lastRow = row;
       }
       const button = el("button", { type: "button" });
-      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name].taste || d.taste) }));
-      button.addEventListener("click", () => go("drug-" + i));
+      if (viaGeneric) {
+        button.append(el("span", { class: "drug-name", text: d.generic }),
+          el("span", { class: "drug-meta", text: originName(d) + "の情報" }),
+          el("span", { class: "drug-meta", text: "あじの目安: " + tasteHint(d) }));
+      } else {
+        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name].taste || d.taste) }));
+      }
+      button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
       items.push(el("li", {}, [button]));
     }
     list.replaceChildren(...items);
@@ -452,19 +484,12 @@
   }
 
   // 自分の言葉でまとめたカード（FACTS にある薬だけ）
-  // 1つの資料にしかない薬は、その資料の名前で書く
-  const BASIS_NAME = { iizuka: "飯塚病院", ncchd: "成育医療センター" };
-
   function factBlock(f) {
-    const one = BASIS_NAME[f.basis];
     const parts = [];
     if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
-    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok",
-      f.good.text || (one ? one + "の資料で、混ぜてよいとされています。" : "2つの病院の資料のどちらでも、混ぜてよいとされています。"), f.good.foods.map(foodChip)));
-    if (f.split) parts.push(chipBox("△ 資料によって分かれる", "g-split",
-      f.split.text || (one ? one + "の資料で、飲めることもあれば苦くなることもある、とされています。迷ったら薬剤師に聞いてください。" : "資料によって評価が分かれます。迷ったら薬剤師に聞いてください。"), f.split.foods.map(foodChip)));
-    if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad",
-      f.avoid.text || (one ? one + "の資料で、飲みにくくなるとされています。" : "2つの病院の資料のどちらでも、飲みにくくなるとされています。"), f.avoid.foods.map(foodChip)));
+    // 「○○の資料で、〜とされています」の決まった文は出さない（2026-10-27 ユーザーの判断）。薬ごとに text を書いたときだけ出す
+    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok", f.good.text, f.good.foods.map(foodChip)));
+    if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad", f.avoid.text, f.avoid.foods.map(foodChip)));
     if (f.tips.length > 0) {
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
@@ -477,10 +502,14 @@
     return parts;
   }
 
-  function renderCard(drug) {
+  function renderCard(drug, viaGeneric) {
     const fact = FACTS[drug.name];
     const taste = fact.taste || drug.taste;
-    const parts = [
+    const parts = viaGeneric ? [
+      el("h2", { text: drug.name }),
+      el("p", { class: "source", text: originName(drug) + "の情報です。" + drug.generic + "で探しました。" }),
+      el("div", { class: "taste" }, [el("b", { text: "あじの目安" }), el("span", { text: tasteHint(drug) })]),
+    ] : [
       el("h2", { text: drug.name }),
       el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
@@ -499,46 +528,101 @@
     ]);
   }
 
-  // 薬の画面の下には、コツを全部出す
-  function renderHowto() {
-    document.getElementById("howto").replaceChildren(...HOWTO.map(howtoItem));
-  }
-
-  // 「のませかたが わからない」の画面は、選んだ年齢と薬の形に合うコツだけを出す（選んでいなければ全部）
+  // 「のませかたが わからない」の画面は、粉薬のコツだけを出し、選んだ年齢に合うものにしぼる（年齢を選ぶまでは何も出さない。2026-10-27 ユーザーの指示）
+  // 薬の形のボタンは 2026-10-26 に外した。まず粉薬にしぼる（ユーザーの判断）
   let ageSel = null;
-  let formSel = null;
-  const FORM_NAME = { powder: "粉", syrup: "シロップ", tablet: "錠剤" };
 
+  // 札のないコツは、どの年齢・どの形にも出す（札がなくてもボタンが止まらないように）
   function matchesHowto(h) {
-    return (!ageSel || h.ages.includes(ageSel) || h.ages.includes("all"))
-      && (!formSel || h.forms.includes(formSel) || h.forms.includes("any"));
+    const ages = h.ages || ["all"];
+    const forms = h.forms || ["any"];
+    return (!ageSel || ages.includes(ageSel) || ages.includes("all"))
+      && (forms.includes("powder") || forms.includes("any"));
   }
 
   function renderHowtoPage() {
-    const hits = HOWTO.filter(matchesHowto);
+    const hits = ageSel ? HOWTO.filter(matchesHowto) : [];
     document.getElementById("howto-all").replaceChildren(...hits.map(howtoItem));
-    document.getElementById("howto-count").textContent = ageSel || formSel ? "合うコツ " + hits.length + " こ" : "コツ " + hits.length + " こ";
-    // シロップと錠剤だけのコツは、まだない（2026-10-25 ユーザーと決定。あとで出どころのある資料から足す）
-    const onlyAny = formSel && !HOWTO.some((h) => h.forms.includes(formSel));
-    const soon = document.getElementById("howto-soon");
-    soon.hidden = !onlyAny;
-    if (onlyAny) soon.textContent = FORM_NAME[formSel] + "だけのコツは、じゅんび中です。上は、どの形の薬でも使えるコツです。";
+    document.getElementById("howto-count").textContent = ageSel ? "合うコツ " + hits.length + " こ" : "";
     document.querySelectorAll("[data-age]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.age === ageSel)));
-    document.querySelectorAll("[data-form]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.form === formSel)));
+  }
+
+  // 「飲ませ方」タブ: いちばん上で年齢を選ぶと、時期の特徴、水の考え方、やり方のまとまりを出す（いちばん上のまとまりの1つ目だけ開いておく）
+  let flowSel = null;
+
+  // 「まぜていい？」と同じように、トップの薬の名前の欄へ案内する
+  // 薬の画面で押したときは、その薬の「混ぜていい」の見出しまで動く
+  function goMix() {
+    if (!screens.detail.hidden) {
+      card.querySelector(".section-title").scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    go("");
+    setTimeout(() => document.querySelector('[data-focus="mix"]').click(), 0);
+  }
+
+  function flowItem(key, open) {
+    const m = METHODS[key];
+    const parts = [
+      el("summary", { text: m.icon + " " + m.title }),
+      el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
+    ];
+    if (m.to === "mix") {
+      const b = el("button", { type: "button", class: "step-next", text: "薬の名前で、混ぜていい食べ物を探す" });
+      b.addEventListener("click", goMix);
+      parts.push(b);
+    }
+    const d = el("details", {}, parts);
+    d.open = open;
+    return d;
+  }
+
+  function renderSteps() {
+    document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
+      const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel), text: f.label });
+      b.addEventListener("click", () => {
+        flowSel = flowSel === f.age ? null : f.age;
+        renderSteps();
+      });
+      return b;
+    }));
+    const f = AGE_FLOWS.find((x) => x.age === flowSel);
+    document.getElementById("age-flow").replaceChildren(...(f ? [
+      el("p", { class: "flow-note", text: f.note }),
+      el("p", { class: "water-note", text: WATER_NOTE }),
+      ...f.groups.flatMap((g, gi) => [
+        el("p", { class: "flow-group", text: g.label }),
+        el("div", { class: "howto" }, g.items.map((key, i) => flowItem(key, gi === 0 && i === 0))),
+      ]),
+      ...(f.ask ? [el("p", { class: "flow-ask", text: f.ask })] : []),
+    ] : []));
+    document.getElementById("method-refs").replaceWith(Object.assign(sourceLine(METHOD_REFS, "参考にした資料: "), { id: "method-refs" }));
+  }
+
+  function showTab(tab) {
+    document.getElementById("tab-steps").hidden = tab !== "steps";
+    document.getElementById("tab-tips").hidden = tab !== "tips";
+    document.querySelectorAll('[role="tab"]').forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
   }
 
   // ---- 画面の切り替え ----
   function route(scroll = true) {
     const hash = location.hash.slice(1);
-    const match = hash.match(/^drug-(\d+)$/);
+    const match = hash.match(/^drug-(\d+)(-g)?$/);
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
 
     screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto"));
     screens.detail.hidden = !drug;
     screens.howto.hidden = hash !== "howto";
+    // 飲ませ方のタブは1つだけ。開いている画面へ動かし、はじめは「飲ませ方」タブを開く（2026-10-27 ユーザーの指示）
+    const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
+    if (slot) {
+      document.getElementById(slot).append(document.getElementById("howto-tabs"));
+      showTab("steps");
+    }
 
-    if (drug) renderCard(drug);
+    if (drug) renderCard(drug, !!match[2] && !!drug.generic);
     if (!screens.pick.hidden) renderList();
     if (scroll) window.scrollTo(0, 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
@@ -562,13 +646,13 @@
     ageSel = ageSel === b.dataset.age ? null : b.dataset.age;
     renderHowtoPage();
   }));
-  document.querySelectorAll("[data-form]").forEach((b) => b.addEventListener("click", () => {
-    formSel = formSel === b.dataset.form ? null : b.dataset.form;
-    renderHowtoPage();
+  document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+    showTab(b.dataset.tab);
+    if (!b.matches('[role="tab"]')) window.scrollTo(0, 0);
   }));
   window.addEventListener("hashchange", () => route());
-  renderHowto();
   renderHowtoPage();
+  renderSteps();
   route();
 </script>
 </body>

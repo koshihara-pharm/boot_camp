@@ -5,7 +5,7 @@
 
 | 部分 | 中身 | 作り方 | 置き場所 |
 |---|---|---|---|
-| アプリ | 薬を選ぶ、混ぜていいか、飲ませ方のコツ、おくすり記録、のめた！スタンプ | `index.html` と `data.js` の 2 ファイル。サーバーなし | このリポジトリ（GitHub Pages で公開する予定） |
+| アプリ | 薬を選ぶ、混ぜていいか、飲ませ方のコツ、おくすり記録、のめた！スタンプ | `index.html` と `data.js` の 2 ファイル。サーバーなし | このリポジトリ（GitHub Pages で公開している。https://koshihara-pharm.github.io/boot_camp/ ） |
 | 読み物ページ | なぜつくったか、できること、飲ませ方のコツ、混ぜるときの基本、記録と安全、つくった人、出どころ | Notion で書き、Wraptas で Web サイトにする | Notion「こどもおくすりサポート」（非公開の下書き）→ Wraptas |
 
 読み物ページは、検索や SNS から人が入ってくる入口。そこからアプリへリンクする（docs/04 の「先に役立つものを見せる」、CLAUDE.md の「まず人を集める」）。
@@ -34,6 +34,8 @@
 | スタンプの絵を変える | `data.js` の `STAMPS` |
 | 色を変える | `index.html` の `:root`（明るい画面）と、その下の 2 か所（暗い画面） |
 
+`data.js` を直したら、`index.html` の `<script src="data.js?v=日付">` の日付も、その日に変える。変えないと、ブラウザが前に読んだ古い `data.js` を使い続け、直したことが画面に出ない（2026-10-26、一般名を足したときにつまずいた）。
+
 ### 記録の保存
 - 服用中の薬とスタンプは、ブラウザの中（localStorage の `okusuri.meds.v1` と `okusuri.stamps.v1`）だけに保存する。サーバーには送らない
 - 家族・保育園へは、親が「LINEで送る」か「文章をコピー」を押したときだけ文章が外に出る
@@ -51,11 +53,14 @@
 - claude.ai のアーティファクト（https://claude.ai/artifact/VdxY8vxHE5Mo1Wf6y7bLTX ）。`index.html` から `<!doctype>`・`<html>`・`<head>`・`<body>` の外枠を外し、`data.js` と一緒に載せている。Claude に「アーティファクトも更新して」と頼むと、同じ URL のまま新しくなる
 
 ### 公開（誰でも見られる）: GitHub Pages
-1. このリポジトリが公開になっていることを確かめる（2026-10-12 時点で公開）
-2. 作業ブランチを main にまとめる（Claude にプルリクエストを作ってもらい、GitHub の画面でマージ）
-3. GitHub のリポジトリ画面 → Settings → Pages → Source を「Deploy from a branch」、Branch を `main`、フォルダを `/ (root)` にして Save
-4. 数分後に `https://koshihara-pharm.github.io/boot_camp/` で開ける
-5. 公開前に、docs/07 のデータ確認を済ませる。病院の表はまるごと載せず、docs/07 の「資料の使い方の方針」の形にする（許可は頼まない。2026-10-18 ユーザー決定）
+- **公開している**（2026-10-25 に確かめた）: https://koshihara-pharm.github.io/boot_camp/ 。`main` ブランチの `/ (root)` を出している
+- 設定の場所: GitHub のリポジトリ画面 → Settings → Pages（Source は「Deploy from a branch」、Branch は `main`、フォルダは `/ (root)`）
+
+更新のしかた:
+1. 作業ブランチで直す
+2. main にまとめる（Claude にプルリクエストを作ってもらい、GitHub の画面でマージ）
+3. 数分後に、上の URL に反映される
+4. main にまとめる前に、docs/07 のデータ確認を済ませる。病院の表はまるごと載せず、docs/07 の「資料の使い方の方針」の形にする（許可は頼まない。2026-10-18 ユーザー決定）
 
 ---
 
