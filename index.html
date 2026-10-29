@@ -356,13 +356,12 @@
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
   }
 
-  function sourceLine(sources, label = "出どころ: ") {
-    const parts = [label];
-    sources.forEach((s, i) => {
-      if (i > 0) parts.push("、");
-      parts.push(el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }));
-    });
-    return el("p", { class: "source" }, parts);
+  // 「参考にした資料」は、どの画面でも閉じた形で出す（タップで開く）
+  function refsBox(sources) {
+    return el("details", { class: "refs" }, [
+      el("summary", { text: "参考にした資料（" + sources.length + "）" }),
+      el("ul", {}, sources.map((s) => el("li", {}, [el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name })]))),
+    ]);
   }
 
   const screens = {
@@ -475,10 +474,7 @@
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
     }
     parts.push(el("p", { class: "source", text: f.checked }));
-    parts.push(el("details", { class: "refs" }, [
-      el("summary", { text: "参考にした資料（" + f.refs.length + "）" }),
-      el("ul", {}, f.refs.map((k) => el("li", {}, [el("a", { href: FACT_REFS[k].url, target: "_blank", rel: "noopener", text: FACT_REFS[k].name })]))),
-    ]));
+    parts.push(refsBox(f.refs.map((k) => FACT_REFS[k])));
     return parts;
   }
 
@@ -558,7 +554,7 @@
       el("p", { class: "flow-group", text: "コツ" }),
       el("div", { class: "howto" }, HOWTO.filter((h) => h.ages.includes(f.age) || h.ages.includes("all")).map(howtoItem)),
     ] : []));
-    document.getElementById("method-refs").replaceWith(Object.assign(sourceLine(METHOD_REFS, "参考にした資料: "), { id: "method-refs" }));
+    document.getElementById("method-refs").replaceWith(Object.assign(refsBox(METHOD_REFS), { id: "method-refs" }));
   }
 
   // ---- 画面の切り替え ----
