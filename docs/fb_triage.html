@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FB トリアージ</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --text: #23211d;
+    --muted: #6b665d;
+    --line: #e6e1d8;
+    --accent: #c4572a;
+    --top: #7a1fa2;
+    --top-bg: #f3e5f8;
+    --high: #b3261e;
+    --high-bg: #fdecea;
+    --mid: #8a6400;
+    --mid-bg: #fdf5df;
+    --low: #4f5b66;
+    --low-bg: #eef1f4;
+    --done: #2f6b4f;
+    --done-bg: #e6f2ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1a18; --card: #252421; --text: #ece8e1; --muted: #a8a196; --line: #3a3833;
+      --accent: #f08a5d;
+      --top: #d9a6ef; --top-bg: #34243b;
+      --high: #ff8a80; --high-bg: #3b2321;
+      --mid: #f2c14e; --mid-bg: #3a3120;
+      --low: #a9b6c2; --low-bg: #2a2f35;
+      --done: #8fd3b0; --done-bg: #20322a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --card: #252421; --text: #ece8e1; --muted: #a8a196; --line: #3a3833;
+    --accent: #f08a5d;
+    --top: #d9a6ef; --top-bg: #34243b;
+    --high: #ff8a80; --high-bg: #3b2321;
+    --mid: #f2c14e; --mid-bg: #3a3120;
+    --low: #a9b6c2; --low-bg: #2a2f35;
+    --done: #8fd3b0; --done-bg: #20322a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    line-height: 1.7; font-size: 16px;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 120px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 16px; font-size: 0.92rem; }
+  h2 { font-size: 1.15rem; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--line); display: flex; align-items: baseline; gap: 8px; }
+  h2 .count { font-size: 0.85rem; color: var(--muted); font-weight: normal; }
+  p { margin: 0 0 8px; }
+  .fb {
+    background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--low);
+    border-radius: 12px; padding: 12px 14px; margin: 0 0 12px;
+  }
+  .fb.p-top { border-left-color: var(--top); }
+  .fb.p-high { border-left-color: var(--high); }
+  .fb.p-mid { border-left-color: var(--mid); }
+  .fb.closed { border-left-color: var(--done); opacity: 0.8; }
+  .fb.changed { box-shadow: 0 0 0 2px var(--accent); }
+  .fb h3 { font-size: 1.02rem; margin: 4px 0 4px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 0.78rem; padding: 1px 8px; border-radius: 999px; background: var(--low-bg); color: var(--low); font-weight: 600; }
+  .tag.mine { background: var(--mid-bg); color: var(--mid); }
+  .meta { font-size: 0.82rem; color: var(--muted); margin: 0 0 6px; }
+  .next { font-size: 0.92rem; margin: 6px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--bg); }
+  .next b { color: var(--accent); }
+  .controls { margin-top: 10px; display: grid; gap: 6px; }
+  .row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .row > span { font-size: 0.8rem; color: var(--muted); width: 3.5em; }
+  .seg { display: flex; flex-wrap: wrap; gap: 4px; }
+  .seg button {
+    font: inherit; font-size: 0.85rem; padding: 4px 10px; min-height: 34px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { font-weight: 700; border-color: currentColor; }
+  .seg button.p-top[aria-pressed="true"] { background: var(--top-bg); color: var(--top); }
+  .seg button.p-high[aria-pressed="true"] { background: var(--high-bg); color: var(--high); }
+  .seg button.p-mid[aria-pressed="true"] { background: var(--mid-bg); color: var(--mid); }
+  .seg button.p-low[aria-pressed="true"] { background: var(--low-bg); color: var(--low); }
+  .seg button.s[aria-pressed="true"] { background: var(--done-bg); color: var(--done); }
+  details.closed-list summary { cursor: pointer; color: var(--muted); margin-bottom: 10px; }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--line);
+    padding: 10px 16px; display: none; justify-content: center; gap: 8px; flex-wrap: wrap;
+  }
+  .bar.show { display: flex; }
+  .bar button { font: inherit; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .bar button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+  .bar .msg { width: 100%; text-align: center; font-size: 0.85rem; color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 12px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); white-space: nowrap; }
+  ol.flow { padding-left: 1.4em; margin: 0; }
+  .note { font-size: 0.85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>FB トリアージ</h1>
+  <p class="lead">もらった意見（FB）と自分のやりたいことを、<b>まだのもの → 終わったもの</b>、優先度の高い順に並べています。優先度と状態はボタンで直せます。直したら下の「Claude に送る」を押すと、docs/18 とこのページに反映します。2026-10-25 時点。</p>
+
+  <h2>まだのもの <span class="count" id="open-count"></span></h2>
+  <div id="open"></div>
+
+  <h2>終わったもの <span class="count" id="closed-count"></span></h2>
+  <details class="closed-list">
+    <summary>ひらく（反映した・見送り）</summary>
+    <div id="closed"></div>
+  </details>
+
+  <h2>仕分けのしかた</h2>
+  <div class="card">
+    <p><b>優先度（上から順に聞く）</b></p>
+    <ol class="flow">
+      <li>安全に関わる？ → はい なら <b style="color:var(--high)">高</b></li>
+      <li>それで子どもが飲むようになる？ → いいえ なら <b style="color:var(--low)">低</b>（今は作らない）</li>
+      <li>入口で止まっている？ → はい なら <b style="color:var(--high)">高</b></li>
+      <li>小さく作れる？ → いいえ なら、小さく分けた最初の1つだけを候補に</li>
+      <li>作り直しが高い？（保存するデータの形、資料の許可、個人情報）→ はい なら、作る前に決める</li>
+      <li>どれでもなければ <b style="color:var(--mid)">中</b></li>
+    </ol>
+  </div>
+  <div class="card">
+    <p><b>区分</b></p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>区分</th><th>どんな意見</th><th>行き先</th></tr>
+        <tr><td>安全</td><td>医療上の判断、個人情報、薬の情報の出どころ・許可</td><td>まず薬剤師（自分）が見る</td></tr>
+        <tr><td>機能</td><td>作るもの、直すもの</td><td>docs/19 の候補、docs/17</td></tr>
+        <tr><td>考え方</td><td>進め方、作り方の助言</td><td>CLAUDE.md</td></tr>
+        <tr><td>確認</td><td>意味がはっきりしない</td><td>相手に聞き返す</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="note">FB が来たら「FB きた」と Slack の文を貼るだけで、スキル fb-triage がこのページと docs/18 を更新します。決めるのは自分。</p>
+</main>
+
+<div class="bar" id="bar">
+  <div class="msg" id="bar-msg"></div>
+  <button type="button" id="reset">もとに戻す</button>
+  <button type="button" class="primary" id="send">Claude に送る</button>
+</div>
+
+<script>
+// 元の記録は docs/18（FB）と docs/17 の「ユーザーがやりたいこと」（自分）。直すときはここも合わせる。
+const ITEMS = [
+  { id: "1", from: "fb", kubun: "考え方", prio: "高", status: "検討中",
+    title: "親がサイトを開く場面を想定して機能を決める",
+    meta: "田沼さん（参加者兼メンター）から ／ Slack ／ 2026-10-18 ／ 2026-10-25 に中から高に上げた",
+    body: "受け取ったとき、準備しているとき、飲めなかった後の3つの場面で整理した（docs/19）。いちばん手薄な「飲めなかった後」に使える機能が、まだない。",
+    next: "「飲めなかった後」に親が知りたいことを1つ選び、小さく作ってスマホで試す" },
+  { id: "4", from: "fb", kubun: "考え方", prio: "高", status: "検討中",
+    title: "知ってもらうには、まず周りの人に使ってもらう",
+    meta: "有本さん（Isamu）から ／ Slack ／ 2026-10-25 ／ 優先度は案",
+    body: "まずは周りで使ってくれそうな人に頼んで使ってもらう。SNS は、よほど画期的なツールでない限り反応がない。X での公開より先に、知り合いの親に直接頼む。",
+    next: "周りの親1人に URL を送り、「飲めなかったとき」に開いてもらう。何に困ったかを聞く（1 とあわせて確かめられる）" },
+  { id: "2-1", from: "fb", kubun: "機能・安全", prio: "高", status: "検討中",
+    title: "一般名（ジェネリックの名前）でも薬を探せる",
+    meta: "参加者（薬剤師）から ／ Slack ／ 2026-10-18 ／ 2026-10-25 に保留して調べた ／ 2026-10-26 に作った",
+    body: "薬袋の名前がジェネリックだと、検索で見つからず入口で止まっていた。6つの薬に一般名を足した。一般名で見つけたときは「○○（先発品）の情報です」と、甘い・苦いの目安だけを出す。風味はメーカーでちがうので出さない（薬剤師として判断）。",
+    next: "スマホで「クラリスロマイシン」などと入れて試す → よければ「反映した」に" },
+  { id: "2-2", from: "fb", kubun: "機能", prio: "中", status: "検討中",
+    title: "粉の色が分かる",
+    meta: "参加者（薬剤師）から ／ Slack ／ 2026-10-18",
+    body: "どれがどの薬か見分けるのに役立つ。ただ、子どもが飲むようになるかへの効き方は間接的。色は出どころのある資料（添付文書の「性状」など）から製品ごとに入れるので手間が大きい。",
+    next: "2-1 が終わってから、5つの薬で試す" },
+  { id: "自分-調査", from: "mine", kubun: "調べもの", prio: "高", status: "未対応",
+    title: "参考にするサイトの調査",
+    meta: "自分の考え ／ 2026-10-18 ／ docs/17 で「いちばん先にやる」",
+    body: "作る前に、参考にするサイトを調べる。何を参考にするか（見た目、中身、使いやすさ）を先に決めてから調べる。docs/05、docs/13、docs/11 で調べたものを土台にする。",
+    next: "「何を参考にしたいか」を1つ決める" },
+  { id: "自分-シロップ", from: "mine", kubun: "機能・安全", prio: "中", status: "未対応",
+    title: "粉に代わるシロップがあるかどうか",
+    meta: "自分の考え ／ 2026-10-18",
+    body: "粉が苦手な子のために、同じ成分のシロップがあるかを出す。変えるかどうかは医師が決めるので、出すのは「シロップがあるかどうか」と「医師・薬剤師に相談できます」まで。",
+    next: "よく出る薬5つについて、シロップの有無を出どころ（添付文書など）つきで薬剤師として確かめる" },
+  { id: "自分-計測", from: "mine", kubun: "機能・安全", prio: "最優先", status: "検討中",
+    title: "使われた数を数える（GitHub Pages のまま、Google Tag Manager で）",
+    meta: "自分の考え ／ 2026-10-25 ／ 2026-10-26 に FB 5 を受けて Vercel 案から変えた",
+    body: "はじめは Vercel に移して数える案だった。有本さんの助言で、GitHub のまま Google Tag Manager で試すことにした。検索欄に入れた文字（薬の名前）は送らない。URL は番号だけで、薬の名前は入っていない。Vercel への移行は保留。",
+    next: "Google Tag Manager に今のサイトを登録し、開いた数だけを数える。スマホで開いて、数が増えるか確かめる" },
+  { id: "6", from: "fb", kubun: "機能・安全", prio: "高", status: "未対応",
+    title: "年齢で飲ませ方を変える（くるみ薬局の記事）",
+    meta: "くるみ薬局の薬剤師・竹村さんの記事（2019-03-25）から ／ 資料だが FB として積んだ ／ 2026-10-26 ／ 優先度は案",
+    body: "今のサイトにないのは3つ。① スポイトは少し入れて、待って、また入れる ② お薬だんごの水の量の目安 ③ 4歳以上は「なぜ飲むのか」を話して、自分から飲む気持ちを引き出す。文章は写さず自分の言葉で書き、数字は薬剤師として確かめる。",
+    next: "①〜③から1つ選び、自分の言葉で書いてコツのページに足す。スマホで読んで確かめる" },
+  { id: "7-1", from: "fb", kubun: "機能・安全", prio: "中", status: "未対応",
+    title: "コツを一枚の画像にして、壁紙や印刷したカードで使う",
+    meta: "メンターから ／ 2026-10-28 ／ 優先度は案",
+    body: "飲むたびにサイトを開くのは手間。年齢ごとのやり方とコツを1枚にすれば、スマホの壁紙や、薬を飲む場所に貼るカードにできる。画像はサイトの外に出回るので、出どころと「医師・薬剤師に相談」をカードの中に入れる。",
+    next: "1つの年齢（例: 1〜3歳）だけ1枚の画像にして、壁紙にして見やすいか試す" },
+  { id: "7-2", from: "fb", kubun: "機能・安全", prio: "低", status: "保留",
+    title: "好きなキャラクターが子どもに説明する",
+    meta: "メンターから ／ 2026-10-28 ／ 優先度は案",
+    body: "子どもの目線に合わせ、キャラクターが説明して、飲む場所の目につくところに置く。アニメなどのキャラクターは許可なく使えない（著作権）。自分で作るのは大きいので、7-1 のあとに見直す。",
+    next: "7-1 のカードを試してから見直す（4歳からの「なぜ飲むか」の面として）" },
+  { id: "5", from: "fb", kubun: "機能・安全", prio: "最優先", status: "反映した",
+    title: "Google Tag Manager なら GitHub のままで数えられる",
+    meta: "有本さん（Isamu）から ／ Slack ／ 2026-10-26",
+    body: "Google Tag Manager を使うと、どこを押したかまで細かく数えられる。ブラウザだけで動くので、Vercel に移さず今の GitHub のままでよい。その場で「GitHub のまま試す」と返事をした。",
+    next: "反映先: docs/17 の 6（自分のやりたいこと「使われた数を数える」）" },
+  { id: "自分-味", from: "mine", kubun: "機能", prio: "中", status: "未対応",
+    title: "トップページから薬の味を引けるようにする",
+    meta: "自分の考え ／ 2026-10-25 ／ 優先度は案",
+    body: "今は「にがくて いやがる」を押して薬の名前を入れると味が出る。「味を知りたい」という入口はない。薬局で受け取ったとき（まだ嫌がっていないが、苦いかを先に知りたい）に役立つ。同じ日に「トップは困りごと3つ」と決めたので、形を決める必要がある。",
+    next: "形を1つ選ぶ（4つ目のボタン／検索欄の近くに「味も分かります」など）→ 足して、スマホで数秒で味まで行けるか試す" },
+  { id: "3", from: "fb", kubun: "考え方", prio: "最優先", status: "反映した",
+    title: "小さく、早く試す。Vibe Coding とハーネスを学ぶ",
+    meta: "有本さん（Isamu）から ／ Slack ／ 2026-10-18",
+    body: "AI は確率で動くので、大きな仕様を完璧に仕上げることはできない。まずはいろいろなものを小さく作る。作るうちに出てくる疑問や課題が学びになる。",
+    next: "反映先: CLAUDE.md のいちばん上「最上位の考え」" },
+];
+
+const PRIOS = ["最優先", "高", "中", "低"];
+const PRIO_CLASS = { "最優先": "p-top", "高": "p-high", "中": "p-mid", "低": "p-low" };
+const STATUSES = ["未対応", "検討中", "保留", "反映した", "見送り"];
+const CLOSED = ["反映した", "見送り"];
+const KEY = "fb-triage-edits-v1";
+
+// 直した分だけを持つ。{ id: { prio, status } }
+let edits = {};
+try { edits = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { edits = {}; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(edits)); } catch (e) {} }
+
+function current(item) {
+  const e = edits[item.id] || {};
+  return { prio: e.prio || item.prio, status: e.status || item.status };
+}
+function isChanged(item) {
+  const c = current(item);
+  return c.prio !== item.prio || c.status !== item.status;
+}
+
+function setEdit(item, field, value) {
+  const e = Object.assign({}, current(item), { [field]: value });
+  if (e.prio === item.prio && e.status === item.status) delete edits[item.id];
+  else edits[item.id] = e;
+  save();
+  render();
+}
+
+function el(tag, attrs, text) {
+  const n = document.createElement(tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+function card(item) {
+  const c = current(item);
+  const closed = CLOSED.includes(c.status);
+  const box = el("div", { class: "fb " + (closed ? "closed" : PRIO_CLASS[c.prio]) + (isChanged(item) ? " changed" : "") });
+
+  const tags = el("div", { class: "tags" });
+  tags.append(el("span", { class: "tag" + (item.from === "mine" ? " mine" : "") }, item.from === "mine" ? "自分のやりたいこと" : "FB " + item.id));
+  tags.append(el("span", { class: "tag" }, item.kubun));
+  box.append(tags);
+  box.append(el("h3", null, item.title));
+  box.append(el("p", { class: "meta" }, item.meta));
+  box.append(el("p", null, item.body));
+  const next = el("p", { class: "next" });
+  next.append(el("b", null, closed ? "" : "次の一歩: "), document.createTextNode(item.next));
+  box.append(next);
+
+  const ctl = el("div", { class: "controls" });
+  ctl.append(segRow("優先度", PRIOS, c.prio, p => PRIO_CLASS[p], v => setEdit(item, "prio", v)));
+  ctl.append(segRow("状態", STATUSES, c.status, () => "s", v => setEdit(item, "status", v)));
+  box.append(ctl);
+  return box;
+}
+
+function segRow(label, values, selected, cls, onPick) {
+  const row = el("div", { class: "row" });
+  row.append(el("span", null, label));
+  const seg = el("div", { class: "seg", role: "group", "aria-label": label });
+  values.forEach(v => {
+    const b = el("button", { type: "button", class: cls(v), "aria-pressed": String(v === selected) }, v);
+    b.addEventListener("click", () => onPick(v));
+    seg.append(b);
+  });
+  row.append(seg);
+  return row;
+}
+
+function render() {
+  const sorted = ITEMS.map((item, i) => ({ item, i, c: current(item) }))
+    .sort((a, b) => PRIOS.indexOf(a.c.prio) - PRIOS.indexOf(b.c.prio) || a.i - b.i);
+  const open = sorted.filter(x => !CLOSED.includes(x.c.status));
+  const closed = sorted.filter(x => CLOSED.includes(x.c.status));
+  const openBox = document.getElementById("open");
+  const closedBox = document.getElementById("closed");
+  openBox.replaceChildren(...open.map(x => card(x.item)));
+  closedBox.replaceChildren(...closed.map(x => card(x.item)));
+  document.getElementById("open-count").textContent = open.length + " 件";
+  document.getElementById("closed-count").textContent = closed.length + " 件";
+
+  const changed = ITEMS.filter(isChanged);
+  document.getElementById("bar").classList.toggle("show", changed.length > 0);
+  document.getElementById("bar-msg").textContent = changed.length + " 件を直しました（まだ docs には入っていません）";
+}
+
+function changeText() {
+  const lines = ITEMS.filter(isChanged).map(item => {
+    const c = current(item);
+    const parts = [];
+    if (c.prio !== item.prio) parts.push("優先度 " + item.prio + " → " + c.prio);
+    if (c.status !== item.status) parts.push("状態 " + item.status + " → " + c.status);
+    const name = item.from === "mine" ? "自分のやりたいこと「" + item.title + "」" : "FB " + item.id + "「" + item.title + "」";
+    return "- " + name + ": " + parts.join("、");
+  });
+  return "FB トリアージの優先度と状態を直しました。docs/18（自分のやりたいことは docs/17）と docs/fb_triage.html に反映してください。\n" + lines.join("\n");
+}
+
+document.getElementById("send").addEventListener("click", () => {
+  const text = changeText();
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "mulmo-html-submit", text }, "*");
+    document.getElementById("bar-msg").textContent = "送りました。反映されたら、このページは新しい内容になります";
+  } else {
+    // 単体で開いたときは、コピーしてチャットに貼ってもらう
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject())
+      .then(() => { document.getElementById("bar-msg").textContent = "コピーしました。Claude のチャットに貼ってください"; })
+      .catch(() => { prompt("この文をコピーして、Claude のチャットに貼ってください", text); });
+  }
+});
+document.getElementById("reset").addEventListener("click", () => { edits = {}; save(); render(); });
+
+// 送ったあとページが新しい内容になったら、古い直しは消す
+for (const id in edits) {
+  const item = ITEMS.find(x => x.id === id);
+  if (!item || !isChanged(item)) delete edits[id];
+}
+save();
+render();
+</script>
+</body>
+</html>
