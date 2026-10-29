@@ -283,7 +283,10 @@
     cursor: pointer; font-family: var(--font-display);
   }
   .worry .ic { margin-right: 8px; }
-  .worry-hint { color: var(--accent); font-size: 15px; min-height: 1.4em; margin: 4px 0 6px; }
+  .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
+  .worry-hint:empty { display: none; }
+  .hero .list:not(:empty) { margin: 8px 0 4px; }
+  .hero .worry-title { margin-top: 20px; }
 </style>
 </head>
 <body>
@@ -294,6 +297,10 @@
       <p class="eyebrow">こどもおくすりサポート</p>
       <h1>おくすり、<br>のめるかな？</h1>
       <p class="lead"><b>粉薬（こなぐすり）</b>のためのページです。薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
+      <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
+      <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
+      <p class="worry-hint" id="worry-hint" role="status"></p>
+      <ul id="list" class="list"></ul>
       <h2 class="worry-title">どうしたの？</h2>
       <div class="worry">
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。味と、苦さをかくせる食べ物が出ます"><span class="ic" aria-hidden="true">😖</span>にがくて いやがる</button>
@@ -301,10 +308,7 @@
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、さけたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>まぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>くすりの あじ</button>
       </div>
-      <p class="worry-hint" id="worry-hint" role="status"></p>
-      <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
     </div>
-    <ul id="list" class="list"></ul>
   </section>
 
   <section id="detail" hidden>
