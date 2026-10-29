@@ -136,7 +136,7 @@ const AGE_FLOWS = [
   },
   {
     age: "toddler", label: "1〜3歳",
-    note: "味が分かり、いやがることがいちばん多い時期です（いわゆる魔の2歳児）。",
+    note: "味が分かり、いやがることがいちばん多い時期です。",
     groups: [
       { label: "まずは、少しの水で（やり方は2つ）", items: ["water", "dango"] },
       { label: "むずかしいときは", items: ["mix"] },
@@ -162,7 +162,7 @@ const METHOD_REFS = [
   { name: "熊本市", url: "https://www.city.kumamoto.jp/kiji00331285/5_31285_410254_up_23WIW8YZ.pdf" },
   { name: "熊本 くすりの話", url: "https://kmh.or.jp/wp/wp-content/uploads/2023/04/okusuri_14.pdf" },
   { name: "診断と治療社", url: "https://shindan.co.jp/np/filedata/00265800_23.pdf" },
-  { name: "札幌市立病院", url: "https://www.city.sapporo.jp/hospital/medicine/howtotake_child.html" },
+  { name: "市立札幌病院", url: "https://www.city.sapporo.jp/hospital/medicine/howtotake_child.html" },
   { name: "龍角散 おくすり飲めたね（販売店の商品説明）", url: "https://netshop.create-sd.co.jp/shop/g/g4987240601838/" },
 ];
 
@@ -181,9 +181,22 @@ const HOWTO = [
     ages: ["baby"],
     body: "乳児は、おなかがすいているとき（授乳の前など）のほうが飲ませやすく、吐きにくいとされています。おなかがいっぱいだと飲めずに吐いてしまうことがあります。",
   },
+  // 泣いているときのスポイトは、くるみ薬局 2019-03-25 の記事（新生児〜乳児の段）から、自分の言葉で書いた（2026-10-29 ユーザーの指示）
+  {
+    title: "泣いているときに飲ませてもいい",
+    ages: ["baby"],
+    body: "この時期は、泣いているときに飲ませることになっても、しかたありません。泣いていると口が大きく開くので、スポイトを入れやすく、少しずつ入れると自然にのどへ進みます。むせないように、少しずつ入れてください。この方法が使えるのは、1歳半ごろまでです。",
+  },
+  // 0〜1歳の口直しは、PMDA くすりQ&A の Q8 と市立札幌病院のページで裏を取った文にした（2026-10-29 ユーザーの指示）
+  // 「ぬるま湯」は資料の言葉の「湯ざまし」にし、裏づけの見つからない「飲みこめたか見る」は外した
   {
     title: "飲んだあとは口直し",
-    ages: ["all"],
+    ages: ["baby"],
+    body: "飲ませたあとに、湯ざましを少し飲ませます。スポイトやスプーンに残った薬も、少しの水で流して飲ませます。",
+  },
+  {
+    title: "飲んだあとは口直し",
+    ages: ["toddler", "kid"],
     body: "飲ませたあとに水やぬるま湯を飲ませて、口の中に残った薬を流します。このとき、ちゃんと飲みこめたか、吐き出していないかも見ておきます。",
   },
   {
