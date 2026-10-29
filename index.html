@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>こどもおくすりサポート</title>
-<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方（デモ版）">
+<meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
@@ -473,7 +473,6 @@
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
     }
-    parts.push(el("p", { class: "source", text: f.checked }));
     parts.push(refsBox(f.refs.map((k) => FACT_REFS[k])));
     return parts;
   }
