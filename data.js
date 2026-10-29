@@ -248,6 +248,7 @@ const FACT_REFS = {
 
 // どの薬にも出すコツ（PMDA Q8、成育の表の注意書き）
 const TIP_JUST_BEFORE = "混ぜるのは、飲ませる直前に。混ぜたまま置いておくと、苦くなったり、効き目が落ちたりすることがあります。";
+// checked（CHECK_〜）は、中の作業の記録。画面には出さない（2026-10-29 ユーザーの指示）
 const TWO_TABLES = ["pmdaQ8", "iizuka", "ncchd"];
 const CHECK_WAITING = "2026-10-18 に2つの病院の資料を見比べてまとめました（薬剤師の確認待ち）";
 const ONE_TABLE_IIZUKA = ["pmdaQ8", "iizuka"];
