@@ -250,15 +250,10 @@
   .pick button small { display: block; font-size: 11px; font-weight: normal; color: var(--muted); }
   .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
   .pick button[aria-pressed="true"] small { color: var(--accent-text); }
-  .howto-count { color: var(--muted); font-size: 15px; margin: 14px 0 0; min-height: 1.4em; }
   /* 「飲ませ方」と「コツ」のタブ */
-  .tabs { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--accent); border-radius: 14px; overflow: hidden; margin: 4px 0 14px; }
-  .tabs button { min-height: 48px; font-size: 17px; font-weight: bold; border: 0; background: var(--card); color: var(--accent); cursor: pointer; font-family: var(--font-display); }
-  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-text); }
   .flow-note { margin: 12px 0 0; padding: 10px 12px; border-left: 5px solid var(--accent); border-radius: 8px; background: var(--taste-bg); color: var(--text); font-size: 17px; font-weight: bold; font-family: var(--font-display); }
   .water-note { margin: 8px 0 0; background: var(--split-bg); border-radius: 12px; padding: 10px 12px; font-size: 15px; }
   .flow-group { margin: 16px 0 0; font-weight: bold; color: var(--accent); }
-  .flow-ask { margin: 14px 0 0; background: var(--warn-bg); border-radius: 12px; padding: 10px 12px; font-size: 15px; }
   .howto ol { margin: 0 0 10px; padding-left: 1.3em; }
   .howto li { margin-bottom: 6px; }
   .howto .step-next { margin: 4px 0 12px; }
@@ -316,8 +311,8 @@
     <button class="back" data-go="" type="button">← 薬を選びなおす</button>
     <div id="card" class="card"></div>
 
-    <h2 class="section-title">飲ませ方のコツ</h2>
-    <!-- 「のませかたが わからない」の画面と同じタブを、薬を開いたときはここへ動かす -->
+    <h2 class="section-title">粉薬の飲ませ方</h2>
+    <!-- 「のませかたが わからない」の画面と同じ飲ませ方（やり方とコツ）を、薬を開いたときはここへ動かす。見出しも同じにする（2026-10-27 ユーザーの指示） -->
     <div id="detail-howto-slot"></div>
 
     <h2 class="section-title">どの薬でも気をつけること</h2>
@@ -333,34 +328,17 @@
   <section id="howto-page" hidden>
     <button class="back" data-go="" type="button">← もどる</button>
     <h1>粉薬の飲ませ方</h1>
-    <div id="howto-page-slot"><div id="howto-tabs">
-    <div class="tabs" role="tablist">
-      <button type="button" role="tab" data-tab="steps" aria-selected="true">飲ませ方</button>
-      <button type="button" role="tab" data-tab="tips" aria-selected="false">コツ</button>
-    </div>
-    <div id="tab-steps">
+    <div id="howto-page-slot"><div id="howto-body">
       <p class="pick-label" id="flow-age-label">何歳？</p>
       <div class="pick" role="group" aria-labelledby="flow-age-label" id="flow-ages"></div>
       <div id="age-flow" aria-live="polite"></div>
       <p class="source" id="method-refs"></p>
-    </div>
-    <div id="tab-tips" hidden>
-      <p class="lead">年齢を押すと、その年齢に合うコツが出ます。押すと説明が開きます。</p>
-      <p class="pick-label" id="age-label">何歳？<small>（めやす）</small></p>
-      <div class="pick" role="group" aria-labelledby="age-label">
-        <button type="button" data-age="baby" aria-pressed="false">赤ちゃん<small>〜1歳ごろ</small></button>
-        <button type="button" data-age="toddler" aria-pressed="false">1〜3歳</button>
-        <button type="button" data-age="kid" aria-pressed="false">4歳から</button>
-      </div>
-      <p class="howto-count" id="howto-count" role="status"></p>
-      <div id="howto-all" class="howto"></div>
-    </div>
     </div></div>
   </section>
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-10-27b"></script>
+<script src="data.js?v=2026-10-27f"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -488,7 +466,9 @@
     const parts = [];
     if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
     // 「○○の資料で、〜とされています」の決まった文は出さない（2026-10-27 ユーザーの判断）。薬ごとに text を書いたときだけ出す
-    if (f.good) parts.push(chipBox("○ 混ぜると飲みやすい", "g-ok", f.good.text, f.good.foods.map(foodChip)));
+    // ◎ と ○ に分ける（2026-10-27 ユーザー（薬剤師）と決定。決まりは data.js の FACT_REFS の上）
+    if (f.easy) parts.push(chipBox("◎ 混ぜると飲みやすい", "g-ok", f.easy.text, f.easy.foods.map(foodChip)));
+    if (f.good) parts.push(chipBox("○ 混ぜても大丈夫", "g-ok", f.good.text, f.good.foods.map(foodChip)));
     if (f.avoid) parts.push(chipBox("× 混ぜないほうがいい", "g-bad", f.avoid.text, f.avoid.foods.map(foodChip)));
     if (f.tips.length > 0) {
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
@@ -520,34 +500,15 @@
     card.replaceChildren(...parts);
   }
 
+  // コツ（HOWTO）の出どころは、ページの下の「参考にした資料」にまとめて出す
   function howtoItem(h) {
     return el("details", {}, [
       el("summary", { text: h.title }),
       el("p", { text: h.body }),
-      sourceLine(h.sources),
     ]);
   }
 
-  // 「のませかたが わからない」の画面は、粉薬のコツだけを出し、選んだ年齢に合うものにしぼる（年齢を選ぶまでは何も出さない。2026-10-27 ユーザーの指示）
-  // 薬の形のボタンは 2026-10-26 に外した。まず粉薬にしぼる（ユーザーの判断）
-  let ageSel = null;
-
-  // 札のないコツは、どの年齢・どの形にも出す（札がなくてもボタンが止まらないように）
-  function matchesHowto(h) {
-    const ages = h.ages || ["all"];
-    const forms = h.forms || ["any"];
-    return (!ageSel || ages.includes(ageSel) || ages.includes("all"))
-      && (forms.includes("powder") || forms.includes("any"));
-  }
-
-  function renderHowtoPage() {
-    const hits = ageSel ? HOWTO.filter(matchesHowto) : [];
-    document.getElementById("howto-all").replaceChildren(...hits.map(howtoItem));
-    document.getElementById("howto-count").textContent = ageSel ? "合うコツ " + hits.length + " こ" : "";
-    document.querySelectorAll("[data-age]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.age === ageSel)));
-  }
-
-  // 「飲ませ方」タブ: いちばん上で年齢を選ぶと、時期の特徴、水の考え方、やり方のまとまりを出す（いちばん上のまとまりの1つ目だけ開いておく）
+  // 飲ませ方: いちばん上で年齢を選ぶと、時期の特徴、水の考え方、やり方のまとまり、その年齢のコツを出す（いちばん上のまとまりは全部開いておく。コツのタブは 2026-10-27 に外し、ここにまとめた。ユーザーの指示）
   let flowSel = null;
 
   // 「まぜていい？」と同じように、トップの薬の名前の欄へ案内する
@@ -589,20 +550,15 @@
     const f = AGE_FLOWS.find((x) => x.age === flowSel);
     document.getElementById("age-flow").replaceChildren(...(f ? [
       el("p", { class: "flow-note", text: f.note }),
-      el("p", { class: "water-note", text: WATER_NOTE }),
+      el("p", { class: "water-note", text: f.water || WATER_NOTE }),
       ...f.groups.flatMap((g, gi) => [
         el("p", { class: "flow-group", text: g.label }),
-        el("div", { class: "howto" }, g.items.map((key, i) => flowItem(key, gi === 0 && i === 0))),
+        el("div", { class: "howto" }, g.items.map((key) => flowItem(key, gi === 0))),
       ]),
-      ...(f.ask ? [el("p", { class: "flow-ask", text: f.ask })] : []),
+      el("p", { class: "flow-group", text: "コツ" }),
+      el("div", { class: "howto" }, HOWTO.filter((h) => h.ages.includes(f.age) || h.ages.includes("all")).map(howtoItem)),
     ] : []));
     document.getElementById("method-refs").replaceWith(Object.assign(sourceLine(METHOD_REFS, "参考にした資料: "), { id: "method-refs" }));
-  }
-
-  function showTab(tab) {
-    document.getElementById("tab-steps").hidden = tab !== "steps";
-    document.getElementById("tab-tips").hidden = tab !== "tips";
-    document.querySelectorAll('[role="tab"]').forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
   }
 
   // ---- 画面の切り替え ----
@@ -615,12 +571,9 @@
     screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto"));
     screens.detail.hidden = !drug;
     screens.howto.hidden = hash !== "howto";
-    // 飲ませ方のタブは1つだけ。開いている画面へ動かし、はじめは「飲ませ方」タブを開く（2026-10-27 ユーザーの指示）
+    // 飲ませ方は1つだけ。開いている画面へ動かす
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
-    if (slot) {
-      document.getElementById(slot).append(document.getElementById("howto-tabs"));
-      showTab("steps");
-    }
+    if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
     if (drug) renderCard(drug, !!match[2] && !!drug.generic);
     if (!screens.pick.hidden) renderList();
@@ -641,17 +594,7 @@
     q.scrollIntoView({ behavior: "smooth", block: "center" });
   }));
   document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
-  // もう一度押すと、選ぶのをやめる
-  document.querySelectorAll("[data-age]").forEach((b) => b.addEventListener("click", () => {
-    ageSel = ageSel === b.dataset.age ? null : b.dataset.age;
-    renderHowtoPage();
-  }));
-  document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => {
-    showTab(b.dataset.tab);
-    if (!b.matches('[role="tab"]')) window.scrollTo(0, 0);
-  }));
   window.addEventListener("hashchange", () => route());
-  renderHowtoPage();
   renderSteps();
   route();
 </script>
