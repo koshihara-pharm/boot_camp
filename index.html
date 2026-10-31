@@ -13,6 +13,15 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "z5py1akpjj");
 </script>
+<!-- Google アナリティクス（GA4）: 開かれた数を数える。Clarity と両方使う（2026-10-31 ユーザーの判断）。検索欄の文字は URL に入らないので送られない。ページの下に一言書いている -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1SGGXK56V6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1SGGXK56V6');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
@@ -353,8 +362,8 @@
     </div></div>
   </section>
 
-  <!-- Clarity のお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
-  <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity で、ページの見られ方（押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a></p></details>
+  <!-- Clarity と Google アナリティクスのお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
+  <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity と Google アナリティクスで、ページの見られ方（開かれた数や押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a>と、<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Google のサービスを使うサイトでの Google によるデータの使い方</a></p></details>
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
