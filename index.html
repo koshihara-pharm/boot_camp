@@ -304,7 +304,7 @@
     <div class="hero">
       <div class="hero-stamp" aria-hidden="true">🐻</div>
       <p class="eyebrow">こどもおくすりサポート</p>
-      <h1>おくすり、<br>のめるかな？</h1>
+      <h1>お薬、<br>飲めるかな？</h1>
       <p class="lead"><b>粉薬（こなぐすり）</b>のためのページです。薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
@@ -312,15 +312,15 @@
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">どうしたの？</h2>
       <div class="worry">
-        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>のませかたが わからない</button>
-        <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、さけたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>まぜていい？</button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>くすりの あじ</button>
+        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
+        <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
       </div>
     </div>
   </section>
 
   <section id="detail" hidden>
-    <button class="back" data-go="" type="button">← 薬を選びなおす</button>
+    <button class="back" data-go="" type="button">← 薬を選び直す</button>
     <div id="card" class="card"></div>
 
     <h2 class="section-title">粉薬の飲ませ方</h2>
@@ -338,7 +338,7 @@
   </section>
 
   <section id="howto-page" hidden>
-    <button class="back" data-go="" type="button">← もどる</button>
+    <button class="back" data-go="" type="button">← 戻る</button>
     <h1>粉薬の飲ませ方</h1>
     <div id="howto-page-slot"><div id="howto-body">
       <p class="pick-label" id="flow-age-label">何歳？</p>
@@ -348,11 +348,11 @@
     </div></div>
   </section>
 
-  <p class="site-note">使いやすくするために、Microsoft Clarity で、ページの見られ方（押された場所など）を記録しています。検索欄に入れた文字は記録されません。くわしくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a></p>
+  <p class="site-note">使いやすくするために、Microsoft Clarity で、ページの見られ方（押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a></p>
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-10-31b"></script>
+<script src="data.js?v=2026-10-31c"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -387,7 +387,7 @@
   const list = document.getElementById("list");
   const card = document.getElementById("card");
   let currentDrugName = null;
-  let pendingFocus = null; // 「くすりの あじ」なら "taste"、「まぜていい？」なら "mix"
+  let pendingFocus = null; // 「薬の味」なら "taste"、「混ぜていい？」なら "mix"
 
   function go(hash) {
     location.hash = hash;
@@ -444,9 +444,9 @@
       if (viaGeneric) {
         button.append(el("span", { class: "drug-name", text: d.generic }),
           el("span", { class: "drug-meta", text: originName(d) + "の情報" }),
-          el("span", { class: "drug-meta", text: "あじの目安: " + tasteHint(d) }));
+          el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
       } else {
-        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "あじ: " + (FACTS[d.name].taste || d.taste) }));
+        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
       }
       button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
       items.push(el("li", {}, [button]));
@@ -497,10 +497,10 @@
     const parts = viaGeneric ? [
       el("h2", { text: drug.name }),
       el("p", { class: "source", text: originName(drug) + "の情報です。" + drug.generic + "で探しました。" }),
-      el("div", { class: "taste" }, [el("b", { text: "あじの目安" }), el("span", { text: tasteHint(drug) })]),
+      el("div", { class: "taste" }, [el("b", { text: "味の目安" }), el("span", { text: tasteHint(drug) })]),
     ] : [
       el("h2", { text: drug.name }),
-      el("div", { class: "taste" }, [el("b", { text: "あじ" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
+      el("div", { class: "taste" }, [el("b", { text: "味" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
