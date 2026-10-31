@@ -312,7 +312,6 @@
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">どうしたの？</h2>
       <div class="worry">
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。味と、苦さをかくせる食べ物が出ます"><span class="ic" aria-hidden="true">😖</span>にがくて いやがる</button>
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>のませかたが わからない</button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、さけたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>まぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>くすりの あじ</button>
@@ -353,7 +352,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-10-29l"></script>
+<script src="data.js?v=2026-10-31b"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -388,7 +387,7 @@
   const list = document.getElementById("list");
   const card = document.getElementById("card");
   let currentDrugName = null;
-  let pendingFocus = null; // 「にがくて いやがる」なら "taste"、「まぜていい？」なら "mix"
+  let pendingFocus = null; // 「くすりの あじ」なら "taste"、「まぜていい？」なら "mix"
 
   function go(hash) {
     location.hash = hash;
@@ -596,7 +595,7 @@
   }
 
   q.addEventListener("input", renderList);
-  // 「にがくて いやがる」「まぜていい？」は、薬を選んでから答えが出るので、検索欄へ案内する
+  // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;
     document.getElementById("worry-hint").textContent = b.dataset.hint;
