@@ -18,6 +18,7 @@ const DRUGS = [
   { name: "クラリスドライシロップ", generic: "クラリスロマイシン", taste: "甘い＋やや苦い・ストロベリー風味" },
   { name: "ザジテンドライシロップ", generic: "ケトチフェン", taste: "甘い・ストロベリー風味" },
   { name: "ジスロマック細粒", generic: "アジスロマイシン", taste: "甘い＋苦い・パイン・オレンジ風味" },
+  { name: "酸化マグネシウム", taste: "無味・無香料" },
   { name: "シングレア細粒", generic: "モンテルカスト", taste: "わずかに甘い・無香料" },
   { name: "セファクロル細粒", taste: "甘い、やや苦い・オレンジ風味" },
   { name: "セフゾン細粒", generic: "セフジニル", taste: "甘い・ストロベリー風味" },
@@ -557,6 +558,14 @@ const FACTS = {
     tips: [TIP_JUST_BEFORE],
     refs: ONE_TABLE_IIZUKA,
     checked: CHECK_ONE_TABLE,
+  },
+  "酸化マグネシウム": {
+    basis: "iizuka",
+    point: "薬そのものに味がないので、食べ物の味をこわしません。",
+    good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
+    tips: [TIP_JUST_BEFORE],
+    refs: ONE_TABLE_IIZUKA,
+    checked: "2026-10-31 に1つの病院の資料をもとにまとめました（資料は1つだけ。薬剤師の確認待ち）",
   },
   "ミヤBM細粒": {
     basis: "iizuka",
