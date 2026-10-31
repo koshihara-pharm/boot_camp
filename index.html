@@ -286,6 +286,8 @@
   .source { margin: 4px 0 10px; }
   .source a, .tips a, .site-note a { color: var(--accent); }
   .site-note { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 32px; }
+  .site-note summary { cursor: pointer; }
+  .site-note p { margin: 8px 0 0; }
   .worry-title { font-size: 20px; margin: 4px 0 8px; }
   .worry { display: grid; gap: 8px; margin: 0 0 4px; }
   .worry button {
@@ -351,7 +353,8 @@
     </div></div>
   </section>
 
-  <p class="site-note">使いやすくするために、Microsoft Clarity で、ページの見られ方（押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a></p>
+  <!-- Clarity のお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
+  <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity で、ページの見られ方（押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a></p></details>
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
