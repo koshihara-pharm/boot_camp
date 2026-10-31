@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>こどもおくすりサポート</title>
+<title>子どものお薬サポート</title>
 <meta name="description" content="子どもが少しでも薬を飲めるように。薬の味、混ぜていい食べ物、飲ませ方">
 <!-- Microsoft Clarity: 使われた数と押された場所を見る（docs/17 の 6）。検索欄の文字は Clarity がいつも隠す。ページの下に一言書いている -->
 <script type="text/javascript">
@@ -116,7 +116,9 @@
     overflow: hidden;
   }
   .hero .eyebrow { margin: 0; font-size: 14px; font-weight: bold; letter-spacing: 0.08em; color: var(--accent); font-family: var(--font-display); }
-  .hero h1 { font-size: 34px; line-height: 1.25; margin: 6px 0 8px; max-width: 9em; }
+  .hero h1 { font-size: 34px; line-height: 1.25; margin: 6px 0 8px; max-width: min(9em, calc(100% - 100px)); }
+  /* 見出しは、くまのスタンプに重ならないよう、せまい画面では言葉の切れ目で折り返す */
+  .hero h1 .nw { display: inline-block; }
   .hero .lead { margin: 0 0 16px; color: var(--text); }
   .hero input[type="search"] { font-size: 18px; }
   .hero-stamp {
@@ -303,16 +305,17 @@
   <section id="pick">
     <div class="hero">
       <div class="hero-stamp" aria-hidden="true">🐻</div>
-      <p class="eyebrow">こどもおくすりサポート</p>
-      <h1>お薬、<br>飲めるかな？</h1>
+      <p class="eyebrow">子どものお薬サポート</p>
+      <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
       <p class="lead"><b>粉薬（こなぐすり）</b>のためのページです。薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
-      <h2 class="worry-title">どうしたの？</h2>
+      <h2 class="worry-title">お困りごと</h2>
       <div class="worry">
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
+        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">⭐</span>おすすめの飲ませ方</button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
       </div>
