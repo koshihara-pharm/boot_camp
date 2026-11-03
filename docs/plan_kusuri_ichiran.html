@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
-  /* 計画は上から読む1カラム。見本はサイトと同じ色と丸い文字で、スマホの枠に入れて並べる */
+  /* html-plan の形: 主張の木（なぜ → 何ができる → 仕組み → どこを直す）。読む → 決める → 返す。見本はサイトと同じ色と丸い文字 */
   :root {
     --bg: #f4f8f7;
     --paper: #ffffff;
@@ -11,7 +11,7 @@
     --muted: #5d6e6b;
     --line: #d3e3df;
     --accent: #1f7a70;
-    /* ここから下はサイトの色（見本の中で使う） */
+    --accent-soft: #e1f0ed;
     --site-bg: #eef6f4;
     --site-hero: #d9eee8;
     --site-card: #ffffff;
@@ -21,21 +21,23 @@
     --prep-bg: #fdf5df;
     --ok-bg: #e3f3e8;
     --ok: #2f7d4f;
+    --code-bg: #f1f5f4;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+    --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9;
+      --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
       --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
-      --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9;
+      --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9; --code-bg: #162220;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9;
+    --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
     --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
-    --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9;
+    --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9; --code-bg: #162220;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
@@ -43,80 +45,96 @@
     background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.7;
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
-  main { max-width: 760px; margin: 0 auto; padding-block: 24px 64px; display: grid; gap: 28px; }
-  h1 { font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3; margin: 0; text-wrap: balance; }
-  h2 { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 10px; text-wrap: balance; }
+  main { max-width: 760px; margin: 0 auto; padding-block: 24px 120px; display: grid; gap: 22px; }
+  h1 { font-family: var(--font-display); font-size: 1.55rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 0; text-wrap: balance; }
   p { margin: 0; }
-  .lead { color: var(--muted); margin-top: 6px; }
-  section { display: grid; gap: 10px; min-width: 0; }
-  ul.plain { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+  .lead { color: var(--muted); margin-top: 6px; font-size: 0.92rem; }
+  .why { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+  .why blockquote { margin: 0; padding-left: 12px; border-left: 3px solid var(--accent); color: var(--text); }
+  .why cite { display: block; font-style: normal; font-size: 0.8rem; color: var(--muted); }
+  .layer { display: grid; gap: 10px; min-width: 0; }
+  .layer-label { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; }
 
-  /* 見本: スマホの枠 */
-  .phones { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
-  .phone { min-width: 0; display: grid; gap: 6px; }
-  .phone .cap { font-size: 0.85rem; color: var(--muted); }
-  .screen {
-    background: var(--site-bg); border: 1px solid var(--line); border-radius: 22px; padding: 12px;
-    font-family: var(--font-display); color: var(--site-ink); display: grid; gap: 8px; align-content: start;
-  }
-  .hero { background: var(--site-hero); border-radius: 18px; padding: 12px; display: grid; gap: 8px; }
+  details.claim { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+  details.claim > summary { cursor: pointer; padding: 12px 16px; font-weight: 700; list-style: none; display: grid; grid-template-columns: 1.2em 1fr; gap: 6px; }
+  details.claim > summary::-webkit-details-marker { display: none; }
+  details.claim > summary::before { content: "▸"; color: var(--accent); }
+  details.claim[open] > summary::before { content: "▾"; }
+  .claim-body { padding: 0 16px 14px; display: grid; gap: 12px; min-width: 0; }
+  .evidence { font-size: 0.8rem; color: var(--muted); }
+
+  .decision { border: 2px solid var(--accent); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; background: var(--accent-soft); }
+  .decision h3 { font-size: 0.98rem; margin: 0; }
+  .decision label.opt { display: grid; grid-template-columns: 1.3em 1fr; gap: 6px; align-items: start; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.92rem; }
+  .decision label.opt input { margin-top: 5px; }
+  .rec { color: var(--accent); font-weight: 700; font-size: 0.78rem; }
+  textarea { width: 100%; min-height: 3.2em; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 0.9rem; background: var(--paper); color: var(--text); resize: vertical; }
+  .cmt-label { font-size: 0.8rem; color: var(--muted); }
+
+  /* 見本（スマホの枠） */
+  .screen { max-width: 300px; background: var(--site-bg); border: 1px solid var(--line); border-radius: 22px; padding: 12px; font-family: var(--font-display); color: var(--site-ink); display: grid; gap: 7px; }
+  .hero { background: var(--site-hero); border-radius: 18px; padding: 12px; display: grid; gap: 7px; }
   .eyebrow { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.06em; }
-  .h { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
-  .lead-s { font-size: 0.78rem; font-family: var(--font-body); color: var(--muted); }
-  .search { background: var(--site-card); border: 2px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 0.82rem; color: var(--muted); font-family: var(--font-body); }
+  .h { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+  .lead-s { font-size: 0.76rem; font-family: var(--font-body); color: var(--muted); }
+  .search { background: var(--site-card); border: 2px solid var(--line); border-radius: 12px; padding: 7px 10px; font-size: 0.8rem; color: var(--muted); font-family: var(--font-body); }
   .search.typed { border-color: var(--accent); color: var(--text); }
-  .lbl { font-size: 0.85rem; font-weight: 700; margin-top: 2px; }
-  .btn { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; font-size: 0.85rem; }
-  .btn.new { border: 2px solid var(--stamp); position: relative; }
-  .btn.new::after { content: "新しい"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; background: var(--stamp); color: #3b2a00; border-radius: 999px; padding: 1px 7px; }
-  .back { font-size: 0.8rem; color: var(--accent); }
-  .row { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 7px 10px; display: grid; grid-template-columns: 1.6em 1fr auto; gap: 6px; align-items: center; font-variant-numeric: tabular-nums; }
-  .row .no { font-size: 0.75rem; color: var(--muted); text-align: right; }
-  .row .nm { font-size: 0.88rem; line-height: 1.3; min-width: 0; }
-  .row .nm small { display: block; font-family: var(--font-body); font-size: 0.68rem; color: var(--muted); }
-  .chip { font-size: 0.66rem; border-radius: 999px; padding: 1px 7px; font-family: var(--font-body); white-space: nowrap; }
+  .lbl { font-size: 0.85rem; font-weight: 700; }
+  .btn { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 0.82rem; }
+  .btn.new { border: 2px solid var(--stamp); }
+  .back { font-size: 0.78rem; color: var(--accent); }
+  .kana { font-size: 0.72rem; color: var(--accent); font-weight: 700; padding: 2px 4px 0; }
+  .row { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; }
+  .row .nm { font-size: 0.85rem; line-height: 1.3; min-width: 0; }
+  .row .nm small { display: block; font-family: var(--font-body); font-size: 0.66rem; color: var(--muted); }
+  .chip { font-size: 0.64rem; border-radius: 999px; padding: 1px 7px; font-family: var(--font-body); white-space: nowrap; }
   .chip.ok { background: var(--ok-bg); color: var(--ok); }
   .chip.prep { background: var(--prep-bg); color: var(--prep); font-weight: 700; }
-  .row.prep { opacity: 0.85; }
-  .kana { font-size: 0.75rem; color: var(--accent); font-weight: 700; padding: 2px 4px 0; }
-  .row.nr { grid-template-columns: 1fr auto; }
-  .src { font-size: 0.65rem; color: var(--muted); font-family: var(--font-body); }
-  .result-prep { background: var(--prep-bg); border-radius: 12px; padding: 10px; font-family: var(--font-body); font-size: 0.8rem; color: var(--text); display: grid; gap: 4px; }
+  .src { font-size: 0.64rem; color: var(--muted); font-family: var(--font-body); }
+  .result-prep { background: var(--prep-bg); border-radius: 12px; padding: 9px; font-family: var(--font-body); font-size: 0.78rem; display: grid; gap: 3px; }
   .result-prep b { color: var(--prep); }
 
-  /* 決めること */
-  .decide { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
-  .decide h3 { font-size: 1rem; margin: 0; }
-  .opts { display: grid; gap: 6px; }
-  .opt { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 0.92rem; }
-  .opt.rec { border-color: var(--accent); }
-  .opt.rec::before { content: "おすすめ "; color: var(--accent); font-weight: 700; font-size: 0.8rem; }
-  .steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
-  .note { font-size: 0.85rem; color: var(--muted); }
-  .whole { background: var(--paper); border: 2px dashed var(--line); border-radius: 14px; padding: 14px 16px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; }
+  .flow span.box { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
+  .flow span.arrow { color: var(--muted); }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; overflow-x: auto; font-family: var(--font-code); font-size: 0.78rem; line-height: 1.55; margin: 0; }
+  ul.files { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 0.92rem; }
+  code { font-family: var(--font-code); font-size: 0.85em; background: var(--code-bg); padding: 0 4px; border-radius: 4px; }
+
+  .whole { background: var(--paper); border: 2px dashed var(--accent); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+  .send { position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 1px solid var(--line);
+    padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .send button { font: inherit; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: none; background: var(--accent); color: var(--paper); cursor: pointer; }
+  .send .msg { font-size: 0.82rem; color: var(--muted); }
+  #out { display: none; }
+  #out.show { display: block; }
+  button:focus-visible, summary:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 </style>
 
 <main>
   <header>
     <h1>薬の一覧を、トップから開けるようにする</h1>
-    <p class="lead">薬をあいうえお順に並べた画面を足す計画です（はじめの案の「よく出る順」から変えました）。見本を見て、下の「決めること」に答えてください。2026-11-03</p>
+    <p class="lead">計画です。上から読んで、緑の枠の「決めること」を選び、気になったところにコメントを書いてください。最後に下の「答えをコピー」を押して、チャットに貼ってください。おすすめは最初から選んであります。2026-11-03</p>
   </header>
 
-  <section>
-    <h2>何を作るか</h2>
-    <ul class="plain">
-      <li>トップの「お困りごと」に、<b>「薬の一覧」</b>のボタンを足す</li>
-      <li>押すと、<b>あいうえお順</b>（ア行・カ行…の見出しつき）に薬が並んだ画面が開く。その画面の一番上にも<b>検索の欄</b>を置く</li>
-      <li>並べる薬は、子どもによく出る薬（処方の数で上位）と、サイトに入っている薬。順位は並べる薬を選ぶのに使い、画面には出さない</li>
-      <li>まだ入っていない薬（オロパタジンなど）は、検索しても一覧でも<b>「準備中」</b>と出す。行き止まりにせず、薬剤師に聞くよう案内する</li>
-      <li>これからは、この順位の上から薬を足していく（今回は画面だけ。薬の中身は1つずつ別に足す）</li>
-    </ul>
+  <section class="why" data-id="なぜ">
+    <span class="layer-label">なぜ（頼まれたこと）</span>
+    <blockquote>「どの薬が登録されているのか分からず、薬の名前を忘れたときに探す方法があると助かります。オロパタジンを検索しましたが、出てきませんでした」<cite>冨田さん（メンター）2026-11-01</cite></blockquote>
+    <blockquote>「ランキング上位から今後埋めて行こうか。トップメニューに薬の一覧をのせてほしい。その画面に検索まどもいれてほしい。リストのものを検索したときは準備中とでるようにしてほしい」「あいうえお順のほうがわかりやすいか」<cite>ユーザー 2026-11-03</cite></blockquote>
+    <span class="cmt-label">ここへのコメント</span>
+    <textarea data-comment="なぜ" aria-label="なぜ へのコメント"></textarea>
   </section>
 
-  <section>
-    <h2>見本（スマホの画面）</h2>
-    <div class="phones">
-      <div class="phone">
+  <section class="layer">
+    <span class="layer-label">何ができるようになるか</span>
+
+    <details class="claim" data-id="W1" open>
+      <summary>トップの「お困りごと」から、薬の一覧を開ける</summary>
+      <div class="claim-body">
+        <p class="evidence">見本: トップの画面</p>
         <div class="screen" aria-label="トップの見本">
           <div class="hero">
             <div class="eyebrow">子どものお薬サポート</div>
@@ -131,36 +149,66 @@
             <div class="btn new">📋 薬の一覧</div>
           </div>
         </div>
-        <p class="cap">① トップ。「薬の一覧」を一番下に足す（場所は決めること 1）</p>
+        <div class="decision" data-decision="D1">
+          <h3>決めること 1: ボタンをどこに置く？</h3>
+          <label class="opt"><input type="radio" name="D1" value="「お困りごと」の5つ目に置く" checked><span>「お困りごと」の5つ目に置く（見本のとおり） <span class="rec">おすすめ</span><br><small>今の形を変えずに足せる</small></span></label>
+          <label class="opt"><input type="radio" name="D1" value="検索の欄のすぐ下に、小さいリンクで置く"><span>検索の欄のすぐ下に、小さいリンク「入っている薬の一覧を見る」で置く<br><small>名前を忘れて検索の欄で止まった人が見つけやすい</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 1" aria-label="決めること 1 へのコメント"></textarea>
+        </div>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W1" aria-label="W1 へのコメント"></textarea>
       </div>
+    </details>
 
-      <div class="phone">
+    <details class="claim" data-id="W2" open>
+      <summary>一覧は、あいうえお順で、検索の欄もある</summary>
+      <div class="claim-body">
+        <p class="evidence">見本: 薬の一覧の画面。「見られる」を押すと今の薬の画面が開く。「準備中」は押しても開かない</p>
         <div class="screen" aria-label="薬の一覧の見本">
           <div class="back">← 戻る</div>
           <div class="h">薬の一覧</div>
           <div class="lead-s">あいうえお順です。</div>
           <div class="search">一覧から探す</div>
           <div class="kana">ア行</div>
-          <div class="row nr"><span class="nm">アスベリン散・DS<small>チペピジン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row nr prep"><span class="nm">アレグラ DS<small>フェキソフェナジン</small></span><span class="chip prep">準備中</span></div>
-          <div class="row nr prep"><span class="nm">アレロック顆粒・DS<small>オロパタジン</small></span><span class="chip prep">準備中</span></div>
-          <div class="row nr"><span class="nm">エリスロシン DS<small>エリスロマイシン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row nr"><span class="nm">オゼックス細粒<small>トスフロキサシン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row nr"><span class="nm">オノン DS<small>プランルカスト</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="nm">アスベリン散・DS<small>チペピジン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="nm">アレグラ DS<small>フェキソフェナジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row"><span class="nm">アレロック顆粒・DS<small>オロパタジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row"><span class="nm">エリスロシン DS<small>エリスロマイシン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="nm">オノン DS<small>プランルカスト</small></span><span class="chip ok">見られる</span></div>
           <div class="kana">カ行</div>
-          <div class="row nr"><span class="nm">カロナール細粒<small>アセトアミノフェン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row nr"><span class="nm">クラリス DS<small>クラリスロマイシン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row nr prep"><span class="nm">クラリチン DS<small>ロラタジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row"><span class="nm">カロナール細粒<small>アセトアミノフェン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="nm">クラリス DS<small>クラリスロマイシン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="nm">クラリチン DS<small>ロラタジン</small></span><span class="chip prep">準備中</span></div>
           <div class="lead-s">…（サ行、タ行と続く）</div>
           <div class="src">並べた薬の選び方: 厚生労働省 NDB オープンデータ（0〜9歳の処方。2023年度）で多いもの</div>
         </div>
-        <p class="cap">② 薬の一覧（あいうえお順）。「見られる」を押すと、今と同じ薬の画面が開く。「準備中」は押しても開かない</p>
+        <div class="decision" data-decision="D2">
+          <h3>決めること 2: 一覧に、どこまで並べる？</h3>
+          <label class="opt"><input type="radio" name="D2" value="処方の上位30＋入っている薬（約40）" checked><span>処方の上位 30（見られる 18、準備中 12）＋ サイトに入っている残りの薬。全部で約 40 <span class="rec">おすすめ</span><br><small>漢方・栄養剤も上位 30 に入るものは「準備中」で出す</small></span></label>
+          <label class="opt"><input type="radio" name="D2" value="処方の上位60まで全部"><span>処方の上位 60 まで全部<br><small>てんかんの薬、特殊なミルクも入る</small></span></label>
+          <label class="opt"><input type="radio" name="D2" value="サイトに入っている34だけ"><span>サイトに入っている 34 だけ<br><small>準備中は検索したときだけ出す</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 2" aria-label="決めること 2 へのコメント"></textarea>
+        </div>
+        <div class="decision" data-decision="D3">
+          <h3>決めること 3: 何の名前で並べて、大きく見せる？</h3>
+          <label class="opt"><input type="radio" name="D3" value="製品名で並べて大きく、成分名は小さく" checked><span>製品名（ムコダイン DS）で並べて大きく、成分名（カルボシステイン）は小さく <span class="rec">おすすめ</span><br><small>親は薬袋の製品名で覚えていることが多い</small></span></label>
+          <label class="opt"><input type="radio" name="D3" value="成分名で並べて大きく、製品名は小さく"><span>成分名で並べて大きく、製品名は小さく<br><small>ジェネリックの薬袋に合わせやすい</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 3" aria-label="決めること 3 へのコメント"></textarea>
+        </div>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W2" aria-label="W2 へのコメント"></textarea>
       </div>
+    </details>
 
-      <div class="phone">
+    <details class="claim" data-id="W3" open>
+      <summary>まだ入っていない薬を検索すると「準備中」と出て、行き止まりにならない</summary>
+      <div class="claim-body">
+        <p class="evidence">見本: トップの検索の欄に「オロパタジン」と入れたとき。一覧に無い薬は、今までどおり「まだ入っていません」</p>
         <div class="screen" aria-label="準備中の検索結果の見本">
           <div class="hero">
-            <div class="h">子どもの粉薬を、飲みやすく</div>
             <div class="search typed">オロパタジン</div>
             <div class="result-prep">
               <b>オロパタジン（アレロック）は準備中です</b>
@@ -168,53 +216,104 @@
             </div>
           </div>
         </div>
-        <p class="cap">③ 準備中の薬を検索したとき。今の「見つかりませんでした」の代わりに出す。一覧にも無い薬は、今までどおり「まだ入っていません」</p>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W3" aria-label="W3 へのコメント"></textarea>
       </div>
-    </div>
+    </details>
   </section>
 
-  <section>
-    <h2>決めること</h2>
-
-    <div class="decide">
-      <h3>1. 「薬の一覧」のボタンをどこに置く？</h3>
-      <div class="opts">
-        <div class="opt rec">「お困りごと」の一番下に5つ目として置く（見本 ①）。今の形を変えずに足せる</div>
-        <div class="opt">検索の欄のすぐ下に、小さな文字のリンク「入っている薬の一覧を見る」として置く。名前を忘れた人が見つけやすい</div>
+  <section class="layer">
+    <span class="layer-label">仕組み</span>
+    <details class="claim" data-id="H1">
+      <summary>準備中の薬は、名前だけの別の表として持つ。味や混ぜ方は持たない</summary>
+      <div class="claim-body">
+        <p class="evidence">画面の動き</p>
+        <div class="flow"><span class="box">トップ</span><span class="arrow">→ 薬の一覧を押す →</span><span class="box">一覧（#list）</span><span class="arrow">→ 見られるを押す →</span><span class="box">薬の画面（今と同じ）</span></div>
+        <p>検索は、今の薬（34）を先に探し、見つからなければ準備中の表を探す。準備中の表は、製品名と成分名の両方で見つかる。「準備中」の薬には、味や混ぜ方を一言も書かない（出どころのある資料で確かめるまで出さない決まりのため）。順位は並べる薬を選ぶのに使うだけで、画面には出さない。</p>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="H1" aria-label="H1 へのコメント"></textarea>
       </div>
-    </div>
-
-    <div class="decide">
-      <h3>2. 一覧に、どこまで並べる？</h3>
-      <div class="opts">
-        <div class="opt rec">処方の上位 30（見られる 18、準備中 12）＋ 上位 30 より下にある、サイトに入っている薬。全部で 40 くらい。漢方・栄養剤も上位 30 に入るものは「準備中」で出す。並びはあいうえお順</div>
-        <div class="opt">上位 60 まで全部（専門の薬、特殊なミルクも入る）</div>
-        <div class="opt">サイトに入っている 34 だけ（準備中は検索したときだけ出す）</div>
-      </div>
-    </div>
-
-    <div class="decide">
-      <h3>3. 一覧で、薬の名前をどう見せる？</h3>
-      <div class="opts">
-        <div class="opt rec">製品名（ムコダイン DS）を大きく、成分名（カルボシステイン）を小さく。あいうえお順も製品名で並べる。親は薬袋の製品名で覚えていることが多い</div>
-        <div class="opt">成分名を大きく、製品名を小さく。あいうえお順も成分名で並べる。ジェネリックの薬袋に合わせやすい</div>
-      </div>
-    </div>
+    </details>
   </section>
 
-  <section>
-    <h2>作る順番（1つずつスマホで確かめる）</h2>
-    <ol class="steps">
-      <li>準備中の薬を、検索したときに「準備中です」と出す（見本 ③）。いちばん小さく、冨田さんの意見（オロパタジンが出ない）にすぐ答えられる</li>
-      <li>「薬の一覧」の画面とボタンを足す（見本 ①②）</li>
-      <li>一覧の画面に検索の欄を足す</li>
-      <li>そのあと、順位の上から薬を1つずつ足す（最初はオロパタジン）。足した薬は「準備中」から「見られる」に変わる</li>
-    </ol>
-    <p class="note">気をつけること: どの薬を並べたかは「処方の数」で選んだので、出どころ（NDB オープンデータ）を一覧の下に書く。順位は画面に出さない（「この薬がよい」と読まれないため）。「準備中」の薬には、味や混ぜ方を一言も書かず、薬剤師に聞く案内だけにする。10-25 に決めた「トップの薬の一覧は名前を入れたときだけ出す」は、トップには一覧を出さないまま、別の画面にするので守れる。</p>
+  <section class="layer">
+    <span class="layer-label">どこを直すか</span>
+    <details class="claim" data-id="P1">
+      <summary>直すファイルは2つと、記録が2つ。1つずつ作ってスマホで確かめる</summary>
+      <div class="claim-body">
+        <ul class="files">
+          <li><code>data.js</code>: 準備中の表を足す（例は下）</li>
+          <li><code>index.html</code>: 「薬の一覧」のボタン、一覧の画面、準備中の検索結果</li>
+          <li><code>CLAUDE.md</code>: 決まったことに書く。<code>docs/18</code>: 意見 11-1・11-3 を「反映した」に</li>
+        </ul>
+        <pre>// data.js に足す（例）
+const PREPARING = [
+  { name: "アレロック顆粒・DS", generic: "オロパタジン" },
+  { name: "アレグラ DS", generic: "フェキソフェナジン" },
+  { name: "クラリチン DS", generic: "ロラタジン" },
+  // …処方の上位 30 で、まだ入っていない 12
+];</pre>
+        <p>作る順番: ① 準備中の検索結果（いちばん小さい。冨田さんの意見にすぐ答えられる）→ ② 一覧の画面とボタン → ③ 一覧の検索の欄。そのあと、順位の上から薬を1つずつ足す（最初はオロパタジン）。</p>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="P1" aria-label="P1 へのコメント"></textarea>
+      </div>
+    </details>
   </section>
 
   <section class="whole">
     <h2>全体へのひとこと</h2>
-    <p>見本を見て、全体として「これでいい／違う」があればここに書いてください。決めること 1〜3 に答えるだけでも大丈夫です。</p>
+    <p class="cmt-label">全体として「これでいい／違う」があれば、ここに書いてください。</p>
+    <textarea id="whole" data-comment="全体へのひとこと" aria-label="全体へのひとこと"></textarea>
   </section>
+
+  <textarea id="out" readonly aria-label="コピーする答え"></textarea>
 </main>
+
+<div class="send">
+  <button type="button" id="copy">答えをコピー</button>
+  <span class="msg" id="msg" role="status">コピーしたら、チャットに貼ってください</span>
+</div>
+
+<script>
+  // 開いて触った決定を覚える。触らなかったものは「開かず、既定のまま」として返す
+  const touched = new Set();
+  document.querySelectorAll(".decision").forEach((d) => {
+    d.addEventListener("change", () => touched.add(d.dataset.decision));
+    d.addEventListener("focusin", () => touched.add(d.dataset.decision));
+  });
+
+  function answers() {
+    const lines = ["# 薬の一覧の計画への答え", ""];
+    document.querySelectorAll(".decision").forEach((d) => {
+      const id = d.dataset.decision;
+      const title = d.querySelector("h3").textContent.trim();
+      const picked = d.querySelector("input:checked");
+      const mark = touched.has(id) ? "" : "（開かず、既定のまま）";
+      lines.push("- " + title + " → " + (picked ? picked.value : "未選択") + mark);
+    });
+    const comments = [];
+    document.querySelectorAll("textarea[data-comment]").forEach((t) => {
+      const v = t.value.trim();
+      if (v) comments.push("- " + t.dataset.comment + ": " + v.replace(/\n+/g, " "));
+    });
+    lines.push("", "## コメント", comments.length ? comments.join("\n") : "- なし");
+    return lines.join("\n");
+  }
+
+  document.getElementById("copy").addEventListener("click", () => {
+    const text = answers();
+    const out = document.getElementById("out");
+    const msg = document.getElementById("msg");
+    out.value = text;
+    const fallback = () => {
+      out.classList.add("show");
+      out.style.minHeight = "10em";
+      out.focus();
+      out.select();
+      msg.textContent = "下の欄の文を選んだので、コピーしてチャットに貼ってください";
+    };
+    try {
+      navigator.clipboard.writeText(text).then(() => { msg.textContent = "コピーしました。チャットに貼ってください"; }, fallback);
+    } catch (e) { fallback(); }
+  });
+</script>
