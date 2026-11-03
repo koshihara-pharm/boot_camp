@@ -344,7 +344,7 @@
   </section>
 
   <section id="detail" hidden>
-    <button class="back" data-go="" type="button">← 薬を選び直す</button>
+    <button class="back" id="detail-back" data-go="" type="button">← 薬を選び直す</button>
     <div id="card" class="card"></div>
 
     <h2 class="section-title">粉薬の飲ませ方</h2>
@@ -677,11 +677,23 @@
   }
 
   // ---- 画面の切り替え ----
+  // 薬の画面の「戻る」は、開いたもとの画面（トップか薬の一覧）へ、同じ場所に戻す（2026-11-03 ユーザーの指示。一覧から開いてトップに戻るのは不便なため）
+  let lastHash = location.hash.slice(1);
+  let returnTo = "";
+  const scrollMemo = {};
+
   function route(scroll = true) {
     const hash = location.hash.slice(1);
     const match = hash.match(/^drug-(\d+)(-g)?$/);
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
+    const prev = lastHash;
+    lastHash = hash;
+    if (prev === "" || prev === "list") scrollMemo[prev] = window.scrollY;
+    if (drug && (prev === "" || prev === "list")) returnTo = prev;
+    const back = document.getElementById("detail-back");
+    back.dataset.go = returnTo;
+    back.textContent = returnTo === "list" ? "← 薬の一覧に戻る" : "← 薬を選び直す";
 
     screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto" && hash !== "list"));
     screens.detail.hidden = !drug;
@@ -694,7 +706,9 @@
     if (drug) renderCard(drug, !!match[2] && !!drug.generic);
     if (!screens.pick.hidden) renderList();
     if (!screens.list.hidden) renderAllList();
-    if (scroll) window.scrollTo(0, 0);
+    // 薬の画面から戻ったときは、前に見ていた場所に戻す
+    const backFromDrug = !drug && (hash === "" || hash === "list") && prev.startsWith("drug-");
+    if (scroll) window.scrollTo(0, backFromDrug ? (scrollMemo[hash] || 0) : 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
     if (drug) {
       if (pendingFocus === "mix") card.querySelector(".section-title").scrollIntoView();
