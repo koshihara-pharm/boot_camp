@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03e"></script>
+<script src="data.js?v=2026-11-03f"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -443,8 +443,12 @@
   }
 
   // 一般名（ジェネリックの名前）に当たるか。薬袋の名前は「クラリスロマイシンDS10%小児用「タカタ」」のように長いので、どちら向きにも含むかを見る
+  // 薬袋の名前に形（DS・細粒など）が書いてあって、その薬の一般名の形とちがうときは当てない（DS の薬袋で細粒の情報を出さないため。2026-11-03）
+  const QUERY_FORMS = [["ドライシロップ", "DS"], ["DS", "DS"], ["細粒", "細粒"], ["顆粒", "顆粒"], ["原末", "原末"], ["散", "散"]];
   function genericHit(d, query) {
-    return !!d.generic && (d.generic.includes(query) || query.includes(d.generic));
+    if (!d.generic || !(d.generic.includes(query) || query.includes(d.generic))) return false;
+    const forms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
+    return !d.genericForm || forms.length === 0 || forms.some((f) => d.genericForm.includes(f));
   }
 
   // 一般名の行を別に出すか。製品名に一般名がそのまま入っているとき（例: フェキソフェナジンDS）は、同じ名前が2行並ぶだけなので出さない（2026-11-03 ユーザーの判断）
@@ -459,6 +463,10 @@
 
   // 準備中の薬に当たるか（docs/17 の 8）。名前、一般名、読み、ほかの呼び方のどれかで見る。薬袋の長い名前でも当たるよう、3文字以上の名前はどちら向きにも見る
   function prepHit(p, query) {
+    // 薬袋の形と、準備中の薬の形がちがうときは当てない（例: 細粒の薬袋で「アセトアミノフェンDS」を出さない）
+    const qForms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
+    const pForms = QUERY_FORMS.filter(([w]) => (p.name + (p.genericForm || "")).includes(w)).map(([, f]) => f);
+    if (qForms.length > 0 && pForms.length > 0 && !qForms.some((f) => pForms.includes(f))) return false;
     return [p.name, p.generic, p.yomi, ...(p.also || [])].some((n) => {
       if (!n) return false;
       const name = n.toUpperCase();
