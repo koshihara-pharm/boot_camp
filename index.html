@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03d"></script>
+<script src="data.js?v=2026-11-03e"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -452,6 +452,11 @@
     return !!generic && !name.includes(generic);
   }
 
+  // 一般名の行に出す名前。一般名の名前で売られている後発品の形をつける（例: クレマスチンDS、カルボシステインDS・細粒。2026-11-03 ユーザーの判断）
+  function genericLabel(x) {
+    return x.generic + (x.genericForm || "");
+  }
+
   // 準備中の薬に当たるか（docs/17 の 8）。名前、一般名、読み、ほかの呼び方のどれかで見る。薬袋の長い名前でも当たるよう、3文字以上の名前はどちら向きにも見る
   function prepHit(p, query) {
     return [p.name, p.generic, p.yomi, ...(p.also || [])].some((n) => {
@@ -506,7 +511,7 @@
       // 準備中の薬は、味や混ぜ方を一言も出さず、薬剤師に聞く案内だけにする
       if (prep) {
         items.push(el("li", {}, [el("div", { class: "prep" }, [
-          el("span", { class: "drug-name", text: prepGeneric ? prep.generic : prep.name }),
+          el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
           prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
             : ownGenericRow(prep.name, prep.generic) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
@@ -516,7 +521,7 @@
       }
       const button = el("button", { type: "button" });
       if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: d.generic }),
+        button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
           el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
         if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
       } else if (all) {
