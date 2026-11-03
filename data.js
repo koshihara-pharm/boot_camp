@@ -5,7 +5,6 @@
 const DRUGS = [
   { name: "アスベリンドライシロップ", taste: "甘い・オレンジ風味" },
   { name: "アスベリン散", taste: "無味・無香料" },
-  { name: "アレジオンドライシロップ", taste: "甘い＋苦い・ヨーグルト風味" },
   { name: "エリスロシンドライシロップ", taste: "甘い・バニラ風味" },
   { name: "オゼックス細粒", generic: "トスフロキサシン", genericForm: "細粒", taste: "甘い・ストロベリー風味" },
   { name: "オノンドライシロップ", generic: "プランルカスト", genericForm: "ドライシロップ", taste: "甘い・無香料" },
@@ -22,7 +21,6 @@ const DRUGS = [
   { name: "セファクロル細粒", taste: "甘い、やや苦い・オレンジ風味" },
   { name: "セフゾン細粒", generic: "セフジニル", genericForm: "細粒", taste: "甘い・ストロベリー風味" },
   { name: "タミフルドライシロップ", generic: "オセルタミビル", genericForm: "ドライシロップ", taste: "苦い・ミックスフルーツ風味" },
-  { name: "テオドールドライシロップ", generic: "テオフィリン", genericForm: "ドライシロップ", taste: "甘い・すもも風味" },
   { name: "トランサミン散", generic: "トラネキサム酸", genericForm: "細粒", taste: "苦い・無香料" },
   { name: "ナウゼリンドライシロップ", generic: "ドンペリドン", genericForm: "ドライシロップ", taste: "甘い・無香料" },
   { name: "ビオフェルミンR散", taste: "甘い・無香料" },
@@ -31,13 +29,12 @@ const DRUGS = [
   { name: "ホスミシンドライシロップ", generic: "ホスホマイシン", taste: "甘い・カルピス風味" },
   { name: "ミヤBM細粒", taste: "無味・無香料" },
   { name: "ムコダインドライシロップ", generic: "カルボシステイン", taste: "甘酸っぱい・ピーチ風味" },
-  { name: "ムコサールドライシロップ", generic: "アンブロキソール", genericForm: "ドライシロップ", notOriginal: true, taste: "甘い・ヨーグルト風味" },
   { name: "メイアクトMS細粒", generic: "セフジトレン", genericForm: "細粒", taste: "甘い＋わずかな苦味・バナナ風味" },
-  { name: "メプチン顆粒", generic: "プロカテロール", genericForm: "ドライシロップ", taste: "甘い・無香料" },
   { name: "ラックビー微粒N", taste: "わずかに甘い・無香料" },
   { name: "ワイドシリン細粒", generic: "アモキシシリン", genericForm: "細粒", notOriginal: true, taste: "甘い・ミックスフルーツ風味" },
 ];
 
+// 販売が終わった製品（今の薬価のリストに名前が無いもの）はサイトから外す（2026-11-03 ユーザーの判断）: アレジオンドライシロップ、テオドールドライシロップ、ムコサールドライシロップ、メプチン顆粒、アセトアミノフェン原末、モニラック原末
 // 準備中の薬（2026-11-03 ユーザーと決定。docs/17 の 8）。厚生労働省「第10回 NDB オープンデータ」の 0〜9歳の処方の上位60のうち、
 // まだ入っていない粉薬（特殊なミルクは外した。粉薬だけにするため）。順位は docs/22。
 // 味や混ぜ方は持たない。出どころのある資料で調べて DRUGS と FACTS に足したら、ここから消す（上から順に。ユーザーが裏側で進める）。
@@ -79,13 +76,15 @@ const PREPARING = [
   { name: "黄耆建中湯（漢方）", yomi: "オウギケンチュウトウ" },
   { name: "五苓散（漢方）", yomi: "ゴレイサン", also: ["五苓散"] },
   { name: "幼児用PL配合顆粒", yomi: "ヨウジヨウピーエル", also: ["PL", "ペレックス"] },
-  { name: "モニラック原末", generic: "ラクツロース" },
   { name: "十全大補湯（漢方）", yomi: "ジュウゼンタイホトウ" },
   { name: "六君子湯（漢方）", yomi: "リックンシトウ" },
   // 上位60の成分の先発品・ブランドで、サイトにまだ無いもの（2026-11-03 に処方データの製品名で探して見つけた）。先発品があるものは先発品の行を出す決まり
   { name: "ケフラール細粒", generic: "セファクロル" },
   { name: "サワシリン細粒", generic: "アモキシシリン" },
-  { name: "メプチンドライシロップ", generic: "プロカテロール" },
+  { name: "メプチンドライシロップ", generic: "プロカテロール", genericForm: "ドライシロップ" },
+  // 販売が終わった製品をサイトから外したので、今売っている先発品を準備中にする（2026-11-03 ユーザーの判断。薬価のリスト 令和8年11月）
+  { name: "テオドール顆粒", generic: "テオフィリン", genericForm: "ドライシロップ" },
+  { name: "小児用ムコソルバンドライシロップ", generic: "アンブロキソール", genericForm: "ドライシロップ", also: ["ムコソルバン"] },
   { name: "ビオスリー配合散", generic: "酪酸菌" },
   { name: "レベニン散", generic: "耐性乳酸菌" },
   { name: "ビオフェルミン散剤", generic: "ビフィズス菌" },
@@ -405,20 +404,6 @@ const FACTS = {
     refs: THREE_SOURCES,
     checked: CHECK_THREE,
   },
-  "ムコサールドライシロップ": {
-    taste: "甘い・ヨーグルト風味",
-    easy: { foods: ["アイスクリーム", "牛乳", "ヨーグルト"] },
-    good: { foods: ["お茶"] },
-    // 出さない: プリン・スポーツ飲料（飯塚 ○/×、成育 ×）
-    avoid: { foods: ["りんごジュース", "オレンジジュース"] },
-    tips: [
-      TIP_JUST_BEFORE,
-      // 飯塚の備考
-      "牛乳に混ぜると、全体が甘くなります。",
-    ],
-    refs: TWO_TABLES,
-    checked: CHECK_WAITING,
-  },
   "メイアクトMS細粒": {
     taste: "バナナ風味・わずかに苦い",
     point: "資料によって評価が分かれることが多い薬です。迷ったら薬剤師に聞いてください。",
@@ -460,13 +445,6 @@ const FACTS = {
     tips: [TIP_JUST_BEFORE],
     refs: ONE_TABLE_IIZUKA,
     checked: CHECK_ONE_TABLE,
-  },
-  "アレジオンドライシロップ": {
-    basis: "iizuka",
-    easy: { foods: ["アイスクリーム", "牛乳", "ヨーグルト"] },
-    tips: [TIP_JUST_BEFORE, "チョコレートシロップやミルクココアでも飲みやすいとされています。"],
-    refs: IIZUKA_KURUMI,
-    checked: CHECK_TWO,
   },
   "エリスロシンドライシロップ": {
     basis: "ncchd",
@@ -546,15 +524,6 @@ const FACTS = {
     refs: ONE_TABLE_NCCHD,
     checked: CHECK_ONE_TABLE,
   },
-  "テオドールドライシロップ": {
-    basis: "ncchd",
-    easy: { foods: ["アイスクリーム", "プリン", "ヨーグルト"] },
-    good: { foods: ["牛乳", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
-    avoid: { foods: ["お茶"] },
-    tips: [TIP_JUST_BEFORE],
-    refs: ONE_TABLE_NCCHD,
-    checked: CHECK_ONE_TABLE,
-  },
   "トランサミン散": {
     basis: "iizuka",
     good: { foods: ["アイスクリーム", "プリン", "牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース"] },
@@ -622,14 +591,6 @@ const FACTS = {
     basis: "ncchd",
     easy: { foods: ["アイスクリーム", "牛乳", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
     avoid: { foods: ["プリン", "お茶"] },
-    tips: [TIP_JUST_BEFORE],
-    refs: ONE_TABLE_NCCHD,
-    checked: CHECK_ONE_TABLE,
-  },
-  "メプチン顆粒": {
-    basis: "ncchd",
-    easy: { foods: ["アイスクリーム", "プリン"] },
-    good: { foods: ["牛乳", "お茶", "ヨーグルト", "りんごジュース", "オレンジジュース", "スポーツ飲料"] },
     tips: [TIP_JUST_BEFORE],
     refs: ONE_TABLE_NCCHD,
     checked: CHECK_ONE_TABLE,
