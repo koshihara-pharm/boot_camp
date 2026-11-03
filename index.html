@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03h"></script>
+<script src="data.js?v=2026-11-03i"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -444,7 +444,7 @@
 
   // 一般名（ジェネリックの名前）に当たるか。薬袋の名前は「クラリスロマイシンDS10%小児用「タカタ」」のように長いので、どちら向きにも含むかを見る
   // 薬袋の名前に形（DS・細粒など）が書いてあって、その薬の一般名の形とちがうときは当てない（DS の薬袋で細粒の情報を出さないため。2026-11-03）
-  const QUERY_FORMS = [["ドライシロップ", "DS"], ["DS", "DS"], ["細粒", "細粒"], ["顆粒", "顆粒"], ["原末", "原末"], ["散", "散"]];
+  const QUERY_FORMS = [["ドライシロップ", "ドライシロップ"], ["細粒", "細粒"], ["顆粒", "顆粒"], ["原末", "原末"], ["散", "散"]];
   function genericHit(d, query) {
     if (!d.generic || !(d.generic.includes(query) || query.includes(d.generic))) return false;
     const forms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
@@ -550,12 +550,17 @@
     }
   }
 
+  // 検索の言葉をそろえる。かなをかたかなに、英字を大文字に。薬袋の「DS」は、画面の「ドライシロップ」と同じに扱う（2026-11-03）
+  function normQuery(v) {
+    return toKatakana(v.normalize("NFKC").trim()).toUpperCase().replace(/DS/g, "ドライシロップ");
+  }
+
   function renderList() {
-    fillList(list, toKatakana(q.value.trim()).toUpperCase(), false);
+    fillList(list, normQuery(q.value), false);
   }
 
   function renderAllList() {
-    fillList(allList, toKatakana(q2.value.trim()).toUpperCase(), true);
+    fillList(allList, normQuery(q2.value), true);
   }
 
   const FOOD_EMOJI = {
