@@ -11,7 +11,7 @@ const DRUGS = [
   { name: "オノンドライシロップ", generic: "プランルカスト", genericForm: "DS", taste: "甘い・無香料" },
   { name: "オラペネム細粒", taste: "甘い＋やや苦い・ストロベリー風味" },
   { name: "カルボシステインDS", taste: "甘い・青りんご風味" },
-  { name: "カロナール細粒", generic: "アセトアミノフェン", genericForm: "細粒", notOriginal: true, taste: "甘い、後に苦い・オレンジ風味" },
+  { name: "カロナール細粒", generic: "アセトアミノフェン", genericForm: "DS・細粒", notOriginal: true, taste: "甘い、後に苦い・オレンジ風味" },
   { name: "キプレス細粒", generic: "モンテルカスト", genericForm: "細粒", taste: "わずかに甘い・無香料" },
   { name: "クラバモックスドライシロップ", taste: "甘い・ストロベリー風味" },
   { name: "クラリスドライシロップ", generic: "クラリスロマイシン", genericForm: "DS", taste: "甘い＋やや苦い・ストロベリー風味" },
@@ -45,8 +45,6 @@ const DRUGS = [
 // yomi はかたかなの読み（漢字の名前でも、かなで探せるように）。also はほかの呼び方
 // genericForm は、一般名の名前で売られている後発品の粉の形（薬価のリスト 令和8年11月で確かめた。2026-11-03）。DRUGS も同じ
 const PREPARING = [
-  // アセトアミノフェンの DS は、細粒（カロナール）と濃さ・味がちがうので別にする（2026-11-03 ユーザーの判断。原末は外した）
-  { name: "アセトアミノフェンDS", generic: "アセトアミノフェン" },
   { name: "アレロック顆粒", generic: "オロパタジン", genericForm: "DS・顆粒" },
   { name: "モビコール配合内用剤", generic: "マクロゴール" },
   { name: "エレンタール配合内用剤", generic: "経腸成分栄養剤", yomi: "エレンタール", also: ["エレンタールP"] },
