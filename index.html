@@ -311,6 +311,9 @@
   }
   .worry .ic { margin-right: 8px; }
   .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
+  .list-link { display: inline-block; margin: 8px 2px 0; font-size: 15px; color: var(--accent); }
+  #list-page .lead { color: var(--muted); margin: 0 0 12px; }
+  #list-page input[type="search"] { margin-bottom: 4px; }
   .worry-hint:empty { display: none; }
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
@@ -326,6 +329,8 @@
       <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
+      <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
+      <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">お困りごと</h2>
@@ -356,6 +361,15 @@
     </ul>
   </section>
 
+  <section id="list-page" hidden>
+    <button class="back" data-go="" type="button">← 戻る</button>
+    <h1>薬の一覧</h1>
+    <p class="lead">あいうえお順です。「準備中」の薬は、味と混ぜていい食べ物をこれから載せます。</p>
+    <input id="q2" type="search" placeholder="一覧から探す" autocomplete="off" aria-label="一覧から探す">
+    <ul id="all-list" class="list"></ul>
+    <p class="source">準備中の薬は、厚生労働省「NDB オープンデータ」（2023年度の処方）で、0〜9歳によく出ている粉薬から選びました。</p>
+  </section>
+
   <section id="howto-page" hidden>
     <button class="back" data-go="" type="button">← 戻る</button>
     <h1>粉薬の飲ませ方</h1>
@@ -372,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03a"></script>
+<script src="data.js?v=2026-11-03b"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -402,9 +416,12 @@
     pick: document.getElementById("pick"),
     detail: document.getElementById("detail"),
     howto: document.getElementById("howto-page"),
+    list: document.getElementById("list-page"),
   };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
+  const q2 = document.getElementById("q2");
+  const allList = document.getElementById("all-list");
   const card = document.getElementById("card");
   let currentDrugName = null;
   let pendingFocus = null; // 「薬の味」なら "taste"、「混ぜていい？」なら "mix"
@@ -449,18 +466,23 @@
     return d.name + (d.notOriginal ? "" : "（先発品）");
   }
 
-  function renderList() {
-    const query = toKatakana(q.value.trim()).toUpperCase();
-    // 一覧は薬の名前を入れたときだけ出す（トップは困りごとのボタンから始める）
-    // 一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+  // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
+  // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+  // 一覧: あいうえお順で全部。製品名を大きく、一般名を小さく。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
+  function fillList(target, query, all) {
     const hits = [];
-    if (query !== "") {
+    if (all || query !== "") {
       DRUGS.forEach((d, i) => {
-        if (d.name.toUpperCase().includes(query)) hits.push({ d, i, label: d.name, viaGeneric: false });
+        const label = d.yomi || d.name;
+        if (all) {
+          if (query === "" || d.name.toUpperCase().includes(query) || label.includes(query) || genericHit(d, query)) hits.push({ d, i, label, viaGeneric: false });
+          return;
+        }
+        if (d.name.toUpperCase().includes(query) || label.includes(query)) hits.push({ d, i, label, viaGeneric: false });
         if (genericHit(d, query)) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
-        if (prepHit(p, query)) hits.push({ prep: p, label: p.yomi || p.name });
+        if ((all && query === "") || prepHit(p, query)) hits.push({ prep: p, label: p.yomi || p.name });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
@@ -478,12 +500,15 @@
           el("span", { class: "drug-name", text: prep.name }),
           prep.generic ? el("span", { class: "drug-meta", text: prep.generic }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
-          el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
+          all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
         continue;
       }
       const button = el("button", { type: "button" });
-      if (viaGeneric) {
+      if (all) {
+        button.append(el("span", { class: "drug-name", text: d.name }));
+        if (d.generic) button.append(el("span", { class: "drug-meta", text: d.generic }));
+      } else if (viaGeneric) {
         button.append(el("span", { class: "drug-name", text: d.generic }),
           el("span", { class: "drug-meta", text: originName(d) + "の情報" }),
           el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
@@ -493,10 +518,18 @@
       button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
       items.push(el("li", {}, [button]));
     }
-    list.replaceChildren(...items);
+    target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
-      list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
+      target.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
+  }
+
+  function renderList() {
+    fillList(list, toKatakana(q.value.trim()).toUpperCase(), false);
+  }
+
+  function renderAllList() {
+    fillList(allList, toKatakana(q2.value.trim()).toUpperCase(), true);
   }
 
   const FOOD_EMOJI = {
@@ -619,15 +652,17 @@
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
 
-    screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto"));
+    screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto" && hash !== "list"));
     screens.detail.hidden = !drug;
     screens.howto.hidden = hash !== "howto";
+    screens.list.hidden = hash !== "list";
     // 飲ませ方は1つだけ。開いている画面へ動かす
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
     if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
     if (drug) renderCard(drug, !!match[2] && !!drug.generic);
     if (!screens.pick.hidden) renderList();
+    if (!screens.list.hidden) renderAllList();
     if (scroll) window.scrollTo(0, 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
     if (drug) {
@@ -637,6 +672,7 @@
   }
 
   q.addEventListener("input", renderList);
+  q2.addEventListener("input", renderAllList);
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;
