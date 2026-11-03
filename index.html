@@ -289,9 +289,6 @@
   .howto summary::after { content: "＋"; color: var(--accent); flex: none; }
   .howto details[open] summary::after { content: "−"; }
   .howto p { margin: 0 0 8px; }
-  .way-tips { margin: 8px 0 0; padding-left: 1.3em; }
-  .way-tips li { margin-bottom: 8px; }
-  .way-tips b { display: block; font-size: 14px; color: var(--accent); }
   .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
   .tips li { margin-bottom: 6px; }
   .source { font-size: 14px; color: var(--muted); }
@@ -618,9 +615,7 @@
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, gi === 0))),
       ]),
       el("p", { class: "flow-group", text: "コツ" }),
-      // やり方ごとのコツも、ここにまとめる。どのやり方のコツか分かるように名前を付ける（2026-11-04 ユーザーの指示。保存用の画像と同じ）
-      el("ul", { class: "way-tips" }, f.groups.flatMap((g) => g.items).flatMap((key) => (METHODS[key].tips || []).map((t) =>
-        el("li", {}, [el("b", { text: METHODS[key].title.replace("おすすめの飲ませ方: ", "") }), t])))),
+      // やり方ごとのコツ（METHODS の tips）は、保存用の画像にだけ出す。サイトでは見にくかった（2026-11-04 ユーザーの判断）
       el("div", { class: "howto" }, HOWTO.filter((h) => h.ages.includes(f.age) || h.ages.includes("all")).map(howtoItem)),
     ] : []));
     document.getElementById("method-refs").replaceWith(Object.assign(refsBox(METHOD_REFS), { id: "method-refs" }));

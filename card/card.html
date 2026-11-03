@@ -110,7 +110,9 @@
     const way = (key, hard) => {
       const m = METHODS[key];
       const name = m.title.replace("おすすめの飲ませ方: ", "");
-      return `<div class="way${hard ? " hard" : ""}"><b>${m.icon} ${esc(name)}</b><ol>${m.steps.map((s) => `<li>${esc(fix(s))}</li>`).join("")}</ol></div>`;
+      // コツと同じ文（data.js の cardDrop）は、手順から抜く。抜いて空になった手順は出さない
+      const steps = m.steps.map((s) => (m.cardDrop || []).reduce((t, d) => t.replace("。" + d, "").replace(d, ""), s)).filter((s) => s.trim());
+      return `<div class="way${hard ? " hard" : ""}"><b>${m.icon} ${esc(name)}</b><ol>${steps.map((s) => `<li>${esc(fix(s))}</li>`).join("")}</ol></div>`;
     };
 
     const card = document.getElementById("card");
