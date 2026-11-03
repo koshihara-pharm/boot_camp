@@ -64,6 +64,7 @@ Claude がやること:
 19. [docs/19_bamen_seiri.md](docs/19_bamen_seiri.md) — 親がサイトを開く3つの場面（受け取ったとき、準備しているとき、飲めなかった後）ごとの、知りたいことと今の機能、次に足す候補
 20. [docs/20_kihon_rinen.md](docs/20_kihon_rinen.md) — 基本理念（Zenn の記事「AIに大きな仕様書を渡して一気に作らせるのは、宝くじを買うようなものです」）の要約と、このプロジェクトへの当てはめ
 21. [docs/21_html_plan_shinchokuhyou.md](docs/21_html_plan_shinchokuhyou.md) — 勉強会のスライドの要約（着手前のズレを html-plan で、作業中の迷子を進捗表でなくす）と当てはめ。出どころは非公開で docs/_local にだけある
+22. [docs/22_kona_gusuri_ichiran.md](docs/22_kona_gusuri_ichiran.md) — 子どもによく出る粉薬の一覧（厚生労働省の薬価基準のリストから）と、サイトに入っているか。次に足す薬を選ぶときに見る
 
 01、02、04、16、20、21 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
