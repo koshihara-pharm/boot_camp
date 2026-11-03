@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03j"></script>
+<script src="data.js?v=2026-11-03m"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -445,8 +445,16 @@
   // 一般名（ジェネリックの名前）に当たるか。薬袋の名前は「クラリスロマイシンDS10%小児用「タカタ」」のように長いので、どちら向きにも含むかを見る
   // 薬袋の名前に形（DS・細粒など）が書いてあって、その薬の一般名の形とちがうときは当てない（DS の薬袋で細粒の情報を出さないため。2026-11-03）
   const QUERY_FORMS = [["ドライシロップ", "ドライシロップ"], ["細粒", "細粒"], ["顆粒", "顆粒"], ["原末", "原末"], ["散", "散"]];
+  // 薬袋の名前の中に一般名があるか。ほかの言葉の途中（例: 「レボセチリジン」の中の「セチリジン」）は数えない
+  function hasWord(query, word) {
+    for (let i = query.indexOf(word); i >= 0; i = query.indexOf(word, i + 1)) {
+      if (i === 0 || !/[ァ-ヴーA-Z]/.test(query[i - 1])) return true;
+    }
+    return false;
+  }
+
   function genericHit(d, query) {
-    if (!d.generic || !(d.generic.includes(query) || query.includes(d.generic))) return false;
+    if (!d.generic || !(d.generic.includes(query) || hasWord(query, d.generic))) return false;
     const forms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
     return !d.genericForm || forms.length === 0 || forms.some((f) => d.genericForm.includes(f));
   }
@@ -464,15 +472,41 @@
   }
 
   // 準備中の薬に当たるか（docs/17 の 8）。名前、一般名、読み、ほかの呼び方のどれかで見る。薬袋の長い名前でも当たるよう、3文字以上の名前はどちら向きにも見る
+  // 製品名の頭（形の言葉の前まで）。薬袋の名前は「メイアクトMS小児用細粒10%」「ツムラ抑肝散エキス顆粒(医療用)」のように、形の前後に言葉が入るので、頭が入っているかで見る（2026-11-03）
+  const FORM_WORDS = /(細粒|顆粒|ドライシロップ|散|原末|微粒|配合|エキス|内用剤|小児用)/;
+  function stemOf(name) {
+    const n = name.replace(/（.*?）/g, "");
+    const i = n.search(FORM_WORDS);
+    return (i > 0 ? n.slice(0, i) : n).toUpperCase();
+  }
+  function formsIn(text) {
+    return QUERY_FORMS.filter(([w]) => text.includes(w)).map(([, f]) => f);
+  }
+  // 頭が入っていて、形がちがわないときに当てる（例: メプチンドライシロップの薬袋で、メプチン顆粒を出さない）
+  function stemHit(name, query) {
+    const st = stemOf(name);
+    if (st.length < 3) return false;
+    // 頭のすぐあとに英字や数字が続くとき（例: 「ビオフェルミンR散」の R）は、別の製品なので数えない
+    let found = false;
+    for (let i = query.indexOf(st); i >= 0; i = query.indexOf(st, i + 1)) {
+      const after = query[i + st.length];
+      if (!after || !/[A-Z0-9]/.test(after)) { found = true; break; }
+    }
+    if (!found) return false;
+    const q = formsIn(query), n = formsIn(name);
+    return q.length === 0 || n.length === 0 || q.some((f) => n.includes(f));
+  }
+
   function prepHit(p, query) {
     // 薬袋の形と、準備中の薬の形がちがうときは当てない（例: 細粒の薬袋で「アセトアミノフェンDS」を出さない）
     const qForms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
     const pForms = QUERY_FORMS.filter(([w]) => (p.name + (p.genericForm || "")).includes(w)).map(([, f]) => f);
     if (qForms.length > 0 && pForms.length > 0 && !qForms.some((f) => pForms.includes(f))) return false;
+    if (stemHit(p.name, query)) return true;
     return [p.name, p.generic, p.yomi, ...(p.also || [])].some((n) => {
       if (!n) return false;
       const name = n.toUpperCase();
-      return name.includes(query) || (name.length >= 3 && query.includes(name));
+      return name.includes(query) || (name.length >= 3 && (n === p.generic ? hasWord(query, name) : query.includes(name)));
     });
   }
 
@@ -498,8 +532,10 @@
         const label = d.yomi || d.name;
         const genMatch = !showAll && genericHit(d, query);
         // 薬袋の長い名前（例: カルボシステインDS50%「タカタ」）でも当たるよう、製品名がその中に入っているかも見る
-        const nameMatch = d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase());
-        if (showAll || nameMatch || (genMatch && !ownGenericRow(d))) hits.push({ d, i, label, viaGeneric: false });
+        const nameMatch = d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase()) || stemHit(d.name, query);
+        // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
+        const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
+        if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
         if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
