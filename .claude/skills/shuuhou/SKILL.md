@@ -95,7 +95,8 @@ git で分かること・分からないこと（ユーザーに聞かれたら�
 1. 名簿リポジトリを、boot_camp の外（となりのフォルダ `../bootcamp004-02`）に置く。なければ `gh repo clone SingularitySociety/bootcamp004-02`、あれば `git pull`
 2. ブランチ `report-koshihara-pharm-YYYYMMDD` を作り、`reports/koshihara-pharm/YYYYMMDD.md` に置く
 3. コミットして push し、PR を出す（題: `週報 YYYY/MM/DD (koshihara-pharm)`）。push と PR の前に、何をするかを一言伝える
-4. マージするかはユーザーが決める
+4. **マージはユーザーにはできない。運営の人がする**（2026-11-01 に確かめた）。名簿リポジトリの PR は「レビューが必要」の設定で、ユーザーの権限（push はできるが admin・maintain はない）ではマージのボタンが押せない。ほかの参加者の週報も、運営（isamu さん、susumutomita さん）がマージしている。だから PR を出したあとに「マージしてください」とユーザーに頼まない。「運営の人がマージするのを待つ」と伝える
+   - 確かめ方: `gh pr view 番号 -R SingularitySociety/bootcamp004-02 --json state,reviewDecision`（`REVIEW_REQUIRED` なら待ち、`MERGED` ならマージ済み）
 5. マージされたら、Slack で共有する文の下書きを出す（どのチャンネルかはユーザーに聞く）。送るのはユーザー
 
 ## 7. 出したあと
