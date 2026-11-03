@@ -78,6 +78,8 @@
   .chip.ok { background: var(--ok-bg); color: var(--ok); }
   .chip.prep { background: var(--prep-bg); color: var(--prep); font-weight: 700; }
   .row.prep { opacity: 0.85; }
+  .kana { font-size: 0.75rem; color: var(--accent); font-weight: 700; padding: 2px 4px 0; }
+  .row.nr { grid-template-columns: 1fr auto; }
   .src { font-size: 0.65rem; color: var(--muted); font-family: var(--font-body); }
   .result-prep { background: var(--prep-bg); border-radius: 12px; padding: 10px; font-family: var(--font-body); font-size: 0.8rem; color: var(--text); display: grid; gap: 4px; }
   .result-prep b { color: var(--prep); }
@@ -97,14 +99,15 @@
 <main>
   <header>
     <h1>薬の一覧を、トップから開けるようにする</h1>
-    <p class="lead">子どもによく出る順に薬を並べた画面を足す計画です。見本を見て、下の「決めること」に答えてください。2026-11-03</p>
+    <p class="lead">薬をあいうえお順に並べた画面を足す計画です（はじめの案の「よく出る順」から変えました）。見本を見て、下の「決めること」に答えてください。2026-11-03</p>
   </header>
 
   <section>
     <h2>何を作るか</h2>
     <ul class="plain">
       <li>トップの「お困りごと」に、<b>「薬の一覧」</b>のボタンを足す</li>
-      <li>押すと、<b>子どもによく出る順</b>に薬が並んだ画面が開く。その画面の一番上にも<b>検索の欄</b>を置く</li>
+      <li>押すと、<b>あいうえお順</b>（ア行・カ行…の見出しつき）に薬が並んだ画面が開く。その画面の一番上にも<b>検索の欄</b>を置く</li>
+      <li>並べる薬は、子どもによく出る薬（処方の数で上位）と、サイトに入っている薬。順位は並べる薬を選ぶのに使い、画面には出さない</li>
       <li>まだ入っていない薬（オロパタジンなど）は、検索しても一覧でも<b>「準備中」</b>と出す。行き止まりにせず、薬剤師に聞くよう案内する</li>
       <li>これからは、この順位の上から薬を足していく（今回は画面だけ。薬の中身は1つずつ別に足す）</li>
     </ul>
@@ -135,20 +138,23 @@
         <div class="screen" aria-label="薬の一覧の見本">
           <div class="back">← 戻る</div>
           <div class="h">薬の一覧</div>
-          <div class="lead-s">子どもによく出る順です。</div>
+          <div class="lead-s">あいうえお順です。</div>
           <div class="search">一覧から探す</div>
-          <div class="row"><span class="no">1</span><span class="nm">ムコダイン DS<small>カルボシステイン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row"><span class="no">2</span><span class="nm">オノン DS<small>プランルカスト</small></span><span class="chip ok">見られる</span></div>
-          <div class="row"><span class="no">3</span><span class="nm">シングレア・キプレス細粒<small>モンテルカスト</small></span><span class="chip ok">見られる</span></div>
-          <div class="row"><span class="no">4</span><span class="nm">小児用ムコソルバン DS<small>アンブロキソール</small></span><span class="chip ok">見られる</span></div>
-          <div class="row prep"><span class="no">5</span><span class="nm">アレロック顆粒・DS<small>オロパタジン</small></span><span class="chip prep">準備中</span></div>
-          <div class="row"><span class="no">6</span><span class="nm">アスベリン散・DS<small>チペピジン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row"><span class="no">7</span><span class="nm">ミヤBM細粒<small>酪酸菌</small></span><span class="chip ok">見られる</span></div>
-          <div class="row"><span class="no">8</span><span class="nm">ワイドシリン細粒<small>アモキシシリン</small></span><span class="chip ok">見られる</span></div>
-          <div class="row prep"><span class="no">9</span><span class="nm">モビコール配合内用剤<small>マクロゴール</small></span><span class="chip prep">準備中</span></div>
-          <div class="src">順番の出どころ: 厚生労働省 NDB オープンデータ（0〜9歳の処方。2023年度）</div>
+          <div class="kana">ア行</div>
+          <div class="row nr"><span class="nm">アスベリン散・DS<small>チペピジン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row nr prep"><span class="nm">アレグラ DS<small>フェキソフェナジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row nr prep"><span class="nm">アレロック顆粒・DS<small>オロパタジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row nr"><span class="nm">エリスロシン DS<small>エリスロマイシン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row nr"><span class="nm">オゼックス細粒<small>トスフロキサシン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row nr"><span class="nm">オノン DS<small>プランルカスト</small></span><span class="chip ok">見られる</span></div>
+          <div class="kana">カ行</div>
+          <div class="row nr"><span class="nm">カロナール細粒<small>アセトアミノフェン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row nr"><span class="nm">クラリス DS<small>クラリスロマイシン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row nr prep"><span class="nm">クラリチン DS<small>ロラタジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="lead-s">…（サ行、タ行と続く）</div>
+          <div class="src">並べた薬の選び方: 厚生労働省 NDB オープンデータ（0〜9歳の処方。2023年度）で多いもの</div>
         </div>
-        <p class="cap">② 薬の一覧。「見られる」を押すと、今と同じ薬の画面が開く。「準備中」は押しても開かない</p>
+        <p class="cap">② 薬の一覧（あいうえお順）。「見られる」を押すと、今と同じ薬の画面が開く。「準備中」は押しても開かない</p>
       </div>
 
       <div class="phone">
@@ -181,7 +187,7 @@
     <div class="decide">
       <h3>2. 一覧に、どこまで並べる？</h3>
       <div class="opts">
-        <div class="opt rec">処方の上位 30（見られる 18、準備中 12）＋ 上位 30 より下にある、サイトに入っている薬。全部で 40 くらい。漢方・栄養剤も上位 30 に入るものは「準備中」で出す</div>
+        <div class="opt rec">処方の上位 30（見られる 18、準備中 12）＋ 上位 30 より下にある、サイトに入っている薬。全部で 40 くらい。漢方・栄養剤も上位 30 に入るものは「準備中」で出す。並びはあいうえお順</div>
         <div class="opt">上位 60 まで全部（専門の薬、特殊なミルクも入る）</div>
         <div class="opt">サイトに入っている 34 だけ（準備中は検索したときだけ出す）</div>
       </div>
@@ -190,8 +196,8 @@
     <div class="decide">
       <h3>3. 一覧で、薬の名前をどう見せる？</h3>
       <div class="opts">
-        <div class="opt rec">製品名（ムコダイン DS）を大きく、成分名（カルボシステイン）を小さく。親は薬袋の製品名で覚えていることが多い</div>
-        <div class="opt">成分名を大きく、製品名を小さく。ジェネリックの薬袋に合わせやすい</div>
+        <div class="opt rec">製品名（ムコダイン DS）を大きく、成分名（カルボシステイン）を小さく。あいうえお順も製品名で並べる。親は薬袋の製品名で覚えていることが多い</div>
+        <div class="opt">成分名を大きく、製品名を小さく。あいうえお順も成分名で並べる。ジェネリックの薬袋に合わせやすい</div>
       </div>
     </div>
   </section>
@@ -204,7 +210,7 @@
       <li>一覧の画面に検索の欄を足す</li>
       <li>そのあと、順位の上から薬を1つずつ足す（最初はオロパタジン）。足した薬は「準備中」から「見られる」に変わる</li>
     </ol>
-    <p class="note">気をつけること: 順番は「処方の数」で、「この薬がよい」という意味ではないので、出どころ（NDB オープンデータ）を一覧の下に書く。「準備中」の薬には、味や混ぜ方を一言も書かず、薬剤師に聞く案内だけにする。10-25 に決めた「トップの薬の一覧は名前を入れたときだけ出す」は、トップには一覧を出さないまま、別の画面にするので守れる。</p>
+    <p class="note">気をつけること: どの薬を並べたかは「処方の数」で選んだので、出どころ（NDB オープンデータ）を一覧の下に書く。順位は画面に出さない（「この薬がよい」と読まれないため）。「準備中」の薬には、味や混ぜ方を一言も書かず、薬剤師に聞く案内だけにする。10-25 に決めた「トップの薬の一覧は名前を入れたときだけ出す」は、トップには一覧を出さないまま、別の画面にするので守れる。</p>
   </section>
 
   <section class="whole">
