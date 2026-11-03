@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03i"></script>
+<script src="data.js?v=2026-11-03j"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -497,7 +497,9 @@
       DRUGS.forEach((d, i) => {
         const label = d.yomi || d.name;
         const genMatch = !showAll && genericHit(d, query);
-        if (showAll || d.name.toUpperCase().includes(query) || label.includes(query) || (genMatch && !ownGenericRow(d))) hits.push({ d, i, label, viaGeneric: false });
+        // 薬袋の長い名前（例: カルボシステインDS50%「タカタ」）でも当たるよう、製品名がその中に入っているかも見る
+        const nameMatch = d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase());
+        if (showAll || nameMatch || (genMatch && !ownGenericRow(d))) hits.push({ d, i, label, viaGeneric: false });
         if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
