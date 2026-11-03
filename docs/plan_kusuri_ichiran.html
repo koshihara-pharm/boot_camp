@@ -1,0 +1,214 @@
+<title>薬の一覧の計画</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+  /* 計画は上から読む1カラム。見本はサイトと同じ色と丸い文字で、スマホの枠に入れて並べる */
+  :root {
+    --bg: #f4f8f7;
+    --paper: #ffffff;
+    --text: #1f2d2b;
+    --muted: #5d6e6b;
+    --line: #d3e3df;
+    --accent: #1f7a70;
+    /* ここから下はサイトの色（見本の中で使う） */
+    --site-bg: #eef6f4;
+    --site-hero: #d9eee8;
+    --site-card: #ffffff;
+    --site-ink: #17403b;
+    --stamp: #e8a317;
+    --prep: #8a6400;
+    --prep-bg: #fdf5df;
+    --ok-bg: #e3f3e8;
+    --ok: #2f7d4f;
+    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9;
+      --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
+      --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9;
+    --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
+    --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 760px; margin: 0 auto; padding-block: 24px 64px; display: grid; gap: 28px; }
+  h1 { font-family: var(--font-display); font-size: 1.6rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 10px; text-wrap: balance; }
+  p { margin: 0; }
+  .lead { color: var(--muted); margin-top: 6px; }
+  section { display: grid; gap: 10px; min-width: 0; }
+  ul.plain { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+
+  /* 見本: スマホの枠 */
+  .phones { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .phone { min-width: 0; display: grid; gap: 6px; }
+  .phone .cap { font-size: 0.85rem; color: var(--muted); }
+  .screen {
+    background: var(--site-bg); border: 1px solid var(--line); border-radius: 22px; padding: 12px;
+    font-family: var(--font-display); color: var(--site-ink); display: grid; gap: 8px; align-content: start;
+  }
+  .hero { background: var(--site-hero); border-radius: 18px; padding: 12px; display: grid; gap: 8px; }
+  .eyebrow { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.06em; }
+  .h { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
+  .lead-s { font-size: 0.78rem; font-family: var(--font-body); color: var(--muted); }
+  .search { background: var(--site-card); border: 2px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 0.82rem; color: var(--muted); font-family: var(--font-body); }
+  .search.typed { border-color: var(--accent); color: var(--text); }
+  .lbl { font-size: 0.85rem; font-weight: 700; margin-top: 2px; }
+  .btn { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 9px 10px; font-size: 0.85rem; }
+  .btn.new { border: 2px solid var(--stamp); position: relative; }
+  .btn.new::after { content: "新しい"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 0.65rem; background: var(--stamp); color: #3b2a00; border-radius: 999px; padding: 1px 7px; }
+  .back { font-size: 0.8rem; color: var(--accent); }
+  .row { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 7px 10px; display: grid; grid-template-columns: 1.6em 1fr auto; gap: 6px; align-items: center; font-variant-numeric: tabular-nums; }
+  .row .no { font-size: 0.75rem; color: var(--muted); text-align: right; }
+  .row .nm { font-size: 0.88rem; line-height: 1.3; min-width: 0; }
+  .row .nm small { display: block; font-family: var(--font-body); font-size: 0.68rem; color: var(--muted); }
+  .chip { font-size: 0.66rem; border-radius: 999px; padding: 1px 7px; font-family: var(--font-body); white-space: nowrap; }
+  .chip.ok { background: var(--ok-bg); color: var(--ok); }
+  .chip.prep { background: var(--prep-bg); color: var(--prep); font-weight: 700; }
+  .row.prep { opacity: 0.85; }
+  .src { font-size: 0.65rem; color: var(--muted); font-family: var(--font-body); }
+  .result-prep { background: var(--prep-bg); border-radius: 12px; padding: 10px; font-family: var(--font-body); font-size: 0.8rem; color: var(--text); display: grid; gap: 4px; }
+  .result-prep b { color: var(--prep); }
+
+  /* 決めること */
+  .decide { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+  .decide h3 { font-size: 1rem; margin: 0; }
+  .opts { display: grid; gap: 6px; }
+  .opt { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 0.92rem; }
+  .opt.rec { border-color: var(--accent); }
+  .opt.rec::before { content: "おすすめ "; color: var(--accent); font-weight: 700; font-size: 0.8rem; }
+  .steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+  .note { font-size: 0.85rem; color: var(--muted); }
+  .whole { background: var(--paper); border: 2px dashed var(--line); border-radius: 14px; padding: 14px 16px; }
+</style>
+
+<main>
+  <header>
+    <h1>薬の一覧を、トップから開けるようにする</h1>
+    <p class="lead">子どもによく出る順に薬を並べた画面を足す計画です。見本を見て、下の「決めること」に答えてください。2026-11-03</p>
+  </header>
+
+  <section>
+    <h2>何を作るか</h2>
+    <ul class="plain">
+      <li>トップの「お困りごと」に、<b>「薬の一覧」</b>のボタンを足す</li>
+      <li>押すと、<b>子どもによく出る順</b>に薬が並んだ画面が開く。その画面の一番上にも<b>検索の欄</b>を置く</li>
+      <li>まだ入っていない薬（オロパタジンなど）は、検索しても一覧でも<b>「準備中」</b>と出す。行き止まりにせず、薬剤師に聞くよう案内する</li>
+      <li>これからは、この順位の上から薬を足していく（今回は画面だけ。薬の中身は1つずつ別に足す）</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>見本（スマホの画面）</h2>
+    <div class="phones">
+      <div class="phone">
+        <div class="screen" aria-label="トップの見本">
+          <div class="hero">
+            <div class="eyebrow">子どものお薬サポート</div>
+            <div class="h">子どもの粉薬を、飲みやすく</div>
+            <div class="lead-s">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</div>
+            <div class="search">粉薬の名前で探す（例: クラリス）</div>
+            <div class="lbl">お困りごと</div>
+            <div class="btn">🥄 飲ませ方が分からない</div>
+            <div class="btn">⭐ おすすめの飲ませ方</div>
+            <div class="btn">🍮 混ぜていい？</div>
+            <div class="btn">👅 薬の味</div>
+            <div class="btn new">📋 薬の一覧</div>
+          </div>
+        </div>
+        <p class="cap">① トップ。「薬の一覧」を一番下に足す（場所は決めること 1）</p>
+      </div>
+
+      <div class="phone">
+        <div class="screen" aria-label="薬の一覧の見本">
+          <div class="back">← 戻る</div>
+          <div class="h">薬の一覧</div>
+          <div class="lead-s">子どもによく出る順です。</div>
+          <div class="search">一覧から探す</div>
+          <div class="row"><span class="no">1</span><span class="nm">ムコダイン DS<small>カルボシステイン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="no">2</span><span class="nm">オノン DS<small>プランルカスト</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="no">3</span><span class="nm">シングレア・キプレス細粒<small>モンテルカスト</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="no">4</span><span class="nm">小児用ムコソルバン DS<small>アンブロキソール</small></span><span class="chip ok">見られる</span></div>
+          <div class="row prep"><span class="no">5</span><span class="nm">アレロック顆粒・DS<small>オロパタジン</small></span><span class="chip prep">準備中</span></div>
+          <div class="row"><span class="no">6</span><span class="nm">アスベリン散・DS<small>チペピジン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="no">7</span><span class="nm">ミヤBM細粒<small>酪酸菌</small></span><span class="chip ok">見られる</span></div>
+          <div class="row"><span class="no">8</span><span class="nm">ワイドシリン細粒<small>アモキシシリン</small></span><span class="chip ok">見られる</span></div>
+          <div class="row prep"><span class="no">9</span><span class="nm">モビコール配合内用剤<small>マクロゴール</small></span><span class="chip prep">準備中</span></div>
+          <div class="src">順番の出どころ: 厚生労働省 NDB オープンデータ（0〜9歳の処方。2023年度）</div>
+        </div>
+        <p class="cap">② 薬の一覧。「見られる」を押すと、今と同じ薬の画面が開く。「準備中」は押しても開かない</p>
+      </div>
+
+      <div class="phone">
+        <div class="screen" aria-label="準備中の検索結果の見本">
+          <div class="hero">
+            <div class="h">子どもの粉薬を、飲みやすく</div>
+            <div class="search typed">オロパタジン</div>
+            <div class="result-prep">
+              <b>オロパタジン（アレロック）は準備中です</b>
+              <span>味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。</span>
+            </div>
+          </div>
+        </div>
+        <p class="cap">③ 準備中の薬を検索したとき。今の「見つかりませんでした」の代わりに出す。一覧にも無い薬は、今までどおり「まだ入っていません」</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>決めること</h2>
+
+    <div class="decide">
+      <h3>1. 「薬の一覧」のボタンをどこに置く？</h3>
+      <div class="opts">
+        <div class="opt rec">「お困りごと」の一番下に5つ目として置く（見本 ①）。今の形を変えずに足せる</div>
+        <div class="opt">検索の欄のすぐ下に、小さな文字のリンク「入っている薬の一覧を見る」として置く。名前を忘れた人が見つけやすい</div>
+      </div>
+    </div>
+
+    <div class="decide">
+      <h3>2. 一覧に、どこまで並べる？</h3>
+      <div class="opts">
+        <div class="opt rec">処方の上位 30（見られる 18、準備中 12）＋ 上位 30 より下にある、サイトに入っている薬。全部で 40 くらい。漢方・栄養剤も上位 30 に入るものは「準備中」で出す</div>
+        <div class="opt">上位 60 まで全部（専門の薬、特殊なミルクも入る）</div>
+        <div class="opt">サイトに入っている 34 だけ（準備中は検索したときだけ出す）</div>
+      </div>
+    </div>
+
+    <div class="decide">
+      <h3>3. 一覧で、薬の名前をどう見せる？</h3>
+      <div class="opts">
+        <div class="opt rec">製品名（ムコダイン DS）を大きく、成分名（カルボシステイン）を小さく。親は薬袋の製品名で覚えていることが多い</div>
+        <div class="opt">成分名を大きく、製品名を小さく。ジェネリックの薬袋に合わせやすい</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>作る順番（1つずつスマホで確かめる）</h2>
+    <ol class="steps">
+      <li>準備中の薬を、検索したときに「準備中です」と出す（見本 ③）。いちばん小さく、冨田さんの意見（オロパタジンが出ない）にすぐ答えられる</li>
+      <li>「薬の一覧」の画面とボタンを足す（見本 ①②）</li>
+      <li>一覧の画面に検索の欄を足す</li>
+      <li>そのあと、順位の上から薬を1つずつ足す（最初はオロパタジン）。足した薬は「準備中」から「見られる」に変わる</li>
+    </ol>
+    <p class="note">気をつけること: 順番は「処方の数」で、「この薬がよい」という意味ではないので、出どころ（NDB オープンデータ）を一覧の下に書く。「準備中」の薬には、味や混ぜ方を一言も書かず、薬剤師に聞く案内だけにする。10-25 に決めた「トップの薬の一覧は名前を入れたときだけ出す」は、トップには一覧を出さないまま、別の画面にするので守れる。</p>
+  </section>
+
+  <section class="whole">
+    <h2>全体へのひとこと</h2>
+    <p>見本を見て、全体として「これでいい／違う」があればここに書いてください。決めること 1〜3 に答えるだけでも大丈夫です。</p>
+  </section>
+</main>
