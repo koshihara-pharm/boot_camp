@@ -386,7 +386,7 @@
 </main>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03c"></script>
+<script src="data.js?v=2026-11-03d"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -468,27 +468,30 @@
 
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
-  // 一覧: あいうえお順で全部。製品名を大きく、一般名を小さく。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
+  // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
+  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
   function fillList(target, query, all) {
     const hits = [];
+    const showAll = all && query === "";
     if (all || query !== "") {
       DRUGS.forEach((d, i) => {
         const label = d.yomi || d.name;
-        if (all) {
-          if (query === "" || d.name.toUpperCase().includes(query) || label.includes(query) || genericHit(d, query)) hits.push({ d, i, label, viaGeneric: false });
-          return;
-        }
-        if (d.name.toUpperCase().includes(query) || label.includes(query)) hits.push({ d, i, label, viaGeneric: false });
-        if (genericHit(d, query)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        if (showAll || d.name.toUpperCase().includes(query) || label.includes(query)) hits.push({ d, i, label, viaGeneric: false });
+        if (d.generic && (showAll || genericHit(d, query))) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
-        if ((all && query === "") || prepHit(p, query)) hits.push({ prep: p, label: p.yomi || p.name });
+        if (!all) {
+          if (prepHit(p, query)) hits.push({ prep: p, label: p.yomi || p.name });
+          return;
+        }
+        if (showAll || prepHit({ ...p, generic: null }, query)) hits.push({ prep: p, label: p.yomi || p.name });
+        if (p.generic && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
     const items = [];
     let lastRow = null;
-    for (const { d, i, label, viaGeneric, prep } of hits) {
+    for (const { d, i, label, viaGeneric, prep, prepGeneric } of hits) {
       const row = kanaRow(label);
       if (row !== lastRow) {
         items.push(el("li", { class: "kana", "aria-hidden": "true", text: row }));
@@ -497,21 +500,22 @@
       // 準備中の薬は、味や混ぜ方を一言も出さず、薬剤師に聞く案内だけにする
       if (prep) {
         items.push(el("li", {}, [el("div", { class: "prep" }, [
-          el("span", { class: "drug-name", text: prep.name }),
-          prep.generic ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+          el("span", { class: "drug-name", text: prepGeneric ? prep.generic : prep.name }),
+          prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
+            : prep.generic ? el("span", { class: "drug-meta", text: prep.generic }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
         continue;
       }
       const button = el("button", { type: "button" });
-      if (all) {
+      if (viaGeneric) {
+        button.append(el("span", { class: "drug-name", text: d.generic }),
+          el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
+        if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+      } else if (all) {
         button.append(el("span", { class: "drug-name", text: d.name }));
         if (d.generic) button.append(el("span", { class: "drug-meta", text: d.generic }));
-      } else if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: d.generic }),
-          el("span", { class: "drug-meta", text: originName(d) + "の情報" }),
-          el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
       } else {
         button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
       }
