@@ -66,6 +66,7 @@ Claude がやること:
 21. [docs/21_html_plan_shinchokuhyou.md](docs/21_html_plan_shinchokuhyou.md) — 勉強会のスライドの要約（着手前のズレを html-plan で、作業中の迷子を進捗表でなくす）と当てはめ。出どころは非公開で docs/_local にだけある
 22. [docs/22_ui_sekkei.md](docs/22_ui_sekkei.md) — 画面（UI）の決まり。Singularity Society「UI設計の基礎 — 読まなくても分かる画面の作り方」の要約、このサイトへの当てはめ、このサイトの画面ルール、確認の結果
 23. [docs/23_kona_gusuri_ichiran.md](docs/23_kona_gusuri_ichiran.md) — 子どもによく出る粉薬の一覧（厚生労働省の薬価基準のリストから）と、サイトに入っているか。次に足す薬を選ぶときに見る
+24. [docs/24_junbichu_taiouhyou.md](docs/24_junbichu_taiouhyou.md) — 準備中の薬の対応表。処方の多い順に、状態（未着手 → 資料さがし → 下書きあり → 確認済み → 反映した）と、薬ごとのカード（味・混ぜていい食べ物・資料・薬剤師の確認）を書いて、上から順に足していく。見るためのページは docs/junbichu_taiouhyou.html（docs/24 を書き足したら `python3 tools/taiouhyou_html.py` で作り直す）
 
 01、02、04、16、20、21、22 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
