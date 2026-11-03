@@ -207,6 +207,11 @@
   .list button:active { border-color: var(--accent); }
   button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   .empty { color: var(--muted); padding: 12px 4px; }
+  /* 準備中の薬。押しても開かないので、ボタンにせず箱で出す */
+  .list .prep { padding: 10px 16px; border: 1px dashed var(--line); border-radius: 14px; background: var(--stamp-soft); }
+  .list .prep .drug-name { color: var(--text); }
+  .list .prep-tag { display: inline-block; font-size: 13px; font-weight: 700; color: var(--stamp-ink); background: var(--stamp); border-radius: 999px; padding: 0 10px; margin: 4px 0 2px; }
+  .list .prep-note { display: block; font-size: 14px; color: var(--text); }
   .back {
     font-size: 17px;
     padding: 10px 14px;
@@ -315,6 +320,9 @@
   }
   .worry .ic { margin-right: 8px; }
   .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
+  .list-link { display: inline-block; margin: 8px 2px 0; font-size: 15px; color: var(--accent); }
+  #list-page .lead { color: var(--muted); margin: 0 0 12px; }
+  #list-page input[type="search"] { margin-bottom: 4px; }
   .worry-hint:empty { display: none; }
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
@@ -330,6 +338,8 @@
       <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
+      <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
+      <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">お困りごと</h2>
@@ -343,7 +353,7 @@
   </section>
 
   <section id="detail" hidden>
-    <button class="back" data-go="" type="button">← 薬を選び直す</button>
+    <button class="back" id="detail-back" data-go="" type="button">← 薬を選び直す</button>
     <div id="card" class="card"></div>
 
     <h2 class="section-title">粉薬の飲ませ方</h2>
@@ -358,6 +368,15 @@
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
+  </section>
+
+  <section id="list-page" hidden>
+    <button class="back" data-go="" type="button">← 戻る</button>
+    <h1>薬の一覧</h1>
+    <p class="lead">あいうえお順です。「準備中」の薬は、味と混ぜていい食べ物をこれから載せます。</p>
+    <input id="q2" type="search" placeholder="一覧から探す" autocomplete="off" aria-label="一覧から探す">
+    <ul id="all-list" class="list"></ul>
+    <p class="source">準備中の薬は、厚生労働省「NDB オープンデータ」（2023年度の処方）で、0〜9歳によく出ている粉薬から選びました。</p>
   </section>
 
   <section id="howto-page" hidden>
@@ -385,7 +404,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-10-31d"></script>
+<script src="data.js?v=2026-11-03o"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -415,9 +434,12 @@
     pick: document.getElementById("pick"),
     detail: document.getElementById("detail"),
     howto: document.getElementById("howto-page"),
+    list: document.getElementById("list-page"),
   };
   const q = document.getElementById("q");
   const list = document.getElementById("list");
+  const q2 = document.getElementById("q2");
+  const allList = document.getElementById("all-list");
   const card = document.getElementById("card");
   let currentDrugName = null;
   let pendingFocus = null; // 「薬の味」なら "taste"、「混ぜていい？」なら "mix"
@@ -439,8 +461,71 @@
   }
 
   // 一般名（ジェネリックの名前）に当たるか。薬袋の名前は「クラリスロマイシンDS10%小児用「タカタ」」のように長いので、どちら向きにも含むかを見る
+  // 薬袋の名前に形（DS・細粒など）が書いてあって、その薬の一般名の形とちがうときは当てない（DS の薬袋で細粒の情報を出さないため。2026-11-03）
+  const QUERY_FORMS = [["ドライシロップ", "ドライシロップ"], ["細粒", "細粒"], ["顆粒", "顆粒"], ["原末", "原末"], ["散", "散"]];
+  // 薬袋の名前の中に一般名があるか。ほかの言葉の途中（例: 「レボセチリジン」の中の「セチリジン」）は数えない
+  function hasWord(query, word) {
+    for (let i = query.indexOf(word); i >= 0; i = query.indexOf(word, i + 1)) {
+      if (i === 0 || !/[ァ-ヴーA-Z]/.test(query[i - 1])) return true;
+    }
+    return false;
+  }
+
   function genericHit(d, query) {
-    return !!d.generic && (d.generic.includes(query) || query.includes(d.generic));
+    if (!d.generic || !(d.generic.includes(query) || hasWord(query, d.generic))) return false;
+    const forms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
+    return !d.genericForm || forms.length === 0 || forms.some((f) => d.genericForm.includes(f));
+  }
+
+  // 一般名の行を別に出すか（2026-11-03 ユーザーの判断）
+  // 製品名に一般名がそのまま入っているとき（例: フェキソフェナジンDS）は、同じ名前が2行並ぶだけなので出さない
+  // 一般名の名前で売られている製品が無いとき（genericForm が無い。例: マクロゴール、ケトチフェン）も、薬袋に出てこない名前なので出さない。一般名で探したら製品名の行を出す
+  function ownGenericRow(x) {
+    return !!x.generic && !!x.genericForm && !x.name.includes(x.generic);
+  }
+
+  // 一般名の行に出す名前。一般名の名前で売られている後発品の形をつける（例: クレマスチンDS、カルボシステインDS・細粒。2026-11-03 ユーザーの判断）
+  function genericLabel(x) {
+    return x.generic + (x.genericForm || "");
+  }
+
+  // 準備中の薬に当たるか（docs/17 の 8）。名前、一般名、読み、ほかの呼び方のどれかで見る。薬袋の長い名前でも当たるよう、3文字以上の名前はどちら向きにも見る
+  // 製品名の頭（形の言葉の前まで）。薬袋の名前は「メイアクトMS小児用細粒10%」「ツムラ抑肝散エキス顆粒(医療用)」のように、形の前後に言葉が入るので、頭が入っているかで見る（2026-11-03）
+  const FORM_WORDS = /(細粒|顆粒|ドライシロップ|散|原末|微粒|配合|エキス|内用剤|小児用)/;
+  function stemOf(name) {
+    const n = name.replace(/（.*?）/g, "");
+    const i = n.search(FORM_WORDS);
+    return (i > 0 ? n.slice(0, i) : n).toUpperCase();
+  }
+  function formsIn(text) {
+    return QUERY_FORMS.filter(([w]) => text.includes(w)).map(([, f]) => f);
+  }
+  // 頭が入っていて、形がちがわないときに当てる（例: メプチンドライシロップの薬袋で、メプチン顆粒を出さない）
+  function stemHit(name, query) {
+    const st = stemOf(name);
+    if (st.length < 3) return false;
+    // 頭のすぐあとに英字や数字が続くとき（例: 「ビオフェルミンR散」の R）は、別の製品なので数えない
+    let found = false;
+    for (let i = query.indexOf(st); i >= 0; i = query.indexOf(st, i + 1)) {
+      const after = query[i + st.length];
+      if (!after || !/[A-Z0-9]/.test(after)) { found = true; break; }
+    }
+    if (!found) return false;
+    const q = formsIn(query), n = formsIn(name);
+    return q.length === 0 || n.length === 0 || q.some((f) => n.includes(f));
+  }
+
+  function prepHit(p, query) {
+    // 薬袋の形と、準備中の薬の形がちがうときは当てない（例: 細粒の薬袋で「アセトアミノフェンDS」を出さない）
+    const qForms = QUERY_FORMS.filter(([w]) => query.includes(w)).map(([, f]) => f);
+    const pForms = QUERY_FORMS.filter(([w]) => (p.name + (p.genericForm || "")).includes(w)).map(([, f]) => f);
+    if (qForms.length > 0 && pForms.length > 0 && !qForms.some((f) => pForms.includes(f))) return false;
+    if (stemHit(p.name, query)) return true;
+    return [p.name, p.generic, p.yomi, ...(p.also || [])].some((n) => {
+      if (!n) return false;
+      const name = n.toUpperCase();
+      return name.includes(query) || (name.length >= 3 && (n === p.generic ? hasWord(query, name) : query.includes(name)));
+    });
   }
 
   // 一般名で見つけたときは、風味（メーカーでちがう）を出さず、甘い・苦いの目安だけを出す（docs/18 の 2-1）
@@ -453,41 +538,85 @@
     return d.name + (d.notOriginal ? "" : "（先発品）");
   }
 
-  function renderList() {
-    const query = toKatakana(q.value.trim()).toUpperCase();
-    // 一覧は薬の名前を入れたときだけ出す（トップは困りごとのボタンから始める）
-    // 一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+  // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
+  // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+  // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
+  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  function fillList(target, query, all) {
     const hits = [];
-    if (query !== "") {
+    const showAll = all && query === "";
+    if (all || query !== "") {
       DRUGS.forEach((d, i) => {
-        if (d.name.toUpperCase().includes(query)) hits.push({ d, i, label: d.name, viaGeneric: false });
-        if (genericHit(d, query)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        const label = d.yomi || d.name;
+        const genMatch = !showAll && genericHit(d, query);
+        // 薬袋の長い名前（例: カルボシステインDS50%「タカタ」）でも当たるよう、製品名がその中に入っているかも見る
+        const nameMatch = d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase()) || stemHit(d.name, query);
+        // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
+        const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
+        if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
+        if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+      });
+      PREPARING.forEach((p) => {
+        if (!all) {
+          if (prepHit(p, query)) hits.push({ prep: p, label: p.yomi || p.name });
+          return;
+        }
+        const ownRow = ownGenericRow(p);
+        if (showAll || prepHit(ownRow ? { ...p, generic: null } : p, query)) hits.push({ prep: p, label: p.yomi || p.name });
+        if (ownRow && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
     const items = [];
     let lastRow = null;
-    for (const { d, i, label, viaGeneric } of hits) {
+    for (const { d, i, label, viaGeneric, prep, prepGeneric } of hits) {
       const row = kanaRow(label);
       if (row !== lastRow) {
         items.push(el("li", { class: "kana", "aria-hidden": "true", text: row }));
         lastRow = row;
       }
+      // 準備中の薬は、味や混ぜ方を一言も出さず、薬剤師に聞く案内だけにする
+      if (prep) {
+        items.push(el("li", {}, [el("div", { class: "prep" }, [
+          el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
+          prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
+            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+          el("span", { class: "prep-tag", text: "準備中" }),
+          all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
+        ].filter(Boolean))]));
+        continue;
+      }
       const button = el("button", { type: "button" });
       if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: d.generic }),
-          el("span", { class: "drug-meta", text: originName(d) + "の情報" }),
-          el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+        button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
+          el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
+        if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+      } else if (all) {
+        button.append(el("span", { class: "drug-name", text: d.name }));
+        if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
       } else {
         button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
       }
       button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
       items.push(el("li", {}, [button]));
     }
-    list.replaceChildren(...items);
+    target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
-      list.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
+      target.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
     }
+  }
+
+  // 検索の言葉をそろえる。かなをかたかなに、英字を大文字に。薬袋の「DS」は、画面の「ドライシロップ」と同じに扱う（2026-11-03）
+  function normQuery(v) {
+    return toKatakana(v.normalize("NFKC").trim()).toUpperCase().replace(/DS/g, "ドライシロップ");
+  }
+
+  function renderList() {
+    fillList(list, normQuery(q.value), false);
+  }
+
+  function renderAllList() {
+    fillList(allList, normQuery(q2.value), true);
   }
 
   const FOOD_EMOJI = {
@@ -622,22 +751,38 @@
   }
 
   // ---- 画面の切り替え ----
+  // 薬の画面の「戻る」は、開いたもとの画面（トップか薬の一覧）へ、同じ場所に戻す（2026-11-03 ユーザーの指示。一覧から開いてトップに戻るのは不便なため）
+  let lastHash = location.hash.slice(1);
+  let returnTo = "";
+  const scrollMemo = {};
+
   function route(scroll = true) {
     const hash = location.hash.slice(1);
     const match = hash.match(/^drug-(\d+)(-g)?$/);
     const drug = match ? DRUGS[Number(match[1])] : null;
     currentDrugName = drug ? drug.name : null;
+    const prev = lastHash;
+    lastHash = hash;
+    if (prev === "" || prev === "list") scrollMemo[prev] = window.scrollY;
+    if (drug && (prev === "" || prev === "list")) returnTo = prev;
+    const back = document.getElementById("detail-back");
+    back.dataset.go = returnTo;
+    back.textContent = returnTo === "list" ? "← 薬の一覧に戻る" : "← 薬を選び直す";
 
-    screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto"));
+    screens.pick.hidden = !(hash === "" || (!drug && hash !== "howto" && hash !== "list"));
     screens.detail.hidden = !drug;
     screens.howto.hidden = hash !== "howto";
+    screens.list.hidden = hash !== "list";
     // 飲ませ方は1つだけ。開いている画面へ動かす
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
     if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
     if (drug) renderCard(drug, !!match[2] && !!drug.generic);
     if (!screens.pick.hidden) renderList();
-    if (scroll) window.scrollTo(0, 0);
+    if (!screens.list.hidden) renderAllList();
+    // 薬の画面から戻ったときは、前に見ていた場所に戻す
+    const backFromDrug = !drug && (hash === "" || hash === "list") && prev.startsWith("drug-");
+    if (scroll) window.scrollTo(0, backFromDrug ? (scrollMemo[hash] || 0) : 0);
     // 「まぜていい？」から来たときは、混ぜていいかの見出しまで動く（「にがい」は画面の上の味から見る）
     if (drug) {
       if (pendingFocus === "mix") card.querySelector(".section-title").scrollIntoView();
@@ -646,6 +791,7 @@
   }
 
   q.addEventListener("input", renderList);
+  q2.addEventListener("input", renderAllList);
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>準備中の薬の対応表</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+  /* 上に進み具合、その下に絞りこみ、薬のカードを処方の多い順に並べる。色はサイトと同じ青緑と、くまのスタンプの黄色。状態は色と言葉の両方で見分ける */
+  :root {
+    --bg: #eef6f4;
+    --card: #ffffff;
+    --text: #1f2d2b;
+    --muted: #5d6e6b;
+    --line: #d3e3df;
+    --accent: #1f7a70;
+    --accent-soft: #d9eee8;
+    --s-todo: #6b7774;      --s-todo-bg: #eef1f0;
+    --s-search: #2a5d9f;    --s-search-bg: #e4ecf8;
+    --s-draft: #8a6400;     --s-draft-bg: #fff2c4;
+    --s-checked: #2f7d4f;   --s-checked-bg: #e3f3e8;
+    --s-done: #ffffff;      --s-done-bg: #1f7a70;
+    --s-hold: #7a3d9c;      --s-hold-bg: #f2e7f8;
+    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+      --s-todo: #b9c4c1; --s-todo-bg: #26302e; --s-search: #9cc0f0; --s-search-bg: #1f2b3d; --s-draft: #f2c14e; --s-draft-bg: #3a3120;
+      --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+    --s-todo: #b9c4c1; --s-todo-bg: #26302e; --s-search: #9cc0f0; --s-search-bg: #1f2b3d; --s-draft: #f2c14e; --s-draft-bg: #3a3120;
+    --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 760px; margin: 0 auto; padding-block: 20px 60px; display: grid; gap: 16px; }
+  h1 { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  .lead { color: var(--muted); font-size: 0.86rem; margin: 4px 0 0; }
+
+  .progress { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 10px; }
+  .progress .big { font-family: var(--font-display); font-size: 1.05rem; }
+  .progress .big b { font-size: 1.7rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--s-todo-bg); }
+  .bar span { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.8rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 0.8rem; }
+  .flow .arrow { color: var(--muted); }
+  .flow .who { color: var(--muted); font-size: 0.72rem; }
+
+  .filters { display: grid; gap: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: inherit; font-size: 0.82rem; padding: 4px 11px; min-height: 34px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--card); font-weight: 700; }
+  input[type="search"] { width: 100%; font: inherit; font-size: 16px; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); color: var(--text); }
+  input[type="search"]:focus { outline: none; border-color: var(--accent); }
+  .count { font-size: 0.82rem; color: var(--muted); }
+
+  .list { display: grid; gap: 8px; }
+  details.drug { background: var(--card); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+  details.drug > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: grid; grid-template-columns: 2.6em 1fr auto; gap: 8px; align-items: center; }
+  details.drug > summary::-webkit-details-marker { display: none; }
+  .rank { font-variant-numeric: tabular-nums; text-align: center; font-weight: 700; color: var(--accent); font-size: 1rem; line-height: 1.1; }
+  .rank small { display: block; font-size: 0.6rem; color: var(--muted); font-weight: 400; }
+  .nm { min-width: 0; }
+  .nm b { display: block; font-family: var(--font-display); font-size: 1.02rem; line-height: 1.35; }
+  .nm span { display: block; font-size: 0.78rem; color: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+  .tag { font-size: 0.68rem; padding: 0 7px; border-radius: 999px; background: var(--accent-soft); color: var(--text); }
+  .tag.src { background: var(--s-checked-bg); color: var(--s-checked); font-weight: 700; }
+  .pill { font-size: 0.74rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .st-未着手 { color: var(--s-todo); background: var(--s-todo-bg); }
+  .st-資料さがし { color: var(--s-search); background: var(--s-search-bg); }
+  .st-下書きあり { color: var(--s-draft); background: var(--s-draft-bg); }
+  .st-確認済み { color: var(--s-checked); background: var(--s-checked-bg); }
+  .st-反映した { color: var(--s-done); background: var(--s-done-bg); }
+  .st-保留 { color: var(--s-hold); background: var(--s-hold-bg); }
+  .body { padding: 0 12px 12px; display: grid; gap: 6px; }
+  .next { font-size: 0.82rem; background: var(--bg); border-radius: 10px; padding: 7px 10px; }
+  .next b { color: var(--accent); }
+  dl { margin: 0; display: grid; grid-template-columns: minmax(6.5em, auto) 1fr; gap: 4px 10px; font-size: 0.86rem; }
+  dt { color: var(--muted); }
+  dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  dd.empty { color: var(--muted); }
+  .memo { font-size: 0.82rem; color: var(--muted); }
+  .note { font-size: 0.8rem; color: var(--muted); }
+  button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>準備中の薬の対応表</h1>
+    <p class="lead">サイトで「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。上から順に調べて足していきます。元の表は docs/24_junbichu_taiouhyou.md（ここは見るためのページ）。</p>
+  </header>
+
+  <section class="progress" aria-label="進み具合">
+    <div class="big">サイトに反映した薬 <b id="done-count">0</b> / 41</div>
+    <div class="bar" id="bar" role="img" aria-label="状態ごとの数"></div>
+    <div class="legend" id="legend"></div>
+    <div class="flow" aria-label="進め方">
+      <span class="pill st-未着手">未着手</span><span class="arrow">→</span>
+      <span class="pill st-資料さがし">資料さがし</span><span class="who">AI</span><span class="arrow">→</span>
+      <span class="pill st-下書きあり">下書きあり</span><span class="who">薬剤師が確かめる</span><span class="arrow">→</span>
+      <span class="pill st-確認済み">確認済み</span><span class="who">AI が足す</span><span class="arrow">→</span>
+      <span class="pill st-反映した">反映した</span>
+    </div>
+  </section>
+
+  <section class="filters" aria-label="絞りこみ">
+    <input id="q" type="search" placeholder="薬の名前・成分で探す" autocomplete="off" aria-label="薬の名前・成分で探す">
+    <div class="chips" id="status-chips" role="group" aria-label="状態"></div>
+    <div class="chips" id="cat-chips" role="group" aria-label="分け方"></div>
+    <div class="count" id="count" role="status"></div>
+  </section>
+
+  <section class="list" id="list" aria-label="薬の一覧"></section>
+
+  <p class="note">順位は成分の処方の順位（厚生労働省「第10回 NDB オープンデータ」、2023年度、院外、0〜9歳）。同じ成分のほかの製品（先発品など）も、その成分の順位で並べています。カードを押すと、書いた中身が開きます。</p>
+</main>
+
+<script>
+  const ROWS = [{"rank": 4, "name": "小児用ムコソルバンドライシロップ", "ing": "アンブロキソール（後発: ドライシロップ）", "cat": "せき・たん", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "アンブロキソール（後発: ドライシロップ）／順位: 4／分け方: せき・たん", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 5, "name": "アレロック顆粒", "ing": "オロパタジン（後発: ドライシロップ・顆粒）", "cat": "アレルギー", "src": "くるみ薬局の一覧にあり", "status": "未着手", "memo": "冨田さんの意見（docs/18 の 11-2）。後発のドライシロップは濃さが顆粒の2倍", "card": {"状態": "未着手", "成分": "オロパタジン（後発: ドライシロップ・顆粒）／順位: 5／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "冨田さんの意見（docs/18 の 11-2）。後発のドライシロップは濃さが顆粒の2倍"}}, {"rank": 7, "name": "ビオスリー配合散", "ing": "酪酸菌ほかの配合", "cat": "おなか（整腸）", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "酪酸菌ほかの配合／順位: 7／分け方: おなか（整腸）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 8, "name": "サワシリン細粒", "ing": "アモキシシリン", "cat": "抗菌薬", "src": "未確認", "status": "未着手", "memo": "ワイドシリン細粒（サイトにある）と同じ成分の別の製品", "card": {"状態": "未着手", "成分": "アモキシシリン／順位: 8／分け方: 抗菌薬", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "ワイドシリン細粒（サイトにある）と同じ成分の別の製品"}}, {"rank": 9, "name": "モビコール配合内用剤", "ing": "マクロゴールほかの配合", "cat": "おなか（便秘）", "src": "未確認", "status": "未着手", "memo": "水に溶かして飲む薬。LD と HD がある", "card": {"状態": "未着手", "成分": "マクロゴールほかの配合／順位: 9／分け方: おなか（便秘）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "水に溶かして飲む薬。LD と HD がある"}}, {"rank": 11, "name": "エレンタール配合内用剤", "ing": "経腸成分栄養剤", "cat": "栄養", "src": "未確認", "status": "未着手", "memo": "栄養剤。混ぜ方の考え方がほかの薬とちがう", "card": {"状態": "未着手", "成分": "経腸成分栄養剤／順位: 11／分け方: 栄養", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "栄養剤。混ぜ方の考え方がほかの薬とちがう"}}, {"rank": 12, "name": "レベニン散", "ing": "耐性乳酸菌", "cat": "おなか（整腸）", "src": "未確認", "status": "未着手", "memo": "ビオフェルミンR散（サイトにある）と同じ種類", "card": {"状態": "未着手", "成分": "耐性乳酸菌／順位: 12／分け方: おなか（整腸）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "ビオフェルミンR散（サイトにある）と同じ種類"}}, {"rank": 14, "name": "レボセチリジンドライシロップ", "ing": "レボセチリジン", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "後発品だけ（先発品のザイザルはシロップ）", "card": {"状態": "未着手", "成分": "レボセチリジン／順位: 14／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "後発品だけ（先発品のザイザルはシロップ）"}}, {"rank": 15, "name": "フェキソフェナジンドライシロップ", "ing": "フェキソフェナジン", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "後発品だけ（アレグラのドライシロップは今のリストに無い）", "card": {"状態": "未着手", "成分": "フェキソフェナジン／順位: 15／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "後発品だけ（アレグラのドライシロップは今のリストに無い）"}}, {"rank": 17, "name": "メプチンドライシロップ", "ing": "プロカテロール（後発: ドライシロップ）", "cat": "せき・ぜんそく", "src": "未確認", "status": "未着手", "memo": "メプチン顆粒（販売終了）のかわり", "card": {"状態": "未着手", "成分": "プロカテロール（後発: ドライシロップ）／順位: 17／分け方: せき・ぜんそく", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "メプチン顆粒（販売終了）のかわり"}}, {"rank": 19, "name": "ビオフェルミン配合散", "ing": "ラクトミン", "cat": "おなか（整腸）", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "ラクトミン／順位: 19／分け方: おなか（整腸）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 21, "name": "ビオフェルミン散剤", "ing": "ビフィズス菌", "cat": "おなか（整腸）", "src": "未確認", "status": "未着手", "memo": "ラックビー微粒N（サイトにある）と同じ種類", "card": {"状態": "未着手", "成分": "ビフィズス菌／順位: 21／分け方: おなか（整腸）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "ラックビー微粒N（サイトにある）と同じ種類"}}, {"rank": 22, "name": "ジルテックドライシロップ", "ing": "セチリジン（後発: ドライシロップ）", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "セチリジン（後発: ドライシロップ）／順位: 22／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 23, "name": "ホクナリンドライシロップ", "ing": "ツロブテロール（後発: ドライシロップ）", "cat": "せき・ぜんそく", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "ツロブテロール（後発: ドライシロップ）／順位: 23／分け方: せき・ぜんそく", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 25, "name": "抑肝散（漢方）", "ing": "抑肝散エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "漢方は飲み合わせの表に少ない。資料さがしから", "card": {"状態": "未着手", "成分": "抑肝散エキス／順位: 25／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "漢方は飲み合わせの表に少ない。資料さがしから"}}, {"rank": 27, "name": "小建中湯（漢方）", "ing": "小建中湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "小建中湯エキス／順位: 27／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 29, "name": "ヨクイニンエキス散", "ing": "ヨクイニン", "cat": "漢方に近い（いぼ）", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "ヨクイニン／順位: 29／分け方: 漢方に近い（いぼ）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 30, "name": "クラリチンドライシロップ", "ing": "ロラタジン", "cat": "アレルギー", "src": "くるみ薬局の一覧にあり", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "ロラタジン／順位: 30／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 33, "name": "タベジール散", "ing": "クレマスチン（後発: ドライシロップ）", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "クレマスチン（後発: ドライシロップ）／順位: 33／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 34, "name": "ケフラール細粒", "ing": "セファクロル", "cat": "抗菌薬", "src": "未確認", "status": "未着手", "memo": "セファクロル細粒（サイトにある）の先発品", "card": {"状態": "未着手", "成分": "セファクロル／順位: 34／分け方: 抗菌薬", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "セファクロル細粒（サイトにある）の先発品"}}, {"rank": 35, "name": "メラトベル顆粒", "ing": "メラトニン", "cat": "眠り（専門）", "src": "未確認", "status": "未着手", "memo": "専門の薬。主治医の指示が大事", "card": {"状態": "未着手", "成分": "メラトニン／順位: 35／分け方: 眠り（専門）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "専門の薬。主治医の指示が大事"}}, {"rank": 36, "name": "デパケン細粒", "ing": "バルプロ酸（後発: 細粒・顆粒）", "cat": "てんかん（専門）", "src": "未確認", "status": "未着手", "memo": "専門の薬。セレニカR顆粒は徐放（かみ砕かない）", "card": {"状態": "未着手", "成分": "バルプロ酸（後発: 細粒・顆粒）／順位: 36／分け方: てんかん（専門）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "専門の薬。セレニカR顆粒は徐放（かみ砕かない）"}}, {"rank": 37, "name": "アイピーディドライシロップ", "ing": "スプラタスト", "cat": "アレルギー", "src": "くるみ薬局の一覧にあり", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "スプラタスト／順位: 37／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 39, "name": "甘麦大棗湯（漢方）", "ing": "甘麦大棗湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "甘麦大棗湯エキス／順位: 39／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 41, "name": "ゼスラン・ニポラジン小児用細粒", "ing": "メキタジン", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "メキタジン／順位: 41／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 42, "name": "小青竜湯（漢方）", "ing": "小青竜湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "小青竜湯エキス／順位: 42／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 45, "name": "ポララミン散・ドライシロップ", "ing": "d-クロルフェニラミン（後発: 散）", "cat": "アレルギー", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "d-クロルフェニラミン（後発: 散）／順位: 45／分け方: アレルギー", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 46, "name": "バナンドライシロップ", "ing": "セフポドキシム（後発: ドライシロップ）", "cat": "抗菌薬", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "セフポドキシム（後発: ドライシロップ）／順位: 46／分け方: 抗菌薬", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 47, "name": "イーケプラドライシロップ", "ing": "レベチラセタム（後発: ドライシロップ）", "cat": "てんかん（専門）", "src": "未確認", "status": "未着手", "memo": "専門の薬。主治医の指示が大事", "card": {"状態": "未着手", "成分": "レベチラセタム（後発: ドライシロップ）／順位: 47／分け方: てんかん（専門）", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "専門の薬。主治医の指示が大事"}}, {"rank": 48, "name": "葛根湯加川芎辛夷（漢方）", "ing": "葛根湯加川きゅう辛夷エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "葛根湯加川きゅう辛夷エキス／順位: 48／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 49, "name": "麻黄湯（漢方）", "ing": "麻黄湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "麻黄湯エキス／順位: 49／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 50, "name": "麦門冬湯（漢方）", "ing": "麦門冬湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "麦門冬湯エキス／順位: 50／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 51, "name": "ソリタ-T配合顆粒", "ing": "ナトリウム・カリウム・マグネシウムの配合", "cat": "水分の補給", "src": "未確認", "status": "未着手", "memo": "水に溶かす経口補水の薬（2号・3号）", "card": {"状態": "未着手", "成分": "ナトリウム・カリウム・マグネシウムの配合／順位: 51／分け方: 水分の補給", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "水に溶かす経口補水の薬（2号・3号）"}}, {"rank": 52, "name": "抑肝散加陳皮半夏（漢方）", "ing": "抑肝散加陳皮半夏エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "抑肝散加陳皮半夏エキス／順位: 52／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 54, "name": "大建中湯（漢方）", "ing": "大建中湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "大建中湯エキス／順位: 54／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 55, "name": "黄耆建中湯（漢方）", "ing": "黄耆建中湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "黄耆建中湯エキス／順位: 55／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 56, "name": "五苓散（漢方）", "ing": "五苓散エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "五苓散エキス／順位: 56／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 57, "name": "幼児用PL配合顆粒", "ing": "かぜ薬の配合", "cat": "かぜ", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "かぜ薬の配合／順位: 57／分け方: かぜ", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 59, "name": "十全大補湯（漢方）", "ing": "十全大補湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "十全大補湯エキス／順位: 59／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 60, "name": "六君子湯（漢方）", "ing": "六君子湯エキス", "cat": "漢方", "src": "未確認", "status": "未着手", "memo": "", "card": {"状態": "未着手", "成分": "六君子湯エキス／順位: 60／分け方: 漢方", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": ""}}, {"rank": 84, "name": "テオドール顆粒", "ing": "テオフィリン（後発: ドライシロップ）", "cat": "せき・ぜんそく", "src": "未確認", "status": "未着手", "memo": "上位60の外。テオドールドライシロップ（販売終了）のかわりに入れた", "card": {"状態": "未着手", "成分": "テオフィリン（後発: ドライシロップ）／順位: 84／分け方: せき・ぜんそく", "味": "", "混ぜると飲みやすい（◎）": "", "混ぜても大丈夫（○）": "", "混ぜないほうがいい（×）と理由": "", "コツ": "", "資料（名前と年）": "", "薬剤師の確認（日付）": "", "メモ": "上位60の外。テオドールドライシロップ（販売終了）のかわりに入れた"}}];
+  const STATUSES = ["未着手", "資料さがし", "下書きあり", "確認済み", "反映した", "保留"];
+  const STATUS_VAR = { "未着手": "--s-todo", "資料さがし": "--s-search", "下書きあり": "--s-draft", "確認済み": "--s-checked", "反映した": "--s-done-bg", "保留": "--s-hold" };
+  const NEXT = {
+    "未着手": "AI が資料（病院の表、くるみ薬局の一覧、添付文書）に載っているかを見る",
+    "資料さがし": "AI が資料をさがしている。開けない資料は薬剤師に見てもらう",
+    "下書きあり": "薬剤師が下書きを確かめる",
+    "確認済み": "AI がサイト（data.js）に足して、スマホで確かめる",
+    "反映した": "サイトに出ている",
+    "保留": "見直す時期をメモに書く",
+  };
+  const FIELDS = ["味", "混ぜると飲みやすい（◎）", "混ぜても大丈夫（○）", "混ぜないほうがいい（×）と理由", "コツ", "資料（名前と年）", "薬剤師の確認（日付）"];
+  // 分け方は、似たものをまとめて絞りこみやすくする
+  function group(cat) {
+    if (cat.includes("漢方")) return "漢方";
+    if (cat.includes("アレルギー")) return "アレルギー";
+    if (cat.includes("抗菌")) return "抗菌薬";
+    if (cat.includes("せき")) return "せき・ぜんそく";
+    if (cat.includes("おなか")) return "おなか";
+    if (cat.includes("専門")) return "専門の薬";
+    return "そのほか";
+  }
+  const GROUPS = ["アレルギー", "抗菌薬", "せき・ぜんそく", "おなか", "漢方", "専門の薬", "そのほか"];
+
+  let statusSel = "すべて";
+  let catSel = "すべて";
+
+  function el(tag, attrs = {}, children = []) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "text") n.textContent = v; else n.setAttribute(k, v);
+    }
+    for (const c of children) if (c) n.append(c);
+    return n;
+  }
+
+  function chips(target, values, current, onPick) {
+    target.replaceChildren(...values.map((v) => {
+      const b = el("button", { type: "button", class: "chip", "aria-pressed": String(v === current), text: v });
+      b.addEventListener("click", () => onPick(v));
+      return b;
+    }));
+  }
+
+  function renderProgress() {
+    const counts = Object.fromEntries(STATUSES.map((s) => [s, ROWS.filter((r) => r.status === s).length]));
+    document.getElementById("done-count").textContent = counts["反映した"];
+    document.getElementById("bar").replaceChildren(...STATUSES.filter((s) => counts[s] > 0).map((s) =>
+      el("span", { style: `width:${100 * counts[s] / ROWS.length}%;background:var(${STATUS_VAR[s]})`, title: s + " " + counts[s] })));
+    document.getElementById("legend").replaceChildren(...STATUSES.map((s) =>
+      el("span", {}, [el("i", { style: `background:var(${STATUS_VAR[s]})` }), document.createTextNode(s + " " + counts[s])])));
+  }
+
+  function card(r) {
+    const c = r.card || {};
+    const d = el("details", { class: "drug" });
+    const tags = el("div", { class: "tags" }, [
+      el("span", { class: "tag", text: r.cat }),
+      r.src && r.src !== "未確認" ? el("span", { class: "tag src", text: "資料: " + r.src }) : null,
+    ]);
+    d.append(el("summary", {}, [
+      el("div", { class: "rank" }, [document.createTextNode(String(r.rank)), el("small", { text: "位" })]),
+      el("div", { class: "nm" }, [el("b", { text: r.name }), el("span", { text: r.ing }), tags]),
+      el("span", { class: "pill st-" + r.status, text: r.status }),
+    ]));
+    const dl = el("dl");
+    for (const f of FIELDS) {
+      const v = c[f] || "";
+      dl.append(el("dt", { text: f.replace("（名前と年）", "").replace("と理由", "") }), el("dd", { class: v ? "" : "empty", text: v || "まだ" }));
+    }
+    d.append(el("div", { class: "body" }, [
+      el("div", { class: "next" }, [el("b", { text: "次: " }), document.createTextNode(NEXT[r.status] || "")]),
+      dl,
+      r.memo ? el("p", { class: "memo", text: "メモ: " + r.memo }) : null,
+    ]));
+    return d;
+  }
+
+  function render() {
+    const q = document.getElementById("q").value.trim();
+    const shown = ROWS.filter((r) =>
+      (statusSel === "すべて" || r.status === statusSel) &&
+      (catSel === "すべて" || group(r.cat) === catSel) &&
+      (q === "" || (r.name + r.ing).includes(q)));
+    document.getElementById("list").replaceChildren(...shown.map(card));
+    document.getElementById("count").textContent = shown.length + " 件";
+    chips(document.getElementById("status-chips"), ["すべて", ...STATUSES.filter((s) => ROWS.some((r) => r.status === s))], statusSel, (v) => { statusSel = v; render(); });
+    chips(document.getElementById("cat-chips"), ["すべて", ...GROUPS.filter((g) => ROWS.some((r) => group(r.cat) === g))], catSel, (v) => { catSel = v; render(); });
+  }
+
+  document.getElementById("q").addEventListener("input", render);
+  renderProgress();
+  render();
+</script>
+</body>
+</html>
