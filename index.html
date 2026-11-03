@@ -289,6 +289,7 @@
   .howto summary::after { content: "＋"; color: var(--accent); flex: none; }
   .howto details[open] summary::after { content: "−"; }
   .howto p { margin: 0 0 8px; }
+  .howto .way-tip b { color: var(--accent); }
   .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
   .tips li { margin-bottom: 6px; }
   .source { font-size: 14px; color: var(--muted); }
@@ -551,6 +552,7 @@
     const parts = [
       el("summary", { text: m.icon + " " + m.title }),
       el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
+      ...(m.tips || []).map((t) => el("p", { class: "way-tip" }, [el("b", { text: "コツ " }), t])),
     ];
     if (m.to === "mix") {
       const b = el("button", { type: "button", class: "step-next", text: "薬の名前で、混ぜていい食べ物を探す" });
