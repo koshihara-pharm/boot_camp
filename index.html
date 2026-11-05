@@ -302,6 +302,15 @@
   .site-note { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 32px; }
   .site-note summary { cursor: pointer; }
   .site-note p { margin: 8px 0 0; }
+  /* 保存ボタンと、画像を大きく出す画面（2026-11-04） */
+  .save-card { display: block; width: 100%; min-height: 48px; margin: 4px 0 12px; font-weight: bold; }
+  #card-view { width: min(420px, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 12px; border: 0; border-radius: 16px; background: var(--card); color: var(--text); }
+  #card-view::backdrop { background: rgb(0 0 0 / 0.6); }
+  #card-view .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  #card-view .card-title { margin: 0; font-weight: bold; color: var(--ink); min-width: 0; }
+  #card-view .card-close { flex: none; min-height: 44px; }
+  #card-view img { display: block; width: 100%; height: auto; border-radius: 12px; -webkit-touch-callout: default; }
+  #card-view .card-hint { margin: 10px 0 0; text-align: center; font-weight: bold; color: var(--ink); }
   .worry-title { font-size: 20px; margin: 4px 0 8px; }
   .worry { display: grid; gap: 8px; margin: 0 0 4px; }
   .worry button {
@@ -384,6 +393,15 @@
   <!-- Clarity と Google アナリティクスのお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
   <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity と Google アナリティクスで、ページの見られ方（開かれた数や押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a>と、<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Google のサービスを使うサイトでの Google によるデータの使い方</a></p></details>
 </main>
+<!-- 飲ませ方の画像を大きく出す画面。✕、Esc、外側を押すと閉じる -->
+<dialog id="card-view" aria-labelledby="card-view-title">
+  <div class="card-head">
+    <p class="card-title" id="card-view-title"></p>
+    <button type="button" class="link-button card-close">✕ 閉じる</button>
+  </div>
+  <img src="" alt="">
+  <p class="card-hint">画像を長押し →「写真に保存」</p>
+</dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
 <script src="data.js?v=2026-11-03o"></script>
@@ -675,6 +693,18 @@
     setTimeout(() => document.querySelector('[data-focus="mix"]').click(), 0);
   }
 
+  // 画像を大きく出す。保存は長押し（2026-11-04 ユーザーと決定。iPhone でも Android でも写真に入るため）
+  function openCard(key, m) {
+    const f = AGE_FLOWS.find((x) => x.age === flowSel);
+    const name = m.title.replace("おすすめの飲ませ方: ", "");
+    const dlg = document.getElementById("card-view");
+    dlg.querySelector(".card-title").textContent = `${f.label}・${name}`;
+    const img = dlg.querySelector("img");
+    img.src = `card/${flowSel}-${key}.png`;
+    img.alt = `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`;
+    dlg.showModal();
+  }
+
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
@@ -686,6 +716,11 @@
       b.addEventListener("click", goMix);
       parts.push(b);
     }
+    // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
+    // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
+    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この飲ませ方を保存"]);
+    save.addEventListener("click", () => openCard(key, m));
+    parts.push(save);
     const d = el("details", {}, parts);
     d.open = open;
     return d;
@@ -709,6 +744,7 @@
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, gi === 0))),
       ]),
       el("p", { class: "flow-group", text: "コツ" }),
+      // やり方ごとのコツ（METHODS の tips）は、保存用の画像にだけ出す。サイトでは見にくかった（2026-11-04 ユーザーの判断）
       el("div", { class: "howto" }, HOWTO.filter((h) => h.ages.includes(f.age) || h.ages.includes("all")).map(howtoItem)),
     ] : []));
     document.getElementById("method-refs").replaceWith(Object.assign(refsBox(METHOD_REFS), { id: "method-refs" }));
@@ -765,6 +801,10 @@
   }));
   document.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(b.dataset.go)));
   window.addEventListener("hashchange", () => route());
+  // 画像の画面は、✕ か外側（暗いところ）を押すと閉じる。Esc はブラウザが閉じる
+  const cardView = document.getElementById("card-view");
+  cardView.querySelector(".card-close").addEventListener("click", () => cardView.close());
+  cardView.addEventListener("click", (e) => { if (e.target === cardView) cardView.close(); });
   renderSteps();
   route();
 </script>
