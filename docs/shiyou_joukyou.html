@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>使用状況の記録</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+  /* 使用状況（Clarity と GA4）を見た日ごとにためるページ。上にいちばん新しい記録、下に推移の表と前の記録。
+     見方は docs/26。記録を足すときは、下の RECORDS のいちばん上に1件足すだけ */
+  :root {
+    --bg: #eef6f4;
+    --card: #ffffff;
+    --text: #1f2d2b;
+    --muted: #5d6e6b;
+    --line: #d3e3df;
+    --accent: #1f7a70;
+    --accent-soft: #d9eee8;
+    --bar: #1f7a70;
+    --bar-bg: #e3efec;
+    --up: #2f7d4f;
+    --down: #b3412f;
+    --warn: #8a6400; --warn-bg: #fff2c4;
+    --idea: #2a5d9f; --idea-bg: #e4ecf8;
+    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+      --bar: #6cc7b9; --bar-bg: #26302e; --up: #8fd6a9; --down: #f0a090;
+      --warn: #f2c14e; --warn-bg: #3a3120; --idea: #9cc0f0; --idea-bg: #1f2b3d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+    --bar: #6cc7b9; --bar-bg: #26302e; --up: #8fd6a9; --down: #f0a090;
+    --warn: #f2c14e; --warn-bg: #3a3120; --idea: #9cc0f0; --idea-bg: #1f2b3d;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.7; }
+  main { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1, h2, h3 { font-family: var(--font-display); line-height: 1.4; margin: 0; }
+  h1 { font-size: 24px; }
+  h2 { font-size: 18px; margin: 28px 0 10px; }
+  h3 { font-size: 15px; margin-bottom: 8px; }
+  .lead { color: var(--muted); font-size: 13px; margin: 4px 0 14px; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .links a { display: inline-block; padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); color: var(--accent); text-decoration: none; font-size: 13px; font-weight: 700; }
+  .links a:hover { background: var(--accent-soft); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .date { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--accent); }
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0 4px; }
+  @media (min-width: 600px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .tile .label { font-size: 12px; color: var(--muted); }
+  .tile .num { font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1.2; }
+  .tile .unit { font-size: 14px; margin-left: 2px; }
+  .tile .sub { font-size: 11px; color: var(--muted); }
+  .delta { font-size: 12px; font-weight: 700; }
+  .delta.up { color: var(--up); } .delta.down { color: var(--down); } .delta.same, .delta.first { color: var(--muted); }
+  .bars { display: grid; gap: 6px; }
+  .bar-row { display: grid; grid-template-columns: 9em 1fr 2.6em; align-items: center; gap: 8px; font-size: 13px; }
+  .bar-row .name { line-height: 1.35; overflow-wrap: anywhere; }
+  .bar-track { background: var(--bar-bg); border-radius: 6px; height: 14px; overflow: hidden; }
+  .bar-fill { background: var(--bar); height: 100%; border-radius: 6px; }
+  .bar-row .n { text-align: right; font-variant-numeric: tabular-nums; }
+  .period { font-size: 11px; color: var(--muted); margin: -4px 0 8px; }
+  .grid2 { display: grid; gap: 12px; }
+  @media (min-width: 600px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+  .note { border-left: 4px solid var(--line); padding: 2px 0 2px 12px; margin: 12px 0; }
+  .note .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; margin-right: 6px; vertical-align: 2px; }
+  .note.kasetsu { border-color: var(--idea); } .note.kasetsu .tag { color: var(--idea); background: var(--idea-bg); }
+  .note.kadai { border-color: var(--warn); } .note.kadai .tag { color: var(--warn); background: var(--warn-bg); }
+  .note.mada { border-color: var(--line); } .note.mada .tag { color: var(--muted); background: var(--bar-bg); }
+  .note b { font-size: 15px; }
+  .note p { margin: 4px 0 0; font-size: 14px; }
+  ul.plain { margin: 6px 0 0; padding-left: 1.2em; }
+  ul.plain li { margin: 4px 0; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; background: var(--card); border-radius: 12px; overflow: hidden; }
+  th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: var(--accent-soft); font-family: var(--font-display); }
+  details.old { background: var(--card); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; }
+  details.old > summary { cursor: pointer; padding: 12px 16px; font-family: var(--font-display); font-weight: 700; }
+  details.old > div { padding: 0 16px 16px; }
+  .empty { color: var(--muted); font-size: 13px; }
+  footer { margin-top: 32px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>使用状況の記録</h1>
+  <p class="lead">子どものお薬サポートが、どれだけ・どう使われたか。見た日ごとにためる。見方は docs/26_shiyou_joukyou_mikata.md。数字には自分の確認の分も入る。</p>
+  <nav class="links">
+    <a href="https://clarity.microsoft.com/projects/view/z5py1akpjj/dashboard" target="_blank" rel="noopener">Clarity ダッシュボード</a>
+    <a href="https://clarity.microsoft.com/projects/view/z5py1akpjj/impressions" target="_blank" rel="noopener">Clarity 録画</a>
+    <a href="https://clarity.microsoft.com/projects/view/z5py1akpjj/heatmaps" target="_blank" rel="noopener">Clarity ヒートマップ</a>
+    <a href="https://analytics.google.com/analytics/web/#/a414238281p561741887/reports/intelligenthome" target="_blank" rel="noopener">GA4 ホーム</a>
+  </nav>
+
+  <div id="latest"></div>
+
+  <h2>推移</h2>
+  <div class="table-wrap" id="trend"></div>
+
+  <h2>前の記録</h2>
+  <div id="older"></div>
+
+  <footer>市区町村など、住んでいる所が分かる数字はここに書かない。考察は数が少ないうちは仮説として書く。</footer>
+</main>
+
+<script>
+/* ===== 記録 =====
+   新しい記録は、この配列のいちばん上に1件足す。項目の意味:
+   date        見た日
+   clarity     Clarity の数字（直近3日まで取れる）。period は対象の期間
+   ga4         GA4 の数字（ホームの「過去 7 日間」）
+   clicks      よく押されたボタン（Clarity の録画を数えたもの）。clicksPeriod は録画の期間と数
+   notes       考察。kind は kasetsu（仮説）/ kadai（課題）/ mada（まだ判断できない）
+   next        次にやること
+   questions   Slack や週報で聞けること
+*/
+const RECORDS = [
+  {
+    date: "2026-11-05",
+    clarity: {
+      period: "11/3〜11/5（3日）",
+      sessions: 24, users: 17,
+      device: { "PC": 14, "スマホ": 8, "タブレット": 2 },
+      source: { "直接": 22, "X": 1, "GitHub": 1 },
+      rage: 5
+    },
+    ga4: {
+      period: "10/29〜11/4（7日）",
+      users: 31, views: 74, events: 277,
+      avgTime: "1分14秒",
+      source: { "直接": 36, "X": 10, "GitHub": 4 }
+    },
+    clicksPeriod: "10/30〜11/5 の録画 58回",
+    clicks: [
+      ["飲ませ方が分からない", 22],
+      ["おすすめの飲ませ方", 13],
+      ["混ぜていい？", 9],
+      ["薬の味", 8],
+      ["薬の一覧を見る", 7],
+      ["この飲ませ方を保存", 2]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "使っているのは、まだ身近な人が中心",
+        body: "1週間で約30人。増えたのは公開した日と11/2で、X と GitHub（名簿・週報）から。PC が多く、BootCamp の仲間と自分の確認が多いと考えられる。スマホで困っている親にはまだ届いていない。" },
+      { kind: "kadai", title: "「直接」が多く、どこから来たか分からない",
+        body: "X や LINE のアプリの中で開くと元が消えて「直接」になる。LINE で送るリンクに ?from=line、QR に ?from=qr のような印をつけると分けられる（コードは直さなくてよい）。" },
+      { kind: "kasetsu", title: "いちばん押されたのは「飲ませ方が分からない」",
+        body: "混ぜていい？や薬の味の2倍以上。ただし、いちばん上のボタンなので、並び順の影響と区別できない。" },
+      { kind: "kasetsu", title: "X のアプリの中で開いた人は、すぐ閉じる",
+        body: "GA4 で、アプリの中の Safari は平均23秒。X で見かけてのぞいた使われ方に見える。困っている親とは開く場面が違う。" },
+      { kind: "kadai", title: "見出しのくまが、押せると思われている",
+        body: "反応しないクリックと連打（5回）が、見出しのくまに集まっている。トップへ戻れると思って押している可能性がある。直すかは未定。" },
+      { kind: "mada", title: "保存ボタン（2回）、戻ってきた人（24%）",
+        body: "保存ボタンは11/4にできたばかり。1〜2週間たってから見直す。" }
+    ],
+    next: [
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送って使ってもらう（リンクに ?from=line をつける）",
+      "くまを押したらトップへ戻るようにするか決める"
+    ],
+    questions: [
+      "LINE で知り合いの親に送るとき、どんな一言を添えると開いてもらえますか？",
+      "X から来た人がすぐ閉じるのは、最初の画面で何のサイトか分からないからでしょうか？"
+    ]
+  }
+];
+
+/* ===== 表示 ===== */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
+const mobileRate = c => { const t = sum(c.device); return t ? Math.round(((c.device["スマホ"] || 0) / t) * 100) : null; };
+
+function delta(now, prev) {
+  if (prev == null || now == null) return '<span class="delta first">前回なし</span>';
+  const d = now - prev;
+  if (d === 0) return '<span class="delta same">前回と同じ</span>';
+  return d > 0 ? `<span class="delta up">▲ ${d}（前回 ${prev}）</span>` : `<span class="delta down">▼ ${-d}（前回 ${prev}）</span>`;
+}
+
+function tile(label, num, unit, sub, prev) {
+  return `<div class="tile"><div class="label">${esc(label)}</div><div class="num">${num ?? "—"}<span class="unit">${esc(unit)}</span></div>${delta(num, prev)}<div class="sub">${esc(sub)}</div></div>`;
+}
+
+function bars(obj) {
+  const entries = Array.isArray(obj) ? obj : Object.entries(obj || {});
+  if (!entries.length) return '<p class="empty">記録なし</p>';
+  const max = Math.max(...entries.map(e => e[1]));
+  return '<div class="bars">' + entries.map(([name, n]) =>
+    `<div class="bar-row"><span class="name" title="${esc(name)}">${esc(name)}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${max ? (n / max) * 100 : 0}%"></span></span><span class="n">${n}</span></div>`
+  ).join("") + "</div>";
+}
+
+const KIND = { kasetsu: "仮説", kadai: "課題", mada: "まだ判断できない" };
+
+function body(r) {
+  const c = r.clarity || {}, g = r.ga4 || {};
+  return `
+    <div class="grid2">
+      <div class="card"><h3>よく押されたボタン</h3><p class="period">${esc(r.clicksPeriod || "")}</p>${bars(r.clicks)}</div>
+      <div class="card"><h3>どこから来たか（GA4）</h3><p class="period">${esc(g.period || "")}・訪問の回数</p>${bars(g.source)}
+        <h3 style="margin-top:14px">端末（Clarity）</h3><p class="period">${esc(c.period || "")}・回数</p>${bars(c.device)}</div>
+    </div>
+    <div class="card"><h3>考察</h3>${(r.notes || []).map(n =>
+      `<div class="note ${esc(n.kind)}"><span class="tag">${esc(KIND[n.kind] || n.kind)}</span><b>${esc(n.title)}</b><p>${esc(n.body)}</p></div>`).join("") || '<p class="empty">なし</p>'}</div>
+    <div class="grid2">
+      <div class="card"><h3>次にやること</h3><ul class="plain">${(r.next || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
+      <div class="card"><h3>Slack・週報で聞けること</h3><ul class="plain">${(r.questions || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
+    </div>`;
+}
+
+function tiles(r, p) {
+  const c = r.clarity || {}, g = r.ga4 || {}, pc = (p && p.clarity) || {}, pg = (p && p.ga4) || {};
+  return `<div class="tiles">
+    ${tile("Clarity 人数", c.users, "人", c.period || "", p ? pc.users : null)}
+    ${tile("Clarity 回数", c.sessions, "回", c.period || "", p ? pc.sessions : null)}
+    ${tile("GA4 人数", g.users, "人", g.period || "", p ? pg.users : null)}
+    ${tile("GA4 表示回数", g.views, "回", g.period || "", p ? pg.views : null)}
+  </div>`;
+}
+
+const latest = RECORDS[0];
+document.getElementById("latest").innerHTML = latest
+  ? `<h2>いちばん新しい記録 <span class="date">${esc(latest.date)}</span></h2>${tiles(latest, RECORDS[1])}${body(latest)}`
+  : '<p class="empty">まだ記録がありません</p>';
+
+const rows = [
+  ["Clarity 人数（3日）", r => r.clarity?.users],
+  ["Clarity 回数（3日）", r => r.clarity?.sessions],
+  ["Clarity スマホの割合", r => { const m = r.clarity ? mobileRate(r.clarity) : null; return m == null ? null : m + "%"; }],
+  ["Clarity 連打", r => r.clarity?.rage],
+  ["GA4 人数（7日）", r => r.ga4?.users],
+  ["GA4 表示回数（7日）", r => r.ga4?.views],
+  ["GA4 X からの訪問", r => r.ga4?.source?.["X"]],
+  ["GA4 平均の時間", r => r.ga4?.avgTime]
+];
+document.getElementById("trend").innerHTML =
+  `<table><thead><tr><th>項目</th>${RECORDS.map(r => `<th>${esc(r.date.slice(5).replace("-", "/"))}</th>`).join("")}</tr></thead><tbody>` +
+  rows.map(([label, f]) => `<tr><td>${esc(label)}</td>${RECORDS.map(r => `<td>${esc(f(r) ?? "—")}</td>`).join("")}</tr>`).join("") +
+  "</tbody></table>";
+
+document.getElementById("older").innerHTML = RECORDS.length > 1
+  ? RECORDS.slice(1).map((r, i) => `<details class="old"><summary>${esc(r.date)}</summary><div>${tiles(r, RECORDS[i + 2])}${body(r)}</div></details>`).join("")
+  : '<p class="empty">まだありません（2回目から、ここにたまります）</p>';
+</script>
+</body>
+</html>
