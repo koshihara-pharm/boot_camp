@@ -23,6 +23,8 @@
     --accent-deep: #17605a;
     --stamp: #e8a317;
     --best-bg: #fff2c4;
+    --bad: #b33a2e;
+    --bad-bg: #fbe8e5;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
@@ -86,6 +88,18 @@
   .one .way li + li { border-top: 1px solid var(--line); }
   .one .tips li { font-size: 15px; margin: 4px 0; }
   .foot { margin-top: 14px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 10.5px; color: var(--muted); }
+  /* 薬ごとの画像（drug= があるとき。2026-11-04 ユーザーの指示）。サイトの薬の画面と同じ順と言葉で出す */
+  .taste { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0 0 12px; font-size: 15px; }
+  .taste b { color: var(--accent-deep); }
+  .taste span { background: var(--card); border-radius: 999px; padding: 2px 10px; }
+  .point { margin: 0 0 10px; padding: 10px 14px; background: var(--card); border-radius: 14px; font-size: 15px; line-height: 1.6; box-shadow: 0 2px 0 var(--line); }
+  .grp { margin: 0 0 8px; padding: 10px 14px; border-radius: 14px; background: var(--card); box-shadow: 0 2px 0 var(--line); }
+  .grp.bad { background: var(--bad-bg); box-shadow: none; }
+  .grp h3 { margin: 0 0 6px; font-size: 15px; color: var(--ink); }
+  .grp.bad h3 { color: var(--bad); }
+  .grp p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.55; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14.5px; background: var(--card); }
 </style>
 </head>
 <body>
@@ -122,6 +136,33 @@
       : f.groups.map((g) => `<h2>${esc(g.label)}</h2>${g.items.map((k) => way(k, g.label.includes("難しい"))).join("")}`).join("");
     // 1つのやり方だけのときは、やり方の名前を見出しにする
     const m = only && METHODS[only];
+    // 薬ごとの画像: card.html?drug=10 のように DRUGS の番号を渡す
+    // 参考にした資料は入れない。出どころは、下の URL からサイトで見てもらう（2026-11-05 ユーザー（薬剤師）の判断。CLAUDE.md の「守ること」に例外として書いた）
+    const drugNo = q.get("drug");
+    const FOOD_EMOJI = { // index.html の FOOD_EMOJI と同じ
+      "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
+      "お茶": "🍵", "ヨーグルト": "🥣", "ゼリー": "🍧", "りんごジュース": "🍎", "オレンジジュース": "🍊",
+      "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
+    };
+    const chips = (foods) => `<div class="chips">${foods.map((x) => `<span>${FOOD_EMOJI[x] || "・"} ${esc(x)}</span>`).join("")}</div>`;
+    const grp = (title, cls, g) => g ? `<div class="grp ${cls}"><h3>${title}</h3>${chips(g.foods)}${g.text ? `<p>${esc(g.text)}</p>` : ""}</div>` : "";
+    if (drugNo !== null) {
+      const d = DRUGS[Number(drugNo)];
+      const fa = FACTS[d.name];
+      // どの薬にも言える一般的なコツ（「混ぜるのは、飲ませる直前に…」）は出さない。その薬だけのことを出す（2026-11-05 ユーザーの指示）
+      const ownTips = fa.tips.filter((t) => !t.startsWith("混ぜるのは、飲ませる直前に"));
+      card.classList.add("one");
+      card.innerHTML = `
+        <div class="stamp" aria-hidden="true">🐻</div>
+        <p class="eyebrow">子どものお薬サポート<br>薬の味と、混ぜていい食べ物</p>
+        <h1>${esc(d.name)}</h1>
+        <div class="taste"><b>味</b>${(fa.taste || d.taste).split("・").map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+        ${fa.point ? `<p class="point">${esc(fa.point)}</p>` : ""}
+        ${grp("◎ 混ぜると飲みやすい", "", fa.easy)}${grp("○ 混ぜても大丈夫", "", fa.good)}${grp("× 混ぜないほうがいい", "bad", fa.avoid)}
+        ${ownTips.length ? `<h2>混ぜるときのコツ</h2><ul class="tips">${ownTips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+        <div class="foot">koshihara-pharm.github.io/boot_camp/</div>`;
+      document.fonts.ready.then(() => { document.body.dataset.h = Math.ceil(card.getBoundingClientRect().bottom + 8); });
+    } else
     card.innerHTML = `
       <div class="stamp" aria-hidden="true">🐻</div>
       <p class="eyebrow">子どものお薬サポート${only ? `<br>${esc(f.label)}の粉薬の飲ませ方` : ""}</p>
