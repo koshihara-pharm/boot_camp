@@ -68,6 +68,7 @@ Claude がやること:
 23. [docs/23_kona_gusuri_ichiran.md](docs/23_kona_gusuri_ichiran.md) — 子どもによく出る粉薬の一覧（厚生労働省の薬価基準のリストから）と、サイトに入っているか。次に足す薬を選ぶときに見る
 24. [docs/24_junbichu_taiouhyou.md](docs/24_junbichu_taiouhyou.md) — 準備中の薬の対応表。処方の多い順に、状態（未着手 → 資料さがし → 下書きあり → 確認済み → 反映した）と、薬ごとのカード（味・混ぜていい食べ物・資料・薬剤師の確認）を書いて、上から順に足していく。見るためのページは docs/junbichu_taiouhyou.html（docs/24 を書き足したら `python3 tools/taiouhyou_html.py` で作り直す）
 25. [docs/25_hikitsugi_junbichu.md](docs/25_hikitsugi_junbichu.md) — 引き継ぎ: 準備中の薬を、資料の原文で確かめて docs/24 に書き、サイトに足していく続きのやり方（最初に読むもの、開く資料の順番、data.js への足し方、下調べの要点）
+26. [docs/26_shiyou_joukyou_mikata.md](docs/26_shiyou_joukyou_mikata.md) — 使用状況の見方（Clarity はコネクタで、GA4 は Claude in Chrome で見る。自分で見る手順、気をつけること）。見た結果と考察は docs/shiyou_joukyou.html にためる（記録は RECORDS のいちばん上に足す）
 
 01、02、04、16、20、21、22 は原文の要約。要約に書いていないこと、日付や条件の細部は、各ファイル冒頭の原文 URL を開いて確認する。
 原文と要約が食い違ったら原文が正しい。要約のほうを直す。
