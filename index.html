@@ -328,6 +328,12 @@
   .hero .worry-title { margin-top: 20px; }
   .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
   .recent-note .link-button { min-height: 44px; font-size: 15px; }
+  .list .saved-mark { display: block; font-size: 13px; font-weight: 700; color: var(--accent); }
+  .save-row { margin-top: 12px; }
+  .save-drug { min-height: 44px; }
+  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); border-color: var(--stamp); }
+  .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
+  .save-msg:empty { display: none; }
 </style>
 </head>
 <body>
@@ -344,18 +350,19 @@
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
-      <!-- 最近見た薬（FB 15-2。2026-11-06 ユーザーと決定）。この端末の中（localStorage）にだけ3つ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
-      <div id="recent" class="recent" data-clarity-mask="true" hidden>
-        <h2 class="worry-title">最近見た薬</h2>
-        <ul id="recent-list" class="list"></ul>
-        <p class="recent-note">この端末の中だけに残ります。<button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
-      </div>
       <h2 class="worry-title">お困りごと</h2>
       <div class="worry">
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">⭐</span>おすすめの飲ませ方</button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
+      </div>
+      <!-- 保存した薬と最近見た薬（FB 15-2。2026-11-06 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置き、1つのまとまりにする。保存した薬は★をつけて上に。同じ薬が両方に出てもよい -->
+      <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
+      <div id="recent" class="recent" data-clarity-mask="true" hidden>
+        <h2 class="worry-title">保存した薬と、最近見た薬</h2>
+        <ul id="recent-list" class="list"></ul>
+        <p class="recent-note">この端末の中だけに残ります。<button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
       </div>
     </div>
   </section>
@@ -546,11 +553,7 @@
     return d.name + (d.notOriginal ? "" : "（先発品）");
   }
 
-  // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
-  // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
-  // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
-  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
-  // 薬の行のボタン。トップの検索結果、薬の一覧、最近見た薬で同じ形を使う
+  // 薬の行のボタン。トップの検索結果、薬の一覧、保存した薬と最近見た薬で同じ形を使う
   function drugButton(d, i, viaGeneric, all) {
     const button = el("button", { type: "button" });
     if (viaGeneric) {
@@ -567,36 +570,69 @@
     return button;
   }
 
-  // ---- 最近見た薬（FB 15-2。2026-11-06 ユーザーと決定） ----
-  // この端末の中（localStorage）にだけ、新しい順に3つ残す。番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）
+  // ---- 最近見た薬と保存した薬（FB 15-2。2026-11-06 ユーザーと決定） ----
+  // どちらも、この端末の中（localStorage）にだけ残す。どこにも送らない
+  // 番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）。新しいものが先
+  // 最近見た薬: 開くと自動で入る。3つまでで、4つ目で古いものが消える
+  // 保存した薬: 薬の画面で「この薬を保存」を押したときだけ入る。押し出さず、5つまで
   // 残せない端末（プライベートモードなど）では、何も出さないだけにする
-  const RECENT_KEY = "recent-drugs-v1";
-  const RECENT_MAX = 3;
-  function loadRecent() {
+  const RECENT = { key: "recent-drugs-v1", max: 3 };
+  const SAVED = { key: "saved-drugs-v1", max: 5 };
+  function loadDrugs(store) {
     try {
-      const v = JSON.parse(localStorage.getItem(RECENT_KEY));
+      const v = JSON.parse(localStorage.getItem(store.key));
       return Array.isArray(v) ? v : [];
     } catch (e) { return []; }
   }
-  function saveRecent(items) {
+  function saveDrugs(store, items) {
     try {
-      if (items.length > 0) localStorage.setItem(RECENT_KEY, JSON.stringify(items));
-      else localStorage.removeItem(RECENT_KEY);
+      if (items.length > 0) localStorage.setItem(store.key, JSON.stringify(items));
+      else localStorage.removeItem(store.key);
     } catch (e) {}
   }
+  const sameDrug = (drug, viaGeneric) => (r) => r.name === drug.name && !!r.g === viaGeneric;
   function addRecent(drug, viaGeneric) {
-    const rest = loadRecent().filter((r) => !(r.name === drug.name && !!r.g === viaGeneric));
-    saveRecent([{ name: drug.name, g: viaGeneric }, ...rest].slice(0, RECENT_MAX));
+    const rest = loadDrugs(RECENT).filter((r) => !sameDrug(drug, viaGeneric)(r));
+    saveDrugs(RECENT, [{ name: drug.name, g: viaGeneric }, ...rest].slice(0, RECENT.max));
   }
-  function renderRecent() {
-    // サイトから外した薬は出さない
-    const items = loadRecent()
+  function isSaved(drug, viaGeneric) {
+    return loadDrugs(SAVED).some(sameDrug(drug, viaGeneric));
+  }
+  // 保存する・外す。いっぱいのときは保存せず false を返す
+  function toggleSaved(drug, viaGeneric) {
+    const items = loadDrugs(SAVED);
+    if (items.some(sameDrug(drug, viaGeneric))) {
+      saveDrugs(SAVED, items.filter((r) => !sameDrug(drug, viaGeneric)(r)));
+      return true;
+    }
+    if (items.length >= SAVED.max) return false;
+    saveDrugs(SAVED, [{ name: drug.name, g: viaGeneric }, ...items]);
+    return true;
+  }
+  // サイトから外した薬は出さない
+  function knownDrugs(store) {
+    return loadDrugs(store)
       .map((r) => ({ i: DRUGS.findIndex((d) => d.name === r.name), g: !!r.g }))
       .filter(({ i, g }) => i >= 0 && (!g || DRUGS[i].generic));
-    document.getElementById("recent").hidden = items.length === 0 || q.value.trim() !== "";
-    document.getElementById("recent-list").replaceChildren(...items.map(({ i, g }) => el("li", {}, [drugButton(DRUGS[i], i, g, false)])));
+  }
+  // トップの下の1つのまとまり。保存した薬に★をつけて上に、最近見た薬を下に。同じ薬が両方に出てもよい（2026-11-06 ユーザーの判断）
+  function renderRecent() {
+    const saved = knownDrugs(SAVED);
+    const recent = knownDrugs(RECENT);
+    const row = ({ i, g }, mark) => {
+      const b = drugButton(DRUGS[i], i, g, false);
+      if (mark) b.prepend(el("span", { class: "saved-mark", text: "★ 保存した薬" }));
+      return el("li", {}, [b]);
+    };
+    document.getElementById("recent").hidden = saved.length + recent.length === 0 || q.value.trim() !== "";
+    document.getElementById("recent-list").replaceChildren(...saved.map((x) => row(x, true)), ...recent.map((x) => row(x, false)));
+    document.getElementById("recent-clear").hidden = recent.length === 0;
   }
 
+  // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
+  // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
+  // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
+  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -697,6 +733,24 @@
     return parts;
   }
 
+  // 「この薬を保存」のボタン（2026-11-06 ユーザーと決定）。押すたびに保存と外すが入れかわる。控えめな link-button の形を使い回す
+  function saveButton(drug, viaGeneric) {
+    const b = el("button", { type: "button", class: "link-button save-drug" });
+    const msg = el("p", { class: "save-msg", role: "status" });
+    const paint = () => {
+      const on = isSaved(drug, viaGeneric);
+      b.setAttribute("aria-pressed", String(on));
+      b.textContent = on ? "★ 保存しました（押すと外す）" : "☆ この薬を保存";
+    };
+    b.addEventListener("click", () => {
+      const ok = toggleSaved(drug, viaGeneric);
+      msg.textContent = ok ? "" : "保存できるのは" + SAVED.max + "つまでです。ほかの薬の画面で「保存しました」を押して外してから、保存してください。";
+      paint();
+    });
+    paint();
+    return el("div", { class: "save-row" }, [b, msg]);
+  }
+
   function renderCard(drug, viaGeneric) {
     const fact = FACTS[drug.name];
     const taste = fact.taste || drug.taste;
@@ -709,6 +763,7 @@
       el("div", { class: "taste" }, [el("b", { text: "味" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
+    parts.push(saveButton(drug, viaGeneric));
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     parts.push(...factBlock(fact));
@@ -841,7 +896,7 @@
   q2.addEventListener("input", renderAllList);
   // 消したら、まとまりごと消える（押した結果が見える）。消すのは取り消せるほど大事ではないので、確かめる画面は出さない
   document.getElementById("recent-clear").addEventListener("click", () => {
-    saveRecent([]);
+    saveDrugs(RECENT, []);
     renderRecent();
   });
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
