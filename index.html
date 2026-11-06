@@ -326,6 +326,8 @@
   .worry-hint:empty { display: none; }
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
+  .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
+  .recent-note .link-button { min-height: 44px; font-size: 15px; }
 </style>
 </head>
 <body>
@@ -342,6 +344,12 @@
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
+      <!-- 最近見た薬（FB 15-2。2026-11-06 ユーザーと決定）。この端末の中（localStorage）にだけ3つ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
+      <div id="recent" class="recent" data-clarity-mask="true" hidden>
+        <h2 class="worry-title">最近見た薬</h2>
+        <ul id="recent-list" class="list"></ul>
+        <p class="recent-note">この端末の中だけに残ります。<button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
+      </div>
       <h2 class="worry-title">お困りごと</h2>
       <div class="worry">
         <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
@@ -542,6 +550,53 @@
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
   // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  // 薬の行のボタン。トップの検索結果、薬の一覧、最近見た薬で同じ形を使う
+  function drugButton(d, i, viaGeneric, all) {
+    const button = el("button", { type: "button" });
+    if (viaGeneric) {
+      button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
+        el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
+      if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+    } else if (all) {
+      button.append(el("span", { class: "drug-name", text: d.name }));
+      if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
+    } else {
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
+    }
+    button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
+    return button;
+  }
+
+  // ---- 最近見た薬（FB 15-2。2026-11-06 ユーザーと決定） ----
+  // この端末の中（localStorage）にだけ、新しい順に3つ残す。番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）
+  // 残せない端末（プライベートモードなど）では、何も出さないだけにする
+  const RECENT_KEY = "recent-drugs-v1";
+  const RECENT_MAX = 3;
+  function loadRecent() {
+    try {
+      const v = JSON.parse(localStorage.getItem(RECENT_KEY));
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  function saveRecent(items) {
+    try {
+      if (items.length > 0) localStorage.setItem(RECENT_KEY, JSON.stringify(items));
+      else localStorage.removeItem(RECENT_KEY);
+    } catch (e) {}
+  }
+  function addRecent(drug, viaGeneric) {
+    const rest = loadRecent().filter((r) => !(r.name === drug.name && !!r.g === viaGeneric));
+    saveRecent([{ name: drug.name, g: viaGeneric }, ...rest].slice(0, RECENT_MAX));
+  }
+  function renderRecent() {
+    // サイトから外した薬は出さない
+    const items = loadRecent()
+      .map((r) => ({ i: DRUGS.findIndex((d) => d.name === r.name), g: !!r.g }))
+      .filter(({ i, g }) => i >= 0 && (!g || DRUGS[i].generic));
+    document.getElementById("recent").hidden = items.length === 0 || q.value.trim() !== "";
+    document.getElementById("recent-list").replaceChildren(...items.map(({ i, g }) => el("li", {}, [drugButton(DRUGS[i], i, g, false)])));
+  }
+
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -586,19 +641,7 @@
         ].filter(Boolean))]));
         continue;
       }
-      const button = el("button", { type: "button" });
-      if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
-          el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
-        if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
-      } else if (all) {
-        button.append(el("span", { class: "drug-name", text: d.name }));
-        if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
-      } else {
-        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
-      }
-      button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
-      items.push(el("li", {}, [button]));
+      items.push(el("li", {}, [drugButton(d, i, viaGeneric, all)]));
     }
     target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
@@ -613,6 +656,7 @@
 
   function renderList() {
     fillList(list, normQuery(q.value), false);
+    renderRecent();
   }
 
   function renderAllList() {
@@ -777,7 +821,10 @@
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
     if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
-    if (drug) renderCard(drug, !!match[2] && !!drug.generic);
+    if (drug) {
+      renderCard(drug, !!match[2] && !!drug.generic);
+      addRecent(drug, !!match[2] && !!drug.generic);
+    }
     if (!screens.pick.hidden) renderList();
     if (!screens.list.hidden) renderAllList();
     // 薬の画面から戻ったときは、前に見ていた場所に戻す
@@ -792,6 +839,11 @@
 
   q.addEventListener("input", renderList);
   q2.addEventListener("input", renderAllList);
+  // 消したら、まとまりごと消える（押した結果が見える）。消すのは取り消せるほど大事ではないので、確かめる画面は出さない
+  document.getElementById("recent-clear").addEventListener("click", () => {
+    saveRecent([]);
+    renderRecent();
+  });
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;
