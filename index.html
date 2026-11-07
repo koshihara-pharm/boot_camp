@@ -575,16 +575,22 @@
   // 番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）。新しいものが先
   // 最近見た薬: 開くと自動で入る。3つまでで、4つ目で古いものが消える
   // 保存した薬: 薬の画面で「この薬を保存」を押したときだけ入る。押し出さず、5つまで
-  // 残せない端末（プライベートモードなど）では、何も出さないだけにする
   const RECENT = { key: "recent-drugs-v1", max: 3 };
   const SAVED = { key: "saved-drugs-v1", max: 5 };
+  // 端末に残せないとき（プライベートモード、アプリの中の枠など）は、開いている間だけ覚えておく
+  const memory = {};
   function loadDrugs(store) {
     try {
-      const v = JSON.parse(localStorage.getItem(store.key));
-      return Array.isArray(v) ? v : [];
-    } catch (e) { return []; }
+      const raw = localStorage.getItem(store.key);
+      if (raw !== null || !(store.key in memory)) {
+        const v = JSON.parse(raw);
+        return Array.isArray(v) ? v : [];
+      }
+    } catch (e) {}
+    return memory[store.key] || [];
   }
   function saveDrugs(store, items) {
+    memory[store.key] = items;
     try {
       if (items.length > 0) localStorage.setItem(store.key, JSON.stringify(items));
       else localStorage.removeItem(store.key);
