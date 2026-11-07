@@ -669,7 +669,9 @@
         // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
         const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
         if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
-        if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        // 製品名で探したとき（例: 「クラリス」）は、製品名の行だけを出す。一般名まで入れたとき（例: 「クラリスロ」「クラリスロマイシンDS「タカタ」」）は一般名の行も出す（2026-11-07 ユーザーの判断）
+        const productTyped = (d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase())) && !hasWord(query, d.generic || "");
+        if (ownGenericRow(d) && (showAll || (genMatch && !productTyped))) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
         if (!all) {
