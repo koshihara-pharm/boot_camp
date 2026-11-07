@@ -454,6 +454,15 @@
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
   }
 
+  function toHiragana(s) {
+    return s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  }
+
+  // 漢方の読みがな（docs/18 の 15-1。2026-11-07 ユーザーの指示）。漢字がむずかしいので、名前の下に小さくひらがなで出す
+  function kampoYomi(p) {
+    return p.name.includes("（漢方）") && p.yomi ? toHiragana(p.yomi) : null;
+  }
+
   // 「参考にした資料」は、どの画面でも閉じた形で出す（タップで開く）
   function refsBox(sources) {
     return el("details", { class: "refs" }, [
@@ -697,7 +706,8 @@
         items.push(el("li", {}, [el("div", { class: "prep" }, [
           el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
           prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
-            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic })
+            : kampoYomi(prep) ? el("span", { class: "drug-meta", text: kampoYomi(prep) }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
