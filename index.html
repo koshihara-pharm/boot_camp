@@ -54,54 +54,8 @@
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #142120;
-      --ink: #cfeae4;
-      --hero: #1b332f;
-      --stamp-soft: #3a3016;
-      --stamp-ink: #2a1f00;
-      --card: #1d2c2a;
-      --text: #e8f1ef;
-      --muted: #a3b5b1;
-      --line: #2f4340;
-      --accent: #6cc7b9;
-      --accent-text: #0f1a19;
-      --stamp: #f2bf4a;
-      --good: #8fd6a9;
-      --good-bg: #1d3a2a;
-      --best-bg: #45390f;
-      --bad: #f1a196;
-      --bad-bg: #432522;
-      --warn: #d4a9ef;
-      --warn-bg: #35263f;
-      --taste-bg: #1f3936;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #142120;
-    --ink: #cfeae4;
-    --hero: #1b332f;
-    --stamp-soft: #3a3016;
-    --stamp-ink: #2a1f00;
-    --card: #1d2c2a;
-    --text: #e8f1ef;
-    --muted: #a3b5b1;
-    --line: #2f4340;
-    --accent: #6cc7b9;
-    --accent-text: #0f1a19;
-    --stamp: #f2bf4a;
-    --good: #8fd6a9;
-    --good-bg: #1d3a2a;
-    --best-bg: #45390f;
-    --bad: #f1a196;
-    --bad-bg: #432522;
-    --warn: #d4a9ef;
-    --warn-bg: #35263f;
-    --taste-bg: #1f3936;
-    color-scheme: dark;
-  }
+  /* スマホのダークモードでも、いつも白で出す（2026-11-07 ユーザーの指示「白をベース」。前はダークモードで緑の暗い色になっていた） */
+  :root { color-scheme: light; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -393,10 +347,6 @@
   .kana { margin-top: 10px; padding: 7px 12px; background: var(--taste-bg); border-radius: 999px; }
   .refs summary, .site-note summary { min-height: 44px; padding-block: 10px; }
   .site-note { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; }
-  :root[data-theme="dark"] { --title: #ffa7b6; --paper-shadow: #0003; --split-bg: #293d32; --lace: #8b7958; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --title: #ffa7b6; --paper-shadow: #0003; --split-bg: #293d32; --lace: #8b7958; }
-  }
   @media (max-width: 350px) {
     .hero-head { gap: 8px; }
     .hero-stamp { width: 63px; height: 63px; }
@@ -411,7 +361,7 @@
   /* ===== 色（2026-11-07 ユーザーの指示）: 白を地に。本の「こども」の4色から、要るものだけを使う =====
      オレンジ＝主役（見出し、お困りごとの丸。丸は 2026-11-07 に薄めの #f5b783 にした）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
      本の色は明るいので、字に使うときは読める濃さにした（オレンジ #b8571a、青 #2a6fa3、緑 #2b7d2b） */
-  :root:not([data-theme="dark"]) {
+  :root {
     --bg: #ffffff; --hero: #ffffff; --card: #ffffff;
     --text: #3a3a3a; --muted: #6b6b6b; --line: #e8e8e8;
     --ink: #b8571a; --title: #c4611a; --accent: #2a6fa3; --accent-text: #ffffff;
@@ -420,7 +370,6 @@
     --taste-bg: #fdf1e6; --stamp-soft: #fff4dc;
     --lace: #f2c49c; --star: #e8893a; --paper-shadow: #00000012; --menu-ink: #3b2414; --split-bg: #fdf6ef;
   }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --kids-orange: #f5b783; --kids-blue: #4b97c8; } }
   body { background-image: none; }
   .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
   .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
@@ -451,7 +400,7 @@
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/spoon.svg" alt=""><span class="lbl">飲ませ方が<br>分からない</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/star.svg" alt=""><span class="lbl">おすすめの<br>飲ませ方</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><img class="ic" src="img/fluent/custard.svg" alt=""><span class="lbl">混ぜて<br>いい？</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/kid-tongue.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/powder.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
       </div>
       <div class="lace" aria-hidden="true"></div>
       </div>
