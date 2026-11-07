@@ -27,7 +27,7 @@
 <style>
   /* 1カラムのスマホ用。クリームの地に白い面、ピンクの丸い見出し、オレンジの丸のメニュー（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。絵とロゴは使わない）。黄色いスタンプのくまは残す */
   :root {
-    --bg: #fff4d6;
+    --bg: #fff8dc;
     --ink: #cf2a44;
     --hero: #ffffff;
     --stamp-soft: #fff1cc;
@@ -47,7 +47,8 @@
     --warn: #7a3d9c;
     --warn-bg: #f2e7f8;
     --taste-bg: #fff0dc;
-    --orange: #d96400;
+    --orange: #e27100;
+    --title: #f22649;
     --lace: #e9cf9a;
     --star: #f29aa8;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
@@ -330,30 +331,38 @@
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
 
-  /* ===== トップ（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた） ===== */
+  /* ===== トップ（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。実物を見て2回目の寄せ） ===== */
   .hero { background: transparent; border-radius: 0; padding: 0; overflow: visible; }
-  .brandbar { margin: 0 0 14px; font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink); }
-  .hero-head { display: flex; align-items: center; gap: 12px; }
-  .hero-stamp { position: relative; top: auto; right: auto; flex: none; width: 84px; height: 84px; font-size: 0; }
-  .hero-stamp img { width: 56px; height: 56px; }
-  .hero h1 { font-size: 32px; line-height: 1.25; margin: 0; max-width: none; color: var(--ink); }
-  .hero .lead { margin: 14px 0 18px; color: var(--text); font-weight: 700; font-size: 16px; }
-  .panel { position: relative; background: var(--hero); border-radius: 72px 24px 24px 24px; padding: 30px 16px 22px; }
+  .brandbar { margin: -16px -16px 18px; padding: 12px 16px 10px; background: #ffffff; border-top: 6px solid transparent;
+    border-image: repeating-linear-gradient(90deg, #f6a5b8 0 28px, #9fd3ef 28px 56px, #ffe07a 56px 84px) 6;
+    font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink); box-shadow: 0 1px 0 var(--line); }
+  .hero-head { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .hero-stamp { position: relative; top: auto; right: auto; flex: none; width: 80px; height: 80px; font-size: 0; }
+  .hero-stamp img { width: 52px; height: 52px; }
+  .hero h1 { font-size: 32px; line-height: 1.25; margin: 0; max-width: none; color: var(--title); text-align: center; }
+  .hero .lead { margin: 14px 0 18px; color: var(--text); font-weight: 700; font-size: 15px; text-align: center; }
+  .panel { position: relative; background: var(--hero); border-radius: 72px 24px 24px 24px; padding: 30px 16px 24px; }
   .panel::before { content: ""; position: absolute; inset: 8px 14px auto 14px; height: 30px; pointer-events: none;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 30'%3E%3Cg fill='%23f29aa8'%3E%3Cpath d='M30 4l2.4 5 5.4.6-4 3.7 1.1 5.4-4.9-2.7-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z'/%3E%3Ccircle cx='58' cy='20' r='2.5'/%3E%3Cpath d='M262 6l1.8 3.8 4.2.5-3.1 2.8.8 4.1-3.7-2-3.7 2 .8-4.1-3.1-2.8 4.2-.5z'/%3E%3Ccircle cx='238' cy='22' r='2.5'/%3E%3Ccircle cx='286' cy='24' r='2'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; }
   .hero input[type="search"] { border: 2px solid var(--line); box-shadow: none; }
   .hero input[type="search"]:focus { border-color: var(--accent); }
-  .hero .worry-title { text-align: center; font-size: 24px; color: var(--ink); margin: 28px 0 34px; }
-  .worry { grid-template-columns: 1fr 1fr; gap: 40px 14px; }
-  .worry button { position: relative; aspect-ratio: 1; min-height: 0; border: 0; border-radius: 50%; background: var(--orange); color: #fff;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 26px 8px 8px; text-align: center; font-weight: 700; }
-  .worry button::before { content: ""; position: absolute; inset: 7px; border: 2px dashed rgb(255 255 255 / 0.9); border-radius: 50%; pointer-events: none; }
-  .worry .ic { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; margin: 0; }
-  .worry .lbl { font-size: 19px; line-height: 1.3; }
+  .hero .worry-title { text-align: center; font-size: 24px; color: var(--title); margin: 28px 0 40px; }
+  .worry { grid-template-columns: 1fr 1fr; gap: 46px 12px; }
+  .worry button { --c: var(--orange); position: relative; isolation: isolate; aspect-ratio: 1; min-height: 0; border: 0; border-radius: 50%; background: none; color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; padding: 8px 8px 22px; text-align: center; font-weight: 700; }
+  .worry button:nth-child(2) { --c: #4e9a2c; }
+  .worry button:nth-child(3) { --c: #e0457a; }
+  .worry button:nth-child(4) { --c: #3b8fd0; }
+  /* でこぼこの丸（手で描いたようなふち）と、内側の白い点線の輪 */
+  .worry button::after { content: ""; position: absolute; inset: 0; z-index: -2; background: var(--c);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.8 50.0 L98.8 51.9 L98.1 53.8 L97.6 55.6 L97.8 57.6 L97.7 59.5 L96.8 61.2 L96.0 63.0 L96.0 64.9 L96.0 67.0 L95.4 68.8 L94.4 70.4 L93.2 72.0 L91.9 73.5 L90.5 74.8 L89.6 76.5 L89.0 78.4 L87.9 79.9 L86.3 81.0 L85.0 82.4 L84.1 84.1 L82.8 85.5 L80.9 86.1 L79.0 86.8 L77.4 87.8 L75.9 88.8 L74.5 90.0 L73.1 91.3 L71.6 92.4 L69.7 92.8 L67.8 93.0 L66.2 93.8 L64.5 94.8 L62.7 94.9 L60.7 94.7 L59.0 95.2 L57.3 96.2 L55.5 96.9 L53.7 97.2 L51.9 97.3 L50.0 97.1 L48.2 96.5 L46.4 96.3 L44.5 96.7 L42.6 96.8 L40.8 96.2 L39.0 95.7 L37.0 96.0 L35.0 96.1 L33.3 95.4 L31.7 94.2 L30.1 93.2 L28.4 92.3 L26.8 91.5 L24.9 91.0 L22.9 90.6 L21.3 89.5 L20.1 88.0 L18.6 86.8 L16.8 85.9 L15.4 84.6 L14.7 82.7 L13.8 81.0 L12.3 79.7 L10.8 78.5 L9.5 77.0 L8.3 75.6 L7.3 73.9 L7.0 71.9 L6.8 69.9 L5.9 68.3 L4.9 66.6 L4.7 64.7 L4.7 62.8 L4.0 61.0 L2.9 59.4 L2.4 57.5 L2.6 55.6 L2.9 53.7 L3.2 51.8 L3.6 50.0 L3.7 48.2 L3.2 46.3 L3.1 44.4 L3.8 42.7 L4.3 40.9 L4.2 39.0 L4.4 37.1 L5.4 35.5 L6.7 34.0 L7.4 32.4 L7.9 30.6 L8.4 28.8 L8.8 27.0 L9.4 25.1 L10.5 23.6 L12.0 22.4 L13.1 20.9 L13.9 19.2 L15.1 17.8 L16.8 16.8 L18.2 15.6 L19.0 13.7 L20.1 12.0 L21.5 10.7 L23.1 9.7 L24.7 8.8 L26.6 8.2 L28.4 7.6 L29.9 6.4 L31.4 5.1 L33.2 4.5 L35.1 4.2 L36.8 3.3 L38.5 2.1 L40.4 1.8 L42.4 2.1 L44.4 2.3 L46.2 2.3 L48.1 2.2 L50.0 1.9 L51.9 1.4 L53.8 1.4 L55.7 2.2 L57.5 2.8 L59.4 2.9 L61.2 3.2 L62.9 4.4 L64.4 5.6 L66.2 6.0 L68.1 6.2 L69.9 6.8 L71.6 7.5 L73.3 8.4 L74.6 9.8 L75.8 11.4 L77.2 12.5 L79.0 13.2 L80.4 14.4 L81.4 16.0 L82.8 17.2 L84.6 18.0 L86.1 19.1 L87.1 20.8 L87.8 22.5 L88.7 24.2 L89.5 25.8 L90.4 27.4 L91.8 28.7 L93.2 30.1 L93.8 31.8 L94.2 33.7 L95.2 35.3 L96.3 36.9 L96.6 38.8 L96.3 40.8 L96.5 42.6 L97.2 44.4 L97.8 46.2 L98.3 48.1Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M98.8 50.0 L98.8 51.9 L98.1 53.8 L97.6 55.6 L97.8 57.6 L97.7 59.5 L96.8 61.2 L96.0 63.0 L96.0 64.9 L96.0 67.0 L95.4 68.8 L94.4 70.4 L93.2 72.0 L91.9 73.5 L90.5 74.8 L89.6 76.5 L89.0 78.4 L87.9 79.9 L86.3 81.0 L85.0 82.4 L84.1 84.1 L82.8 85.5 L80.9 86.1 L79.0 86.8 L77.4 87.8 L75.9 88.8 L74.5 90.0 L73.1 91.3 L71.6 92.4 L69.7 92.8 L67.8 93.0 L66.2 93.8 L64.5 94.8 L62.7 94.9 L60.7 94.7 L59.0 95.2 L57.3 96.2 L55.5 96.9 L53.7 97.2 L51.9 97.3 L50.0 97.1 L48.2 96.5 L46.4 96.3 L44.5 96.7 L42.6 96.8 L40.8 96.2 L39.0 95.7 L37.0 96.0 L35.0 96.1 L33.3 95.4 L31.7 94.2 L30.1 93.2 L28.4 92.3 L26.8 91.5 L24.9 91.0 L22.9 90.6 L21.3 89.5 L20.1 88.0 L18.6 86.8 L16.8 85.9 L15.4 84.6 L14.7 82.7 L13.8 81.0 L12.3 79.7 L10.8 78.5 L9.5 77.0 L8.3 75.6 L7.3 73.9 L7.0 71.9 L6.8 69.9 L5.9 68.3 L4.9 66.6 L4.7 64.7 L4.7 62.8 L4.0 61.0 L2.9 59.4 L2.4 57.5 L2.6 55.6 L2.9 53.7 L3.2 51.8 L3.6 50.0 L3.7 48.2 L3.2 46.3 L3.1 44.4 L3.8 42.7 L4.3 40.9 L4.2 39.0 L4.4 37.1 L5.4 35.5 L6.7 34.0 L7.4 32.4 L7.9 30.6 L8.4 28.8 L8.8 27.0 L9.4 25.1 L10.5 23.6 L12.0 22.4 L13.1 20.9 L13.9 19.2 L15.1 17.8 L16.8 16.8 L18.2 15.6 L19.0 13.7 L20.1 12.0 L21.5 10.7 L23.1 9.7 L24.7 8.8 L26.6 8.2 L28.4 7.6 L29.9 6.4 L31.4 5.1 L33.2 4.5 L35.1 4.2 L36.8 3.3 L38.5 2.1 L40.4 1.8 L42.4 2.1 L44.4 2.3 L46.2 2.3 L48.1 2.2 L50.0 1.9 L51.9 1.4 L53.8 1.4 L55.7 2.2 L57.5 2.8 L59.4 2.9 L61.2 3.2 L62.9 4.4 L64.4 5.6 L66.2 6.0 L68.1 6.2 L69.9 6.8 L71.6 7.5 L73.3 8.4 L74.6 9.8 L75.8 11.4 L77.2 12.5 L79.0 13.2 L80.4 14.4 L81.4 16.0 L82.8 17.2 L84.6 18.0 L86.1 19.1 L87.1 20.8 L87.8 22.5 L88.7 24.2 L89.5 25.8 L90.4 27.4 L91.8 28.7 L93.2 30.1 L93.8 31.8 L94.2 33.7 L95.2 35.3 L96.3 36.9 L96.6 38.8 L96.3 40.8 L96.5 42.6 L97.2 44.4 L97.8 46.2 L98.3 48.1Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+  .worry button::before { content: ""; position: absolute; inset: 9px; z-index: -1; border: 2px dashed rgb(255 255 255 / 0.9); border-radius: 50%; pointer-events: none; }
+  .worry .ic { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); width: 82px; height: 82px; margin: 0; }
+  .worry .lbl { font-size: 19px; line-height: 1.3; text-shadow: 0 1px 0 rgb(0 0 0 / 0.15); }
   .worry .arrow { width: 30px; height: 22px; color: #fff; }
   .worry button:active { filter: brightness(0.92); }
   .worry button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-  .lace { height: 12px; margin-top: 26px; background: radial-gradient(circle at 6px 0, transparent 5px, var(--lace) 5px 6.5px, transparent 7px) 0 0 / 12px 12px repeat-x; }
+  .lace { height: 12px; margin-top: 30px; background: radial-gradient(circle at 6px 0, transparent 5px, var(--lace) 5px 6.5px, transparent 7px) 0 0 / 12px 12px repeat-x; }
 </style>
 </head>
 <body>
@@ -378,7 +387,7 @@
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/spoon.svg" alt=""><span class="lbl">飲ませ方が<br>分からない</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/star.svg" alt=""><span class="lbl">おすすめの<br>飲ませ方</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><img class="ic" src="img/fluent/custard.svg" alt=""><span class="lbl">混ぜて<br>いい？</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/tongue.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/face-savoring-food.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
       </div>
       <div class="lace" aria-hidden="true"></div>
       </div>
