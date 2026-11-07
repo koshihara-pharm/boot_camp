@@ -332,8 +332,9 @@
   .mine .howto .list { margin-bottom: 4px; }
   .mine .list button { min-height: 52px; }
   .save-row { margin-top: 12px; }
-  .save-drug { min-height: 44px; }
-  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); border-color: var(--stamp); }
+  /* 保存する前は、くまのスタンプと同じ黄色で塗って目立たせる。保存した後は薄い黄色（2026-11-07 ユーザーの指示） */
+  .save-drug { min-height: 48px; padding: 8px 18px; font-weight: bold; background: var(--stamp); border: 2px solid var(--stamp); color: var(--stamp-ink); font-family: var(--font-display); }
+  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: normal; }
   .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
   .save-msg:empty { display: none; }
 </style>
