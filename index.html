@@ -409,18 +409,18 @@
   }
 
   /* ===== 色（2026-11-07 ユーザーの指示）: 白を地に。本の「こども」の4色から、要るものだけを使う =====
-     オレンジ＝主役（見出し、お困りごとの丸）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
+     オレンジ＝主役（見出し、お困りごとの丸。丸は 2026-11-07 に薄めの #f5b783 にした）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
      本の色は明るいので、字に使うときは読める濃さにした（オレンジ #b8571a、青 #2a6fa3、緑 #2b7d2b） */
   :root:not([data-theme="dark"]) {
     --bg: #ffffff; --hero: #ffffff; --card: #ffffff;
     --text: #3a3a3a; --muted: #6b6b6b; --line: #e8e8e8;
     --ink: #b8571a; --title: #c4611a; --accent: #2a6fa3; --accent-text: #ffffff;
-    --orange: #e8893a; --kids-orange: #e8893a; --kids-blue: #4b97c8; --kids-green: #3e9a3c;
+    --orange: #f5b783; --kids-orange: #f5b783; --kids-blue: #4b97c8; --kids-green: #3e9a3c;
     --good: #2b7d2b; --good-bg: #ebf5e9; --best-bg: #ebf5e9;
     --taste-bg: #fdf1e6; --stamp-soft: #fff4dc;
     --lace: #f2c49c; --star: #e8893a; --paper-shadow: #00000012; --menu-ink: #3b2414; --split-bg: #fdf6ef;
   }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --kids-orange: #e8893a; --kids-blue: #4b97c8; } }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --kids-orange: #f5b783; --kids-blue: #4b97c8; } }
   body { background-image: none; }
   .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
   .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
@@ -451,7 +451,7 @@
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/spoon.svg" alt=""><span class="lbl">飲ませ方が<br>分からない</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-go="howto"><img class="ic" src="img/fluent/star.svg" alt=""><span class="lbl">おすすめの<br>飲ませ方</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><img class="ic" src="img/fluent/custard.svg" alt=""><span class="lbl">混ぜて<br>いい？</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/face-savoring-food.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><img class="ic" src="img/fluent/kid-tongue.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
       </div>
       <div class="lace" aria-hidden="true"></div>
       </div>
