@@ -656,7 +656,7 @@
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
-  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  // 一覧で何も入れていないときは、製品名の行だけを並べる（2026-11-07 ユーザーの判断。前は一般名の行も並べていた）。一般名で探したときは、トップと同じく一般名の行を出す
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -671,7 +671,7 @@
         if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
         // 製品名で探したとき（例: 「クラリス」）は、製品名の行だけを出す。一般名まで入れたとき（例: 「クラリスロ」「クラリスロマイシンDS「タカタ」」）は一般名の行も出す（2026-11-07 ユーザーの判断）
         const productTyped = (d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase())) && !hasWord(query, d.generic || "");
-        if (ownGenericRow(d) && (showAll || (genMatch && !productTyped))) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        if (ownGenericRow(d) && genMatch && !productTyped) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
         if (!all) {
@@ -680,7 +680,7 @@
         }
         const ownRow = ownGenericRow(p);
         if (showAll || prepHit(ownRow ? { ...p, generic: null } : p, query)) hits.push({ prep: p, label: p.yomi || p.name });
-        if (ownRow && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
+        if (ownRow && !showAll && prepHit({ name: p.generic }, query)) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
