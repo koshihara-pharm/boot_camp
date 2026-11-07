@@ -328,7 +328,9 @@
   .hero .worry-title { margin-top: 20px; }
   .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
   .recent-note .link-button { min-height: 44px; font-size: 15px; }
-  .list .saved-mark { display: block; font-size: 13px; font-weight: 700; color: var(--accent); }
+  .mine .howto { margin-top: 12px; }
+  .mine .howto .list { margin-bottom: 4px; }
+  .mine .list button { min-height: 52px; }
   .save-row { margin-top: 12px; }
   .save-drug { min-height: 44px; }
   .save-drug[aria-pressed="true"] { background: var(--stamp-soft); border-color: var(--stamp); }
@@ -357,12 +359,22 @@
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
       </div>
-      <!-- 保存した薬と最近見た薬（FB 15-2。2026-11-06 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置き、1つのまとまりにする。保存した薬は★をつけて上に。同じ薬が両方に出てもよい -->
+      <!-- 保存した薬と最近見た薬（FB 15-2。2026-11-07 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置く -->
+      <!-- 保存した薬は見出しつきでいつも出し、最近見た薬は閉じた形にして、押すと開く。どちらも薬の名前だけ。同じ薬が両方に出てもよい -->
       <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
-      <div id="recent" class="recent" data-clarity-mask="true" hidden>
-        <h2 class="worry-title">保存した薬と、最近見た薬</h2>
-        <ul id="recent-list" class="list"></ul>
-        <p class="recent-note">この端末の中だけに残ります。<button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
+      <div id="mine" class="mine" data-clarity-mask="true" hidden>
+        <div id="saved" hidden>
+          <h2 class="worry-title">保存した薬</h2>
+          <ul id="saved-list" class="list"></ul>
+        </div>
+        <div id="recent" class="howto" hidden>
+          <details>
+            <summary>最近見た薬</summary>
+            <ul id="recent-list" class="list"></ul>
+            <p class="recent-note"><button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
+          </details>
+        </div>
+        <p class="recent-note">この端末の中だけに残ります。</p>
       </div>
     </div>
   </section>
@@ -554,9 +566,12 @@
   }
 
   // 薬の行のボタン。トップの検索結果、薬の一覧、保存した薬と最近見た薬で同じ形を使う
-  function drugButton(d, i, viaGeneric, all) {
+  // nameOnly: 保存した薬と最近見た薬では、薬の名前だけを出す（一般名で開いた薬は一般名）
+  function drugButton(d, i, viaGeneric, all, nameOnly = false) {
     const button = el("button", { type: "button" });
-    if (viaGeneric) {
+    if (nameOnly) {
+      button.append(el("span", { class: "drug-name", text: viaGeneric ? genericLabel(d) : d.name }));
+    } else if (viaGeneric) {
       button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
         el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
       if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
@@ -621,18 +636,16 @@
       .map((r) => ({ i: DRUGS.findIndex((d) => d.name === r.name), g: !!r.g }))
       .filter(({ i, g }) => i >= 0 && (!g || DRUGS[i].generic));
   }
-  // トップの下の1つのまとまり。保存した薬に★をつけて上に、最近見た薬を下に。同じ薬が両方に出てもよい（2026-11-06 ユーザーの判断）
+  // トップの下に、保存した薬（見出しつき）と、最近見た薬（閉じた形）を分けて出す。行は薬の名前だけ（2026-11-07 ユーザーの判断）
   function renderRecent() {
     const saved = knownDrugs(SAVED);
     const recent = knownDrugs(RECENT);
-    const row = ({ i, g }, mark) => {
-      const b = drugButton(DRUGS[i], i, g, false);
-      if (mark) b.prepend(el("span", { class: "saved-mark", text: "★ 保存した薬" }));
-      return el("li", {}, [b]);
-    };
-    document.getElementById("recent").hidden = saved.length + recent.length === 0 || q.value.trim() !== "";
-    document.getElementById("recent-list").replaceChildren(...saved.map((x) => row(x, true)), ...recent.map((x) => row(x, false)));
-    document.getElementById("recent-clear").hidden = recent.length === 0;
+    const row = ({ i, g }) => el("li", {}, [drugButton(DRUGS[i], i, g, false, true)]);
+    document.getElementById("mine").hidden = saved.length + recent.length === 0 || q.value.trim() !== "";
+    document.getElementById("saved").hidden = saved.length === 0;
+    document.getElementById("recent").hidden = recent.length === 0;
+    document.getElementById("saved-list").replaceChildren(...saved.map(row));
+    document.getElementById("recent-list").replaceChildren(...recent.map(row));
   }
 
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
