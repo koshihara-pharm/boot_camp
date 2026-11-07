@@ -374,6 +374,14 @@
   .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
   .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
   .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) { --c: var(--kids-orange); color: var(--menu-ink); }
+
+  /* 平らな絵（img/fluent）の大きさ（2026-11-07） */
+  .chip img.fe { width: 26px; height: 26px; flex: none; }
+  img.mi { width: 26px; height: 26px; vertical-align: -6px; margin-right: 6px; }
+  img.bi { width: 20px; height: 20px; vertical-align: -4px; margin-right: 6px; }
+  /* 「準備中」も今回の色に（黄色 → 薄いオレンジ。2026-11-07） */
+  .list .prep { background: var(--taste-bg); border-color: var(--kids-orange); }
+  .list .prep-tag { background: var(--kids-orange); color: var(--menu-ink); }
 </style>
 </head>
 <body>
@@ -680,8 +688,21 @@
     "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
   };
 
+  // 絵文字のかわりに、平らな絵（img/fluent。Fluent Emoji、MIT）で出す。スマホの種類で絵が変わらないように（2026-11-07 ユーザーの指示「今回のテイストにあわせて全部変更」）
+  const ICON_FILE = {
+    "🍨": "ice-cream", "💧": "droplet", "☕": "hot-beverage", "🍮": "custard", "🥛": "glass-of-milk", "🥄": "spoon",
+    "🍵": "teacup", "🥣": "bowl-with-spoon", "🍧": "shaved-ice", "🍎": "red-apple", "🍊": "tangerine",
+    "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box", "📥": "inbox-tray", "🍼": "baby-bottle",
+    "✂️": "scissors", "☝️": "index-pointing-up",
+  };
+  function ico(emoji, cls) {
+    const f = ICON_FILE[emoji];
+    if (!f) return el("span", { class: cls, "aria-hidden": "true", text: emoji || "・" });
+    return el("img", { class: cls, src: "img/fluent/" + f + ".svg", alt: "", "aria-hidden": "true" });
+  }
+
   function foodChip(food) {
-    return el("span", { class: "chip" }, [el("span", { class: "fe", "aria-hidden": "true", text: FOOD_EMOJI[food] || "・" }), food]);
+    return el("span", { class: "chip" }, [ico(FOOD_EMOJI[food], "fe"), food]);
   }
 
   function chipBox(title, cls, text, chips) {
@@ -763,7 +784,7 @@
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
-      el("summary", { text: m.icon + " " + m.title }),
+      el("summary", {}, [ico(m.icon, "mi"), m.title]),
       el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
     ];
     if (m.to === "mix") {
@@ -773,7 +794,7 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この飲ませ方を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方を保存"]);
     save.addEventListener("click", () => openCard(key, m));
     parts.push(save);
     const d = el("details", {}, parts);
