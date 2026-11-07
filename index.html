@@ -321,6 +321,8 @@
   .worry .ic { margin-right: 8px; }
   .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
   .list-link { display: inline-block; margin: 8px 2px 0; font-size: 15px; color: var(--accent); }
+  /* QRコードのリンクは、押すと画面の上に出るのでボタンにする。見た目は「薬の一覧を見る」と同じ下線のリンク */
+  button.list-link { margin-top: 12px; padding: 10px 0; min-height: 44px; border: 0; background: none; font-family: inherit; text-decoration: underline; cursor: pointer; }
   #list-page .lead { color: var(--muted); margin: 0 0 12px; }
   #list-page input[type="search"] { margin-bottom: 4px; }
   .worry-hint:empty { display: none; }
@@ -360,6 +362,8 @@
         <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
         <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
       </div>
+      <!-- ほかの親にサイトを教えるときに、QRコードを見せる。形は「薬の一覧を見る」と同じ小さいリンク（2026-11-05 ユーザーと決定。計画は html-plan）。QR の中身は ?from=qr つきの URL（docs/26） -->
+      <button type="button" class="list-link" id="open-qr"><span aria-hidden="true">📱 </span>このサイトをQRコードで教える</button>
       <!-- 保存した薬と最近見た薬（FB 15-2。2026-11-07 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置く -->
       <!-- 保存した薬は見出しつきでいつも出し、最近見た薬は閉じた形にして、押すと開く。どちらも薬の名前だけ。同じ薬が両方に出てもよい -->
       <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
@@ -421,7 +425,7 @@
   <!-- Clarity と Google アナリティクスのお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
   <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity と Google アナリティクスで、ページの見られ方（開かれた数や押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a>と、<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Google のサービスを使うサイトでの Google によるデータの使い方</a></p></details>
 </main>
-<!-- 飲ませ方の画像を大きく出す画面。✕、Esc、外側を押すと閉じる -->
+<!-- 飲ませ方と薬の画像を大きく出す画面。✕、Esc、外側を押すと閉じる -->
 <dialog id="card-view" aria-labelledby="card-view-title">
   <div class="card-head">
     <p class="card-title" id="card-view-title"></p>
@@ -787,6 +791,11 @@
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     parts.push(...factBlock(fact));
+    // 薬ごとの画像（card/drug/薬の名前.png。card/make.cjs で作る）を出すボタン。コツの下、参考にした資料の上に置く（2026-11-05 ユーザーと決定）
+    // 一般名で開いたときも、同じ薬の画像を出す
+    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この薬の情報を保存"]);
+    save.addEventListener("click", () => openImage(drug.name, `card/drug/${encodeURIComponent(drug.name)}.png`, `${drug.name}の味と、混ぜていい食べ物の画像`));
+    parts.splice(parts.length - 1, 0, save);
     card.replaceChildren(...parts);
   }
 
@@ -813,15 +822,21 @@
   }
 
   // 画像を大きく出す。保存は長押し（2026-11-04 ユーザーと決定。iPhone でも Android でも写真に入るため）
+  // hint は画像の下の一文。QRコードのときだけ「相手のスマホのカメラで…」に変える
+  function openImage(title, src, alt, hint = "画像を長押し →「写真に保存」") {
+    const dlg = document.getElementById("card-view");
+    dlg.querySelector(".card-title").textContent = title;
+    dlg.querySelector(".card-hint").textContent = hint;
+    const img = dlg.querySelector("img");
+    img.src = src;
+    img.alt = alt;
+    dlg.showModal();
+  }
+
   function openCard(key, m) {
     const f = AGE_FLOWS.find((x) => x.age === flowSel);
     const name = m.title.replace("おすすめの飲ませ方: ", "");
-    const dlg = document.getElementById("card-view");
-    dlg.querySelector(".card-title").textContent = `${f.label}・${name}`;
-    const img = dlg.querySelector("img");
-    img.src = `card/${flowSel}-${key}.png`;
-    img.alt = `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`;
-    dlg.showModal();
+    openImage(`${f.label}・${name}`, `card/${flowSel}-${key}.png`, `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`);
   }
 
   function flowItem(key, open) {
@@ -932,6 +947,9 @@
   const cardView = document.getElementById("card-view");
   cardView.querySelector(".card-close").addEventListener("click", () => cardView.close());
   cardView.addEventListener("click", (e) => { if (e.target === cardView) cardView.close(); });
+  // トップの「このサイトをQRコードで教える」。QR の画像は card/qr_site.png（中身は ?from=qr つきの URL）
+  document.getElementById("open-qr").addEventListener("click", () =>
+    openImage("このサイトのQRコード", "card/qr_site.png", "このサイトを開くQRコード", "相手のスマホのカメラで読んでもらってください"));
   renderSteps();
   route();
 </script>
