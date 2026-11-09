@@ -427,6 +427,11 @@
   .hero .lead .nw { display: inline-block; }
   /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
   .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
+
+  /* ===== 2026-11-09 ユーザー「もう少しシンプルに」「キラキラがあると情報が散る」: キラキラと小さな飾りを外す ===== */
+  .hero-head::before, .hero-head::after, .panel::before, .worry button::after, .search-wrap::before { content: none; display: none; }
+  .search-wrap { padding: 0; margin: 0; background: none; border: 0; }
+  .lace { display: none; }
 </style>
 </head>
 <body>
