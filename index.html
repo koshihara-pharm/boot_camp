@@ -279,6 +279,8 @@
   .worry .ic { margin-right: 8px; }
   .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
   .list-link { display: inline-block; margin: 8px 2px 0; font-size: 15px; color: var(--accent); }
+  /* QRコードのリンクは、押すと画面の上に出るのでボタンにする。見た目は「薬の一覧を見る」と同じ下線のリンク */
+  button.list-link { margin-top: 12px; padding: 10px 0; min-height: 44px; border: 0; background: none; font-family: inherit; text-decoration: underline; cursor: pointer; }
   #list-page .lead { color: var(--muted); margin: 0 0 12px; }
   #list-page input[type="search"] { margin-bottom: 4px; }
   .worry-hint:empty { display: none; }
@@ -407,6 +409,24 @@
     .worry button:nth-child(4) { animation-delay: 0.86s; }
     @keyframes worry-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
   }
+
+  .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
+  .recent-note .link-button { min-height: 44px; font-size: 15px; }
+  .mine .howto { margin-top: 12px; }
+  .mine .howto .list { margin-bottom: 4px; }
+  .mine .list button { min-height: 52px; }
+  .save-row { margin-top: 12px; }
+  /* 保存する前は、くまのスタンプと同じ黄色で塗って目立たせる。保存した後は薄い黄色（2026-11-07 ユーザーの指示） */
+  .save-drug { min-height: 48px; padding: 8px 18px; font-weight: bold; background: var(--stamp); border: 2px solid var(--stamp); color: var(--stamp-ink); font-family: var(--font-display); }
+  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: normal; }
+  .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
+  .save-msg:empty { display: none; }
+
+  /* 2026-11-09 ユーザー: 説明文の改行が気になる（「ます。」だけが次の行に残る）。言葉の切れ目で折り返し、字を少し大きく */
+  .hero .lead { font-size: 17px; line-height: 1.8; }
+  .hero .lead .nw { display: inline-block; }
+  /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
+  .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
 </style>
 </head>
 <body>
@@ -418,7 +438,7 @@
         <div class="hero-stamp" aria-hidden="true"><img src="img/fluent/bear.svg" alt=""></div>
         <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
       </div>
-      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
+      <p class="lead"><span class="nw">薬の名前を入れると、</span><span class="nw">味と、混ぜていい食べ物が分かります。</span></p>
       <div class="panel">
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <div class="search-wrap">
@@ -436,6 +456,25 @@
         <button type="button" data-focus="taste" data-hint="上の欄に、薬の名前を入れてください"><img class="ic" src="img/fluent/powder.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
       </div>
       <div class="lace" aria-hidden="true"></div>
+      </div>
+      <!-- ほかの親にサイトを教えるときに、QRコードを見せる。形は「薬の一覧を見る」と同じ小さいリンク（2026-11-05 ユーザーと決定。計画は html-plan）。QR の中身は ?from=qr つきの URL（docs/26） -->
+      <button type="button" class="list-link" id="open-qr"><img class="bi" src="img/fluent/mobile-phone.svg" alt="" aria-hidden="true">このサイトをQRコードで教える</button>
+      <!-- ブックマークした薬と最近見た薬（FB 15-2。2026-11-07 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置く -->
+      <!-- ブックマークした薬は見出しつきでいつも出し、最近見た薬は閉じた形にして、押すと開く。どちらも薬の名前だけ。同じ薬が両方に出てもよい -->
+      <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
+      <div id="mine" class="mine" data-clarity-mask="true" hidden>
+        <div id="saved" hidden>
+          <h2 class="worry-title">ブックマークした薬</h2>
+          <ul id="saved-list" class="list"></ul>
+        </div>
+        <div id="recent" class="howto" hidden>
+          <details>
+            <summary>最近見た薬</summary>
+            <ul id="recent-list" class="list"></ul>
+            <p class="recent-note"><button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
+          </details>
+        </div>
+        <p class="recent-note">この端末の中だけに残ります。</p>
       </div>
     </div>
   </section>
@@ -481,7 +520,7 @@
   <!-- Clarity と Google アナリティクスのお知らせは、規約で置くことになっているので消さずに、たたんでおく（2026-10-31 ユーザーの判断） -->
   <details class="site-note"><summary>このサイトについて</summary><p>使いやすくするために、Microsoft Clarity と Google アナリティクスで、ページの見られ方（開かれた数や押された場所など）を記録しています。検索欄に入れた文字は記録されません。詳しくは <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft のプライバシーに関する声明</a>と、<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener">Google のサービスを使うサイトでの Google によるデータの使い方</a></p></details>
 </main>
-<!-- 飲ませ方の画像を大きく出す画面。✕、Esc、外側を押すと閉じる -->
+<!-- 飲ませ方と薬の画像を大きく出す画面。✕、Esc、外側を押すと閉じる -->
 <dialog id="card-view" aria-labelledby="card-view-title">
   <div class="card-head">
     <p class="card-title" id="card-view-title"></p>
@@ -508,6 +547,15 @@
 
   function toKatakana(s) {
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  }
+
+  function toHiragana(s) {
+    return s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  }
+
+  // 漢方の読みがな（docs/18 の 15-1。2026-11-07 ユーザーの指示）。漢字がむずかしいので、名前の下に小さくひらがなで出す
+  function kampoYomi(p) {
+    return p.name.includes("（漢方）") && p.yomi ? toHiragana(p.yomi) : null;
   }
 
   // 「参考にした資料」は、どの画面でも閉じた形で出す（タップで開く）
@@ -626,10 +674,93 @@
     return d.name + (d.notOriginal ? "" : "（先発品）");
   }
 
+  // 薬の行のボタン。トップの検索結果、薬の一覧、ブックマークした薬と最近見た薬で同じ形を使う
+  // nameOnly: ブックマークした薬と最近見た薬では、薬の名前だけを出す（一般名で開いた薬は一般名）
+  function drugButton(d, i, viaGeneric, all, nameOnly = false) {
+    const button = el("button", { type: "button" });
+    if (nameOnly) {
+      button.append(el("span", { class: "drug-name", text: viaGeneric ? genericLabel(d) : d.name }));
+    } else if (viaGeneric) {
+      button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
+        el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
+      if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+    } else if (all) {
+      button.append(el("span", { class: "drug-name", text: d.name }));
+      if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
+    } else {
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
+    }
+    button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
+    return button;
+  }
+
+  // ---- 最近見た薬とブックマークした薬（FB 15-2。2026-11-06 ユーザーと決定。11-07 に「保存」から「ブックマーク」に名前を変えた） ----
+  // どちらも、この端末の中（localStorage）にだけ残す。どこにも送らない
+  // 番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）。新しいものが先
+  // 最近見た薬: 開くと自動で入る。3つまでで、4つ目で古いものが消える
+  // ブックマークした薬: 薬の画面で「この薬をブックマーク」を押したときだけ入る。押し出さず、5つまで
+  const RECENT = { key: "recent-drugs-v1", max: 3 };
+  const SAVED = { key: "saved-drugs-v1", max: 5 };
+  // 端末に残せないとき（プライベートモード、アプリの中の枠など）は、開いている間だけ覚えておく
+  const memory = {};
+  function loadDrugs(store) {
+    try {
+      const raw = localStorage.getItem(store.key);
+      if (raw !== null || !(store.key in memory)) {
+        const v = JSON.parse(raw);
+        return Array.isArray(v) ? v : [];
+      }
+    } catch (e) {}
+    return memory[store.key] || [];
+  }
+  function saveDrugs(store, items) {
+    memory[store.key] = items;
+    try {
+      if (items.length > 0) localStorage.setItem(store.key, JSON.stringify(items));
+      else localStorage.removeItem(store.key);
+    } catch (e) {}
+  }
+  const sameDrug = (drug, viaGeneric) => (r) => r.name === drug.name && !!r.g === viaGeneric;
+  function addRecent(drug, viaGeneric) {
+    const rest = loadDrugs(RECENT).filter((r) => !sameDrug(drug, viaGeneric)(r));
+    saveDrugs(RECENT, [{ name: drug.name, g: viaGeneric }, ...rest].slice(0, RECENT.max));
+  }
+  function isSaved(drug, viaGeneric) {
+    return loadDrugs(SAVED).some(sameDrug(drug, viaGeneric));
+  }
+  // 保存する・外す。いっぱいのときは保存せず false を返す
+  function toggleSaved(drug, viaGeneric) {
+    const items = loadDrugs(SAVED);
+    if (items.some(sameDrug(drug, viaGeneric))) {
+      saveDrugs(SAVED, items.filter((r) => !sameDrug(drug, viaGeneric)(r)));
+      return true;
+    }
+    if (items.length >= SAVED.max) return false;
+    saveDrugs(SAVED, [{ name: drug.name, g: viaGeneric }, ...items]);
+    return true;
+  }
+  // サイトから外した薬は出さない
+  function knownDrugs(store) {
+    return loadDrugs(store)
+      .map((r) => ({ i: DRUGS.findIndex((d) => d.name === r.name), g: !!r.g }))
+      .filter(({ i, g }) => i >= 0 && (!g || DRUGS[i].generic));
+  }
+  // トップの下に、ブックマークした薬（見出しつき）と、最近見た薬（閉じた形）を分けて出す。行は薬の名前だけ（2026-11-07 ユーザーの判断）
+  function renderRecent() {
+    const saved = knownDrugs(SAVED);
+    const recent = knownDrugs(RECENT);
+    const row = ({ i, g }) => el("li", {}, [drugButton(DRUGS[i], i, g, false, true)]);
+    document.getElementById("mine").hidden = saved.length + recent.length === 0 || q.value.trim() !== "";
+    document.getElementById("saved").hidden = saved.length === 0;
+    document.getElementById("recent").hidden = recent.length === 0;
+    document.getElementById("saved-list").replaceChildren(...saved.map(row));
+    document.getElementById("recent-list").replaceChildren(...recent.map(row));
+  }
+
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
-  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  // 一覧で何も入れていないときは、製品名の行だけを並べる（2026-11-07 ユーザーの判断。前は一般名の行も並べていた）。一般名で探したときは、トップと同じく一般名の行を出す
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -642,7 +773,9 @@
         // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
         const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
         if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
-        if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        // 製品名で探したとき（例: 「クラリス」）は、製品名の行だけを出す。一般名まで入れたとき（例: 「クラリスロ」「クラリスロマイシンDS「タカタ」」）は一般名の行も出す（2026-11-07 ユーザーの判断）
+        const productTyped = (d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase())) && !hasWord(query, d.generic || "");
+        if (ownGenericRow(d) && genMatch && !productTyped) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
         if (!all) {
@@ -651,7 +784,7 @@
         }
         const ownRow = ownGenericRow(p);
         if (showAll || prepHit(ownRow ? { ...p, generic: null } : p, query)) hits.push({ prep: p, label: p.yomi || p.name });
-        if (ownRow && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
+        if (ownRow && !showAll && prepHit({ name: p.generic }, query)) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
@@ -668,25 +801,14 @@
         items.push(el("li", {}, [el("div", { class: "prep" }, [
           el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
           prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
-            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic })
+            : kampoYomi(prep) ? el("span", { class: "drug-meta", text: kampoYomi(prep) }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
         continue;
       }
-      const button = el("button", { type: "button" });
-      if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
-          el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
-        if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
-      } else if (all) {
-        button.append(el("span", { class: "drug-name", text: d.name }));
-        if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
-      } else {
-        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
-      }
-      button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
-      items.push(el("li", {}, [button]));
+      items.push(el("li", {}, [drugButton(d, i, viaGeneric, all)]));
     }
     target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
@@ -701,6 +823,7 @@
 
   function renderList() {
     fillList(list, normQuery(q.value), false);
+    renderRecent();
   }
 
   function renderAllList() {
@@ -754,6 +877,25 @@
     return parts;
   }
 
+  // 「この薬をブックマーク」のボタン（2026-11-06 ユーザーと決定）。押すたびに入れると外すが入れかわる。黄色で目立たせる（11-07）
+  // 写真に残す「画像を保存」と分けるため、名前は「ブックマーク」にする（2026-11-07 ユーザーの判断）
+  function saveButton(drug, viaGeneric) {
+    const b = el("button", { type: "button", class: "link-button save-drug" });
+    const msg = el("p", { class: "save-msg", role: "status" });
+    const paint = () => {
+      const on = isSaved(drug, viaGeneric);
+      b.setAttribute("aria-pressed", String(on));
+      b.textContent = on ? "★ ブックマークしました（押すと外す）" : "☆ この薬をブックマーク";
+    };
+    b.addEventListener("click", () => {
+      const ok = toggleSaved(drug, viaGeneric);
+      msg.textContent = ok ? "" : "ブックマークできるのは" + SAVED.max + "つまでです。ほかの薬の画面で「ブックマークしました」を押して外してから、ブックマークしてください。";
+      paint();
+    });
+    paint();
+    return el("div", { class: "save-row" }, [b, msg]);
+  }
+
   function renderCard(drug, viaGeneric) {
     const fact = FACTS[drug.name];
     const taste = fact.taste || drug.taste;
@@ -766,9 +908,15 @@
       el("div", { class: "taste" }, [el("b", { text: "味" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
+    parts.push(saveButton(drug, viaGeneric));
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     parts.push(...factBlock(fact));
+    // 薬ごとの画像（card/drug/薬の名前.png。card/make.cjs で作る）を出すボタン。コツの下、参考にした資料の上に置く（2026-11-05 ユーザーと決定）
+    // 一般名で開いたときも、同じ薬の画像を出す
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この薬の画像を保存"]);
+    save.addEventListener("click", () => openImage(drug.name, `card/drug/${encodeURIComponent(drug.name)}.png`, `${drug.name}の味と、混ぜていい食べ物の画像`));
+    parts.splice(parts.length - 1, 0, save);
     card.replaceChildren(...parts);
   }
 
@@ -795,15 +943,21 @@
   }
 
   // 画像を大きく出す。保存は長押し（2026-11-04 ユーザーと決定。iPhone でも Android でも写真に入るため）
+  // hint は画像の下の一文。QRコードのときだけ「相手のスマホのカメラで…」に変える
+  function openImage(title, src, alt, hint = "画像を長押し →「写真に保存」") {
+    const dlg = document.getElementById("card-view");
+    dlg.querySelector(".card-title").textContent = title;
+    dlg.querySelector(".card-hint").textContent = hint;
+    const img = dlg.querySelector("img");
+    img.src = src;
+    img.alt = alt;
+    dlg.showModal();
+  }
+
   function openCard(key, m) {
     const f = AGE_FLOWS.find((x) => x.age === flowSel);
     const name = m.title.replace("おすすめの飲ませ方: ", "");
-    const dlg = document.getElementById("card-view");
-    dlg.querySelector(".card-title").textContent = `${f.label}・${name}`;
-    const img = dlg.querySelector("img");
-    img.src = `card/${flowSel}-${key}.png`;
-    img.alt = `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`;
-    dlg.showModal();
+    openImage(`${f.label}・${name}`, `card/${flowSel}-${key}.png`, `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`);
   }
 
   function flowItem(key, open) {
@@ -819,7 +973,7 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方の画像を保存"]);
     save.addEventListener("click", () => openCard(key, m));
     parts.push(save);
     const d = el("details", {}, parts);
@@ -878,7 +1032,10 @@
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
     if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
-    if (drug) renderCard(drug, !!match[2] && !!drug.generic);
+    if (drug) {
+      renderCard(drug, !!match[2] && !!drug.generic);
+      addRecent(drug, !!match[2] && !!drug.generic);
+    }
     if (!screens.pick.hidden) renderList();
     if (!screens.list.hidden) renderAllList();
     // 薬の画面から戻ったときは、前に見ていた場所に戻す
@@ -893,6 +1050,11 @@
 
   q.addEventListener("input", renderList);
   q2.addEventListener("input", renderAllList);
+  // 消したら、まとまりごと消える（押した結果が見える）。消すのは取り消せるほど大事ではないので、確かめる画面は出さない
+  document.getElementById("recent-clear").addEventListener("click", () => {
+    saveDrugs(RECENT, []);
+    renderRecent();
+  });
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;
@@ -906,6 +1068,9 @@
   const cardView = document.getElementById("card-view");
   cardView.querySelector(".card-close").addEventListener("click", () => cardView.close());
   cardView.addEventListener("click", (e) => { if (e.target === cardView) cardView.close(); });
+  // トップの「このサイトをQRコードで教える」。QR の画像は card/qr_site.png（中身は ?from=qr つきの URL）
+  document.getElementById("open-qr").addEventListener("click", () =>
+    openImage("このサイトのQRコード", "card/qr_site.png", "このサイトを開くQRコード", "相手のスマホのカメラで読んでもらってください"));
   renderSteps();
   route();
 </script>

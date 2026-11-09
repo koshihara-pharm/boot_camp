@@ -1,0 +1,330 @@
+<title>薬を保存する計画</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+  /* html-plan の形: 主張の木（なぜ → 何ができる → 仕組み → どこを直す）。読む → 決める → 返す。見本はサイトと同じ色と丸い文字 */
+  :root {
+    --bg: #f4f8f7;
+    --paper: #ffffff;
+    --text: #1f2d2b;
+    --muted: #5d6e6b;
+    --line: #d3e3df;
+    --accent: #1f7a70;
+    --accent-soft: #e1f0ed;
+    --site-bg: #eef6f4;
+    --site-hero: #d9eee8;
+    --site-card: #ffffff;
+    --site-ink: #17403b;
+    --stamp: #e8a317;
+    --prep: #8a6400;
+    --prep-bg: #fdf5df;
+    --ok-bg: #e3f3e8;
+    --ok: #2f7d4f;
+    --code-bg: #f1f5f4;
+    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+    --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+      --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
+      --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9; --code-bg: #162220;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121c1b; --paper: #1a2725; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
+    --site-bg: #142120; --site-hero: #1b332f; --site-card: #1d2c2a; --site-ink: #cfeae4; --stamp: #f2bf4a;
+    --prep: #f2c14e; --prep-bg: #3a3120; --ok-bg: #1d3a2a; --ok: #8fd6a9; --code-bg: #162220;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 760px; margin: 0 auto; padding-block: 24px 120px; display: grid; gap: 22px; }
+  h1 { font-family: var(--font-display); font-size: 1.55rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-size: 1.1rem; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  .lead { color: var(--muted); margin-top: 6px; font-size: 0.92rem; }
+  .why { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+  .why blockquote { margin: 0; padding-left: 12px; border-left: 3px solid var(--accent); color: var(--text); }
+  .why cite { display: block; font-style: normal; font-size: 0.8rem; color: var(--muted); }
+  .layer { display: grid; gap: 10px; min-width: 0; }
+  .layer-label { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--accent); font-weight: 700; }
+
+  details.claim { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+  details.claim > summary { cursor: pointer; padding: 12px 16px; font-weight: 700; list-style: none; display: grid; grid-template-columns: 1.2em 1fr; gap: 6px; }
+  details.claim > summary::-webkit-details-marker { display: none; }
+  details.claim > summary::before { content: "▸"; color: var(--accent); }
+  details.claim[open] > summary::before { content: "▾"; }
+  .claim-body { padding: 0 16px 14px; display: grid; gap: 12px; min-width: 0; }
+  .evidence { font-size: 0.8rem; color: var(--muted); }
+
+  .decision { border: 2px solid var(--accent); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; background: var(--accent-soft); }
+  .decision h3 { font-size: 0.98rem; margin: 0; }
+  .decision label.opt { display: grid; grid-template-columns: 1.3em 1fr; gap: 6px; align-items: start; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; cursor: pointer; font-size: 0.92rem; }
+  .decision label.opt input { margin-top: 5px; }
+  .rec { color: var(--accent); font-weight: 700; font-size: 0.78rem; }
+  textarea { width: 100%; min-height: 3.2em; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font: inherit; font-size: 0.9rem; background: var(--paper); color: var(--text); resize: vertical; }
+  .cmt-label { font-size: 0.8rem; color: var(--muted); }
+
+  /* 見本（スマホの枠） */
+  .screen { max-width: 300px; background: var(--site-bg); border: 1px solid var(--line); border-radius: 22px; padding: 12px; font-family: var(--font-display); color: var(--site-ink); display: grid; gap: 7px; }
+  .hero { background: var(--site-hero); border-radius: 18px; padding: 12px; display: grid; gap: 7px; }
+  .eyebrow { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.06em; }
+  .h { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+  .lead-s { font-size: 0.76rem; font-family: var(--font-body); color: var(--muted); }
+  .search { background: var(--site-card); border: 2px solid var(--line); border-radius: 12px; padding: 7px 10px; font-size: 0.8rem; color: var(--muted); font-family: var(--font-body); }
+  .search.typed { border-color: var(--accent); color: var(--text); }
+  .lbl { font-size: 0.85rem; font-weight: 700; }
+  .btn { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 0.82rem; }
+  .btn.new { border: 2px solid var(--stamp); }
+  .back { font-size: 0.78rem; color: var(--accent); }
+  .kana { font-size: 0.72rem; color: var(--accent); font-weight: 700; padding: 2px 4px 0; }
+  .row { background: var(--site-card); border: 1px solid var(--line); border-radius: 12px; padding: 6px 10px; display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; }
+  .row .nm { font-size: 0.85rem; line-height: 1.3; min-width: 0; }
+  .row .nm small { display: block; font-family: var(--font-body); font-size: 0.66rem; color: var(--muted); }
+  .chip { font-size: 0.64rem; border-radius: 999px; padding: 1px 7px; font-family: var(--font-body); white-space: nowrap; }
+  .chip.ok { background: var(--ok-bg); color: var(--ok); }
+  .chip.prep { background: var(--prep-bg); color: var(--prep); font-weight: 700; }
+  .src { font-size: 0.64rem; color: var(--muted); font-family: var(--font-body); }
+  .result-prep { background: var(--prep-bg); border-radius: 12px; padding: 9px; font-family: var(--font-body); font-size: 0.78rem; display: grid; gap: 3px; }
+  .result-prep b { color: var(--prep); }
+
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.85rem; }
+  .flow span.box { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; }
+  .flow span.arrow { color: var(--muted); }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; overflow-x: auto; font-family: var(--font-code); font-size: 0.78rem; line-height: 1.55; margin: 0; }
+  ul.files { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: 0.92rem; }
+  code { font-family: var(--font-code); font-size: 0.85em; background: var(--code-bg); padding: 0 4px; border-radius: 4px; }
+
+  .whole { background: var(--paper); border: 2px dashed var(--accent); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+  .send { position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 1px solid var(--line);
+    padding-block: 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .send button { font: inherit; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: none; background: var(--accent); color: var(--paper); cursor: pointer; }
+  .send .msg { font-size: 0.82rem; color: var(--muted); }
+  #out { display: none; }
+  #out.show { display: block; }
+  button:focus-visible, summary:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  /* この計画で足した見本の部品 */
+  .sec { font-size: 0.85rem; font-weight: 700; padding-top: 4px; }
+  .note-s { font-size: 0.66rem; font-family: var(--font-body); color: var(--text); display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pill { border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; background: var(--site-card); font-size: 0.66rem; white-space: nowrap; }
+  .card-m { background: var(--site-card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; display: grid; gap: 6px; }
+  .taste-m { font-size: 0.72rem; font-family: var(--font-body); }
+  .taste-m span { background: var(--accent-soft); border-radius: 999px; padding: 1px 7px; margin-left: 4px; }
+  .savebtn { border: 2px solid var(--stamp); border-radius: 999px; padding: 5px 10px; font-size: 0.78rem; background: var(--site-card); justify-self: start; }
+  .savebtn.on { background: var(--prep-bg); }
+  .vs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .cap { font-size: 0.78rem; color: var(--muted); }
+  table.t { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+  table.t th, table.t td { border-bottom: 1px solid var(--line); padding: 6px 6px; text-align: left; vertical-align: top; }
+  table.t th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .tw { overflow-x: auto; }
+</style>
+
+<main>
+  <header>
+    <h1>薬を保存して、次に開いたときすぐ出せるようにする</h1>
+    <p class="lead">計画です（見本のページで試すためのデモ。公開のサイトはまだ変えません）。上から読んで、緑の枠の「決めること」を選び、気になったところにコメントを書いてください。最後に下の「答えをコピー」を押して、チャットに貼ってください。おすすめは最初から選んであります。2026-11-06</p>
+  </header>
+
+  <section class="why" data-id="なぜ">
+    <span class="layer-label">なぜ（頼まれたこと）</span>
+    <blockquote>「ページを移ると、何を探したか分からなくなる。検索の履歴か、見た薬の履歴をトップに出せるとよい」<cite>有本さん（Isamu）2026-11-04</cite></blockquote>
+    <blockquote>「（ローカルストレージでのブックマークは）いいと思います。それもデモでつくって」<cite>ユーザー 2026-11-06</cite></blockquote>
+    <p class="cap">「最近見た薬」は自動で3つ残るが、4つ目で押し出される。親が「この薬はまた開く」と自分で決めたものは、押し出されずに残したい。</p>
+    <span class="cmt-label">ここへのコメント</span>
+    <textarea data-comment="なぜ" aria-label="なぜ へのコメント"></textarea>
+  </section>
+
+  <section class="layer">
+    <span class="layer-label">何ができるようになるか</span>
+
+    <details class="claim" data-id="W1" open>
+      <summary>薬の画面で「この薬を保存」を押すと、トップの「保存した薬」に残る</summary>
+      <div class="claim-body">
+        <p class="evidence">見本: 左が薬の画面（押す前と押した後）、右がそのあとのトップ</p>
+        <div class="vs">
+          <div class="screen" aria-label="薬の画面の見本">
+            <div class="back">← 薬を選び直す</div>
+            <div class="card-m">
+              <div class="h">クラリスドライシロップ</div>
+              <div class="taste-m">味<span>ストロベリー風味</span><span>薬そのものは苦い</span></div>
+              <div class="savebtn">☆ この薬を保存</div>
+              <div class="cap">押すと ↓</div>
+              <div class="savebtn on">★ 保存しました（押すと外す）</div>
+            </div>
+          </div>
+          <div class="screen" aria-label="トップの見本">
+            <div class="hero">
+              <div class="h">子どもの粉薬を、飲みやすく</div>
+              <div class="search">粉薬の名前で探す（例: クラリス）</div>
+              <div class="sec">★ 保存した薬</div>
+              <div class="row"><span class="nm">クラリスドライシロップ<small>味: ストロベリー風味・薬そのものは苦い</small></span></div>
+              <div class="row"><span class="nm">ムコダインドライシロップ<small>味: 甘酸っぱい・ピーチ風味</small></span></div>
+              <div class="sec">最近見た薬</div>
+              <div class="row"><span class="nm">カロナール細粒<small>味: …</small></span></div>
+              <div class="note-s">この端末の中だけに残ります。<span class="pill">最近見た薬を消す</span></div>
+              <div class="lbl">お困りごと</div>
+              <div class="btn">🥄 飲ませ方が分からない</div>
+            </div>
+          </div>
+        </div>
+        <div class="decision" data-decision="D1">
+          <h3>決めること 1: ボタンと見出しの言葉は？</h3>
+          <label class="opt"><input type="radio" name="D1" value="「この薬を保存」と「保存した薬」" checked><span>「☆ この薬を保存」と「★ 保存した薬」 <span class="rec">おすすめ</span><br><small>飲ませ方の画像の「この飲ませ方を保存」と言葉がそろう（一貫性）</small></span></label>
+          <label class="opt"><input type="radio" name="D1" value="「お気に入りに入れる」と「お気に入り」"><span>「お気に入りに入れる」と「お気に入り」<br><small>よく見る言葉だが、薬に「お気に入り」は少し合わない</small></span></label>
+          <label class="opt"><input type="radio" name="D1" value="「うちの子の薬に入れる」と「うちの子の薬」"><span>「うちの子の薬に入れる」と「うちの子の薬」<br><small>親しみはあるが、ほかの人の薬を見ただけのときに合わない</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 1" aria-label="決めること 1 へのコメント"></textarea>
+        </div>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W1" aria-label="W1 へのコメント"></textarea>
+      </div>
+    </details>
+
+    <details class="claim" data-id="W2" open>
+      <summary>「保存した薬」と「最近見た薬」は、同じ薬を2回出さない</summary>
+      <div class="claim-body">
+        <p class="evidence">見本: W1 の右のトップ。クラリスは保存したので「保存した薬」にだけ出て、「最近見た薬」には出ない</p>
+        <div class="decision" data-decision="D2">
+          <h3>決めること 2: トップでの並べ方は？</h3>
+          <label class="opt"><input type="radio" name="D2" value="「保存した薬」を上、「最近見た薬」は保存していないものだけ下" checked><span>「保存した薬」を上に、「最近見た薬」は保存していないものだけを下に <span class="rec">おすすめ</span><br><small>自分で決めて残したものが先。同じ薬が2回出ない</small></span></label>
+          <label class="opt"><input type="radio" name="D2" value="1つのまとまりにして、保存したものに★をつける"><span>1つのまとまり「最近見た薬」にして、保存したものに ★ をつけて上に出す<br><small>トップが短くなる。ただ ★ の意味を読まないと分からない</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 2" aria-label="決めること 2 へのコメント"></textarea>
+        </div>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W2" aria-label="W2 へのコメント"></textarea>
+      </div>
+    </details>
+
+    <details class="claim" data-id="W3" open>
+      <summary>長く開かないと消えることを、どこまで伝えるかを決める</summary>
+      <div class="claim-body">
+        <p class="cap">iPhone の Safari は、7日開かないサイトの保存を消す。ホーム画面に追加して開くと、この決まりから外れる。LINE の中のブラウザでどうなるかは、試してみないと分からない。</p>
+        <div class="screen" aria-label="案内の見本">
+          <div class="hero">
+            <div class="sec">★ 保存した薬</div>
+            <div class="row"><span class="nm">クラリスドライシロップ<small>味: ストロベリー風味・薬そのものは苦い</small></span></div>
+            <div class="note-s">ホーム画面に追加すると、消えにくくなります。</div>
+          </div>
+        </div>
+        <div class="decision" data-decision="D3">
+          <h3>決めること 3: 消えることの案内は？</h3>
+          <label class="opt"><input type="radio" name="D3" value="デモでは出さず、まず自分で使って確かめる" checked><span>デモでは出さない。まず自分のスマホ（Safari と LINE）で数日使って、本当に消えるか確かめる <span class="rec">おすすめ</span><br><small>公開する前に、もう一度決める</small></span></label>
+          <label class="opt"><input type="radio" name="D3" value="「ホーム画面に追加すると、消えにくくなります」の1行を出す"><span>「保存した薬」の下に「ホーム画面に追加すると、消えにくくなります」の1行を出す（見本のとおり）<br><small>肯定の形で伝えられる。追加のやり方の説明が別に要るかもしれない</small></span></label>
+          <span class="cmt-label">この決定へのコメント</span>
+          <textarea data-comment="決めること 3" aria-label="決めること 3 へのコメント"></textarea>
+        </div>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="W3" aria-label="W3 へのコメント"></textarea>
+      </div>
+    </details>
+  </section>
+
+  <section class="layer">
+    <span class="layer-label">仕組み</span>
+    <details class="claim" data-id="H1">
+      <summary>「最近見た薬」と同じ置き場所（この端末の中）に、別の名前で残す。どこにも送らない</summary>
+      <div class="claim-body">
+        <div class="tw"><table class="t">
+          <tr><th></th><th>最近見た薬（作った）</th><th>保存した薬（これから）</th></tr>
+          <tr><th>入れ方</th><td>開くと自動で入る</td><td>「この薬を保存」を押したときだけ</td></tr>
+          <tr><th>数</th><td>3つ。4つ目で古いものが消える</td><td>押し出さない。目安は5つまで（6つ目は「保存できるのは5つまでです」と出す）</td></tr>
+          <tr><th>外し方</th><td>「最近見た薬を消す」で全部</td><td>薬の画面でもう一度押す（1つずつ）</td></tr>
+          <tr><th>置き場所</th><td colspan="2">この端末の中（localStorage）。サーバー、GA4、Clarity には送らない。Clarity の録画では隠す</td></tr>
+        </table></div>
+        <p>残す形は最近見た薬と同じ「薬の名前」。番号は data.js を直すとずれるため。サイトから外した薬は出さない。</p>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="H1" aria-label="H1 へのコメント"></textarea>
+      </div>
+    </details>
+  </section>
+
+  <section class="layer">
+    <span class="layer-label">どこを直すか</span>
+    <details class="claim" data-id="P1">
+      <summary>直すのは index.html だけ。見本のページで触ってから、記録と公開を決める</summary>
+      <div class="claim-body">
+        <ul class="files">
+          <li><code>index.html</code>: 薬の画面に「この薬を保存」のボタン、トップに「保存した薬」、最近見た薬との重なりを外す</li>
+          <li>見本のページ（お薬サポート見本）を更新して、スマホで触る</li>
+          <li>決まったら: <code>CLAUDE.md</code> の決まったこと、<code>docs/18</code> の 15-2、FB シート。公開（main にまとめる）はそのあと</li>
+        </ul>
+        <pre>// この端末の中に残す形（例）
+localStorage "saved-drugs-v1" = [
+  { "name": "クラリスドライシロップ", "g": false },
+  { "name": "ムコダインドライシロップ", "g": false }
+]</pre>
+        <p>作る順番: ① 薬の画面のボタン（押すと ☆ と ★ が変わる）→ ② トップの「保存した薬」→ ③ 最近見た薬との重なりを外す。作ったら画面チェックをして、見本のページを更新する。</p>
+        <span class="cmt-label">この主張へのコメント</span>
+        <textarea data-comment="P1" aria-label="P1 へのコメント"></textarea>
+      </div>
+    </details>
+  </section>
+
+  <section class="whole">
+    <h2>全体へのひとこと</h2>
+    <p class="cmt-label">全体として「これでいい／違う」があれば、ここに書いてください。</p>
+    <textarea id="whole" data-comment="全体へのひとこと" aria-label="全体へのひとこと"></textarea>
+  </section>
+
+  <textarea id="out" readonly aria-label="コピーする答え"></textarea>
+</main>
+
+<div class="send">
+  <button type="button" id="copy">答えをコピー</button>
+  <span class="msg" id="msg" role="status">コピーしたら、チャットに貼ってください</span>
+</div>
+
+<script>
+  // 開いて触った決定を覚える。触らなかったものは「開かず、既定のまま」として返す
+  const touched = new Set();
+  document.querySelectorAll(".decision").forEach((d) => {
+    d.addEventListener("change", () => touched.add(d.dataset.decision));
+    d.addEventListener("focusin", () => touched.add(d.dataset.decision));
+  });
+
+  function answers() {
+    const lines = ["# 薬を保存する計画への答え", ""];
+    document.querySelectorAll(".decision").forEach((d) => {
+      const id = d.dataset.decision;
+      const title = d.querySelector("h3").textContent.trim();
+      const picked = d.querySelector("input:checked");
+      const mark = touched.has(id) ? "" : "（開かず、既定のまま）";
+      lines.push("- " + title + " → " + (picked ? picked.value : "未選択") + mark);
+    });
+    const comments = [];
+    document.querySelectorAll("textarea[data-comment]").forEach((t) => {
+      const v = t.value.trim();
+      if (v) comments.push("- " + t.dataset.comment + ": " + v.replace(/\n+/g, " "));
+    });
+    lines.push("", "## コメント", comments.length ? comments.join("\n") : "- なし");
+    return lines.join("\n");
+  }
+
+  document.getElementById("copy").addEventListener("click", () => {
+    const text = answers();
+    const out = document.getElementById("out");
+    const msg = document.getElementById("msg");
+    out.value = text;
+    const fallback = () => {
+      out.classList.add("show");
+      out.style.minHeight = "10em";
+      out.focus();
+      out.select();
+      msg.textContent = "下の欄の文を選んだので、コピーしてチャットに貼ってください";
+    };
+    try {
+      navigator.clipboard.writeText(text).then(() => { msg.textContent = "コピーしました。チャットに貼ってください"; }, fallback);
+    } catch (e) { fallback(); }
+  });
+</script>

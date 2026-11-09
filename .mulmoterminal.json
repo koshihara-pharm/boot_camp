@@ -1,0 +1,6 @@
+{
+  "buttons": [
+    { "id": "site-serve", "icon": "play_arrow", "label": "サイトを動かす（localhost:8123）", "run": "shell", "cmd": "node .claude/serve.cjs", "order": 10 },
+    { "id": "fb", "icon": "forum", "label": "FBを開く", "run": "open", "open": { "url": "http://localhost:8123/docs/fb_triage.html" }, "order": 11 }
+  ]
+}
