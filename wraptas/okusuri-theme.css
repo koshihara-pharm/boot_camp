@@ -21,7 +21,7 @@
   --accent: #e8a317;           /* 差し色（アプリの「のめた！」スタンプの丸と同じ黄） */
   --accent-ink: #17403b;       /* 差し色の上に載せる文字色 */
   --muted: #5d6e6b;
-  --theme-color: #1f7a70;      /* テーブル見出し等の流用先（アプリのボタンの青緑） */
+  --theme-color: #1c7168;      /* テーブル見出し等の流用先（アプリのボタンの青緑） */
   --display: "Bebas Neue", "Noto Sans JP", sans-serif;
   --body: "Zen Maru Gothic", "Noto Sans JP", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif;
 }

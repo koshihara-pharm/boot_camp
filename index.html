@@ -23,20 +23,20 @@
   gtag('config', 'G-1SGGXK56V6');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
 <style>
-  /* 1カラムのスマホ用。やわらかい青緑の地に、黄色いスタンプの丸を目印に置く。主役は飲ませる手助け */
+  /* 1カラムのスマホ用。クリームの地に白い面、ピンクの丸い見出し、オレンジの丸のメニュー（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。絵とロゴは使わない）。黄色いスタンプのくまは残す */
   :root {
-    --bg: #eef6f4;
-    --ink: #17403b;
-    --hero: #d9eee8;
+    --bg: #fff8dc;
+    --ink: #cf2a44;
+    --hero: #ffffff;
     --stamp-soft: #fff1cc;
     --stamp-ink: #3b2a00;
     --card: #ffffff;
-    --text: #1f2d2b;
-    --muted: #5d6e6b;
-    --line: #d3e3df;
-    --accent: #1f7a70;
+    --text: #4a2f1e;
+    --muted: #7a5440;
+    --line: #f1dcb8;
+    --accent: #cf2a44;
     --accent-text: #ffffff;
     --stamp: #e8a317;
     --good: #2f7d4f;
@@ -46,58 +46,16 @@
     --bad-bg: #fbe8e5;
     --warn: #7a3d9c;
     --warn-bg: #f2e7f8;
-    --taste-bg: #e1f0ed;
+    --taste-bg: #fff0dc;
+    --orange: #e27100;
+    --title: #f22649;
+    --lace: #e9cf9a;
+    --star: #f29aa8;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #142120;
-      --ink: #cfeae4;
-      --hero: #1b332f;
-      --stamp-soft: #3a3016;
-      --stamp-ink: #2a1f00;
-      --card: #1d2c2a;
-      --text: #e8f1ef;
-      --muted: #a3b5b1;
-      --line: #2f4340;
-      --accent: #6cc7b9;
-      --accent-text: #0f1a19;
-      --stamp: #f2bf4a;
-      --good: #8fd6a9;
-      --good-bg: #1d3a2a;
-      --best-bg: #45390f;
-      --bad: #f1a196;
-      --bad-bg: #432522;
-      --warn: #d4a9ef;
-      --warn-bg: #35263f;
-      --taste-bg: #1f3936;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #142120;
-    --ink: #cfeae4;
-    --hero: #1b332f;
-    --stamp-soft: #3a3016;
-    --stamp-ink: #2a1f00;
-    --card: #1d2c2a;
-    --text: #e8f1ef;
-    --muted: #a3b5b1;
-    --line: #2f4340;
-    --accent: #6cc7b9;
-    --accent-text: #0f1a19;
-    --stamp: #f2bf4a;
-    --good: #8fd6a9;
-    --good-bg: #1d3a2a;
-    --best-bg: #45390f;
-    --bad: #f1a196;
-    --bad-bg: #432522;
-    --warn: #d4a9ef;
-    --warn-bg: #35263f;
-    --taste-bg: #1f3936;
-    color-scheme: dark;
-  }
+  /* スマホのダークモードでも、いつも白で出す（2026-11-07 ユーザーの指示「白をベース」。前はダークモードで緑の暗い色になっていた） */
+  :root { color-scheme: light; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -328,6 +286,130 @@
   .worry-hint:empty { display: none; }
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
+
+  /* ===== トップ（2026-11-07：紙・刺しゅう・絵本のモチーフ） ===== */
+  :root { --title: #cf2a44; --paper-shadow: #d6b77726; --menu-ink: #51301e; --split-bg: #fff4dc; }
+  body { background-image: radial-gradient(var(--line) .8px, transparent .8px); background-size: 14px 14px; }
+  .hero { background: transparent; border-radius: 0; padding: 0; overflow: visible; }
+  .brandbar { margin: -16px -16px 26px; padding: 15px 18px 13px; background: var(--card); border-top: 7px solid transparent;
+    border-image: repeating-linear-gradient(90deg, #f3a8b6 0 12px, #ffe9ab 12px 24px, #a8d5e1 24px 36px, #c8dea2 36px 48px) 7;
+    font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink); box-shadow: 0 3px 0 var(--paper-shadow); letter-spacing: .06em; }
+  .hero-head { position: relative; display: flex; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 10px; padding: 5px 0 14px; }
+  .hero-head::before, .hero-head::after { position: absolute; color: var(--title); content: "✧"; font-size: 25px; pointer-events: none; }
+  .hero-head::before { right: 5px; top: -16px; transform: rotate(12deg); }
+  .hero-head::after { left: 1px; bottom: 0; font-size: 17px; }
+  .hero-stamp { position: relative; top: auto; right: auto; flex: none; width: 76px; height: 76px; font-size: 0; border-width: 3px; outline: 1px dashed var(--stamp); outline-offset: 5px; background: var(--stamp-soft); box-shadow: 3px 5px 0 var(--paper-shadow); }
+  .hero-stamp img { width: 53px; height: 53px; }
+  .hero-stamp::after { bottom: -10px; white-space: nowrap; }
+  .hero h1 { font-size: clamp(26px, 7.7vw, 38px); line-height: 1.4; margin: 0; max-width: none; color: var(--title); text-align: left; letter-spacing: .025em; }
+  .hero .lead { margin: 9px auto 25px; max-width: 25em; color: var(--text); font-weight: 700; font-size: 15px; text-align: center; line-height: 1.9; }
+  .panel { position: relative; background: var(--hero); border-radius: 48% 42% 26px 30px / 24px 26px 26px 30px; padding: 33px 16px 22px; box-shadow: 0 6px 0 var(--paper-shadow); }
+  .panel::before { content: "✦  ·  ✧"; position: absolute; top: -17px; right: 23px; color: var(--title); font-size: 24px; letter-spacing: 10px; transform: rotate(8deg); pointer-events: none; }
+  .search-wrap { position: relative; padding: 12px; margin: 0 -3px; background: var(--split-bg); border: 1px dashed var(--lace); border-radius: 20px 20px 8px 20px; }
+  .search-wrap::before { content: ""; position: absolute; width: 48px; height: 14px; top: -8px; left: calc(50% - 24px); background: repeating-linear-gradient(45deg, #f5c3a9aa 0 3px, #ffe0beaa 3px 6px); transform: rotate(-5deg); }
+  .hero input[type="search"] { border: 1px solid var(--muted); border-radius: 12px; box-shadow: 0 3px 0 var(--paper-shadow); font-size: 16px; padding: 16px 10px; min-height: 56px; }
+  input[type="search"]:focus { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .hero input[type="search"]:focus { border-color: var(--accent); }
+  input[type="search"]::placeholder { color: var(--muted); opacity: 1; }
+  .list-link { display: flex; align-items: center; justify-content: center; min-height: 44px; margin: 4px 0 -4px; font-size: 14px; text-underline-offset: 4px; }
+  .hero .worry-title { display: flex; align-items: center; justify-content: center; gap: 14px; text-align: center; font-size: 25px; color: var(--title); margin: 29px 0 44px; letter-spacing: .08em; }
+  .worry-title::before, .worry-title::after { content: ""; width: 26px; height: 9px; border-top: 2px solid var(--lace); border-bottom: 2px solid var(--lace); transform: rotate(-12deg); }
+  .worry-title::after { transform: rotate(12deg); }
+  .worry { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 47px 12px; padding: 0 1px 3px; }
+  .worry button { --c: #f7b54e; position: relative; isolation: isolate; aspect-ratio: 1; min-height: 148px; border: 0; border-radius: 48% 52% 47% 53%; background: var(--c); color: var(--menu-ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; padding: 35px 7px 16px; text-align: center; font-weight: 700; box-shadow: 0 5px 0 var(--paper-shadow); }
+  .worry button:nth-child(2) { --c: #bad77f; border-radius: 52% 48% 53% 47%; }
+  .worry button:nth-child(3) { --c: #f2a3b3; }
+  .worry button:nth-child(4) { --c: #94cee1; border-radius: 52% 48% 53% 47%; }
+  .worry button::before { content: ""; position: absolute; inset: 8px; z-index: -1; border: 2px dashed #fff; border-radius: inherit; pointer-events: none; }
+  .worry button::after { content: "✧"; position: absolute; right: 18px; top: 29px; color: #fff; font-size: 23px; transform: rotate(12deg); pointer-events: none; }
+  .worry .ic { position: absolute; top: -30px; left: 50%; transform: translateX(-50%) rotate(-9deg); width: 80px; height: 80px; margin: 0; filter: drop-shadow(0 4px 0 #ffffff66); }
+  .worry button:nth-child(even) .ic { transform: translateX(-50%) rotate(8deg); }
+  .worry .lbl { position: relative; font-size: 19px; line-height: 1.35; text-shadow: none; }
+  .worry .arrow { width: 27px; height: 19px; color: var(--menu-ink); }
+  .worry button:active { transform: translateY(3px); box-shadow: none; }
+  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+  .lace { height: 18px; margin: 26px -10px 0; border-top: 1px dotted var(--lace); background: radial-gradient(circle at 9px 0, transparent 7px, var(--lace) 7px 8px, transparent 8.5px) 0 0 / 18px 15px repeat-x; }
+  #detail, #howto-page, #list-page { position: relative; }
+  #howto-page > h1, #list-page > h1 { margin: 14px 0 20px; padding-bottom: 15px; border-bottom: 2px dashed var(--lace); font-size: 29px; color: var(--title); }
+  .back { min-height: 48px; margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 999px; font-family: var(--font-display); }
+  .card { border-radius: 27px 27px 20px 20px; border-top: 5px solid var(--lace); box-shadow: 0 5px 0 var(--paper-shadow); padding: 22px 16px; margin-top: 18px; }
+  .section-title { padding-bottom: 8px; border-bottom: 2px dotted var(--lace); margin-top: 28px; }
+  .group { padding: 15px 12px; border-radius: 17px; background: var(--tone-bg); }
+  .chip { background: var(--card); border: 1px solid var(--line); font-size: 16px; }
+  .taste { padding: 12px 0; border-bottom: 1px dashed var(--line); }
+  .pick { gap: 9px; }
+  .pick button { min-height: 56px; border: 2px solid var(--line); box-shadow: 0 3px 0 var(--paper-shadow); }
+  .howto details { border-radius: 19px; box-shadow: 0 3px 0 var(--paper-shadow); }
+  .howto summary { min-height: 52px; align-items: center; }
+  .howto summary::after { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--taste-bg); }
+  .howto li::marker { color: var(--accent); font-weight: bold; }
+  .howto ol li { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .list button { border-radius: 17px 17px 17px 5px; box-shadow: 0 3px 0 var(--paper-shadow); }
+  .kana { margin-top: 10px; padding: 7px 12px; background: var(--taste-bg); border-radius: 999px; }
+  .refs summary, .site-note summary { min-height: 44px; padding-block: 10px; }
+  .site-note { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; }
+  @media (max-width: 350px) {
+    .hero-head { gap: 8px; }
+    .hero-stamp { width: 63px; height: 63px; }
+    .hero-stamp img { width: 44px; height: 44px; }
+    .panel { padding-inline: 12px; }
+    .worry { gap: 44px 8px; }
+    .worry button { min-height: 136px; }
+    .worry .lbl { font-size: 18px; }
+    .hero input[type="search"] { font-size: 14px; }
+  }
+
+  /* ===== 色（2026-11-07 ユーザーの指示）: 白を地に。本の「こども」の4色から、要るものだけを使う =====
+     オレンジ＝主役（見出し、お困りごとの丸。丸は 2026-11-07 に薄めの #f5b783 にした）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
+     本の色は明るいので、字に使うときは読める濃さにした（オレンジ #b8571a、青 #2a6fa3、緑 #2b7d2b） */
+  :root {
+    --bg: #ffffff; --hero: #ffffff; --card: #ffffff;
+    --text: #3a3a3a; --muted: #6b6b6b; --line: #e8e8e8;
+    --ink: #b8571a; --title: #c4611a; --accent: #2a6fa3; --accent-text: #ffffff;
+    --orange: #f5b783; --kids-orange: #f5b783; --kids-blue: #4b97c8; --kids-green: #3e9a3c;
+    --good: #2b7d2b; --good-bg: #ebf5e9; --best-bg: #ebf5e9;
+    --taste-bg: #fdf1e6; --stamp-soft: #fff4dc;
+    --lace: #f2c49c; --star: #e8893a; --paper-shadow: #00000012; --menu-ink: #3b2414; --split-bg: #fdf6ef;
+  }
+  body { background-image: none; }
+  .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
+  .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
+  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) { --c: var(--kids-orange); color: var(--menu-ink); }
+
+  /* 平らな絵（img/fluent）の大きさ（2026-11-07） */
+  .chip img.fe { width: 26px; height: 26px; flex: none; }
+  img.mi { width: 26px; height: 26px; vertical-align: -6px; margin-right: 6px; }
+  img.bi { width: 20px; height: 20px; vertical-align: -4px; margin-right: 6px; }
+  /* 「準備中」も今回の色に（黄色 → 薄いオレンジ。2026-11-07） */
+  .list .prep { background: var(--taste-bg); border-color: var(--kids-orange); }
+  .list .prep-tag { background: var(--kids-orange); color: var(--menu-ink); }
+
+  /* ===== 2026-11-09 ユーザーの指示: 丸ゴシックにする。お困りごとの丸の余白が目立つので、字と絵を大きく ===== */
+  :root { --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  body, button, input, select, textarea { font-family: var(--font-body); }
+  .worry button, .worry .lbl { font-family: var(--font-display); }
+  /* 丸は広い画面でも大きくなりすぎないようにし、字・絵・矢印は丸の大きさに合わせて大きくする（cqw＝丸の幅に対する割合） */
+  .worry { max-width: 440px; margin-inline: auto; }
+  .worry button { container-type: inline-size; justify-content: center; gap: 4px; padding: 24% 6% 9%; }
+  .worry .lbl { font-size: clamp(19px, 16cqw, 30px); line-height: 1.3; }
+  .worry .ic { width: 58cqw; height: 58cqw; top: -24cqw; }
+  .worry .arrow { width: clamp(27px, 18cqw, 40px); height: auto; }
+  .worry button::after { right: 10cqw; top: 16cqw; font-size: clamp(18px, 12cqw, 28px); }
+
+  /* ===== 2026-11-09 ユーザー「タップしていいのか分からない」: 丸を押せるボタンに見せる（docs/22 第2章 押せるものは押せそうに） ===== */
+  .worry button { box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / 0.10); cursor: pointer; }
+  .worry button:active { transform: translateY(6px); box-shadow: 0 1px 0 #dc955a, 0 3px 6px rgb(0 0 0 / 0.10); }
+  .worry .arrow { box-sizing: content-box; padding: 6px 12px; margin-top: 2px; background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; }
+  @media (prefers-reduced-motion: no-preference) {
+    .worry button { animation: worry-hop 0.7s ease-out 1 both; }
+    .worry button:nth-child(1) { animation-delay: 0.5s; }
+    .worry button:nth-child(2) { animation-delay: 0.62s; }
+    .worry button:nth-child(3) { animation-delay: 0.74s; }
+    .worry button:nth-child(4) { animation-delay: 0.86s; }
+    @keyframes worry-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+  }
+
   .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
   .recent-note .link-button { min-height: 44px; font-size: 15px; }
   .mine .howto { margin-top: 12px; }
@@ -339,31 +421,44 @@
   .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: normal; }
   .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
   .save-msg:empty { display: none; }
+
+  /* 2026-11-09 ユーザー: 説明文の改行が気になる（「ます。」だけが次の行に残る）。言葉の切れ目で折り返し、字を少し大きく */
+  .hero .lead { font-size: 17px; line-height: 1.8; }
+  .hero .lead .nw { display: inline-block; }
+  /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
+  .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
 </style>
 </head>
 <body>
 <main>
   <section id="pick">
     <div class="hero">
-      <div class="hero-stamp" aria-hidden="true">🐻</div>
-      <p class="eyebrow">子どものお薬サポート</p>
-      <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
-      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
+      <p class="brandbar">子どものお薬サポート</p>
+      <div class="hero-head">
+        <div class="hero-stamp" aria-hidden="true"><img src="img/fluent/bear.svg" alt=""></div>
+        <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
+      </div>
+      <p class="lead"><span class="nw">薬の名前を入れると、</span><span class="nw">味と、混ぜていい食べ物が分かります。</span></p>
+      <div class="panel">
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
+      <div class="search-wrap">
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
+      </div>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">お困りごと</h2>
       <div class="worry">
-        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
-        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">⭐</span>おすすめの飲ませ方</button>
-        <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
+        <button type="button" data-go="howto"><img class="ic" src="img/fluent/spoon.svg" alt=""><span class="lbl">飲ませ方が<br>分からない</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-go="howto"><img class="ic" src="img/fluent/star.svg" alt=""><span class="lbl">おすすめの<br>飲ませ方</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="mix" data-hint="上の欄に、薬の名前を入れてください"><img class="ic" src="img/fluent/custard.svg" alt=""><span class="lbl">混ぜて<br>いい？</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="taste" data-hint="上の欄に、薬の名前を入れてください"><img class="ic" src="img/fluent/powder.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+      </div>
+      <div class="lace" aria-hidden="true"></div>
       </div>
       <!-- ほかの親にサイトを教えるときに、QRコードを見せる。形は「薬の一覧を見る」と同じ小さいリンク（2026-11-05 ユーザーと決定。計画は html-plan）。QR の中身は ?from=qr つきの URL（docs/26） -->
-      <button type="button" class="list-link" id="open-qr"><span aria-hidden="true">📱 </span>このサイトをQRコードで教える</button>
+      <button type="button" class="list-link" id="open-qr"><img class="bi" src="img/fluent/mobile-phone.svg" alt="" aria-hidden="true">このサイトをQRコードで教える</button>
       <!-- ブックマークした薬と最近見た薬（FB 15-2。2026-11-07 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置く -->
       <!-- ブックマークした薬は見出しつきでいつも出し、最近見た薬は閉じた形にして、押すと開く。どちらも薬の名前だけ。同じ薬が両方に出てもよい -->
       <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
@@ -396,7 +491,7 @@
     <ul class="tips">
       <li>混ぜたら、すぐに飲ませる。時間がたつと苦くなる薬があります</li>
       <li>熱いものには混ぜない</li>
-      <li>酸っぱいもの（オレンジジュース、スポーツドリンク、乳酸菌飲料、ヨーグルトなど）は、苦くなったり効き目が弱まる薬があります</li>
+      <li>酸っぱいもの（オレンジジュース、スポーツ飲料、乳酸菌飲料、ヨーグルトなど）は、苦くなったり効き目が弱まる薬があります</li>
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
@@ -741,8 +836,21 @@
     "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
   };
 
+  // 絵文字のかわりに、平らな絵（img/fluent。Fluent Emoji、MIT）で出す。スマホの種類で絵が変わらないように（2026-11-07 ユーザーの指示「今回のテイストにあわせて全部変更」）
+  const ICON_FILE = {
+    "🍨": "ice-cream", "💧": "droplet", "☕": "hot-beverage", "🍮": "custard", "🥛": "glass-of-milk", "🥄": "spoon",
+    "🍵": "teacup", "🥣": "bowl-with-spoon", "🍧": "shaved-ice", "🍎": "red-apple", "🍊": "tangerine",
+    "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box", "📥": "inbox-tray", "🍼": "baby-bottle",
+    "✂️": "scissors", "☝️": "index-pointing-up",
+  };
+  function ico(emoji, cls) {
+    const f = ICON_FILE[emoji];
+    if (!f) return el("span", { class: cls, "aria-hidden": "true", text: emoji || "・" });
+    return el("img", { class: cls, src: "img/fluent/" + f + ".svg", alt: "", "aria-hidden": "true" });
+  }
+
   function foodChip(food) {
-    return el("span", { class: "chip" }, [el("span", { class: "fe", "aria-hidden": "true", text: FOOD_EMOJI[food] || "・" }), food]);
+    return el("span", { class: "chip" }, [ico(FOOD_EMOJI[food], "fe"), food]);
   }
 
   function chipBox(title, cls, text, chips) {
@@ -806,7 +914,7 @@
     parts.push(...factBlock(fact));
     // 薬ごとの画像（card/drug/薬の名前.png。card/make.cjs で作る）を出すボタン。コツの下、参考にした資料の上に置く（2026-11-05 ユーザーと決定）
     // 一般名で開いたときも、同じ薬の画像を出す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この薬の画像を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この薬の画像を保存"]);
     save.addEventListener("click", () => openImage(drug.name, `card/drug/${encodeURIComponent(drug.name)}.png`, `${drug.name}の味と、混ぜていい食べ物の画像`));
     parts.splice(parts.length - 1, 0, save);
     card.replaceChildren(...parts);
@@ -855,7 +963,7 @@
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
-      el("summary", { text: m.icon + " " + m.title }),
+      el("summary", {}, [ico(m.icon, "mi"), m.title]),
       el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
     ];
     if (m.to === "mix") {
@@ -865,7 +973,7 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この飲ませ方の画像を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方の画像を保存"]);
     save.addEventListener("click", () => openCard(key, m));
     parts.push(save);
     const d = el("details", {}, parts);

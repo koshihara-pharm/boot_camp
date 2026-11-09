@@ -10,17 +10,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
+  /* 2026-11-07 サイトと同じテイストに: 白い地、オレンジ（見出し）、青（番号の印）。絵は平らな絵（../img/fluent） */
   :root {
-    --bg: #eef6f4;
-    --ink: #17403b;
-    --hero: #d9eee8;
+    --bg: #ffffff;
+    --ink: #c4611a;
+    --hero: #fdf1e6;
     --card: #ffffff;
-    --text: #1f2d2b;
-    --muted: #5d6e6b;
-    --line: #d3e3df;
-    --accent: #1f7a70;
+    --text: #3a3a3a;
+    --muted: #6b6b6b;
+    --line: #f2c49c;
+    --accent: #2a6fa3;
     /* 小さい文字の色。--accent は薄い背景の上で 4.26 対 1 しかないため（docs/22 の 4.5 対 1。2026-11-04 ui-check） */
-    --accent-deep: #17605a;
+    --accent-deep: #b8571a;
     --stamp: #e8a317;
     --best-bg: #fff2c4;
     --bad: #b33a2e;
@@ -36,7 +37,11 @@
     background: linear-gradient(180deg, var(--hero) 0, var(--bg) 160px);
     color: var(--text);
     font-family: var(--font-body);
+    border-top: 6px solid transparent;
+    border-image: linear-gradient(90deg, #f5b783 0 70%, #4b97c8 70% 100%) 6;
   }
+  .stamp img { width: 40px; height: 40px; }
+  .ic { width: 1.1em; height: 1.1em; vertical-align: -0.15em; margin-right: 4px; }
   .card {
     margin: 0 12px;
     padding: 34px 0 16px;
@@ -99,7 +104,7 @@
   .grp.bad h3 { color: var(--bad); }
   .grp p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.55; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chips span { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14.5px; background: var(--card); }
+  .chips span { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14.5px; background: var(--card); }
 </style>
 </head>
 <body>
@@ -120,13 +125,18 @@
     const NOT_TIPS = ["口直し", "服薬ゼリー"];
     const tips = HOWTO.filter((h) => (h.ages.includes(age) || h.ages.includes("all")) && !NOT_TIPS.some((w) => h.title.includes(w)));
 
+    // 絵文字のかわりに、サイトと同じ平らな絵で出す（2026-11-07）
+    const ICON_FILE = { "🍼": "baby-bottle", "🥄": "spoon", "✂️": "scissors", "☝️": "index-pointing-up", "💧": "droplet", "🍮": "custard", "🥛": "glass-of-milk",
+      "🍨": "ice-cream", "☕": "hot-beverage", "🍵": "teacup", "🥣": "bowl-with-spoon", "🍧": "shaved-ice", "🍎": "red-apple", "🍊": "tangerine",
+      "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box" };
+    const icon = (e) => ICON_FILE[e] ? `<img class="ic" src="../img/fluent/${ICON_FILE[e]}.svg" alt="">` : (e ? e + " " : "");
     const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const way = (key, hard) => {
       const m = METHODS[key];
       const name = m.title.replace("おすすめの飲ませ方: ", "");
       // コツと同じ文（data.js の cardDrop）は、手順から抜く。抜いて空になった手順は出さない
       const steps = m.steps.map((s) => (m.cardDrop || []).reduce((t, d) => t.replace("。" + d, "").replace(d, ""), s)).filter((s) => s.trim());
-      return `<div class="way${hard ? " hard" : ""}"><b>${m.icon} ${esc(name)}</b><ol>${steps.map((s) => `<li>${esc(fix(s))}</li>`).join("")}</ol></div>`;
+      return `<div class="way${hard ? " hard" : ""}"><b>${icon(m.icon)}${esc(name)}</b><ol>${steps.map((s) => `<li>${esc(fix(s))}</li>`).join("")}</ol></div>`;
     };
 
     const card = document.getElementById("card");
@@ -144,7 +154,7 @@
       "お茶": "🍵", "ヨーグルト": "🥣", "ゼリー": "🍧", "りんごジュース": "🍎", "オレンジジュース": "🍊",
       "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
     };
-    const chips = (foods) => `<div class="chips">${foods.map((x) => `<span>${FOOD_EMOJI[x] || "・"} ${esc(x)}</span>`).join("")}</div>`;
+    const chips = (foods) => `<div class="chips">${foods.map((x) => `<span>${icon(FOOD_EMOJI[x] || "・")}${esc(x)}</span>`).join("")}</div>`;
     const grp = (title, cls, g) => g ? `<div class="grp ${cls}"><h3>${title}</h3>${chips(g.foods)}${g.text ? `<p>${esc(g.text)}</p>` : ""}</div>` : "";
     if (drugNo !== null) {
       const d = DRUGS[Number(drugNo)];
@@ -164,9 +174,9 @@
       document.fonts.ready.then(() => { document.body.dataset.h = Math.ceil(card.getBoundingClientRect().bottom + 8); });
     } else
     card.innerHTML = `
-      <div class="stamp" aria-hidden="true">🐻</div>
+      <div class="stamp" aria-hidden="true"><img src="../img/fluent/bear.svg" alt=""></div>
       <p class="eyebrow">子どものお薬サポート${only ? `<br>${esc(f.label)}の粉薬の飲ませ方` : ""}</p>
-      <h1>${only ? `${m.icon} ${esc(m.title.replace("おすすめの飲ませ方: ", ""))}` : `${esc(f.label)}の粉薬の飲ませ方`}</h1>
+      <h1>${only ? `${icon(m.icon)}${esc(m.title.replace("おすすめの飲ませ方: ", ""))}` : `${esc(f.label)}の粉薬の飲ませ方`}</h1>
       ${body}
       <h2>コツ</h2>
       <ul class="tips">${[...(only && METHODS[only].tips || []), ...tips.map((h) => h.title)].map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
