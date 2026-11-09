@@ -454,6 +454,15 @@
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
   }
 
+  function toHiragana(s) {
+    return s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  }
+
+  // 漢方の読みがな（docs/18 の 15-1。2026-11-07 ユーザーの指示）。漢字がむずかしいので、名前の下に小さくひらがなで出す
+  function kampoYomi(p) {
+    return p.name.includes("（漢方）") && p.yomi ? toHiragana(p.yomi) : null;
+  }
+
   // 「参考にした資料」は、どの画面でも閉じた形で出す（タップで開く）
   function refsBox(sources) {
     return el("details", { class: "refs" }, [
@@ -656,7 +665,7 @@
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
-  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  // 一覧で何も入れていないときは、製品名の行だけを並べる（2026-11-07 ユーザーの判断。前は一般名の行も並べていた）。一般名で探したときは、トップと同じく一般名の行を出す
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -669,7 +678,9 @@
         // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
         const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
         if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
-        if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        // 製品名で探したとき（例: 「クラリス」）は、製品名の行だけを出す。一般名まで入れたとき（例: 「クラリスロ」「クラリスロマイシンDS「タカタ」」）は一般名の行も出す（2026-11-07 ユーザーの判断）
+        const productTyped = (d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase())) && !hasWord(query, d.generic || "");
+        if (ownGenericRow(d) && genMatch && !productTyped) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
         if (!all) {
@@ -678,7 +689,7 @@
         }
         const ownRow = ownGenericRow(p);
         if (showAll || prepHit(ownRow ? { ...p, generic: null } : p, query)) hits.push({ prep: p, label: p.yomi || p.name });
-        if (ownRow && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
+        if (ownRow && !showAll && prepHit({ name: p.generic }, query)) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
@@ -695,7 +706,8 @@
         items.push(el("li", {}, [el("div", { class: "prep" }, [
           el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
           prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
-            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic })
+            : kampoYomi(prep) ? el("span", { class: "drug-meta", text: kampoYomi(prep) }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
