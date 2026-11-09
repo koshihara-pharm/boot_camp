@@ -484,6 +484,11 @@
   @media (prefers-reduced-motion: no-preference) {
     #flow-ages button { transition: transform .15s ease, box-shadow .15s ease; }
   }
+
+  /* 2026-11-09 ユーザー「キユーピーみたいに背景をうすピンクに」: ページの地をうすいピンクに。白い面やカードは白のまま。
+     うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
+  :root { --bg: #fff4f6; --ink: #ad5118; }
+  body { background: var(--bg); }
 </style>
 </head>
 <body>
