@@ -394,6 +394,19 @@
   .worry .ic { width: 58cqw; height: 58cqw; top: -24cqw; }
   .worry .arrow { width: clamp(27px, 18cqw, 40px); height: auto; }
   .worry button::after { right: 10cqw; top: 16cqw; font-size: clamp(18px, 12cqw, 28px); }
+
+  /* ===== 2026-11-09 ユーザー「タップしていいのか分からない」: 丸を押せるボタンに見せる（docs/22 第2章 押せるものは押せそうに） ===== */
+  .worry button { box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / 0.10); cursor: pointer; }
+  .worry button:active { transform: translateY(6px); box-shadow: 0 1px 0 #dc955a, 0 3px 6px rgb(0 0 0 / 0.10); }
+  .worry .arrow { box-sizing: content-box; padding: 6px 12px; margin-top: 2px; background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; }
+  @media (prefers-reduced-motion: no-preference) {
+    .worry button { animation: worry-hop 0.7s ease-out 1 both; }
+    .worry button:nth-child(1) { animation-delay: 0.5s; }
+    .worry button:nth-child(2) { animation-delay: 0.62s; }
+    .worry button:nth-child(3) { animation-delay: 0.74s; }
+    .worry button:nth-child(4) { animation-delay: 0.86s; }
+    @keyframes worry-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+  }
 </style>
 </head>
 <body>
