@@ -489,6 +489,11 @@
      うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
   :root { --bg: #fff4f6; --ink: #ad5118; }
   body { background: var(--bg); }
+
+  /* 年齢の丸の絵を全身にした（縦長）ので、大きさと位置を合わせる（2026-11-09） */
+  #flow-ages { padding-top: 64px; }
+  #flow-ages .age-illustration { width: 66%; height: 80%; top: -50%; left: 17%; transform: none; filter: none; }
+  #flow-ages button:nth-child(2) .age-illustration { transform: none; }
 </style>
 </head>
 <body>
@@ -1045,7 +1050,8 @@
 
   function renderSteps() {
     document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
-      const illustration = { baby: "baby", toddler: "child", kid: "backpack" }[f.age];
+      // 年齢ごとの全身の絵（img/age。このサイトで描いた。2026-11-09 ユーザー「全身をうつして、年齢を表現して」）
+      const illustration = { baby: "baby", toddler: "toddler", kid: "kid" }[f.age];
       const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       arrow.setAttribute("class", "age-arrow");
       arrow.setAttribute("viewBox", "0 0 24 20");
@@ -1056,7 +1062,7 @@
       path.setAttribute("fill", "currentColor");
       arrow.append(path);
       const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel) }, [
-        el("img", { class: "age-illustration", src: `img/fluent/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
+        el("img", { class: "age-illustration", src: `img/age/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
         el("span", { class: "age-label", text: f.label }),
         arrow,
         el("span", { class: "age-check", "aria-hidden": "true", text: "✓" }),
