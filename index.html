@@ -23,20 +23,20 @@
   gtag('config', 'G-1SGGXK56V6');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
 <style>
-  /* 1カラムのスマホ用。やわらかい青緑の地に、黄色いスタンプの丸を目印に置く。主役は飲ませる手助け */
+  /* 1カラムのスマホ用。クリームの地に白い面、ピンクの丸い見出し、オレンジの丸のメニュー（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。絵とロゴは使わない）。黄色いスタンプのくまは残す */
   :root {
-    --bg: #eef6f4;
-    --ink: #17403b;
-    --hero: #d9eee8;
+    --bg: #fff8dc;
+    --ink: #cf2a44;
+    --hero: #ffffff;
     --stamp-soft: #fff1cc;
     --stamp-ink: #3b2a00;
     --card: #ffffff;
-    --text: #1f2d2b;
-    --muted: #5d6e6b;
-    --line: #d3e3df;
-    --accent: #1f7a70;
+    --text: #4a2f1e;
+    --muted: #7a5440;
+    --line: #f1dcb8;
+    --accent: #cf2a44;
     --accent-text: #ffffff;
     --stamp: #e8a317;
     --good: #2f7d4f;
@@ -46,58 +46,16 @@
     --bad-bg: #fbe8e5;
     --warn: #7a3d9c;
     --warn-bg: #f2e7f8;
-    --taste-bg: #e1f0ed;
+    --taste-bg: #fff0dc;
+    --orange: #e27100;
+    --title: #f22649;
+    --lace: #e9cf9a;
+    --star: #f29aa8;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #142120;
-      --ink: #cfeae4;
-      --hero: #1b332f;
-      --stamp-soft: #3a3016;
-      --stamp-ink: #2a1f00;
-      --card: #1d2c2a;
-      --text: #e8f1ef;
-      --muted: #a3b5b1;
-      --line: #2f4340;
-      --accent: #6cc7b9;
-      --accent-text: #0f1a19;
-      --stamp: #f2bf4a;
-      --good: #8fd6a9;
-      --good-bg: #1d3a2a;
-      --best-bg: #45390f;
-      --bad: #f1a196;
-      --bad-bg: #432522;
-      --warn: #d4a9ef;
-      --warn-bg: #35263f;
-      --taste-bg: #1f3936;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #142120;
-    --ink: #cfeae4;
-    --hero: #1b332f;
-    --stamp-soft: #3a3016;
-    --stamp-ink: #2a1f00;
-    --card: #1d2c2a;
-    --text: #e8f1ef;
-    --muted: #a3b5b1;
-    --line: #2f4340;
-    --accent: #6cc7b9;
-    --accent-text: #0f1a19;
-    --stamp: #f2bf4a;
-    --good: #8fd6a9;
-    --good-bg: #1d3a2a;
-    --best-bg: #45390f;
-    --bad: #f1a196;
-    --bad-bg: #432522;
-    --warn: #d4a9ef;
-    --warn-bg: #35263f;
-    --taste-bg: #1f3936;
-    color-scheme: dark;
-  }
+  /* スマホのダークモードでも、いつも白で出す（2026-11-07 ユーザーの指示「白をベース」。前はダークモードで緑の暗い色になっていた） */
+  :root { color-scheme: light; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -328,31 +286,258 @@
   .worry-hint:empty { display: none; }
   .hero .list:not(:empty) { margin: 8px 0 4px; }
   .hero .worry-title { margin-top: 20px; }
+
+  /* ===== トップ（2026-11-07：紙・刺しゅう・絵本のモチーフ） ===== */
+  :root { --title: #cf2a44; --paper-shadow: #d6b77726; --menu-ink: #51301e; --split-bg: #fff4dc; }
+  body { background-image: radial-gradient(var(--line) .8px, transparent .8px); background-size: 14px 14px; }
+  .hero { background: transparent; border-radius: 0; padding: 0; overflow: visible; }
+  .brandbar { margin: -16px -16px 26px; padding: 15px 18px 13px; background: var(--card); border-top: 7px solid transparent;
+    border-image: repeating-linear-gradient(90deg, #f3a8b6 0 12px, #ffe9ab 12px 24px, #a8d5e1 24px 36px, #c8dea2 36px 48px) 7;
+    font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink); box-shadow: 0 3px 0 var(--paper-shadow); letter-spacing: .06em; }
+  .hero-head { position: relative; display: flex; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 10px; padding: 5px 0 14px; }
+  .hero-head::before, .hero-head::after { position: absolute; color: var(--title); content: "✧"; font-size: 25px; pointer-events: none; }
+  .hero-head::before { right: 5px; top: -16px; transform: rotate(12deg); }
+  .hero-head::after { left: 1px; bottom: 0; font-size: 17px; }
+  .hero-stamp { position: relative; top: auto; right: auto; flex: none; width: 76px; height: 76px; font-size: 0; border-width: 3px; outline: 1px dashed var(--stamp); outline-offset: 5px; background: var(--stamp-soft); box-shadow: 3px 5px 0 var(--paper-shadow); }
+  .hero-stamp img { width: 53px; height: 53px; }
+  .hero-stamp::after { bottom: -10px; white-space: nowrap; }
+  .hero h1 { font-size: clamp(26px, 7.7vw, 38px); line-height: 1.4; margin: 0; max-width: none; color: var(--title); text-align: left; letter-spacing: .025em; }
+  .hero .lead { margin: 9px auto 25px; max-width: 25em; color: var(--text); font-weight: 700; font-size: 15px; text-align: center; line-height: 1.9; }
+  .panel { position: relative; background: var(--hero); border-radius: 48% 42% 26px 30px / 24px 26px 26px 30px; padding: 33px 16px 22px; box-shadow: 0 6px 0 var(--paper-shadow); }
+  .panel::before { content: "✦  ·  ✧"; position: absolute; top: -17px; right: 23px; color: var(--title); font-size: 24px; letter-spacing: 10px; transform: rotate(8deg); pointer-events: none; }
+  .search-wrap { position: relative; padding: 12px; margin: 0 -3px; background: var(--split-bg); border: 1px dashed var(--lace); border-radius: 20px 20px 8px 20px; }
+  .search-wrap::before { content: ""; position: absolute; width: 48px; height: 14px; top: -8px; left: calc(50% - 24px); background: repeating-linear-gradient(45deg, #f5c3a9aa 0 3px, #ffe0beaa 3px 6px); transform: rotate(-5deg); }
+  .hero input[type="search"] { border: 1px solid var(--muted); border-radius: 12px; box-shadow: 0 3px 0 var(--paper-shadow); font-size: 16px; padding: 16px 10px; min-height: 56px; }
+  input[type="search"]:focus { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .hero input[type="search"]:focus { border-color: var(--accent); }
+  input[type="search"]::placeholder { color: var(--muted); opacity: 1; }
+  .list-link { display: flex; align-items: center; justify-content: center; min-height: 44px; margin: 4px 0 -4px; font-size: 14px; text-underline-offset: 4px; }
+  .hero .worry-title { display: flex; align-items: center; justify-content: center; gap: 14px; text-align: center; font-size: 25px; color: var(--title); margin: 29px 0 44px; letter-spacing: .08em; }
+  .worry-title::before, .worry-title::after { content: ""; width: 26px; height: 9px; border-top: 2px solid var(--lace); border-bottom: 2px solid var(--lace); transform: rotate(-12deg); }
+  .worry-title::after { transform: rotate(12deg); }
+  .worry { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 47px 12px; padding: 0 1px 3px; }
+  .worry button { --c: #f7b54e; position: relative; isolation: isolate; aspect-ratio: 1; min-height: 148px; border: 0; border-radius: 48% 52% 47% 53%; background: var(--c); color: var(--menu-ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; padding: 35px 7px 16px; text-align: center; font-weight: 700; box-shadow: 0 5px 0 var(--paper-shadow); }
+  .worry button:nth-child(2) { --c: #bad77f; border-radius: 52% 48% 53% 47%; }
+  .worry button:nth-child(3) { --c: #f2a3b3; }
+  .worry button:nth-child(4) { --c: #94cee1; border-radius: 52% 48% 53% 47%; }
+  .worry button::before { content: ""; position: absolute; inset: 8px; z-index: -1; border: 2px dashed #fff; border-radius: inherit; pointer-events: none; }
+  .worry button::after { content: "✧"; position: absolute; right: 18px; top: 29px; color: #fff; font-size: 23px; transform: rotate(12deg); pointer-events: none; }
+  .worry .ic { position: absolute; top: -30px; left: 50%; transform: translateX(-50%) rotate(-9deg); width: 80px; height: 80px; margin: 0; filter: drop-shadow(0 4px 0 #ffffff66); }
+  .worry button:nth-child(even) .ic { transform: translateX(-50%) rotate(8deg); }
+  .worry .lbl { position: relative; font-size: 19px; line-height: 1.35; text-shadow: none; }
+  .worry .arrow { width: 27px; height: 19px; color: var(--menu-ink); }
+  .worry button:active { transform: translateY(3px); box-shadow: none; }
+  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+  .lace { height: 18px; margin: 26px -10px 0; border-top: 1px dotted var(--lace); background: radial-gradient(circle at 9px 0, transparent 7px, var(--lace) 7px 8px, transparent 8.5px) 0 0 / 18px 15px repeat-x; }
+  #detail, #howto-page, #list-page { position: relative; }
+  #howto-page > h1, #list-page > h1 { margin: 14px 0 20px; padding-bottom: 15px; border-bottom: 2px dashed var(--lace); font-size: 29px; color: var(--title); }
+  .back { min-height: 48px; margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 999px; font-family: var(--font-display); }
+  .card { border-radius: 27px 27px 20px 20px; border-top: 5px solid var(--lace); box-shadow: 0 5px 0 var(--paper-shadow); padding: 22px 16px; margin-top: 18px; }
+  .section-title { padding-bottom: 8px; border-bottom: 2px dotted var(--lace); margin-top: 28px; }
+  .group { padding: 15px 12px; border-radius: 17px; background: var(--tone-bg); }
+  .chip { background: var(--card); border: 1px solid var(--line); font-size: 16px; }
+  .taste { padding: 12px 0; border-bottom: 1px dashed var(--line); }
+  .pick { gap: 9px; }
+  .pick button { min-height: 56px; border: 2px solid var(--line); box-shadow: 0 3px 0 var(--paper-shadow); }
+  .howto details { border-radius: 19px; box-shadow: 0 3px 0 var(--paper-shadow); }
+  .howto summary { min-height: 52px; align-items: center; }
+  .howto summary::after { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--taste-bg); }
+  .howto li::marker { color: var(--accent); font-weight: bold; }
+  .howto ol li { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .list button { border-radius: 17px 17px 17px 5px; box-shadow: 0 3px 0 var(--paper-shadow); }
+  .kana { margin-top: 10px; padding: 7px 12px; background: var(--taste-bg); border-radius: 999px; }
+  .refs summary, .site-note summary { min-height: 44px; padding-block: 10px; }
+  .site-note { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; }
+  @media (max-width: 350px) {
+    .hero-head { gap: 8px; }
+    .hero-stamp { width: 63px; height: 63px; }
+    .hero-stamp img { width: 44px; height: 44px; }
+    .panel { padding-inline: 12px; }
+    .worry { gap: 44px 8px; }
+    .worry button { min-height: 136px; }
+    .worry .lbl { font-size: 18px; }
+    .hero input[type="search"] { font-size: 14px; }
+  }
+
+  /* ===== 色（2026-11-07 ユーザーの指示）: 白を地に。本の「こども」の4色から、要るものだけを使う =====
+     オレンジ＝主役（見出し、お困りごとの丸。丸は 2026-11-07 に薄めの #f5b783 にした）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
+     本の色は明るいので、字に使うときは読める濃さにした（オレンジ #b8571a、青 #2a6fa3、緑 #2b7d2b） */
+  :root {
+    --bg: #ffffff; --hero: #ffffff; --card: #ffffff;
+    --text: #3a3a3a; --muted: #6b6b6b; --line: #e8e8e8;
+    --ink: #b8571a; --title: #c4611a; --accent: #2a6fa3; --accent-text: #ffffff;
+    --orange: #f5b783; --kids-orange: #f5b783; --kids-blue: #4b97c8; --kids-green: #3e9a3c;
+    --good: #2b7d2b; --good-bg: #ebf5e9; --best-bg: #ebf5e9;
+    --taste-bg: #fdf1e6; --stamp-soft: #fff4dc;
+    --lace: #f2c49c; --star: #e8893a; --paper-shadow: #00000012; --menu-ink: #3b2414; --split-bg: #fdf6ef;
+  }
+  body { background-image: none; }
+  .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
+  .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
+  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) { --c: var(--kids-orange); color: var(--menu-ink); }
+
+  /* 平らな絵（img/fluent）の大きさ（2026-11-07） */
+  .chip img.fe { width: 26px; height: 26px; flex: none; }
+  img.mi { width: 26px; height: 26px; vertical-align: -6px; margin-right: 6px; }
+  img.bi { width: 20px; height: 20px; vertical-align: -4px; margin-right: 6px; }
+  /* 「準備中」も今回の色に（黄色 → 薄いオレンジ。2026-11-07） */
+  .list .prep { background: var(--taste-bg); border-color: var(--kids-orange); }
+  .list .prep-tag { background: var(--kids-orange); color: var(--menu-ink); }
+
+  /* ===== 2026-11-09 ユーザーの指示: 丸ゴシックにする。お困りごとの丸の余白が目立つので、字と絵を大きく ===== */
+  :root { --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  body, button, input, select, textarea { font-family: var(--font-body); }
+  .worry button, .worry .lbl { font-family: var(--font-display); }
+  /* 丸は広い画面でも大きくなりすぎないようにし、字・絵・矢印は丸の大きさに合わせて大きくする（cqw＝丸の幅に対する割合） */
+  .worry { max-width: 440px; margin-inline: auto; }
+  .worry button { container-type: inline-size; justify-content: center; gap: 4px; padding: 24% 6% 9%; }
+  .worry .lbl { font-size: clamp(19px, 16cqw, 30px); line-height: 1.3; }
+  .worry .ic { width: 58cqw; height: 58cqw; top: -24cqw; }
+  .worry .arrow { width: clamp(27px, 18cqw, 40px); height: auto; }
+  .worry button::after { right: 10cqw; top: 16cqw; font-size: clamp(18px, 12cqw, 28px); }
+
+  /* ===== 2026-11-09 ユーザー「タップしていいのか分からない」: 丸を押せるボタンに見せる（docs/22 第2章 押せるものは押せそうに） ===== */
+  .worry button { box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / 0.10); cursor: pointer; }
+  .worry button:active { transform: translateY(6px); box-shadow: 0 1px 0 #dc955a, 0 3px 6px rgb(0 0 0 / 0.10); }
+  .worry .arrow { box-sizing: content-box; padding: 6px 12px; margin-top: 2px; background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; }
+  @media (prefers-reduced-motion: no-preference) {
+    .worry button { animation: worry-hop 0.7s ease-out 1 both; }
+    .worry button:nth-child(1) { animation-delay: 0.5s; }
+    .worry button:nth-child(2) { animation-delay: 0.62s; }
+    .worry button:nth-child(3) { animation-delay: 0.74s; }
+    .worry button:nth-child(4) { animation-delay: 0.86s; }
+    @keyframes worry-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+  }
+
+  .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
+  .recent-note .link-button { min-height: 44px; font-size: 15px; }
+  .mine .howto { margin-top: 12px; }
+  .mine .howto .list { margin-bottom: 4px; }
+  .mine .list button { min-height: 52px; }
+  .save-row { margin-top: 12px; }
+  /* 保存する前は、くまのスタンプと同じ黄色で塗って目立たせる。保存した後は薄い黄色（2026-11-07 ユーザーの指示） */
+  .save-drug { min-height: 48px; padding: 8px 18px; font-weight: bold; background: var(--stamp); border: 2px solid var(--stamp); color: var(--stamp-ink); font-family: var(--font-display); }
+  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: normal; }
+  .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
+  .save-msg:empty { display: none; }
+
+  /* 2026-11-09 ユーザー: 説明文の改行が気になる（「ます。」だけが次の行に残る）。言葉の切れ目で折り返し、字を少し大きく */
+  .hero .lead { font-size: 17px; line-height: 1.8; }
+  .hero .lead .nw { display: inline-block; }
+  /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
+  .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
+
+  /* ===== 2026-11-09 ユーザー「もう少しシンプルに」「キラキラがあると情報が散る」: キラキラと小さな飾りを外す ===== */
+  .hero-head::before, .hero-head::after, .panel::before, .worry button::after, .search-wrap::before { content: none; display: none; }
+  .search-wrap { padding: 0; margin: 0; background: none; border: 0; }
+  .lace { display: none; }
+
+  /* 年齢選択：お困りごとの丸と同じ、絵が飛び出すスタンプ（2026-11-09 ユーザーの指示でキユーピーの月齢の丸に寄せ、Codex が作った） */
+  #flow-ages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px; max-width: 440px; margin: 0 auto 18px;
+    padding: 32px 4px 12px;
+  }
+  #flow-ages button {
+    position: relative; container-type: inline-size;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; width: 100%; min-width: 0; min-height: 44px; aspect-ratio: 1;
+    padding: 25% 5% 10%; border: 0; border-radius: 50%;
+    background: var(--kids-orange); color: var(--menu-ink);
+    font-family: var(--font-display); font-weight: 700;
+    box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / .10);
+    -webkit-tap-highlight-color: transparent;
+  }
+  #flow-ages button::before {
+    content: ""; position: absolute; inset: 7px;
+    border: 2px dashed white; border-radius: inherit; pointer-events: none;
+  }
+  #flow-ages .age-illustration {
+    position: absolute; width: 58%; height: 58%; top: -25%; left: 21%;
+    object-fit: contain; transform: rotate(-8deg); pointer-events: none;
+    filter: drop-shadow(0 3px 0 rgb(255 255 255 / .5));
+  }
+  #flow-ages button:nth-child(2) .age-illustration { transform: rotate(7deg); }
+  #flow-ages .age-label {
+    position: relative; font-size: clamp(19px, 20cqw, 27px);
+    line-height: 1.4; white-space: nowrap;
+  }
+  /* 矢印は、お困りごとの丸と同じ「白い丸の中の矢印」にそろえる（2026-11-09。docs/22 第1章 一貫性） */
+  #flow-ages .age-arrow { box-sizing: content-box; width: 16%; height: auto; padding: 4px 9px; color: var(--menu-ink); background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; flex: none; }
+  #flow-ages button[aria-pressed="true"] .age-arrow { box-shadow: none; }
+  #flow-ages .age-check {
+    display: none; position: absolute; right: 3%; top: 3%;
+    width: 26px; height: 26px; border: 2px solid var(--accent);
+    border-radius: 50%; background: white; color: var(--accent);
+    font-size: 19px; line-height: 22px; text-align: center;
+  }
+  #flow-ages button[aria-pressed="true"] {
+    background: var(--accent); color: white; transform: translateY(5px);
+    box-shadow: 0 2px 0 var(--accent), 0 3px 6px rgb(0 0 0 / .12);
+  }
+  #flow-ages button[aria-pressed="true"] .age-check { display: block; }
+  #flow-ages button:active {
+    transform: translateY(6px); box-shadow: 0 1px 0 #dc955a;
+  }
+  #flow-ages button:focus-visible { outline: 3px solid var(--menu-ink); outline-offset: 4px; }
+  @media (prefers-reduced-motion: no-preference) {
+    #flow-ages button { transition: transform .15s ease, box-shadow .15s ease; }
+  }
+
+  /* 2026-11-09 ユーザー「キユーピーみたいに背景をうすピンクに」: ページの地をうすいピンクに。白い面やカードは白のまま。
+     うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
+  :root { --bg: #fff4f6; --ink: #ad5118; }
+  body { background: var(--bg); }
 </style>
 </head>
 <body>
 <main>
   <section id="pick">
     <div class="hero">
-      <div class="hero-stamp" aria-hidden="true">🐻</div>
-      <p class="eyebrow">子どものお薬サポート</p>
-      <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
-      <p class="lead">薬の名前を入れると、味と、混ぜていい食べ物が分かります。</p>
+      <p class="brandbar">子どものお薬サポート</p>
+      <div class="hero-head">
+        <div class="hero-stamp" aria-hidden="true"><img src="img/fluent/bear.svg" alt=""></div>
+        <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
+      </div>
+      <p class="lead"><span class="nw">薬の名前を入れると、</span><span class="nw">味と、混ぜていい食べ物が分かります。</span></p>
+      <div class="panel">
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
+      <div class="search-wrap">
       <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
+      </div>
       <p class="worry-hint" id="worry-hint" role="status"></p>
       <ul id="list" class="list"></ul>
       <h2 class="worry-title">お困りごと</h2>
       <div class="worry">
-        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">🥄</span>飲ませ方が分からない</button>
-        <button type="button" data-go="howto"><span class="ic" aria-hidden="true">⭐</span>おすすめの飲ませ方</button>
-        <button type="button" data-focus="mix" data-hint="薬の名前を入れてください。混ぜていい食べ物と、避けたい食べ物が出ます"><span class="ic" aria-hidden="true">🍮</span>混ぜていい？</button>
-        <button type="button" data-focus="taste" data-hint="薬の名前を入れてください。どんな味かが出ます"><span class="ic" aria-hidden="true">👅</span>薬の味</button>
+        <button type="button" data-go="howto"><img class="ic" src="img/fluent/spoon.svg" alt=""><span class="lbl">飲ませ方が<br>分からない</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-go="howto"><img class="ic" src="img/fluent/star.svg" alt=""><span class="lbl">おすすめの<br>飲ませ方</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="mix" data-hint="上の欄に、薬の名前を入れてください"><img class="ic" src="img/fluent/custard.svg" alt=""><span class="lbl">混ぜて<br>いい？</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+        <button type="button" data-focus="taste" data-hint="上の欄に、薬の名前を入れてください"><img class="ic" src="img/fluent/powder.svg" alt=""><span class="lbl">薬の味</span><svg class="arrow" viewBox="0 0 32 24" aria-hidden="true"><path d="M2 9h17V3l11 9-11 9v-6H2z" fill="currentColor"/></svg></button>
+      </div>
+      <div class="lace" aria-hidden="true"></div>
       </div>
       <!-- ほかの親にサイトを教えるときに、QRコードを見せる。形は「薬の一覧を見る」と同じ小さいリンク（2026-11-05 ユーザーと決定。計画は html-plan）。QR の中身は ?from=qr つきの URL（docs/26） -->
-      <button type="button" class="list-link" id="open-qr"><span aria-hidden="true">📱 </span>このサイトをQRコードで教える</button>
+      <button type="button" class="list-link" id="open-qr"><img class="bi" src="img/fluent/mobile-phone.svg" alt="" aria-hidden="true">このサイトをQRコードで教える</button>
+      <!-- ブックマークした薬と最近見た薬（FB 15-2。2026-11-07 ユーザーと決定）。トップが見にくくならないよう「お困りごと」の下に置く -->
+      <!-- ブックマークした薬は見出しつきでいつも出し、最近見た薬は閉じた形にして、押すと開く。どちらも薬の名前だけ。同じ薬が両方に出てもよい -->
+      <!-- この端末の中（localStorage）にだけ残し、どこにも送らない。名前を入れている間は出さない。Clarity の録画では隠す -->
+      <div id="mine" class="mine" data-clarity-mask="true" hidden>
+        <div id="saved" hidden>
+          <h2 class="worry-title">ブックマークした薬</h2>
+          <ul id="saved-list" class="list"></ul>
+        </div>
+        <div id="recent" class="howto" hidden>
+          <details>
+            <summary>最近見た薬</summary>
+            <ul id="recent-list" class="list"></ul>
+            <p class="recent-note"><button type="button" class="link-button" id="recent-clear">最近見た薬を消す</button></p>
+          </details>
+        </div>
+        <p class="recent-note">この端末の中だけに残ります。</p>
+      </div>
     </div>
   </section>
 
@@ -368,7 +553,7 @@
     <ul class="tips">
       <li>混ぜたら、すぐに飲ませる。時間がたつと苦くなる薬があります</li>
       <li>熱いものには混ぜない</li>
-      <li>酸っぱいもの（オレンジジュース、スポーツドリンク、乳酸菌飲料、ヨーグルトなど）は、苦くなったり効き目が弱まる薬があります</li>
+      <li>酸っぱいもの（オレンジジュース、スポーツ飲料、乳酸菌飲料、ヨーグルトなど）は、苦くなったり効き目が弱まる薬があります</li>
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
@@ -424,6 +609,15 @@
 
   function toKatakana(s) {
     return s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  }
+
+  function toHiragana(s) {
+    return s.replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  }
+
+  // 漢方の読みがな（docs/18 の 15-1。2026-11-07 ユーザーの指示）。漢字がむずかしいので、名前の下に小さくひらがなで出す
+  function kampoYomi(p) {
+    return p.name.includes("（漢方）") && p.yomi ? toHiragana(p.yomi) : null;
   }
 
   // 「参考にした資料」は、どの画面でも閉じた形で出す（タップで開く）
@@ -542,10 +736,93 @@
     return d.name + (d.notOriginal ? "" : "（先発品）");
   }
 
+  // 薬の行のボタン。トップの検索結果、薬の一覧、ブックマークした薬と最近見た薬で同じ形を使う
+  // nameOnly: ブックマークした薬と最近見た薬では、薬の名前だけを出す（一般名で開いた薬は一般名）
+  function drugButton(d, i, viaGeneric, all, nameOnly = false) {
+    const button = el("button", { type: "button" });
+    if (nameOnly) {
+      button.append(el("span", { class: "drug-name", text: viaGeneric ? genericLabel(d) : d.name }));
+    } else if (viaGeneric) {
+      button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
+        el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
+      if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
+    } else if (all) {
+      button.append(el("span", { class: "drug-name", text: d.name }));
+      if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
+    } else {
+      button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
+    }
+    button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
+    return button;
+  }
+
+  // ---- 最近見た薬とブックマークした薬（FB 15-2。2026-11-06 ユーザーと決定。11-07 に「保存」から「ブックマーク」に名前を変えた） ----
+  // どちらも、この端末の中（localStorage）にだけ残す。どこにも送らない
+  // 番号は data.js を直すとずれるので、薬の名前で残す: [{ name, g }]（g は一般名の行から開いたか）。新しいものが先
+  // 最近見た薬: 開くと自動で入る。3つまでで、4つ目で古いものが消える
+  // ブックマークした薬: 薬の画面で「この薬をブックマーク」を押したときだけ入る。押し出さず、5つまで
+  const RECENT = { key: "recent-drugs-v1", max: 3 };
+  const SAVED = { key: "saved-drugs-v1", max: 5 };
+  // 端末に残せないとき（プライベートモード、アプリの中の枠など）は、開いている間だけ覚えておく
+  const memory = {};
+  function loadDrugs(store) {
+    try {
+      const raw = localStorage.getItem(store.key);
+      if (raw !== null || !(store.key in memory)) {
+        const v = JSON.parse(raw);
+        return Array.isArray(v) ? v : [];
+      }
+    } catch (e) {}
+    return memory[store.key] || [];
+  }
+  function saveDrugs(store, items) {
+    memory[store.key] = items;
+    try {
+      if (items.length > 0) localStorage.setItem(store.key, JSON.stringify(items));
+      else localStorage.removeItem(store.key);
+    } catch (e) {}
+  }
+  const sameDrug = (drug, viaGeneric) => (r) => r.name === drug.name && !!r.g === viaGeneric;
+  function addRecent(drug, viaGeneric) {
+    const rest = loadDrugs(RECENT).filter((r) => !sameDrug(drug, viaGeneric)(r));
+    saveDrugs(RECENT, [{ name: drug.name, g: viaGeneric }, ...rest].slice(0, RECENT.max));
+  }
+  function isSaved(drug, viaGeneric) {
+    return loadDrugs(SAVED).some(sameDrug(drug, viaGeneric));
+  }
+  // 保存する・外す。いっぱいのときは保存せず false を返す
+  function toggleSaved(drug, viaGeneric) {
+    const items = loadDrugs(SAVED);
+    if (items.some(sameDrug(drug, viaGeneric))) {
+      saveDrugs(SAVED, items.filter((r) => !sameDrug(drug, viaGeneric)(r)));
+      return true;
+    }
+    if (items.length >= SAVED.max) return false;
+    saveDrugs(SAVED, [{ name: drug.name, g: viaGeneric }, ...items]);
+    return true;
+  }
+  // サイトから外した薬は出さない
+  function knownDrugs(store) {
+    return loadDrugs(store)
+      .map((r) => ({ i: DRUGS.findIndex((d) => d.name === r.name), g: !!r.g }))
+      .filter(({ i, g }) => i >= 0 && (!g || DRUGS[i].generic));
+  }
+  // トップの下に、ブックマークした薬（見出しつき）と、最近見た薬（閉じた形）を分けて出す。行は薬の名前だけ（2026-11-07 ユーザーの判断）
+  function renderRecent() {
+    const saved = knownDrugs(SAVED);
+    const recent = knownDrugs(RECENT);
+    const row = ({ i, g }) => el("li", {}, [drugButton(DRUGS[i], i, g, false, true)]);
+    document.getElementById("mine").hidden = saved.length + recent.length === 0 || q.value.trim() !== "";
+    document.getElementById("saved").hidden = saved.length === 0;
+    document.getElementById("recent").hidden = recent.length === 0;
+    document.getElementById("saved-list").replaceChildren(...saved.map(row));
+    document.getElementById("recent-list").replaceChildren(...recent.map(row));
+  }
+
   // 薬の行を並べる。トップの検索（all = false）と、薬の一覧の画面（all = true。docs/17 の 8）で使う
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
-  // 一覧でも、トップと同じく一般名を別の行にする。ジェネリックの薬袋しか手元にない親が探しやすいため（2026-11-03 ユーザーの判断）
+  // 一覧で何も入れていないときは、製品名の行だけを並べる（2026-11-07 ユーザーの判断。前は一般名の行も並べていた）。一般名で探したときは、トップと同じく一般名の行を出す
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -558,7 +835,9 @@
         // 一般名で当たったとき、同じ一般名の行がほかの薬にあるなら、そちらに任せる（例: モンテルカスト → シングレアの一般名の行だけ）
         const rowElsewhere = DRUGS.some((x) => x.generic === d.generic && ownGenericRow(x));
         if (showAll || nameMatch || (genMatch && !rowElsewhere)) hits.push({ d, i, label, viaGeneric: false });
-        if (ownGenericRow(d) && (showAll || genMatch)) hits.push({ d, i, label: d.generic, viaGeneric: true });
+        // 製品名で探したとき（例: 「クラリス」）は、製品名の行だけを出す。一般名まで入れたとき（例: 「クラリスロ」「クラリスロマイシンDS「タカタ」」）は一般名の行も出す（2026-11-07 ユーザーの判断）
+        const productTyped = (d.name.toUpperCase().includes(query) || label.includes(query) || query.includes(d.name.toUpperCase())) && !hasWord(query, d.generic || "");
+        if (ownGenericRow(d) && genMatch && !productTyped) hits.push({ d, i, label: d.generic, viaGeneric: true });
       });
       PREPARING.forEach((p) => {
         if (!all) {
@@ -567,7 +846,7 @@
         }
         const ownRow = ownGenericRow(p);
         if (showAll || prepHit(ownRow ? { ...p, generic: null } : p, query)) hits.push({ prep: p, label: p.yomi || p.name });
-        if (ownRow && (showAll || prepHit({ name: p.generic }, query))) hits.push({ prep: p, label: p.generic, prepGeneric: true });
+        if (ownRow && !showAll && prepHit({ name: p.generic }, query)) hits.push({ prep: p, label: p.generic, prepGeneric: true });
       });
       hits.sort((a, b) => a.label.localeCompare(b.label, "ja"));
     }
@@ -584,25 +863,14 @@
         items.push(el("li", {}, [el("div", { class: "prep" }, [
           el("span", { class: "drug-name", text: prepGeneric ? genericLabel(prep) : prep.name }),
           prepGeneric ? el("span", { class: "drug-meta", text: prep.name })
-            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic }) : null,
+            : ownGenericRow(prep) ? el("span", { class: "drug-meta", text: prep.generic })
+            : kampoYomi(prep) ? el("span", { class: "drug-meta", text: kampoYomi(prep) }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
         ].filter(Boolean))]));
         continue;
       }
-      const button = el("button", { type: "button" });
-      if (viaGeneric) {
-        button.append(el("span", { class: "drug-name", text: genericLabel(d) }),
-          el("span", { class: "drug-meta", text: originName(d) + "の情報" }));
-        if (!all) button.append(el("span", { class: "drug-meta", text: "味の目安: " + tasteHint(d) }));
-      } else if (all) {
-        button.append(el("span", { class: "drug-name", text: d.name }));
-        if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
-      } else {
-        button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
-      }
-      button.addEventListener("click", () => go("drug-" + i + (viaGeneric ? "-g" : "")));
-      items.push(el("li", {}, [button]));
+      items.push(el("li", {}, [drugButton(d, i, viaGeneric, all)]));
     }
     target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
@@ -617,6 +885,7 @@
 
   function renderList() {
     fillList(list, normQuery(q.value), false);
+    renderRecent();
   }
 
   function renderAllList() {
@@ -629,8 +898,21 @@
     "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
   };
 
+  // 絵文字のかわりに、平らな絵（img/fluent。Fluent Emoji、MIT）で出す。スマホの種類で絵が変わらないように（2026-11-07 ユーザーの指示「今回のテイストにあわせて全部変更」）
+  const ICON_FILE = {
+    "🍨": "ice-cream", "💧": "droplet", "☕": "hot-beverage", "🍮": "custard", "🥛": "glass-of-milk", "🥄": "spoon",
+    "🍵": "teacup", "🥣": "bowl-with-spoon", "🍧": "shaved-ice", "🍎": "red-apple", "🍊": "tangerine",
+    "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box", "📥": "inbox-tray", "🍼": "baby-bottle",
+    "✂️": "scissors", "☝️": "index-pointing-up",
+  };
+  function ico(emoji, cls) {
+    const f = ICON_FILE[emoji];
+    if (!f) return el("span", { class: cls, "aria-hidden": "true", text: emoji || "・" });
+    return el("img", { class: cls, src: "img/fluent/" + f + ".svg", alt: "", "aria-hidden": "true" });
+  }
+
   function foodChip(food) {
-    return el("span", { class: "chip" }, [el("span", { class: "fe", "aria-hidden": "true", text: FOOD_EMOJI[food] || "・" }), food]);
+    return el("span", { class: "chip" }, [ico(FOOD_EMOJI[food], "fe"), food]);
   }
 
   function chipBox(title, cls, text, chips) {
@@ -657,6 +939,25 @@
     return parts;
   }
 
+  // 「この薬をブックマーク」のボタン（2026-11-06 ユーザーと決定）。押すたびに入れると外すが入れかわる。黄色で目立たせる（11-07）
+  // 写真に残す「画像を保存」と分けるため、名前は「ブックマーク」にする（2026-11-07 ユーザーの判断）
+  function saveButton(drug, viaGeneric) {
+    const b = el("button", { type: "button", class: "link-button save-drug" });
+    const msg = el("p", { class: "save-msg", role: "status" });
+    const paint = () => {
+      const on = isSaved(drug, viaGeneric);
+      b.setAttribute("aria-pressed", String(on));
+      b.textContent = on ? "★ ブックマークしました（押すと外す）" : "☆ この薬をブックマーク";
+    };
+    b.addEventListener("click", () => {
+      const ok = toggleSaved(drug, viaGeneric);
+      msg.textContent = ok ? "" : "ブックマークできるのは" + SAVED.max + "つまでです。ほかの薬の画面で「ブックマークしました」を押して外してから、ブックマークしてください。";
+      paint();
+    });
+    paint();
+    return el("div", { class: "save-row" }, [b, msg]);
+  }
+
   function renderCard(drug, viaGeneric) {
     const fact = FACTS[drug.name];
     const taste = fact.taste || drug.taste;
@@ -669,12 +970,13 @@
       el("div", { class: "taste" }, [el("b", { text: "味" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
 
+    parts.push(saveButton(drug, viaGeneric));
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
     parts.push(...factBlock(fact));
     // 薬ごとの画像（card/drug/薬の名前.png。card/make.cjs で作る）を出すボタン。コツの下、参考にした資料の上に置く（2026-11-05 ユーザーと決定）
     // 一般名で開いたときも、同じ薬の画像を出す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この薬の情報を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この薬の画像を保存"]);
     save.addEventListener("click", () => openImage(drug.name, `card/drug/${encodeURIComponent(drug.name)}.png`, `${drug.name}の味と、混ぜていい食べ物の画像`));
     parts.splice(parts.length - 1, 0, save);
     card.replaceChildren(...parts);
@@ -723,7 +1025,7 @@
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
-      el("summary", { text: m.icon + " " + m.title }),
+      el("summary", {}, [ico(m.icon, "mi"), m.title]),
       el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
     ];
     if (m.to === "mix") {
@@ -733,7 +1035,7 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
-    const save = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "📥 " }), "この飲ませ方を保存"]);
+    const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方の画像を保存"]);
     save.addEventListener("click", () => openCard(key, m));
     parts.push(save);
     const d = el("details", {}, parts);
@@ -743,10 +1045,27 @@
 
   function renderSteps() {
     document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
-      const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel), text: f.label });
+      const illustration = { baby: "baby", toddler: "child", kid: "backpack" }[f.age];
+      const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      arrow.setAttribute("class", "age-arrow");
+      arrow.setAttribute("viewBox", "0 0 24 20");
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.setAttribute("focusable", "false");
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M2 6h11V1l10 9-10 9v-5H2z");
+      path.setAttribute("fill", "currentColor");
+      arrow.append(path);
+      const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel) }, [
+        el("img", { class: "age-illustration", src: `img/fluent/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
+        el("span", { class: "age-label", text: f.label }),
+        arrow,
+        el("span", { class: "age-check", "aria-hidden": "true", text: "✓" }),
+      ]);
       b.addEventListener("click", () => {
+        const keepFocus = document.activeElement === b;
         flowSel = flowSel === f.age ? null : f.age;
         renderSteps();
+        if (keepFocus) document.querySelectorAll("#flow-ages button")[AGE_FLOWS.indexOf(f)].focus({ preventScroll: true });
       });
       return b;
     }));
@@ -792,7 +1111,10 @@
     const slot = drug ? "detail-howto-slot" : !screens.howto.hidden ? "howto-page-slot" : null;
     if (slot) document.getElementById(slot).append(document.getElementById("howto-body"));
 
-    if (drug) renderCard(drug, !!match[2] && !!drug.generic);
+    if (drug) {
+      renderCard(drug, !!match[2] && !!drug.generic);
+      addRecent(drug, !!match[2] && !!drug.generic);
+    }
     if (!screens.pick.hidden) renderList();
     if (!screens.list.hidden) renderAllList();
     // 薬の画面から戻ったときは、前に見ていた場所に戻す
@@ -807,6 +1129,11 @@
 
   q.addEventListener("input", renderList);
   q2.addEventListener("input", renderAllList);
+  // 消したら、まとまりごと消える（押した結果が見える）。消すのは取り消せるほど大事ではないので、確かめる画面は出さない
+  document.getElementById("recent-clear").addEventListener("click", () => {
+    saveDrugs(RECENT, []);
+    renderRecent();
+  });
   // 「まぜていい？」「くすりの あじ」は、薬を選んでから答えが出るので、検索欄へ案内する
   document.querySelectorAll("[data-focus]").forEach((b) => b.addEventListener("click", () => {
     pendingFocus = b.dataset.focus;
