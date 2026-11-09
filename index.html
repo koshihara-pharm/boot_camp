@@ -427,6 +427,68 @@
   .hero .lead .nw { display: inline-block; }
   /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
   .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
+
+  /* ===== 2026-11-09 ユーザー「もう少しシンプルに」「キラキラがあると情報が散る」: キラキラと小さな飾りを外す ===== */
+  .hero-head::before, .hero-head::after, .panel::before, .worry button::after, .search-wrap::before { content: none; display: none; }
+  .search-wrap { padding: 0; margin: 0; background: none; border: 0; }
+  .lace { display: none; }
+
+  /* 年齢選択：お困りごとの丸と同じ、絵が飛び出すスタンプ（2026-11-09 ユーザーの指示でキユーピーの月齢の丸に寄せ、Codex が作った） */
+  #flow-ages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px; max-width: 440px; margin: 0 auto 18px;
+    padding: 32px 4px 12px;
+  }
+  #flow-ages button {
+    position: relative; container-type: inline-size;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 5px; width: 100%; min-width: 0; min-height: 44px; aspect-ratio: 1;
+    padding: 25% 5% 10%; border: 0; border-radius: 50%;
+    background: var(--kids-orange); color: var(--menu-ink);
+    font-family: var(--font-display); font-weight: 700;
+    box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / .10);
+    -webkit-tap-highlight-color: transparent;
+  }
+  #flow-ages button::before {
+    content: ""; position: absolute; inset: 7px;
+    border: 2px dashed white; border-radius: inherit; pointer-events: none;
+  }
+  #flow-ages .age-illustration {
+    position: absolute; width: 58%; height: 58%; top: -25%; left: 21%;
+    object-fit: contain; transform: rotate(-8deg); pointer-events: none;
+    filter: drop-shadow(0 3px 0 rgb(255 255 255 / .5));
+  }
+  #flow-ages button:nth-child(2) .age-illustration { transform: rotate(7deg); }
+  #flow-ages .age-label {
+    position: relative; font-size: clamp(19px, 20cqw, 27px);
+    line-height: 1.4; white-space: nowrap;
+  }
+  /* 矢印は、お困りごとの丸と同じ「白い丸の中の矢印」にそろえる（2026-11-09。docs/22 第1章 一貫性） */
+  #flow-ages .age-arrow { box-sizing: content-box; width: 16%; height: auto; padding: 4px 9px; color: var(--menu-ink); background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; flex: none; }
+  #flow-ages button[aria-pressed="true"] .age-arrow { box-shadow: none; }
+  #flow-ages .age-check {
+    display: none; position: absolute; right: 3%; top: 3%;
+    width: 26px; height: 26px; border: 2px solid var(--accent);
+    border-radius: 50%; background: white; color: var(--accent);
+    font-size: 19px; line-height: 22px; text-align: center;
+  }
+  #flow-ages button[aria-pressed="true"] {
+    background: var(--accent); color: white; transform: translateY(5px);
+    box-shadow: 0 2px 0 var(--accent), 0 3px 6px rgb(0 0 0 / .12);
+  }
+  #flow-ages button[aria-pressed="true"] .age-check { display: block; }
+  #flow-ages button:active {
+    transform: translateY(6px); box-shadow: 0 1px 0 #dc955a;
+  }
+  #flow-ages button:focus-visible { outline: 3px solid var(--menu-ink); outline-offset: 4px; }
+  @media (prefers-reduced-motion: no-preference) {
+    #flow-ages button { transition: transform .15s ease, box-shadow .15s ease; }
+  }
+
+  /* 2026-11-09 ユーザー「キユーピーみたいに背景をうすピンクに」: ページの地をうすいピンクに。白い面やカードは白のまま。
+     うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
+  :root { --bg: #fff4f6; --ink: #ad5118; }
+  body { background: var(--bg); }
 </style>
 </head>
 <body>
@@ -983,10 +1045,27 @@
 
   function renderSteps() {
     document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
-      const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel), text: f.label });
+      const illustration = { baby: "baby", toddler: "child", kid: "backpack" }[f.age];
+      const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      arrow.setAttribute("class", "age-arrow");
+      arrow.setAttribute("viewBox", "0 0 24 20");
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.setAttribute("focusable", "false");
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M2 6h11V1l10 9-10 9v-5H2z");
+      path.setAttribute("fill", "currentColor");
+      arrow.append(path);
+      const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel) }, [
+        el("img", { class: "age-illustration", src: `img/fluent/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
+        el("span", { class: "age-label", text: f.label }),
+        arrow,
+        el("span", { class: "age-check", "aria-hidden": "true", text: "✓" }),
+      ]);
       b.addEventListener("click", () => {
+        const keepFocus = document.activeElement === b;
         flowSel = flowSel === f.age ? null : f.age;
         renderSteps();
+        if (keepFocus) document.querySelectorAll("#flow-ages button")[AGE_FLOWS.indexOf(f)].focus({ preventScroll: true });
       });
       return b;
     }));
