@@ -23,7 +23,7 @@
   gtag('config', 'G-1SGGXK56V6');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
 <style>
   /* 1カラムのスマホ用。クリームの地に白い面、ピンクの丸い見出し、オレンジの丸のメニュー（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。絵とロゴは使わない）。黄色いスタンプのくまは残す */
   :root {
@@ -382,6 +382,18 @@
   /* 「準備中」も今回の色に（黄色 → 薄いオレンジ。2026-11-07） */
   .list .prep { background: var(--taste-bg); border-color: var(--kids-orange); }
   .list .prep-tag { background: var(--kids-orange); color: var(--menu-ink); }
+
+  /* ===== 2026-11-09 ユーザーの指示: 丸ゴシックにする。お困りごとの丸の余白が目立つので、字と絵を大きく ===== */
+  :root { --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  body, button, input, select, textarea { font-family: var(--font-body); }
+  .worry button, .worry .lbl { font-family: var(--font-display); }
+  /* 丸は広い画面でも大きくなりすぎないようにし、字・絵・矢印は丸の大きさに合わせて大きくする（cqw＝丸の幅に対する割合） */
+  .worry { max-width: 440px; margin-inline: auto; }
+  .worry button { container-type: inline-size; justify-content: center; gap: 4px; padding: 24% 6% 9%; }
+  .worry .lbl { font-size: clamp(19px, 16cqw, 30px); line-height: 1.3; }
+  .worry .ic { width: 58cqw; height: 58cqw; top: -24cqw; }
+  .worry .arrow { width: clamp(27px, 18cqw, 40px); height: auto; }
+  .worry button::after { right: 10cqw; top: 16cqw; font-size: clamp(18px, 12cqw, 28px); }
 </style>
 </head>
 <body>
