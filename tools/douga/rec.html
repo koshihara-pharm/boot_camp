@@ -1,0 +1,141 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+</head><body style="margin:0;background:#333"><canvas id="c" width="720" height="1280"></canvas>
+<script>
+// 飲ませ方の動画を作るページ（tools/douga/make.cjs が Chrome で開いて録画する）。手順は docs/28
+// 絵（work/*.png）に、下の文・手順の丸・読み上げ（work/*.wav）・自作の曲を重ねる。場面は cfg/名前.json で決める
+const F = "'Zen Maru Gothic', 'Meiryo', sans-serif";
+const C = { bg: "#fbf6ec", table: "#eef6f4", green: "#1f7a70", gray: "#5d6e6b", gold: "#e8a317", ink: "#3b2a20" };
+const c = document.getElementById("c"), g = c.getContext("2d");
+const cl = (x) => Math.max(0, Math.min(1, x));
+const ease = (x) => (1 - Math.cos(Math.PI * cl(x))) / 2;
+const seg = (t, a, b) => ease((t - a) / (b - a));
+function rr(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function text(s, x, y, size, color, w = 700) { g.fillStyle = color; g.font = `${w} ${size}px ${F}`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(s, x, y); }
+
+const IMG = {};
+// 絵を四角の中に出す。zoom はゆっくり近づく動き
+function pic(name, x, y, s, zoom, alpha = 1) {
+  const im = IMG[name]; if (!im) return;
+  g.save(); g.globalAlpha *= alpha; rr(x, y, s, s, 28); g.clip();
+  const z = 1 + 0.06 * zoom, w = s * z;
+  g.drawImage(im, x - (w - s) / 2, y - (w - s) / 2, w, w);
+  g.restore();
+}
+function steps(n) {
+  for (let i = 1; i <= 3; i++) {
+    const x = 360 + (i - 2) * 130, on = i === n, done = i < n;
+    g.fillStyle = on ? C.gold : done ? "#9cc7bf" : "#e3ddd0";
+    g.beginPath(); g.arc(x, 100, on ? 46 : 28, 0, Math.PI * 2); g.fill();
+    if (on || done) text(done ? "✓" : String(i), x, 103, on ? 50 : 28, "#fff");
+  }
+}
+function caption(lines, big, a) {
+  g.save(); g.globalAlpha = a;
+  rr(36, 1010, 648, 236, 30); g.fillStyle = "#fff"; g.fill();
+  const fit = (str, size, w) => { g.font = `${w} ${size}px ${F}`; while (g.measureText(str).width > 580 && size > 20) { size -= 2; g.font = `${w} ${size}px ${F}`; } return size; };
+  if (big) { text(lines[0], 360, 1088, fit(lines[0], 46, 500), C.gray, 500); text(lines[1], 360, 1172, fit(lines[1], 64, 700), C.green); }
+  else if (lines.length === 1) text(lines[0], 360, 1128, fit(lines[0], 48, 700), C.ink);
+  else if (lines.length === 2) { text(lines[0], 360, 1086, fit(lines[0], 44, 700), C.ink); text(lines[1], 360, 1170, fit(lines[1], 44, 700), C.green); }
+  else lines.forEach((l, i) => text(l, 360, 1060 + i * 68, fit(l, 42, 700), i ? C.green : C.ink));
+  g.restore();
+}
+
+// 場面は設定ファイル（cfg_名前.json）から作る。?cfg=名前 で選ぶ
+let SCENES = [], CFG;
+function build(cfg) {
+  SCENES = cfg.scenes.map((sc) => {
+    if (sc.end) return { fixed: 3.2, img: () => { pic(sc.img, 160, 300, 400, 0); text("子どものお薬サポート", 360, 820, 52, C.green); text("koshihara-pharm.github.io/boot_camp/", 360, 900, 30, C.gray, 500); } };
+    const [p, q] = sc.imgs;
+    return { voice: sc.voice, step: sc.step, cap: sc.cap, big: sc.big,
+      img: q ? (t, D) => { const c = D * (sc.cut || 0.45); pic(p, 40, 190, 640, t / D); pic(q, 40, 190, 640, (t - c) / (D - c), seg(t, c, c + 0.8)); }
+             : (t, D) => pic(p, 40, 190, 640, t / D) };
+  });
+}
+
+// 場面の長さ（読み上げをやめたので、前の読み上げの長さに合わせて固定）
+const DUR = [7.1, 6.1, 11.5, 4.9, 8.6, 5.2];
+
+// 音楽は、ここで音を合成して作る（自作。既存の曲は使わない）
+// 明るいポップ調: テンポ 120、C → G → Am → F をくり返す。ドラム・ベース・和音・メロディー。1小節 2秒
+function music(ac, out, t0, total) {
+  const comp = ac.createDynamicsCompressor(); comp.connect(out);
+  const master = ac.createGain(); master.connect(comp);
+  master.gain.setValueAtTime(0, t0); master.gain.linearRampToValueAtTime(0.5, t0 + 0.8);
+  master.gain.setValueAtTime(0.5, t0 + total - 2.0); master.gain.linearRampToValueAtTime(0, t0 + total);
+  const END = t0 + total;
+  const hz = (n) => 440 * Math.pow(2, (n - 69) / 12);
+  const noise = ac.createBuffer(1, ac.sampleRate, ac.sampleRate); const nd = noise.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  function env(gn, at, vol, dec) { gn.gain.setValueAtTime(0, at); gn.gain.linearRampToValueAtTime(vol, at + 0.005); gn.gain.exponentialRampToValueAtTime(0.0005, at + dec); }
+  function kick(at) { if (at > END) return; const o = ac.createOscillator(), gn = ac.createGain(); o.frequency.setValueAtTime(140, at); o.frequency.exponentialRampToValueAtTime(45, at + 0.12); o.connect(gn); gn.connect(master); env(gn, at, 0.9, 0.28); o.start(at); o.stop(at + 0.3); }
+  function hiss(at, vol, dec, type, f) { if (at > END) return; const s = ac.createBufferSource(), fl = ac.createBiquadFilter(), gn = ac.createGain(); s.buffer = noise; fl.type = type; fl.frequency.value = f; s.connect(fl); fl.connect(gn); gn.connect(master); env(gn, at, vol, dec); s.start(at, Math.random() * 0.5); s.stop(at + dec + 0.02); }
+  function snare(at) { hiss(at, 0.35, 0.16, "bandpass", 1900); const o = ac.createOscillator(), gn = ac.createGain(); o.frequency.value = 190; o.connect(gn); gn.connect(master); env(gn, at, 0.18, 0.09); o.start(at); o.stop(at + 0.1); }
+  function tone(n, at, len, vol, type, cut) { if (at > END) return; const o = ac.createOscillator(), fl = ac.createBiquadFilter(), gn = ac.createGain(); o.type = type; o.frequency.value = hz(n); fl.type = "lowpass"; fl.frequency.value = cut; o.connect(fl); fl.connect(gn); gn.connect(master); env(gn, at, vol, len); o.start(at); o.stop(at + len + 0.05); }
+  const BAR = 2, b8 = BAR / 8, b16 = BAR / 16;
+  const prog = [[48, [60, 64, 67]], [43, [59, 62, 67]], [45, [60, 64, 69]], [41, [60, 65, 69]]]; // C, G, Am, F
+  // メロディー（16分音符の位置, 音, 長さ[16分]）。4小節で1回り
+  const mel = [
+    [[0, 76, 2], [2, 76, 2], [4, 79, 3], [8, 76, 2], [10, 74, 2], [12, 72, 4]],
+    [[0, 74, 2], [2, 74, 2], [4, 79, 3], [8, 74, 2], [10, 71, 2], [12, 67, 4]],
+    [[0, 72, 2], [2, 76, 2], [4, 81, 3], [8, 79, 2], [10, 76, 2], [12, 76, 2], [14, 79, 2]],
+    [[0, 77, 3], [4, 76, 2], [6, 74, 2], [8, 72, 4], [12, 74, 2], [14, 76, 2]],
+  ];
+  for (let bar = 0; bar * BAR < total; bar++) {
+    const bt = t0 + bar * BAR, [root, ch] = prog[bar % 4], intro = bar < 2;
+    for (let k = 0; k < 4; k++) kick(bt + k * (BAR / 4));                          // 4つ打ち
+    if (!intro) { snare(bt + BAR / 4); snare(bt + 3 * BAR / 4); }                   // 2拍目と4拍目
+    for (let k = 0; k < 8; k++) hiss(bt + k * b8 + b8 / 2, 0.08, 0.04, "highpass", 7000); // 裏のハイハット
+    [0, 0, 12, 0, 0, 12, 0, 7].forEach((d, k) => tone(root + d - 12 + 12, bt + k * b8, 0.22, 0.32, "sawtooth", 500)); // ベース
+    [1, 3, 5, 7].forEach((k) => ch.forEach((n) => tone(n, bt + k * b8, 0.18, 0.07, "sawtooth", 2200)));  // 裏の和音
+    if (!intro) mel[bar % 4].forEach(([p, n, l]) => tone(n, bt + p * b16, l * b16 * 0.95, 0.13, "square", 3000)); // メロディー
+  }
+}
+
+function frame(i, t, D, e, total) {
+  g.globalAlpha = 1; g.fillStyle = C.bg; g.fillRect(0, 0, 720, 1280);
+  const s = SCENES[i], a = Math.min(seg(t, 0, 0.35), 1 - seg(t, D - 0.3, D));
+  g.save(); g.globalAlpha = a; s.img(t, D); g.restore();
+  if (s.step) steps(s.step);
+  if (s.cap) caption(s.cap, s.big, a);
+  g.fillStyle = "#e3ddd0"; g.fillRect(0, 1270, 720, 10);
+  g.fillStyle = C.green; g.fillRect(0, 1270, 720 * e / total, 10);
+}
+
+(async () => {
+  await document.fonts.load(`700 40px 'Zen Maru Gothic'`); await document.fonts.load(`500 40px 'Zen Maru Gothic'`);
+  CFG = await fetch("cfg/" + new URLSearchParams(location.search).get("cfg") + ".json").then((r) => r.json()); build(CFG);
+  const names = [...new Set(CFG.scenes.flatMap((sc) => sc.imgs || [sc.img]))];
+  await Promise.all(names.map((n) => new Promise((ok, ng) => { const im = new Image(); im.onload = () => { IMG[n] = im; ok(); }; im.onerror = ng; im.src = "work/" + n + ".png"; })));
+  const ac = new AudioContext(); await ac.resume();
+  // 読み上げ（yomiscript + Kokoro で作った n0〜n5.wav）
+  const bufs = await Promise.all(SCENES.map((sc) => sc.voice ? fetch("work/" + sc.voice).then((r) => r.arrayBuffer()).then((b) => ac.decodeAudioData(b)) : null));
+  const LEAD = 0.4, starts = [], durs = []; let T = 0;
+  for (const s of SCENES) { const d = s.fixed || bufs[SCENES.indexOf(s)].duration + LEAD + 1.0; starts.push(T); durs.push(d); T += d; }
+  const total = T;
+  // 曲は録画の前に、先に1本の音にしておく（録画中に音を作ると重くて、音が途切れたり長さがずれたりするため）
+  const oac = new OfflineAudioContext(2, Math.ceil(44100 * (total + 0.5)), 44100);
+  music(oac, oac.destination, 0, total);
+  const musicBuf = await oac.startRendering();
+  const still = new URLSearchParams(location.search).get("still"); // 確かめ用: ?still=場面,秒
+  if (still) { const [i, t] = still.split(",").map(Number); frame(i, t, durs[i], starts[i] + t, total); document.title = "done"; return; }
+  const dest = ac.createMediaStreamDestination();
+  const stream = new MediaStream([...c.captureStream(30).getVideoTracks(), ...dest.stream.getAudioTracks()]);
+  const type = ["video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm"].find((x) => MediaRecorder.isTypeSupported(x));
+  const rec = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 3e6 });
+  const chunks = []; rec.ondataavailable = (e) => chunks.push(e.data);
+  rec.onstop = () => fetch(`/save?type=${encodeURIComponent(type)}&dur=${total}`, { method: "POST", body: new Blob(chunks, { type }) });
+  frame(0, 0, durs[0], 0, total);
+  rec.start(500);
+  const t0 = ac.currentTime + 0.1;
+  // 曲は読み上げのじゃまにならないよう小さく（前の 3分の1 くらい）
+  const mg = ac.createGain(); mg.gain.value = 0.32; mg.connect(dest);
+  const ms = ac.createBufferSource(); ms.buffer = musicBuf; ms.connect(mg); ms.start(t0);
+  SCENES.forEach((s, i) => { if (!bufs[i]) return; const src = ac.createBufferSource(); src.buffer = bufs[i]; src.connect(dest); src.start(t0 + starts[i] + LEAD); });
+  const tick = setInterval(() => {
+    const e = Math.max(0, ac.currentTime - t0);
+    let i = 0; while (i + 1 < starts.length && e >= starts[i + 1]) i++;
+    frame(i, e - starts[i], durs[i], Math.min(e, total), total);
+    if (e >= total) { clearInterval(tick); rec.stop(); }
+  }, 33);
+})().catch((e) => fetch("/err", { method: "POST", body: String((e && e.stack) || e) }));
+</script></body></html>

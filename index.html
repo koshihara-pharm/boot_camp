@@ -268,6 +268,8 @@
   #card-view .card-title { margin: 0; font-weight: bold; color: var(--ink); min-width: 0; }
   #card-view .card-close { flex: none; min-height: 44px; }
   #card-view img { display: block; width: 100%; height: auto; border-radius: 12px; -webkit-touch-callout: default; }
+  #card-view video { display: block; width: 100%; max-height: calc(100dvh - 170px); border-radius: 12px; background: #000; }
+  #card-view [hidden] { display: none; }
   #card-view .card-hint { margin: 10px 0 0; text-align: center; font-weight: bold; color: var(--ink); }
   .worry-title { font-size: 20px; margin: 4px 0 8px; }
   .worry { display: grid; gap: 8px; margin: 0 0 4px; }
@@ -594,11 +596,12 @@
     <button type="button" class="link-button card-close">✕ 閉じる</button>
   </div>
   <img src="" alt="">
+  <video controls playsinline preload="none" hidden></video>
   <p class="card-hint">画像を長押し →「写真に保存」</p>
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-03o"></script>
+<script src="data.js?v=2026-11-09a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -1018,6 +1021,33 @@
     const img = dlg.querySelector("img");
     img.src = src;
     img.alt = alt;
+    img.hidden = false;
+    dlg.querySelector("video").hidden = true;
+    dlg.showModal();
+  }
+
+  // 飲ませ方の動画（video/年齢-やり方.mp4。作り方は docs/28、道具は tools/douga）。1〜3歳と4歳からの6本（2026-11-06〜10）
+  // まだ公開しない（2026-11-10 ユーザーの判断）。動画は GitHub に上げず（.gitignore の video/）、ボタンも手元（localhost）で開いたときだけ出す
+  // 画像と同じ画面に出す。自動では始めず、▶ を押すと始まる。閉じると止まる
+  // ?v= は動画を差しかえたら変える（ブラウザが前の動画を覚えたまま出さないように）
+  const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
+  const VIDEOS = !LOCAL ? {} : {
+    "toddler-water": "video/toddler-water.mp4?v=20261110",
+    "toddler-fukuro": "video/toddler-fukuro.mp4?v=20261110",
+    "toddler-dango": "video/toddler-dango.mp4?v=20261110",
+    "kid-water": "video/kid-water.mp4?v=20261110",
+    "kid-fukuro": "video/kid-fukuro.mp4?v=20261110",
+    "kid-otona": "video/kid-otona.mp4?v=20261110",
+  };
+  function openVideo(title, src, label) {
+    const dlg = document.getElementById("card-view");
+    dlg.querySelector(".card-title").textContent = title;
+    dlg.querySelector(".card-hint").textContent = "音を出さなくても、画面の文で分かります";
+    dlg.querySelector("img").hidden = true;
+    const v = dlg.querySelector("video");
+    if (!v.src.endsWith(src)) v.src = src;
+    v.setAttribute("aria-label", label);
+    v.hidden = false;
     dlg.showModal();
   }
 
@@ -1040,6 +1070,14 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
+    const video = VIDEOS[`${flowSel}-${key}`];
+    if (video) {
+      const f = AGE_FLOWS.find((x) => x.age === flowSel);
+      const name = m.title.replace("おすすめの飲ませ方: ", "");
+      const play = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "▶ " }), "この飲ませ方を動画で見る"]);
+      play.addEventListener("click", () => openVideo(`${f.label}・${name}`, video, `${f.label}の粉薬の飲ませ方「${name}」の動画`));
+      parts.push(play);
+    }
     const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方の画像を保存"]);
     save.addEventListener("click", () => openCard(key, m));
     parts.push(save);
@@ -1153,6 +1191,7 @@
   const cardView = document.getElementById("card-view");
   cardView.querySelector(".card-close").addEventListener("click", () => cardView.close());
   cardView.addEventListener("click", (e) => { if (e.target === cardView) cardView.close(); });
+  cardView.addEventListener("close", () => cardView.querySelector("video").pause());
   // トップの「このサイトをQRコードで教える」。QR の画像は card/qr_site.png（中身は ?from=qr つきの URL）
   document.getElementById("open-qr").addEventListener("click", () =>
     openImage("このサイトのQRコード", "card/qr_site.png", "このサイトを開くQRコード", "相手のスマホのカメラで読んでもらってください"));
