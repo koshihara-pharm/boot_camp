@@ -211,7 +211,7 @@ const AGE_FLOWS = [
     age: "baby", label: "0〜1歳",
     note: "わりと素直に飲んでくれる時期です。",
     water: WATER_NOTE_BABY,
-    groups: [{ label: "どれでも", items: ["spoit", "nipple", "dango"] }],
+    groups: [{ label: "おすすめの飲ませ方（3つ）", items: ["spoit", "nipple", "dango"] }],
   },
   {
     age: "toddler", label: "1〜3歳",
