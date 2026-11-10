@@ -547,6 +547,8 @@
   .hero input[type="search"]::placeholder, #list-page input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
   .search-help { padding-left: 18px; }
   .search-help .nw { display: inline-block; }
+  /* やり方を開いたときの絵（2026-11-10） */
+  .howto .method-pic { display:block; width:100%; height:auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2px 0 12px; background: #fff; }
 </style>
 </head>
 <body>
@@ -1110,12 +1112,18 @@
     openImage(`${f.label}・${name}`, `card/${flowSel}-${key}.png`, `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`);
   }
 
+  const METHOD_PICS = {
+    // 絵ができたら足す。例: water: "大人の手が、小さなコップの中の少しの水と粉を、スプーンで混ぜている絵",
+  };
+
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
       el("summary", {}, [ico(m.icon, "mi"), m.title]),
-      el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
     ];
+    // 開いたときに出す、やり方の絵（img/howto。Codex で作った。2026-11-10 ユーザーの指示）
+    if (METHOD_PICS[key]) parts.push(el("img", { class: "method-pic", src: `img/howto/${key}.webp`, alt: METHOD_PICS[key], loading: "lazy", width: "800", height: "600" }));
+    parts.push(el("ol", {}, m.steps.map((s) => el("li", { text: s }))));
     if (m.to === "mix") {
       const b = el("button", { type: "button", class: "step-next", text: "薬の名前で、混ぜていい食べ物を探す" });
       b.addEventListener("click", goMix);
@@ -1170,9 +1178,9 @@
     document.getElementById("age-flow").replaceChildren(...(f ? [
       el("p", { class: "flow-note", text: f.note }),
       el("p", { class: "water-note", text: f.water || WATER_NOTE }),
-      ...f.groups.flatMap((g, gi) => [
+      ...f.groups.flatMap((g) => [
         el("p", { class: "flow-group", text: g.label }),
-        el("div", { class: "howto" }, g.items.map((key) => flowItem(key, gi === 0))),
+        el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
       ]),
       el("p", { class: "flow-group", text: "コツ" }),
       // やり方ごとのコツ（METHODS の tips）は、保存用の画像にだけ出す。サイトでは見にくかった（2026-11-04 ユーザーの判断）
