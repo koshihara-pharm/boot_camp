@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="none">
+<!-- 4歳から: 黄色い通園帽子、スモック、リュックの子。このサイトで描いた（2026-11-09） -->
+<defs><g id="f">
+  <rect x="25" y="58" width="50" height="34" rx="12" fill="#E8893A"/>
+  <rect x="24" y="62" width="10" height="26" rx="5" transform="rotate(8 29 75)" fill="#A9D4F2"/>
+  <rect x="66" y="62" width="10" height="26" rx="5" transform="rotate(-8 71 75)" fill="#A9D4F2"/>
+  <circle cx="27" cy="89" r="5" fill="#FBD8BC"/>
+  <circle cx="73" cy="89" r="5" fill="#FBD8BC"/>
+  <rect x="40" y="94" width="8" height="15" rx="3.5" fill="#FBD8BC"/>
+  <rect x="52" y="94" width="8" height="15" rx="3.5" fill="#FBD8BC"/>
+  <ellipse cx="43" cy="111" rx="7.5" ry="4.3" fill="#7FB4DE"/>
+  <ellipse cx="57" cy="111" rx="7.5" ry="4.3" fill="#7FB4DE"/>
+  <path d="M36 60 H64 L69 96 H31 Z" fill="#A9D4F2"/>
+  <path d="M43 60 L50 68 L57 60 Z" fill="#FFFFFF"/>
+  <rect x="37" y="61" width="5" height="22" rx="2" fill="#E8893A"/>
+  <rect x="58" y="61" width="5" height="22" rx="2" fill="#E8893A"/>
+  <circle cx="28.5" cy="41" r="4.6" fill="#F0C29F"/>
+  <circle cx="71.5" cy="41" r="4.6" fill="#F0C29F"/>
+  <path d="M28 40 C28 47 30 52 33 54 L33 38 Z" fill="#2B2422"/>
+  <path d="M72 40 C72 47 70 52 67 54 L67 38 Z" fill="#2B2422"/>
+  <circle cx="50" cy="40" r="21.5" fill="#FBD8BC"/>
+  <path d="M30 34 H70 C70 31 69 29 67 28 H33 C31 29 30 31 30 34 Z" fill="#2B2422"/>
+  <ellipse cx="50" cy="28" rx="27" ry="5" fill="#FFCC33"/>
+  <path d="M30 28 C30 15 39 9 50 9 C61 9 70 15 70 28 Z" fill="#FFD54F"/>
+  <circle cx="42.5" cy="43" r="2.4" fill="#2B2422"/>
+  <circle cx="57.5" cy="43" r="2.4" fill="#2B2422"/>
+  <ellipse cx="36.5" cy="49" rx="4.4" ry="2.9" fill="#F59A9A" fill-opacity="0.8"/>
+  <ellipse cx="63.5" cy="49" rx="4.4" ry="2.9" fill="#F59A9A" fill-opacity="0.8"/>
+  <path d="M46 51 Q50 54.5 54 51" stroke="#B0444F" stroke-width="2" stroke-linecap="round"/>
+</g></defs>
+<use href="#f" stroke="#FFFFFF" stroke-width="7" stroke-linejoin="round"/>
+<use href="#f"/>
+</svg>
