@@ -659,7 +659,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-09a"></script>
+<script src="data.js?v=2026-11-10a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -690,7 +690,8 @@
   function refsBox(sources) {
     return el("details", { class: "refs" }, [
       el("summary", { text: "参考にした資料（" + sources.length + "）" }),
-      el("ul", {}, sources.map((s) => el("li", {}, [el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name })]))),
+      // 本のように URL の無い資料は、リンクにせず名前だけを出す（2026-11-10）
+      el("ul", {}, sources.map((s) => el("li", {}, [s.url ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }) : document.createTextNode(s.name)]))),
     ]);
   }
 
