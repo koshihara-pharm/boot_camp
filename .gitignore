@@ -3,3 +3,7 @@
 
 # 公開しない資料の出どころ（勉強会のスライドの URL など）
 docs/_local/
+
+# 動画づくりの作業場所と、できた動画（大きいので GitHub に上げない。作り方は docs/28）
+tools/douga/work/
+video/
