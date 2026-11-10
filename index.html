@@ -548,7 +548,7 @@
   .search-help { padding-left: 18px; }
   .search-help .nw { display: inline-block; }
   /* やり方を開いたときの絵（2026-11-10） */
-  .howto summary .method-thumb { flex: none; width: 88px; height: 66px; object-fit: cover; border-radius: 10px; border: 1px solid #eee5dd; background: #fff; }
+  .howto summary .method-thumb { flex: none; width: 60px; height: 60px; object-fit: contain; border-radius: 12px; background: #fff; }
   .howto summary .method-name { flex: 1; text-align: left; }
   .howto summary:has(.method-thumb) { justify-content: flex-start; gap: 12px; padding: 10px 0; }
   .howto .method-pic { display:block; width:100%; height:auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2px 0 12px; background: #fff; }
@@ -1128,9 +1128,9 @@
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
-      // 見出しの左に、やり方の絵を小さく出す。開く前にイメージがつかめるように（2026-11-10 ユーザーの指示）。絵がないときは、今までの小さな絵
+      // 見出しの左に、やり方の道具を1つだけ描いたアイコンの絵（img/howto/icon_*.webp）を出す。開く前にイメージがつかめるように（2026-11-10 ユーザーの指示。手順の絵を縮めたものは、どれも手が入って見分けにくかった）。絵がないときは、今までの小さな絵
       el("summary", {}, METHOD_PICS[key]
-        ? [el("img", { class: "method-thumb", src: `img/howto/${key}.webp`, alt: "", "aria-hidden": "true", width: "88", height: "66" }), el("span", { class: "method-name", text: m.title })]
+        ? [el("img", { class: "method-thumb", src: `img/howto/icon_${key}.webp`, alt: "", "aria-hidden": "true", width: "60", height: "60" }), el("span", { class: "method-name", text: m.title })]
         : [ico(m.icon, "mi"), m.title]),
     ];
     // 開いたときに出す、やり方の絵（img/howto。Codex で作った。2026-11-10 ユーザーの指示）
