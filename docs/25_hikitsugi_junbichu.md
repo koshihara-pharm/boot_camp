@@ -16,7 +16,7 @@
 
 - 公開のサイト（PR #32 でマージ済み）: 検索の欄の下に「薬の一覧を見る（あいうえお順）」。一覧の画面。まだの薬は「準備中」と出る。サイトの薬 29、準備中 41
 - 対応表 docs/24: 41 の薬が処方の多い順に並ぶ。**全部「未着手」**。カードは空
-- 見るためのページ docs/junbichu_taiouhyou.html: docs/24 から `python3 tools/taiouhyou_html.py` で作る（docs/24 を書き足したら作り直す）。ユーザーは非公開の Artifact https://claude.ai/artifact/3a219wSiFYhmBmNKUrLL38 でも見ている（同じファイルを publish すると同じ URL が新しくなる。前のセッションで作ったので、新しいセッションでは `url` を指定して read してから publish する）
+- 見るためのページ docs/junbichu_taiouhyou.html: docs/24 から `node tools/taiouhyou_html.cjs` で作る（docs/24 を書き足したら作り直す）。ユーザーは非公開の Artifact https://claude.ai/artifact/3a219wSiFYhmBmNKUrLL38 でも見ている（同じファイルを publish すると同じ URL が新しくなる。前のセッションで作ったので、新しいセッションでは `url` を指定して read してから publish する）
 - 下調べのレポートとメモは、作業用の枝 `claude/admiring-knuth-uf7sml` にある（main にマージ済みでなければ、その枝から始めるか、先にマージする）
 
 ## 3. やってほしいこと（1つの薬ずつ。上から順に）
@@ -28,7 +28,7 @@ docs/24 の「進め方」のとおり。
 3. 見つかったら、docs/24 のカードに、味／◎／○／×と理由／コツ／資料（名前と年、URL）を**自分の言葉で**書く。原文で確かめたものと、検索の抜粋だけのものを分ける。状態を「下書きあり」にする
 4. ユーザー（薬剤師）に確かめてもらう。直しは「薬剤師:」で書く。よければ「確認済み（日付）」
 5. 確認済みになった薬を data.js に足す（下の 6）。スマホの幅で確かめ、状態を「反映した」にする
-6. docs/24 を変えたら `python3 tools/taiouhyou_html.py` で見るページを作り直す
+6. docs/24 を変えたら `node tools/taiouhyou_html.cjs` で見るページを作り直す（2026-11-10 に Python 版から変えた。サイトに足した薬は data.js から「サイトに出ている内容」を出し、公開中のサイトに出ているかも見る）
 
 下調べのレポートは「どこを見ればいいか」の手がかりとして使う。中身をそのまま事実として書かない。
 

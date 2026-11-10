@@ -95,7 +95,35 @@
   dt { color: var(--muted); }
   dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
   dd.empty { color: var(--muted); }
+  dd a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
   .memo { font-size: 0.82rem; color: var(--muted); }
+  /* サイトに足した薬: いちばん上に「サイトに出ている内容」。data.js から作る（2026-11-10） */
+  .site { border: 2px solid var(--s-done-bg); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+  .site h3 { margin: 0; font-size: 0.95rem; font-family: var(--font-display); }
+  .live { font-size: 0.82rem; font-weight: 700; border-radius: 8px; padding: 6px 10px; }
+  .live.yes { color: var(--s-checked); background: var(--s-checked-bg); }
+  .live.no { color: var(--s-draft); background: var(--s-draft-bg); }
+  .site dl { font-size: 0.92rem; display: block; }
+  .site dt { color: var(--muted); font-size: 0.8rem; font-weight: 700; margin-top: 8px; }
+  .site dt:first-child { margin-top: 0; }
+  .site dd { margin: 1px 0 0; }
+  .src-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; padding: 3px 0; border-bottom: 1px dotted var(--line); }
+  .src-line .what { font-weight: 700; }
+  .src-line .arrow { color: var(--muted); }
+  .site, .site dl, .site dd, .src-line { min-width: 0; max-width: 100%; }
+  .srcs { display: inline-flex; flex-wrap: wrap; gap: 4px; min-width: 0; max-width: 100%; }
+  .src-tag { font-size: 0.78rem; background: var(--accent-soft); border-radius: 12px; padding: 1px 8px; overflow-wrap: anywhere; }
+  .src-tag a { color: var(--text); }
+  .src-tag b { color: var(--accent); }
+  .src-none { font-size: 0.78rem; color: var(--s-draft); font-weight: 700; }
+  .src-note, .src-legend { font-size: 0.76rem; color: var(--muted); margin: 0; }
+  .site ul { margin: 0; padding-left: 1.1em; }
+  .site li + li { margin-top: 2px; }
+  .check { font-size: 0.86rem; background: var(--s-draft-bg); border-radius: 10px; padding: 8px 10px; }
+  .check b { color: var(--s-draft); }
+  details.draft { border-top: 1px dashed var(--line); padding-top: 6px; }
+  details.draft > summary { cursor: pointer; font-size: 0.82rem; color: var(--muted); padding: 4px 0; }
+  details.draft dl { margin-top: 6px; }
   .note { font-size: 0.8rem; color: var(--muted); }
   button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -109,7 +137,7 @@
   </header>
 
   <section class="progress" aria-label="進み具合">
-    <div class="big">サイトに反映した薬 <b id="done-count">0</b> / __COUNT__</div>
+    <div class="big">サイトに反映した薬 <b id="done-count">0</b> / __COUNT__<span id="live-count" class="lead"></span></div>
     <div class="bar" id="bar" role="img" aria-label="状態ごとの数"></div>
     <div class="legend" id="legend"></div>
     <div class="flow" aria-label="進め方">
@@ -170,6 +198,21 @@
     return n;
   }
 
+  // カードの文の中の [名前](URL) と、そのままの URL を、押せるリンクにする（資料の欄。2026-11-10 ユーザーの指示）
+  function linked(text) {
+    const out = [];
+    const re = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s）)]+)/g;
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) out.push(document.createTextNode(text.slice(last, m.index)));
+      const url = m[2] || m[3];
+      out.push(el("a", { href: url, target: "_blank", rel: "noopener", text: m[1] || url }));
+      last = re.lastIndex;
+    }
+    if (last < text.length) out.push(document.createTextNode(text.slice(last)));
+    return out;
+  }
+
   function chips(target, values, current, onPick) {
     target.replaceChildren(...values.map((v) => {
       const b = el("button", { type: "button", class: "chip", "aria-pressed": String(v === current), text: v });
@@ -181,6 +224,8 @@
   function renderProgress() {
     const counts = Object.fromEntries(STATUSES.map((s) => [s, ROWS.filter((r) => r.status === s).length]));
     document.getElementById("done-count").textContent = counts["反映した"];
+    const onSite = ROWS.filter((r) => r.site);
+    if (onSite.length > 0) document.getElementById("live-count").textContent = "（うち公開中のサイトに出ている薬 " + onSite.filter((r) => r.site.live).length + "）";
     document.getElementById("bar").replaceChildren(...STATUSES.filter((s) => counts[s] > 0).map((s) =>
       el("span", { style: `width:${100 * counts[s] / ROWS.length}%;background:var(${STATUS_VAR[s]})`, title: s + " " + counts[s] })));
     document.getElementById("legend").replaceChildren(...STATUSES.map((s) =>
@@ -201,8 +246,19 @@
     ]));
     const dl = el("dl");
     for (const f of FIELDS) {
+      if (r.site && f === "薬剤師の確認（日付）") continue;
       const v = c[f] || "";
-      dl.append(el("dt", { text: f.replace("（名前と年）", "").replace("と理由", "") }), el("dd", { class: v ? "" : "empty", text: v || "まだ" }));
+      dl.append(el("dt", { text: f.replace("（名前と年）", "").replace("と理由", "") }), v ? el("dd", {}, linked(v)) : el("dd", { class: "empty", text: "まだ" }));
+    }
+    if (r.site) {
+      // サイトに足した薬: サイトに出ている内容 → 確かめること → 調べたときの下書き（閉じておく）
+      d.append(el("div", { class: "body" }, [
+        siteBlock(r.site, r.why),
+        el("div", { class: "check" }, [el("b", { text: "確かめること: " }), document.createTextNode(r.memo || "なし")]),
+        c["薬剤師の確認（日付）"] ? el("p", { class: "memo", text: "薬剤師の確認: " + c["薬剤師の確認（日付）"] }) : null,
+        el("details", { class: "draft" }, [el("summary", { text: "調べたときの下書き（AI のメモ）を開く" }), dl]),
+      ]));
+      return d;
     }
     d.append(el("div", { class: "body" }, [
       el("div", { class: "next" }, [el("b", { text: "次: " }), document.createTextNode(NEXT[r.status] || "")]),
@@ -210,6 +266,46 @@
       r.memo ? el("p", { class: "memo", text: "メモ: " + r.memo }) : null,
     ]));
     return d;
+  }
+
+  // 出どころの印: 「帯広 2024 ○」のように、短い資料名（リンク）と、その資料の印や言葉を並べる
+  function srcTags(list) {
+    if (!list || list.length === 0) return el("span", { class: "src-none", text: "出どころ未記入" });
+    return el("span", { class: "srcs" }, list.map((x) => el("span", { class: "src-tag" }, [
+      x.url ? el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.short }) : document.createTextNode(x.short),
+      x.mark ? el("b", { text: " " + x.mark }) : null,
+    ])));
+  }
+
+  // 1行: 中身 ← 出どころ
+  function srcLine(text, list) {
+    return el("div", { class: "src-line" }, [el("span", { class: "what", text }), el("span", { class: "arrow", text: "←" }), srcTags(list)]);
+  }
+
+  // サイトの薬の画面と同じ中身（data.js から作った）。中身の1つずつに、出どころを並べる（2026-11-10 ユーザーの指示）
+  function siteBlock(s, why) {
+    const w = why || { taste: [], point: [], foods: {}, tips: [] };
+    const dl = el("dl");
+    const add = (k, nodes) => dl.append(el("dt", { text: k }), el("dd", {}, nodes));
+    add("味", [srcLine(s.taste.split("・").join("、"), w.taste)]);
+    if (s.point) add("画面の一文", [srcLine(s.point, w.point)]);
+    const foodRows = (foods) => foods.length ? foods.map((x) => srcLine(x, w.foods[x])) : [document.createTextNode("なし")];
+    add("◎ 混ぜると飲みやすい", foodRows(s.easy));
+    add("○ 混ぜても大丈夫", foodRows(s.good));
+    add("× 混ぜないほうがいい", foodRows(s.avoid));
+    add("コツ", s.tips.length ? s.tips.map((t, i) => srcLine(t, w.tips[i])) : [document.createTextNode("なし")]);
+    if (w.note) dl.append(el("dd", { class: "src-note", text: "※ " + w.note }));
+    dl.append(el("dt", { text: "参考にした資料" }), el("dd", {}, [el("ul", {}, s.refs.map((x) =>
+      el("li", {}, [x.url ? el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.name }) : document.createTextNode(x.name + "（本。URL なし）")])))]));
+    const live = s.live === true ? ["yes", "公開中のサイトに出ています"]
+      : s.live === false ? ["no", "まだ公開していません（手元の data.js には入っています。コミットして main に入れると出ます）"]
+      : ["no", "公開中のサイトに出ているかは、確かめられませんでした"];
+    return el("section", { class: "site", "aria-label": "サイトに出ている内容" }, [
+      el("h3", { text: "サイトに出ている内容" }),
+      el("div", { class: "live " + live[0], text: live[1] }),
+      el("p", { class: "src-legend", text: "← のあとが出どころ（資料と、その資料の印）。印: 帯広 ○飲みやすい △ふつう ×飲みにくい ／ 飯塚 ○問題なし ×飲みにくくなる ／ 成育 ●飲みやすい ▲変わらない ×飲みにくい ／ くるみ薬局 ○のみやすくなる・問題ない" }),
+      dl,
+    ]);
   }
 
   function render() {
