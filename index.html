@@ -491,6 +491,64 @@
      うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
   :root { --bg: #fff4f6; --ink: #ad5118; }
   body { background: var(--bg); }
+
+  /* 年齢の丸の絵を全身にした（縦長）ので、大きさと位置を合わせる（2026-11-09） */
+  #flow-ages { padding-top: 64px; }
+  #flow-ages .age-illustration { width: 66%; height: 80%; top: -50%; left: 17%; transform: none; filter: none; }
+  #flow-ages button:nth-child(2) .age-illustration { transform: none; }
+
+  /* ===== 2026-11-10 ユーザー「シンプルに王道のデザインで」「お困りごとはクリックするのが分かりにくい」「写真のところも見にくい」 =====
+     飾りの丸をやめて、スマホのアプリでよく見る形にする。色・丸ゴシック・くまは残す */
+  .panel { border-radius: 20px; padding: 20px 16px 22px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.06); }
+  .search-label { display: block; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--text); margin: 0 0 8px; }
+  .hero input[type="search"] { border: 2px solid #d9d9d9; border-radius: 12px; box-shadow: none; font-size: 18px; padding: 14px 14px; min-height: 56px; }
+  .hero input[type="search"]::placeholder { color: #8a8a8a; }
+  .search-help { margin: 8px 2px 0; font-size: 15px; color: var(--muted); }
+  .hero .worry-title { justify-content: flex-start; font-size: 20px; margin: 28px 0 12px; letter-spacing: 0; color: var(--text); }
+  .worry-title::before, .worry-title::after { content: none; display: none; }
+
+  /* お困りごと: 横長のボタン（左に絵、まん中に言葉、右に ›） */
+  .worry { grid-template-columns: 1fr; gap: 10px; max-width: none; padding: 0; }
+  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) {
+    --c: #ffffff; aspect-ratio: auto; min-height: 68px; container-type: normal; isolation: auto;
+    flex-direction: row; justify-content: flex-start; align-items: center; gap: 14px;
+    padding: 10px 44px 10px 14px; border-radius: 16px; border: 1.5px solid #e6e1dc; background: #ffffff; color: var(--text);
+    text-align: left; box-shadow: 0 2px 0 #ece6e0; animation: none; transform: none; position: relative; }
+  .worry button::before { content: none; display: none; }
+  .worry button::after { content: "›"; display: block; position: absolute; right: 16px; top: 50%; transform: translateY(-52%);
+    font-size: 30px; line-height: 1; color: var(--ink); font-family: var(--font-display); }
+  .worry .ic, .worry button:nth-child(even) .ic { position: static; transform: none; width: 44px; height: 44px; flex: none; filter: none;
+    background: var(--taste-bg); border-radius: 12px; padding: 5px; box-sizing: border-box; }
+  .worry .lbl { font-size: 18px; line-height: 1.4; }
+  .worry .lbl br { display: none; }
+  .worry .arrow { display: none; }
+  .worry button:active { transform: translateY(1px); background: var(--taste-bg); box-shadow: none; }
+  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* 年齢を選ぶ: 絵をカードの中に収め、下に年齢。選んだカードは青い枠 */
+  #flow-ages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 480px; margin: 0 0 18px; padding: 4px 0 8px; }
+  #flow-ages button { aspect-ratio: auto; container-type: normal; min-height: 120px; border-radius: 16px; border: 2px solid #e6e1dc;
+    background: #ffffff; color: var(--text); box-shadow: 0 2px 0 #ece6e0; padding: 10px 6px 10px; gap: 6px; transform: none; justify-content: flex-start; }
+  #flow-ages button::before { content: none; display: none; }
+  #flow-ages .age-illustration, #flow-ages button:nth-child(2) .age-illustration { position: static; width: auto; height: 72px; max-width: 100%; transform: none; filter: none; }
+  #flow-ages .age-label { font-size: 18px; line-height: 1.3; }
+  #flow-ages .age-arrow { display: none; }
+  #flow-ages button[aria-pressed="true"] { background: #eaf3fb; border: 3px solid var(--accent); color: var(--text); transform: none; box-shadow: none; }
+  #flow-ages button[aria-pressed="true"] .age-check { top: 6px; right: 6px; }
+  #flow-ages button:active { transform: translateY(1px); box-shadow: none; }
+
+  /* 2026-11-10 ユーザー「欄をもう少しかわいく」（薬の一覧の画面の検索欄もそろえる）: カプセル形、うすいオレンジの枠、左に虫めがね、押すとやわらかく光る */
+  .hero input[type="search"], #list-page input[type="search"] {
+    border: 2.5px solid var(--kids-orange); border-radius: 999px; background-color: #fffaf6;
+    padding: 14px 18px 14px 50px; min-height: 58px; font-size: 18px; box-shadow: 0 3px 0 #f6dcc7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ad5118' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 20 20'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 18px 50%; background-size: 22px 22px; }
+  .hero input[type="search"]:focus, #list-page input[type="search"]:focus { outline: none; border-color: #e8893a; box-shadow: 0 0 0 5px rgb(245 183 131 / 0.45); background-color: #ffffff; }
+  .hero input[type="search"]::placeholder, #list-page input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
+  .search-help { padding-left: 18px; }
+  .search-help .nw { display: inline-block; }
+  /* やり方を開いたときの絵（2026-11-10） */
+  .howto .method-pic { display:block; width:100%; height:auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2px 0 12px; background: #fff; }
 </style>
 </head>
 <body>
@@ -502,11 +560,13 @@
         <div class="hero-stamp" aria-hidden="true"><img src="img/fluent/bear.svg" alt=""></div>
         <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
       </div>
-      <p class="lead"><span class="nw">薬の名前を入れると、</span><span class="nw">味と、混ぜていい食べ物が分かります。</span></p>
       <div class="panel">
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <div class="search-wrap">
-      <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
+      <!-- よくある入力欄の形: 上に名前、中に例、下に短い説明（2026-11-10 ユーザー「シンプルに、分かりやすく」。前はトップに長い説明文） -->
+      <label class="search-label" for="q">粉薬の名前で探す</label>
+      <input id="q" type="search" placeholder="例: クラリス" autocomplete="off" aria-describedby="q-help">
+      <p class="search-help" id="q-help"><span class="nw">薬の味と、</span><span class="nw">混ぜていい食べ物が分かります</span></p>
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       </div>
@@ -1052,12 +1112,24 @@
     openImage(`${f.label}・${name}`, `card/${flowSel}-${key}.png`, `${f.label}の粉薬の飲ませ方「${name}」の手順とコツの画像`);
   }
 
+  const METHOD_PICS = {
+    water: "大人の手が、小さなコップの中の少しの水と粉を、スプーンで混ぜている絵",
+    fukuro: "大人の手が、口を切った薬の袋の中を、スプーンで混ぜている絵",
+    dango: "大人の指の先に、薬のペーストがのっている絵",
+    spoit: "大人の手が、小さな容器から、スポイトで薬を吸っている絵",
+    nipple: "哺乳びんの乳首と、とろっとした薬の入った小さな容器の絵",
+    mix: "大人の手が、小さな器の少しのアイスに、スプーンで薬を混ぜている絵",
+    otona: "子どもの両手が水のコップを持ち、そばで大人が親指を立てている絵",
+  };
+
   function flowItem(key, open) {
     const m = METHODS[key];
     const parts = [
       el("summary", {}, [ico(m.icon, "mi"), m.title]),
-      el("ol", {}, m.steps.map((s) => el("li", { text: s }))),
     ];
+    // 開いたときに出す、やり方の絵（img/howto。Codex で作った。2026-11-10 ユーザーの指示）
+    if (METHOD_PICS[key]) parts.push(el("img", { class: "method-pic", src: `img/howto/${key}.webp`, alt: METHOD_PICS[key], loading: "lazy", width: "800", height: "600" }));
+    parts.push(el("ol", {}, m.steps.map((s) => el("li", { text: s }))));
     if (m.to === "mix") {
       const b = el("button", { type: "button", class: "step-next", text: "薬の名前で、混ぜていい食べ物を探す" });
       b.addEventListener("click", goMix);
@@ -1083,7 +1155,8 @@
 
   function renderSteps() {
     document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
-      const illustration = { baby: "baby", toddler: "child", kid: "backpack" }[f.age];
+      // 年齢ごとの全身の絵（img/age。このサイトで描いた。2026-11-09 ユーザー「全身をうつして、年齢を表現して」）
+      const illustration = { baby: "baby", toddler: "toddler", kid: "kid" }[f.age];
       const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       arrow.setAttribute("class", "age-arrow");
       arrow.setAttribute("viewBox", "0 0 24 20");
@@ -1094,7 +1167,7 @@
       path.setAttribute("fill", "currentColor");
       arrow.append(path);
       const b = el("button", { type: "button", "aria-pressed": String(f.age === flowSel) }, [
-        el("img", { class: "age-illustration", src: `img/fluent/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
+        el("img", { class: "age-illustration", src: `img/age/${illustration}.svg`, alt: "", "aria-hidden": "true" }),
         el("span", { class: "age-label", text: f.label }),
         arrow,
         el("span", { class: "age-check", "aria-hidden": "true", text: "✓" }),
@@ -1111,9 +1184,9 @@
     document.getElementById("age-flow").replaceChildren(...(f ? [
       el("p", { class: "flow-note", text: f.note }),
       el("p", { class: "water-note", text: f.water || WATER_NOTE }),
-      ...f.groups.flatMap((g, gi) => [
+      ...f.groups.flatMap((g) => [
         el("p", { class: "flow-group", text: g.label }),
-        el("div", { class: "howto" }, g.items.map((key) => flowItem(key, gi === 0))),
+        el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
       ]),
       el("p", { class: "flow-group", text: "コツ" }),
       // やり方ごとのコツ（METHODS の tips）は、保存用の画像にだけ出す。サイトでは見にくかった（2026-11-04 ユーザーの判断）
