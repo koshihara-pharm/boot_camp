@@ -26,6 +26,8 @@ const DRUGS = [
   { name: "トランサミン散", generic: "トラネキサム酸", genericForm: "細粒", taste: "苦い・無香料" },
   { name: "ナウゼリンドライシロップ", generic: "ドンペリドン", genericForm: "ドライシロップ", taste: "甘い・無香料" },
   { name: "ビオフェルミンR散", taste: "甘い・無香料" },
+  // 準備中から移した（2026-11-10 薬剤師の判断。docs/24）。飯塚の表は味だけで、食べ物はすべて「データなし」。食べ物は「資料なし」として出す
+  { name: "ビオスリー配合散", generic: "酪酸菌", taste: "やや甘い・無香料" },
   { name: "フロモックス細粒", generic: "セフカペン", genericForm: "細粒", taste: "甘い・ストロベリー味" },
   { name: "ペリアクチン散", taste: "わずかに甘い・無香料" },
   { name: "ホスミシンドライシロップ", generic: "ホスホマイシン", taste: "甘い・カルピス味" },
@@ -87,7 +89,6 @@ const PREPARING = [
   { name: "メプチンドライシロップ", generic: "プロカテロール", genericForm: "ドライシロップ" },
   // 販売が終わった製品をサイトから外したので、今売っている先発品を準備中にする（2026-11-03 ユーザーの判断。薬価のリスト 令和8年11月）
   { name: "テオドール顆粒", generic: "テオフィリン", genericForm: "ドライシロップ" },
-  { name: "ビオスリー配合散", generic: "酪酸菌" },
   { name: "レベニン散", generic: "耐性乳酸菌" },
   { name: "ビオフェルミン散剤", generic: "ビフィズス菌" },
 ];
@@ -561,6 +562,20 @@ const FACTS = {
     tips: [TIP_JUST_BEFORE],
     refs: ONE_TABLE_IIZUKA,
     checked: CHECK_ONE_TABLE,
+  },
+  // 2026-11-10 に足した（docs/24）。食べ物の資料が無い薬は、病院の表と同じく「資料なし」とし、◎○× を出さない（薬剤師の判断）
+  "ビオスリー配合散": {
+    basis: "iizuka",
+    point: "やや甘く、においもないので、比較的飲みやすい薬です。混ぜていい食べ物は、病院の資料でも「データなし」で、分かっていません。",
+    tips: [],
+    refs: ["iizuka"],
+    checked: "薬剤師が確認しました（2026-11-10）",
+    why: {
+      taste: [["iizuka", "やや甘い・無香料"]],
+      point: [["iizuka", "やや甘い・無香料。食べ物はすべて「－ データなし」"], ["pharmacist", "比較的飲みやすい（2026-11-10 薬剤師の判断）"]],
+      foods: {},
+      tips: [],
+    },
   },
   "ビオフェルミンR散": {
     basis: "iizuka",

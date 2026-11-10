@@ -16,7 +16,7 @@ const LIVE_URL = "https://koshihara-pharm.github.io/boot_camp/data.js";
 const SHORT = {
   obihiro: "帯広 2024", iizuka: "飯塚 2016", ncchd: "成育 2018", kurumiMix: "くるみ薬局 2018",
   mucosolvanLabel: "添付文書", allelockLabel: "添付文書", clarisLabel: "添付文書",
-  pmdaQ8: "PMDA Q8", handbook: "本（服用介助ハンドブック）",
+  pmdaQ8: "PMDA Q8", handbook: "本（服用介助ハンドブック）", pharmacist: "薬剤師（ユーザー）",
 };
 
 // data.js の why（[資料のキー, 印や言葉] の並び）を、短い名前・URL つきにする
