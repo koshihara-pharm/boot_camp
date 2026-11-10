@@ -6,7 +6,7 @@
       "runtimeExecutable": "node",
       "runtimeArgs": [
         "-e",
-        "const h=require('http'),f=require('fs'),p=require('path');const t={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css'};h.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const fp=p.join(process.cwd(),u);f.readFile(fp,(e,d)=>{if(e){r.writeHead(404);r.end();return}r.writeHead(200,{'Content-Type':t[p.extname(fp)]||'application/octet-stream'});r.end(d)})}).listen(process.env.PORT||8123)"
+        "const h=require('http'),f=require('fs'),p=require('path');const t={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css','.png':'image/png','.mp4':'video/mp4'};h.createServer((q,r)=>{let u=decodeURIComponent(q.url.split('?')[0]);if(u.endsWith('/'))u+='index.html';const fp=p.join(process.cwd(),u);f.readFile(fp,(e,d)=>{if(e){r.writeHead(404);r.end();return}const ty=t[p.extname(fp)]||'application/octet-stream';const m=/bytes=(\\d*)-(\\d*)/.exec(q.headers.range||'');if(m){const s=m[1]?+m[1]:0,en=m[2]?+m[2]:d.length-1;r.writeHead(206,{'Content-Type':ty,'Accept-Ranges':'bytes','Content-Range':'bytes '+s+'-'+en+'/'+d.length,'Content-Length':en-s+1});r.end(d.subarray(s,en+1));return}r.writeHead(200,{'Content-Type':ty,'Accept-Ranges':'bytes'});r.end(d)})}).listen(process.env.PORT||8123)"
       ],
       "port": 8123
     }
