@@ -536,6 +536,16 @@
   #flow-ages button[aria-pressed="true"] { background: #eaf3fb; border: 3px solid var(--accent); color: var(--text); transform: none; box-shadow: none; }
   #flow-ages button[aria-pressed="true"] .age-check { top: 6px; right: 6px; }
   #flow-ages button:active { transform: translateY(1px); box-shadow: none; }
+
+  /* 2026-11-10 ユーザー「欄をもう少しかわいく」（薬の一覧の画面の検索欄もそろえる）: カプセル形、うすいオレンジの枠、左に虫めがね、押すとやわらかく光る */
+  .hero input[type="search"], #list-page input[type="search"] {
+    border: 2.5px solid var(--kids-orange); border-radius: 999px; background-color: #fffaf6;
+    padding: 14px 18px 14px 50px; min-height: 58px; font-size: 18px; box-shadow: 0 3px 0 #f6dcc7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ad5118' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 20 20'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 18px 50%; background-size: 22px 22px; }
+  .hero input[type="search"]:focus, #list-page input[type="search"]:focus { outline: none; border-color: #e8893a; box-shadow: 0 0 0 5px rgb(245 183 131 / 0.45); background-color: #ffffff; }
+  .hero input[type="search"]::placeholder, #list-page input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
+  .search-help { padding-left: 18px; }
 </style>
 </head>
 <body>
