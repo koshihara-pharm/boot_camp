@@ -546,6 +546,7 @@
   .hero input[type="search"]:focus, #list-page input[type="search"]:focus { outline: none; border-color: #e8893a; box-shadow: 0 0 0 5px rgb(245 183 131 / 0.45); background-color: #ffffff; }
   .hero input[type="search"]::placeholder, #list-page input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
   .search-help { padding-left: 18px; }
+  .search-help .nw { display: inline-block; }
 </style>
 </head>
 <body>
@@ -563,7 +564,7 @@
       <!-- よくある入力欄の形: 上に名前、中に例、下に短い説明（2026-11-10 ユーザー「シンプルに、分かりやすく」。前はトップに長い説明文） -->
       <label class="search-label" for="q">粉薬の名前で探す</label>
       <input id="q" type="search" placeholder="例: クラリス" autocomplete="off" aria-describedby="q-help">
-      <p class="search-help" id="q-help">薬の味と、混ぜていい食べ物が分かります</p>
+      <p class="search-help" id="q-help"><span class="nw">薬の味と、</span><span class="nw">混ぜていい食べ物が分かります</span></p>
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       </div>
