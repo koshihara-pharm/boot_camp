@@ -496,6 +496,46 @@
   #flow-ages { padding-top: 64px; }
   #flow-ages .age-illustration { width: 66%; height: 80%; top: -50%; left: 17%; transform: none; filter: none; }
   #flow-ages button:nth-child(2) .age-illustration { transform: none; }
+
+  /* ===== 2026-11-10 ユーザー「シンプルに王道のデザインで」「お困りごとはクリックするのが分かりにくい」「写真のところも見にくい」 =====
+     飾りの丸をやめて、スマホのアプリでよく見る形にする。色・丸ゴシック・くまは残す */
+  .panel { border-radius: 20px; padding: 20px 16px 22px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.06); }
+  .search-label { display: block; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--text); margin: 0 0 8px; }
+  .hero input[type="search"] { border: 2px solid #d9d9d9; border-radius: 12px; box-shadow: none; font-size: 18px; padding: 14px 14px; min-height: 56px; }
+  .hero input[type="search"]::placeholder { color: #8a8a8a; }
+  .search-help { margin: 8px 2px 0; font-size: 15px; color: var(--muted); }
+  .hero .worry-title { justify-content: flex-start; font-size: 20px; margin: 28px 0 12px; letter-spacing: 0; color: var(--text); }
+  .worry-title::before, .worry-title::after { content: none; display: none; }
+
+  /* お困りごと: 横長のボタン（左に絵、まん中に言葉、右に ›） */
+  .worry { grid-template-columns: 1fr; gap: 10px; max-width: none; padding: 0; }
+  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) {
+    --c: #ffffff; aspect-ratio: auto; min-height: 68px; container-type: normal; isolation: auto;
+    flex-direction: row; justify-content: flex-start; align-items: center; gap: 14px;
+    padding: 10px 44px 10px 14px; border-radius: 16px; border: 1.5px solid #e6e1dc; background: #ffffff; color: var(--text);
+    text-align: left; box-shadow: 0 2px 0 #ece6e0; animation: none; transform: none; position: relative; }
+  .worry button::before { content: none; display: none; }
+  .worry button::after { content: "›"; display: block; position: absolute; right: 16px; top: 50%; transform: translateY(-52%);
+    font-size: 30px; line-height: 1; color: var(--ink); font-family: var(--font-display); }
+  .worry .ic, .worry button:nth-child(even) .ic { position: static; transform: none; width: 44px; height: 44px; flex: none; filter: none;
+    background: var(--taste-bg); border-radius: 12px; padding: 5px; box-sizing: border-box; }
+  .worry .lbl { font-size: 18px; line-height: 1.4; }
+  .worry .lbl br { display: none; }
+  .worry .arrow { display: none; }
+  .worry button:active { transform: translateY(1px); background: var(--taste-bg); box-shadow: none; }
+  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* 年齢を選ぶ: 絵をカードの中に収め、下に年齢。選んだカードは青い枠 */
+  #flow-ages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 480px; margin: 0 0 18px; padding: 4px 0 8px; }
+  #flow-ages button { aspect-ratio: auto; container-type: normal; min-height: 120px; border-radius: 16px; border: 2px solid #e6e1dc;
+    background: #ffffff; color: var(--text); box-shadow: 0 2px 0 #ece6e0; padding: 10px 6px 10px; gap: 6px; transform: none; justify-content: flex-start; }
+  #flow-ages button::before { content: none; display: none; }
+  #flow-ages .age-illustration, #flow-ages button:nth-child(2) .age-illustration { position: static; width: auto; height: 72px; max-width: 100%; transform: none; filter: none; }
+  #flow-ages .age-label { font-size: 18px; line-height: 1.3; }
+  #flow-ages .age-arrow { display: none; }
+  #flow-ages button[aria-pressed="true"] { background: #eaf3fb; border: 3px solid var(--accent); color: var(--text); transform: none; box-shadow: none; }
+  #flow-ages button[aria-pressed="true"] .age-check { top: 6px; right: 6px; }
+  #flow-ages button:active { transform: translateY(1px); box-shadow: none; }
 </style>
 </head>
 <body>
@@ -507,11 +547,13 @@
         <div class="hero-stamp" aria-hidden="true"><img src="img/fluent/bear.svg" alt=""></div>
         <h1><span class="nw">子どもの</span><span class="nw">粉薬を、</span><br>飲みやすく</h1>
       </div>
-      <p class="lead"><span class="nw">薬の名前を入れると、</span><span class="nw">味と、混ぜていい食べ物が分かります。</span></p>
       <div class="panel">
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <div class="search-wrap">
-      <input id="q" type="search" placeholder="粉薬の名前で探す（例: クラリス）" autocomplete="off" aria-label="粉薬の名前で探す">
+      <!-- よくある入力欄の形: 上に名前、中に例、下に短い説明（2026-11-10 ユーザー「シンプルに、分かりやすく」。前はトップに長い説明文） -->
+      <label class="search-label" for="q">粉薬の名前で探す</label>
+      <input id="q" type="search" placeholder="例: クラリス" autocomplete="off" aria-describedby="q-help">
+      <p class="search-help" id="q-help">味と、混ぜていい食べ物が分かります</p>
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
       </div>
