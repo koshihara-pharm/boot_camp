@@ -667,7 +667,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-11a"></script>
+<script src="data.js?v=2026-11-11e"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -1006,7 +1006,11 @@
   }
 
   function foodChip(food) {
-    return el("span", { class: "chip" }, [ico(FOOD_EMOJI[food], "fe"), food]);
+    // Fluent Emoji に絵が無い食べ物は、img/food の絵を出す（data.js の FOOD_IMG。2026-11-11）
+    const pic = FOOD_IMG[food]
+      ? el("img", { class: "fe", src: "img/food/" + FOOD_IMG[food] + ".png", alt: "", "aria-hidden": "true" })
+      : ico(FOOD_EMOJI[food], "fe");
+    return el("span", { class: "chip" }, [pic, food]);
   }
 
   function chipBox(title, cls, text, chips) {
