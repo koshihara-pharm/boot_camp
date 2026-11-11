@@ -25,540 +25,267 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
 <style>
-  /* 1カラムのスマホ用。クリームの地に白い面、ピンクの丸い見出し、オレンジの丸のメニュー（2026-11-07 キユーピーの離乳食のページの雰囲気に寄せた。絵とロゴは使わない）。黄色いスタンプのくまは残す */
+  /* 画面の見た目（2026-11-11 に、重なっていた決まりを1つに書き直した。色・丸ゴシック・くまのスタンプ・平らな絵は今までどおり）
+     決まり:
+     - 色: うすいピンクの地に白い面。オレンジ＝主役（ページの題）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ、赤＝「混ぜないほうがいい」だけ
+     - 形: 押せるもの＝白い面に枠と下の影、右に丸い印（› は移動、＋ は開く）。押せない情報＝うすい色の面で、枠も影もなし
+     - 字: Zen Maru Gothic だけ。題 26 / 見出し 19 / 本文とボタン 17 / 補足 15 / 小さい注 13。左ぞろえ
+     - スマホのダークモードでも、いつも明るい色で出す（2026-11-07 ユーザーの指示） */
   :root {
-    --bg: #fff8dc;
-    --ink: #cf2a44;
-    --hero: #ffffff;
-    --stamp-soft: #fff1cc;
-    --stamp-ink: #3b2a00;
+    color-scheme: light;
+    --bg: #fff4f6;
     --card: #ffffff;
-    --text: #4a2f1e;
-    --muted: #7a5440;
-    --line: #f1dcb8;
-    --accent: #cf2a44;
-    --accent-text: #ffffff;
-    --stamp: #e8a317;
-    --good: #2f7d4f;
-    --good-bg: #e3f3e8;
-    --best-bg: #fff2c4;
+    --text: #3d2f28;
+    --muted: #6f5f56;
+    --line: #eadfd8;
+    --hair: #f1e8e2;
+    --info: #f8f3ef;
+    --title: #c4611a;
+    --ink: #ad5118;
+    --orange: #f5b783;
+    --orange-soft: #fdf1e6;
+    --accent: #2a6fa3;
+    --accent-soft: #eaf3fb;
+    --good: #2b7d2b;
+    --good-bg: #ebf5e9;
     --bad: #b33a2e;
     --bad-bg: #fbe8e5;
-    --warn: #7a3d9c;
-    --warn-bg: #f2e7f8;
-    --taste-bg: #fff0dc;
-    --orange: #e27100;
-    --title: #f22649;
-    --lace: #e9cf9a;
-    --star: #f29aa8;
-    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
-    --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+    --stamp: #e8a317;
+    --stamp-soft: #fff4dc;
+    --stamp-ink: #3b2a00;
+    --font: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --row-shadow: 0 2px 0 var(--line);
+    --sheet-shadow: 0 1px 2px rgb(61 47 40 / 0.04), 0 6px 20px rgb(61 47 40 / 0.06);
+    --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23ad5118' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.2 2 8.4 6 4.2 10'/%3E%3C/svg%3E");
+    --plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23ad5118' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 1.5v9M1.5 6h9'/%3E%3C/svg%3E");
+    --minus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23ad5118' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M1.5 6h9'/%3E%3C/svg%3E");
   }
-  /* スマホのダークモードでも、いつも白で出す（2026-11-07 ユーザーの指示「白をベース」。前はダークモードで緑の暗い色になっていた） */
-  :root { color-scheme: light; }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
+    font-family: var(--font);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
   }
+  button, input { font: inherit; letter-spacing: inherit; color: inherit; }
+  button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
   main {
     max-width: 560px;
     margin: 0 auto;
-    padding-block: 16px 40px;
+    padding-block: 16px 48px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
-  h1, h2, h3, h4, .howto summary { font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
-  h1 { font-size: 26px; margin: 8px 0 4px; }
-
-  .hero {
-    position: relative;
-    background: var(--hero);
-    border-radius: 28px;
-    padding: 22px 18px 18px;
-    overflow: hidden;
-  }
-  .hero .eyebrow { margin: 0; font-size: 14px; font-weight: bold; letter-spacing: 0.08em; color: var(--accent); font-family: var(--font-display); }
-  .hero h1 { font-size: 34px; line-height: 1.25; margin: 6px 0 8px; max-width: min(9em, calc(100% - 100px)); }
-  /* 見出しは、くまのスタンプに重ならないよう、せまい画面では言葉の切れ目で折り返す */
-  .hero h1 .nw { display: inline-block; }
-  .hero .lead { margin: 0 0 16px; color: var(--text); }
-  .hero input[type="search"] { font-size: 18px; }
-  .hero-stamp {
-    position: absolute;
-    top: 18px;
-    right: 16px;
-    width: 92px;
-    height: 92px;
-    border: 5px solid var(--stamp);
-    border-radius: 50%;
-    background: var(--card);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    transform: rotate(-12deg);
-  }
-  .hero-stamp::after {
-    content: "のめた！";
-    position: absolute;
-    bottom: -12px;
-    padding: 1px 8px;
-    border-radius: 999px;
-    background: var(--stamp);
-    color: var(--stamp-ink);
-    font-family: var(--font-display);
-    font-size: 13px;
-    font-weight: bold;
-  }
-  .hero input[type="search"] { border-color: transparent; box-shadow: 0 2px 0 var(--line); }
-  .nav button { display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; font-size: 16px; padding: 0 8px; }
-  .nav .ic { font-size: 22px; }
-  .kana {
-    font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    padding: 14px 4px 2px;
-  }
-  .list .drug-name { display: block; font-size: 19px; color: var(--text); }
-  .list .drug-meta { display: block; font-size: 14px; color: var(--muted); }
-  .lead { color: var(--muted); margin: 0 0 16px; font-size: 16px; }
-  .toplinks { display: flex; justify-content: flex-end; margin-bottom: 4px; }
-  .link-button {
-    font-size: 16px;
-    padding: 8px 12px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--card);
-    color: var(--text);
-    cursor: pointer;
-  }
-  input[type="search"] {
-    width: 100%;
-    font-size: 20px;
-    padding: 14px 16px;
-    border: 2px solid var(--line);
-    border-radius: 14px;
-    background: var(--card);
-    color: var(--text);
-  }
-  input[type="search"]:focus { outline: none; border-color: var(--accent); }
-  .list { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 6px; }
-  .list button {
-    width: 100%;
-    text-align: left;
-    font-size: 19px;
-    padding: 10px 16px;
-    min-height: 60px;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    background: var(--card);
-    color: var(--text);
-    cursor: pointer;
-  }
-  .list button:active { border-color: var(--accent); }
+  h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.4; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--accent); text-underline-offset: 3px; }
   button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-  .empty { color: var(--muted); padding: 12px 4px; }
-  /* 準備中の薬。押しても開かないので、ボタンにせず箱で出す */
-  .list .prep { padding: 10px 16px; border: 1px dashed var(--line); border-radius: 14px; background: var(--stamp-soft); }
-  .list .prep .drug-name { color: var(--text); }
-  .list .prep-tag { display: inline-block; font-size: 13px; font-weight: 700; color: var(--stamp-ink); background: var(--stamp); border-radius: 999px; padding: 0 10px; margin: 4px 0 2px; }
-  .list .prep-note { display: block; font-size: 14px; color: var(--text); }
+
+  /* ---- 題と見出し ---- */
+  #howto-page > h1, #list-page > h1 { margin: 18px 0 14px; font-size: 26px; color: var(--title); letter-spacing: 0.03em; }
+  .worry-title, .section-title { margin: 30px 0 10px; font-size: 19px; color: var(--text); }
+  .flow-group, .pick-label { margin: 26px 0 8px; font-size: 17px; font-weight: 700; color: var(--text); }
+  .pick-label { margin-top: 8px; }
+  .lead { margin: 0 0 14px; font-size: 15px; color: var(--muted); }
+  .source { margin: 14px 0 0; font-size: 13px; color: var(--muted); }
+
+  /* ---- トップ ---- */
+  .brandbar {
+    margin: -16px -16px 22px; padding: 12px 20px 11px;
+    background: var(--card); border-top: 6px solid transparent;
+    border-image: linear-gradient(90deg, var(--orange) 0 70%, #4b97c8 70% 100%) 6;
+    box-shadow: 0 1px 0 var(--hair);
+    font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: 0.06em;
+  }
+  .hero-head { display: flex; flex-direction: row-reverse; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 10px 20px 6px; }
+  .hero h1 { font-size: clamp(24px, 7.2vw, 36px); color: var(--title); letter-spacing: 0.03em; }
+  .hero h1 .nw, .search-help .nw { display: inline-block; }
+  /* くまの「のめた！」のスタンプ。このサイトの顔なので、ここだけは飾る */
+  .hero-stamp {
+    position: relative; flex: none; display: grid; place-items: center;
+    width: 76px; height: 76px; border: 3px solid var(--stamp); border-radius: 50%;
+    background: var(--stamp-soft); outline: 1px dashed var(--stamp); outline-offset: 5px; transform: rotate(-12deg);
+  }
+  .hero-stamp img { width: 53px; height: 53px; }
+  .hero-stamp::after {
+    content: "のめた！"; position: absolute; bottom: -10px; padding: 1px 8px; border-radius: 999px;
+    background: var(--stamp); color: var(--stamp-ink); font-size: 13px; font-weight: 700; line-height: 1.5; white-space: nowrap;
+  }
+  .panel, .card { background: var(--card); border-radius: 20px; padding: 20px 16px; box-shadow: var(--sheet-shadow); }
+  .panel .worry-title:first-of-type { margin-top: 28px; }
+  .lace, .worry .arrow, .worry .lbl br, #flow-ages .age-arrow { display: none; }
+
+  /* ---- 薬の名前の欄 ---- */
+  .search-label { display: block; margin: 0 0 8px 2px; font-size: 17px; font-weight: 700; }
+  input[type="search"] {
+    width: 100%; min-height: 58px; padding: 14px 18px 14px 50px;
+    border: 2.5px solid var(--orange); border-radius: 999px; box-shadow: 0 3px 0 #f6dcc7;
+    background: #fffaf6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ad5118' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 20 20'/%3E%3C/svg%3E") 18px 50% / 22px 22px no-repeat;
+    font-size: 18px; color: var(--text);
+  }
+  input[type="search"]:focus { outline: none; border-color: #e8893a; background-color: #ffffff; box-shadow: 0 0 0 5px rgb(245 183 131 / 0.45); }
+  input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
+  .search-help { margin: 8px 0 0 18px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .list-link { display: inline-flex; align-items: center; min-height: 44px; margin: 2px 0 0 18px; font-size: 15px; color: var(--accent); text-underline-offset: 4px; }
+  button.list-link { margin: 14px 0 0 18px; padding: 0; border: 0; background: none; text-decoration: underline; }
+  .worry-hint { margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; background: var(--orange-soft); color: var(--ink); font-size: 15px; font-weight: 700; }
+  .worry-hint:empty { display: none; }
   /* 「この薬を足してほしいと伝える」（docs/18 の 17-2）。形は「薬の一覧を見る」と同じ下線のリンク。親指で押せる高さにする */
-  .request-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; color: var(--accent); text-underline-offset: 4px; }
-  .request-link { flex-wrap: wrap; }
+  .request-link { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 44px; font-size: 15px; color: var(--accent); text-underline-offset: 4px; }
   .request-link .nowrap { white-space: nowrap; }
   .empty .request-link { display: flex; }
-  .request-bottom { text-align: center; margin: 20px 0 0; }
-  .request-bottom .request-link { justify-content: center; }
-  .back {
-    font-size: 17px;
-    padding: 10px 14px;
-    border: none;
-    border-radius: 12px;
-    background: transparent;
-    color: var(--accent);
-    cursor: pointer;
-    margin-left: -14px;
+  .list .prep .request-link { grid-column: 1 / -1; }
+  .request-bottom { margin: 4px 0 0 18px; }
+  #list-page .request-bottom { margin: 16px 0 0 4px; }
+
+  /* ---- 押せるもの: 白い面に枠と下の影。右に丸い印 ---- */
+  .worry { display: grid; gap: 10px; }
+  .worry button, .list button, .howto details, #flow-ages button, .back, .link-button {
+    background: var(--card); border: 1.5px solid var(--line); box-shadow: var(--row-shadow); color: var(--text);
   }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 18px 16px;
-    margin-top: 8px;
+  .worry button, .list button { position: relative; display: flex; align-items: center; width: 100%; border-radius: 16px; text-align: left; }
+  .worry button { gap: 12px; min-height: 68px; padding: 10px 50px 10px 12px; font-size: 17px; font-weight: 700; line-height: 1.4; }
+  .worry .lbl { text-wrap: balance; }
+  .worry .ic { flex: none; width: 44px; height: 44px; padding: 5px; border-radius: 12px; background: var(--orange-soft); }
+  .list button { flex-direction: column; align-items: flex-start; justify-content: center; min-height: 60px; padding: 10px 54px 10px 16px; }
+  .worry button::after, .list button::after, .howto summary::after {
+    content: ""; position: absolute; right: 14px; top: 50%; width: 28px; height: 28px; margin-top: -14px;
+    border-radius: 50%; background: var(--orange-soft) var(--chevron) center / 11px no-repeat;
   }
-  .card h2 { font-size: 26px; margin: 0; line-height: 1.3; }
-  .taste { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: 16px; }
-  .taste b { font-family: var(--font-display); color: var(--muted); font-size: 14px; letter-spacing: 0.08em; margin-right: 2px; }
-  .taste span { padding: 4px 12px; border-radius: 999px; background: var(--taste-bg); }
-  .section-title { font-size: 20px; margin: 24px 0 4px; }
-  .section-lead { color: var(--muted); font-size: 15px; margin: 0 0 4px; }
-  .group { margin-top: 16px; --tone: var(--muted); --tone-bg: var(--taste-bg); }
-  .group h3 { font-size: 17px; margin: 0 0 8px; color: var(--tone); }
-  .group p { margin: -4px 0 8px; font-size: 14px; color: var(--muted); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 17px;
-    padding: 6px 14px 6px 10px;
-    border-radius: 999px;
-    background: var(--tone-bg, var(--taste-bg));
-    color: var(--text);
-  }
-  .chip .fe { font-size: 20px; line-height: 1; }
-  .chip small { font-size: 12px; color: var(--muted); }
+  .howto summary::after { right: 0; background-image: var(--plus); }
+  .howto details[open] > summary::after { background-image: var(--minus); }
+  .worry button:active, .list button:active, #flow-ages button:active, .back:active, .link-button:active { transform: translateY(2px); box-shadow: none; }
+
+  /* ---- 薬の行 ---- */
+  .list { list-style: none; display: grid; gap: 8px; margin: 0; padding: 0; }
+  .hero .list:not(:empty) { margin: 12px 0 4px; }
+  .list .drug-name { display: block; font-size: 17px; font-weight: 700; line-height: 1.45; }
+  .list .drug-meta { display: block; font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .kana { padding: 12px 4px 0; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; }
+  .empty { padding: 12px 4px; color: var(--muted); }
+  /* 準備中の薬は押しても開かない。押せる行より目立たないように、枠も影もない面にする */
+  .list .prep { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; padding: 12px 16px; border-radius: 16px; background: var(--info); }
+  .list .prep .drug-name { color: var(--muted); font-weight: 500; }
+  .list .prep .drug-meta, .list .prep-note { grid-column: 1 / -1; }
+  .list .prep-tag { grid-column: 2; grid-row: 1; padding: 1px 10px; border-radius: 999px; background: #eadfd8; color: #55463d; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .list .prep-note { display: block; margin-top: 4px; font-size: 14px; line-height: 1.6; color: var(--text); }
+  #list-page input[type="search"] { margin-bottom: 6px; }
+  #list-page .prep { background: rgb(255 255 255 / 0.6); }
+
+  /* ---- 小さなボタン ---- */
+  .back { min-height: 44px; padding: 0 16px; border-radius: 999px; color: var(--accent); font-size: 15px; font-weight: 700; }
+  .link-button { padding: 8px 14px; border-radius: 999px; font-size: 15px; text-wrap: balance; }
+  .save-card { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 50px; margin: 4px 0 14px; border-radius: 14px; font-weight: 700; }
+  .step-next { display: block; width: 100%; min-height: 52px; margin: 4px 0 12px; border: 0; border-radius: 14px; background: var(--accent); color: #ffffff; font-size: 16px; font-weight: 700; }
+  img.bi { width: 20px; height: 20px; margin-right: 6px; vertical-align: -4px; }
+  img.mi { width: 26px; height: 26px; margin-right: 6px; vertical-align: -6px; }
+
+  /* ---- 薬の画面 ---- */
+  .card { margin-top: 12px; }
+  .card h2 { font-size: 24px; color: var(--title); line-height: 1.35; letter-spacing: 0.03em; }
+  .taste { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: 15px; }
+  .taste b { margin-right: 2px; font-size: 13px; color: var(--muted); }
+  .taste span { padding: 2px 12px; border-radius: 999px; background: var(--orange-soft); }
+  .save-row { margin-top: 14px; }
+  /* ブックマークは、くまのスタンプと同じ黄色で目立たせる。入れた後はうすい黄色（2026-11-07 ユーザーの指示） */
+  .save-drug { min-height: 48px; padding: 8px 18px; border: 2px solid var(--stamp); box-shadow: none; background: var(--stamp); color: var(--stamp-ink); font-weight: 700; }
+  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: 500; }
+  .save-msg { margin: 6px 0 0; font-size: 15px; }
+  .save-msg:empty { display: none; }
+  .card .section-title { margin: 22px 0 10px; padding-top: 20px; border-top: 1px solid var(--hair); }
+  .fact-point { margin: 0 0 12px; }
+  /* 混ぜていい・混ぜないほうがいい: 情報なので、色のついた面だけ */
+  .group { margin-top: 10px; padding: 14px 12px; border-radius: 16px; background: var(--tone-bg); --tone: var(--muted); --tone-bg: var(--info); }
+  .group h3 { margin: 0 0 10px; font-size: 16px; color: var(--tone); }
+  .group p { margin: -4px 0 10px; font-size: 14px; color: var(--text); }
   .g-ok { --tone: var(--good); --tone-bg: var(--good-bg); }
   .g-bad { --tone: var(--bad); --tone-bg: var(--bad-bg); }
-  .g-same { --tone: var(--muted); --tone-bg: var(--taste-bg); }
-  .src-head { font-size: 15px; margin: 18px 0 0; color: var(--muted); }
-  .fact-point { margin: 8px 0 4px; }
-  .refs { margin: 4px 0 10px; font-size: 14px; color: var(--muted); }
-  .refs ul { margin: 6px 0 0; padding-left: 1.2em; }
-  .refs li { margin-bottom: 6px; }
-  .refs a { color: var(--accent); }
-  .notes { margin: 16px 0 0; padding-left: 1.2em; }
-  .notes li { margin-bottom: 6px; }
-  .howto { display: grid; gap: 10px; margin-top: 8px; }
-  .pick-label { font-weight: bold; margin: 14px 0 6px; }
-  .pick-label small { font-weight: normal; color: var(--muted); font-size: 14px; margin-left: 4px; }
-  .pick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .pick button {
-    min-height: 48px; font-size: 16px; font-weight: bold; line-height: 1.2;
-    border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text);
-    cursor: pointer; font-family: var(--font-display);
-  }
-  .pick button small { display: block; font-size: 11px; font-weight: normal; color: var(--muted); }
-  .pick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
-  .pick button[aria-pressed="true"] small { color: var(--accent-text); }
-  /* 「飲ませ方」と「コツ」のタブ */
-  .flow-note { margin: 12px 0 0; padding: 10px 12px; border-left: 5px solid var(--accent); border-radius: 8px; background: var(--taste-bg); color: var(--text); font-size: 17px; font-weight: bold; font-family: var(--font-display); }
-  .water-note { margin: 8px 0 0; background: var(--split-bg); border-radius: 12px; padding: 10px 12px; font-size: 15px; }
-  .flow-group { margin: 16px 0 0; font-weight: bold; color: var(--accent); }
-  .howto ol { margin: 0 0 10px; padding-left: 1.3em; }
-  .howto li { margin-bottom: 6px; }
-  .howto .step-next { margin: 4px 0 12px; }
-  .step-next { display: block; width: 100%; min-height: 52px; font-size: 16px; font-weight: bold; border: 0; border-radius: 14px; background: var(--accent); color: var(--accent-text); cursor: pointer; font-family: var(--font-display); }
-  #method-refs { margin-top: 16px; }
-  .howto details {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 4px 14px;
-  }
-  .howto summary { cursor: pointer; padding: 12px 0; font-size: 17px; font-weight: bold; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px 5px 8px; border-radius: 999px; background: var(--card); font-size: 16px; }
+  .chip img.fe { flex: none; width: 26px; height: 26px; }
+  .chip small { font-size: 12px; color: var(--muted); }
+  .src-head { margin: 22px 0 6px; font-size: 16px; color: var(--text); }
+  .notes, .tips { margin: 0 0 14px; padding-left: 1.2em; }
+  .notes li, .tips li { margin-bottom: 6px; }
+  .tips { font-size: 16px; }
+  .refs { font-size: 14px; color: var(--muted); }
+  .refs summary, .site-note summary { padding-block: 12px; cursor: pointer; }
+  .refs ul { margin: 0 0 8px; padding-left: 1.2em; }
+  .refs li a { display: inline-block; padding-block: 10px; }
+  #method-refs { margin-top: 18px; }
+
+  /* ---- 飲ませ方: 年齢のカード ---- */
+  .pick { display: grid; }
+  #flow-ages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 480px; margin: 0 0 16px; }
+  #flow-ages button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 120px; padding: 12px 6px 10px; border-radius: 16px; font-weight: 700; }
+  #flow-ages .age-illustration { height: 72px; width: auto; max-width: 100%; pointer-events: none; }
+  #flow-ages .age-label { font-size: 17px; line-height: 1.3; white-space: nowrap; }
+  #flow-ages .age-check { display: none; position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #ffffff; font-size: 15px; line-height: 24px; text-align: center; }
+  /* 選んだカードは青（色だけにせず、チェックの印もつける） */
+  #flow-ages button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); }
+  #flow-ages button[aria-pressed="true"] .age-check { display: block; }
+
+  /* ---- 飲ませ方: 時期の特徴と「まずは水で」（押せない情報。2つを1つの面にまとめる） ---- */
+  .flow-note { padding: 14px 16px 6px; border-radius: 16px 16px 0 0; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
+  .water-note { padding: 0 16px 14px; border-radius: 0 0 16px 16px; background: var(--orange-soft); font-size: 15px; }
+
+  /* ---- 飲ませ方: やり方とコツ（押すと開く） ---- */
+  .howto { display: grid; gap: 10px; }
+  .howto details { border-radius: 16px; padding: 0 14px; }
+  .howto summary { position: relative; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 10px 40px 10px 0; list-style: none; cursor: pointer; font-size: 17px; font-weight: 700; line-height: 1.4; }
   .howto summary::-webkit-details-marker { display: none; }
-  .howto summary::after { content: "＋"; color: var(--accent); flex: none; }
-  .howto details[open] summary::after { content: "−"; }
-  .howto p { margin: 0 0 8px; }
-  .tips { margin: 0; padding-left: 1.2em; font-size: 16px; }
-  .tips li { margin-bottom: 6px; }
-  .source { font-size: 14px; color: var(--muted); }
-  .source { margin: 4px 0 10px; }
-  .source a, .tips a, .site-note a { color: var(--accent); }
-  .site-note { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; margin-top: 32px; }
-  .site-note summary { cursor: pointer; }
-  .site-note p { margin: 8px 0 0; }
-  /* 保存ボタンと、画像を大きく出す画面（2026-11-04） */
-  .save-card { display: block; width: 100%; min-height: 48px; margin: 4px 0 12px; font-weight: bold; }
+  .howto details[open] > summary { margin-bottom: 14px; border-bottom: 1px solid var(--hair); }
+  .howto summary .method-thumb { flex: none; width: 56px; height: 56px; object-fit: contain; }
+  .howto summary .method-name { flex: 1; }
+  .howto .method-pic { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; margin: 0 0 16px; border-radius: 12px; background: #ffffff; }
+  .howto details > p { margin: 0 0 14px; }
+  /* 手順は順番に行うものなので、番号を丸で出す */
+  .howto ol { list-style: none; counter-reset: step; margin: 0 0 6px; padding: 0; }
+  .howto ol li { position: relative; counter-increment: step; margin: 0 0 14px; padding-left: 38px; }
+  .howto ol li::before {
+    content: counter(step); position: absolute; left: 0; top: 1px; display: grid; place-items: center;
+    width: 26px; height: 26px; border-radius: 50%; background: var(--orange-soft); color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .worry button, .list button, #flow-ages button, .back, .link-button { transition: transform 0.08s ease, box-shadow 0.08s ease; }
+    .howto details[open] > :not(summary) { animation: open-in 0.18s ease-out both; }
+    @keyframes open-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  }
+
+  /* ---- ブックマークした薬と最近見た薬 ---- */
+  .mine .howto { margin-top: 12px; }
+  .mine .howto .list { margin-bottom: 8px; }
+  .mine .list button { min-height: 52px; }
+  .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; }
+  .recent-note .link-button { min-height: 44px; }
+
+  /* ---- このサイトについて（規約のお知らせ。押せる行に見えないよう、面にしない） ---- */
+  .site-note { margin-top: 40px; border-top: 1px solid #f3dfe3; font-size: 13px; color: var(--muted); }
+  .site-note p { margin: 0 0 8px; }
+
+  /* ---- 画像を大きく出す画面（2026-11-04） ---- */
   #card-view { width: min(420px, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 12px; border: 0; border-radius: 16px; background: var(--card); color: var(--text); }
   #card-view::backdrop { background: rgb(0 0 0 / 0.6); }
   #card-view .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-  #card-view .card-title { margin: 0; font-weight: bold; color: var(--ink); min-width: 0; }
+  #card-view .card-title { min-width: 0; font-weight: 700; color: var(--ink); }
   #card-view .card-close { flex: none; min-height: 44px; }
   #card-view img { display: block; width: 100%; height: auto; border-radius: 12px; -webkit-touch-callout: default; }
   #card-view video { display: block; width: 100%; max-height: calc(100dvh - 170px); border-radius: 12px; background: #000; }
-  #card-view [hidden] { display: none; }
-  #card-view .card-hint { margin: 10px 0 0; text-align: center; font-weight: bold; color: var(--ink); }
-  .worry-title { font-size: 20px; margin: 4px 0 8px; }
-  .worry { display: grid; gap: 8px; margin: 0 0 4px; }
-  .worry button {
-    min-height: 56px; font-size: 18px; text-align: left; padding: 0 16px;
-    border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--text);
-    cursor: pointer; font-family: var(--font-display);
-  }
-  .worry .ic { margin-right: 8px; }
-  .worry-hint { color: var(--accent); font-size: 15px; margin: 6px 0 0; }
-  .list-link { display: inline-block; margin: 8px 2px 0; font-size: 15px; color: var(--accent); }
-  /* QRコードのリンクは、押すと画面の上に出るのでボタンにする。見た目は「薬の一覧を見る」と同じ下線のリンク */
-  button.list-link { margin-top: 12px; padding: 10px 0; min-height: 44px; border: 0; background: none; font-family: inherit; text-decoration: underline; cursor: pointer; }
-  #list-page .lead { color: var(--muted); margin: 0 0 12px; }
-  #list-page input[type="search"] { margin-bottom: 4px; }
-  .worry-hint:empty { display: none; }
-  .hero .list:not(:empty) { margin: 8px 0 4px; }
-  .hero .worry-title { margin-top: 20px; }
+  #card-view .card-hint { margin: 10px 0 0; text-align: center; font-weight: 700; color: var(--ink); text-wrap: balance; }
 
-  /* ===== トップ（2026-11-07：紙・刺しゅう・絵本のモチーフ） ===== */
-  :root { --title: #cf2a44; --paper-shadow: #d6b77726; --menu-ink: #51301e; --split-bg: #fff4dc; }
-  body { background-image: radial-gradient(var(--line) .8px, transparent .8px); background-size: 14px 14px; }
-  .hero { background: transparent; border-radius: 0; padding: 0; overflow: visible; }
-  .brandbar { margin: -16px -16px 26px; padding: 15px 18px 13px; background: var(--card); border-top: 7px solid transparent;
-    border-image: repeating-linear-gradient(90deg, #f3a8b6 0 12px, #ffe9ab 12px 24px, #a8d5e1 24px 36px, #c8dea2 36px 48px) 7;
-    font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--ink); box-shadow: 0 3px 0 var(--paper-shadow); letter-spacing: .06em; }
-  .hero-head { position: relative; display: flex; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 10px; padding: 5px 0 14px; }
-  .hero-head::before, .hero-head::after { position: absolute; color: var(--title); content: "✧"; font-size: 25px; pointer-events: none; }
-  .hero-head::before { right: 5px; top: -16px; transform: rotate(12deg); }
-  .hero-head::after { left: 1px; bottom: 0; font-size: 17px; }
-  .hero-stamp { position: relative; top: auto; right: auto; flex: none; width: 76px; height: 76px; font-size: 0; border-width: 3px; outline: 1px dashed var(--stamp); outline-offset: 5px; background: var(--stamp-soft); box-shadow: 3px 5px 0 var(--paper-shadow); }
-  .hero-stamp img { width: 53px; height: 53px; }
-  .hero-stamp::after { bottom: -10px; white-space: nowrap; }
-  .hero h1 { font-size: clamp(26px, 7.7vw, 38px); line-height: 1.4; margin: 0; max-width: none; color: var(--title); text-align: left; letter-spacing: .025em; }
-  .hero .lead { margin: 9px auto 25px; max-width: 25em; color: var(--text); font-weight: 700; font-size: 15px; text-align: center; line-height: 1.9; }
-  .panel { position: relative; background: var(--hero); border-radius: 48% 42% 26px 30px / 24px 26px 26px 30px; padding: 33px 16px 22px; box-shadow: 0 6px 0 var(--paper-shadow); }
-  .panel::before { content: "✦  ·  ✧"; position: absolute; top: -17px; right: 23px; color: var(--title); font-size: 24px; letter-spacing: 10px; transform: rotate(8deg); pointer-events: none; }
-  .search-wrap { position: relative; padding: 12px; margin: 0 -3px; background: var(--split-bg); border: 1px dashed var(--lace); border-radius: 20px 20px 8px 20px; }
-  .search-wrap::before { content: ""; position: absolute; width: 48px; height: 14px; top: -8px; left: calc(50% - 24px); background: repeating-linear-gradient(45deg, #f5c3a9aa 0 3px, #ffe0beaa 3px 6px); transform: rotate(-5deg); }
-  .hero input[type="search"] { border: 1px solid var(--muted); border-radius: 12px; box-shadow: 0 3px 0 var(--paper-shadow); font-size: 16px; padding: 16px 10px; min-height: 56px; }
-  input[type="search"]:focus { outline: 3px solid var(--accent); outline-offset: 3px; }
-  .hero input[type="search"]:focus { border-color: var(--accent); }
-  input[type="search"]::placeholder { color: var(--muted); opacity: 1; }
-  .list-link { display: flex; align-items: center; justify-content: center; min-height: 44px; margin: 4px 0 -4px; font-size: 14px; text-underline-offset: 4px; }
-  .hero .worry-title { display: flex; align-items: center; justify-content: center; gap: 14px; text-align: center; font-size: 25px; color: var(--title); margin: 29px 0 44px; letter-spacing: .08em; }
-  .worry-title::before, .worry-title::after { content: ""; width: 26px; height: 9px; border-top: 2px solid var(--lace); border-bottom: 2px solid var(--lace); transform: rotate(-12deg); }
-  .worry-title::after { transform: rotate(12deg); }
-  .worry { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 47px 12px; padding: 0 1px 3px; }
-  .worry button { --c: #f7b54e; position: relative; isolation: isolate; aspect-ratio: 1; min-height: 148px; border: 0; border-radius: 48% 52% 47% 53%; background: var(--c); color: var(--menu-ink);
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; padding: 35px 7px 16px; text-align: center; font-weight: 700; box-shadow: 0 5px 0 var(--paper-shadow); }
-  .worry button:nth-child(2) { --c: #bad77f; border-radius: 52% 48% 53% 47%; }
-  .worry button:nth-child(3) { --c: #f2a3b3; }
-  .worry button:nth-child(4) { --c: #94cee1; border-radius: 52% 48% 53% 47%; }
-  .worry button::before { content: ""; position: absolute; inset: 8px; z-index: -1; border: 2px dashed #fff; border-radius: inherit; pointer-events: none; }
-  .worry button::after { content: "✧"; position: absolute; right: 18px; top: 29px; color: #fff; font-size: 23px; transform: rotate(12deg); pointer-events: none; }
-  .worry .ic { position: absolute; top: -30px; left: 50%; transform: translateX(-50%) rotate(-9deg); width: 80px; height: 80px; margin: 0; filter: drop-shadow(0 4px 0 #ffffff66); }
-  .worry button:nth-child(even) .ic { transform: translateX(-50%) rotate(8deg); }
-  .worry .lbl { position: relative; font-size: 19px; line-height: 1.35; text-shadow: none; }
-  .worry .arrow { width: 27px; height: 19px; color: var(--menu-ink); }
-  .worry button:active { transform: translateY(3px); box-shadow: none; }
-  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
-  .lace { height: 18px; margin: 26px -10px 0; border-top: 1px dotted var(--lace); background: radial-gradient(circle at 9px 0, transparent 7px, var(--lace) 7px 8px, transparent 8.5px) 0 0 / 18px 15px repeat-x; }
-  #detail, #howto-page, #list-page { position: relative; }
-  #howto-page > h1, #list-page > h1 { margin: 14px 0 20px; padding-bottom: 15px; border-bottom: 2px dashed var(--lace); font-size: 29px; color: var(--title); }
-  .back { min-height: 48px; margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 999px; font-family: var(--font-display); }
-  .card { border-radius: 27px 27px 20px 20px; border-top: 5px solid var(--lace); box-shadow: 0 5px 0 var(--paper-shadow); padding: 22px 16px; margin-top: 18px; }
-  .section-title { padding-bottom: 8px; border-bottom: 2px dotted var(--lace); margin-top: 28px; }
-  .group { padding: 15px 12px; border-radius: 17px; background: var(--tone-bg); }
-  .chip { background: var(--card); border: 1px solid var(--line); font-size: 16px; }
-  .taste { padding: 12px 0; border-bottom: 1px dashed var(--line); }
-  .pick { gap: 9px; }
-  .pick button { min-height: 56px; border: 2px solid var(--line); box-shadow: 0 3px 0 var(--paper-shadow); }
-  .howto details { border-radius: 19px; box-shadow: 0 3px 0 var(--paper-shadow); }
-  .howto summary { min-height: 52px; align-items: center; }
-  .howto summary::after { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--taste-bg); }
-  .howto li::marker { color: var(--accent); font-weight: bold; }
-  .howto ol li { padding: 8px 0; border-bottom: 1px dashed var(--line); }
-  .list button { border-radius: 17px 17px 17px 5px; box-shadow: 0 3px 0 var(--paper-shadow); }
-  .kana { margin-top: 10px; padding: 7px 12px; background: var(--taste-bg); border-radius: 999px; }
-  .refs summary, .site-note summary { min-height: 44px; padding-block: 10px; }
-  .site-note { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; }
   @media (max-width: 350px) {
-    .hero-head { gap: 8px; }
-    .hero-stamp { width: 63px; height: 63px; }
+    .hero-head { padding-inline: 8px 6px; }
+    .hero-stamp { width: 64px; height: 64px; }
     .hero-stamp img { width: 44px; height: 44px; }
-    .panel { padding-inline: 12px; }
-    .worry { gap: 44px 8px; }
-    .worry button { min-height: 136px; }
-    .worry .lbl { font-size: 18px; }
-    .hero input[type="search"] { font-size: 14px; }
+    .panel, .card { padding-inline: 12px; }
+    #flow-ages .age-label { font-size: 15px; }
   }
-
-  /* ===== 色（2026-11-07 ユーザーの指示）: 白を地に。本の「こども」の4色から、要るものだけを使う =====
-     オレンジ＝主役（見出し、お困りごとの丸。丸は 2026-11-07 に薄めの #f5b783 にした）、青＝リンクと「選んでいる」、緑＝「混ぜていい」だけ。ピンクは使わない。
-     本の色は明るいので、字に使うときは読める濃さにした（オレンジ #b8571a、青 #2a6fa3、緑 #2b7d2b） */
-  :root {
-    --bg: #ffffff; --hero: #ffffff; --card: #ffffff;
-    --text: #3a3a3a; --muted: #6b6b6b; --line: #e8e8e8;
-    --ink: #b8571a; --title: #c4611a; --accent: #2a6fa3; --accent-text: #ffffff;
-    --orange: #f5b783; --kids-orange: #f5b783; --kids-blue: #4b97c8; --kids-green: #3e9a3c;
-    --good: #2b7d2b; --good-bg: #ebf5e9; --best-bg: #ebf5e9;
-    --taste-bg: #fdf1e6; --stamp-soft: #fff4dc;
-    --lace: #f2c49c; --star: #e8893a; --paper-shadow: #00000012; --menu-ink: #3b2414; --split-bg: #fdf6ef;
-  }
-  body { background-image: none; }
-  .brandbar { border-image: linear-gradient(90deg, var(--kids-orange) 0 70%, var(--kids-blue) 70% 100%) 7; }
-  .hero-head::before, .hero-head::after, .panel::before { color: var(--kids-orange); }
-  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) { --c: var(--kids-orange); color: var(--menu-ink); }
-
-  /* 平らな絵（img/fluent）の大きさ（2026-11-07） */
-  .chip img.fe { width: 26px; height: 26px; flex: none; }
-  img.mi { width: 26px; height: 26px; vertical-align: -6px; margin-right: 6px; }
-  img.bi { width: 20px; height: 20px; vertical-align: -4px; margin-right: 6px; }
-  /* 「準備中」も今回の色に（黄色 → 薄いオレンジ。2026-11-07） */
-  .list .prep { background: var(--taste-bg); border-color: var(--kids-orange); }
-  .list .prep-tag { background: var(--kids-orange); color: var(--menu-ink); }
-
-  /* ===== 2026-11-09 ユーザーの指示: 丸ゴシックにする。お困りごとの丸の余白が目立つので、字と絵を大きく ===== */
-  :root { --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif; }
-  body, button, input, select, textarea { font-family: var(--font-body); }
-  .worry button, .worry .lbl { font-family: var(--font-display); }
-  /* 丸は広い画面でも大きくなりすぎないようにし、字・絵・矢印は丸の大きさに合わせて大きくする（cqw＝丸の幅に対する割合） */
-  .worry { max-width: 440px; margin-inline: auto; }
-  .worry button { container-type: inline-size; justify-content: center; gap: 4px; padding: 24% 6% 9%; }
-  .worry .lbl { font-size: clamp(19px, 16cqw, 30px); line-height: 1.3; }
-  .worry .ic { width: 58cqw; height: 58cqw; top: -24cqw; }
-  .worry .arrow { width: clamp(27px, 18cqw, 40px); height: auto; }
-  .worry button::after { right: 10cqw; top: 16cqw; font-size: clamp(18px, 12cqw, 28px); }
-
-  /* ===== 2026-11-09 ユーザー「タップしていいのか分からない」: 丸を押せるボタンに見せる（docs/22 第2章 押せるものは押せそうに） ===== */
-  .worry button { box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / 0.10); cursor: pointer; }
-  .worry button:active { transform: translateY(6px); box-shadow: 0 1px 0 #dc955a, 0 3px 6px rgb(0 0 0 / 0.10); }
-  .worry .arrow { box-sizing: content-box; padding: 6px 12px; margin-top: 2px; background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; }
-  @media (prefers-reduced-motion: no-preference) {
-    .worry button { animation: worry-hop 0.7s ease-out 1 both; }
-    .worry button:nth-child(1) { animation-delay: 0.5s; }
-    .worry button:nth-child(2) { animation-delay: 0.62s; }
-    .worry button:nth-child(3) { animation-delay: 0.74s; }
-    .worry button:nth-child(4) { animation-delay: 0.86s; }
-    @keyframes worry-hop { 0% { transform: translateY(0); } 35% { transform: translateY(-8px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
-  }
-
-  .recent-note { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 2px 0; font-size: 14px; color: var(--text); }
-  .recent-note .link-button { min-height: 44px; font-size: 15px; }
-  .mine .howto { margin-top: 12px; }
-  .mine .howto .list { margin-bottom: 4px; }
-  .mine .list button { min-height: 52px; }
-  .save-row { margin-top: 12px; }
-  /* 保存する前は、くまのスタンプと同じ黄色で塗って目立たせる。保存した後は薄い黄色（2026-11-07 ユーザーの指示） */
-  .save-drug { min-height: 48px; padding: 8px 18px; font-weight: bold; background: var(--stamp); border: 2px solid var(--stamp); color: var(--stamp-ink); font-family: var(--font-display); }
-  .save-drug[aria-pressed="true"] { background: var(--stamp-soft); color: var(--text); font-weight: normal; }
-  .save-msg { margin: 6px 0 0; font-size: 15px; color: var(--text); }
-  .save-msg:empty { display: none; }
-
-  /* 2026-11-09 ユーザー: 説明文の改行が気になる（「ます。」だけが次の行に残る）。言葉の切れ目で折り返し、字を少し大きく */
-  .hero .lead { font-size: 17px; line-height: 1.8; }
-  .hero .lead .nw { display: inline-block; }
-  /* ボタンの字も、1文字だけが次の行に残らないように（2026-11-09） */
-  .save-drug, .link-button, .worry .lbl { text-wrap: balance; }
-
-  /* ===== 2026-11-09 ユーザー「もう少しシンプルに」「キラキラがあると情報が散る」: キラキラと小さな飾りを外す ===== */
-  .hero-head::before, .hero-head::after, .panel::before, .worry button::after, .search-wrap::before { content: none; display: none; }
-  .search-wrap { padding: 0; margin: 0; background: none; border: 0; }
-  .lace { display: none; }
-
-  /* 年齢選択：お困りごとの丸と同じ、絵が飛び出すスタンプ（2026-11-09 ユーザーの指示でキユーピーの月齢の丸に寄せ、Codex が作った） */
-  #flow-ages {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px; max-width: 440px; margin: 0 auto 18px;
-    padding: 32px 4px 12px;
-  }
-  #flow-ages button {
-    position: relative; container-type: inline-size;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 5px; width: 100%; min-width: 0; min-height: 44px; aspect-ratio: 1;
-    padding: 25% 5% 10%; border: 0; border-radius: 50%;
-    background: var(--kids-orange); color: var(--menu-ink);
-    font-family: var(--font-display); font-weight: 700;
-    box-shadow: 0 7px 0 #dc955a, 0 12px 18px rgb(0 0 0 / .10);
-    -webkit-tap-highlight-color: transparent;
-  }
-  #flow-ages button::before {
-    content: ""; position: absolute; inset: 7px;
-    border: 2px dashed white; border-radius: inherit; pointer-events: none;
-  }
-  #flow-ages .age-illustration {
-    position: absolute; width: 58%; height: 58%; top: -25%; left: 21%;
-    object-fit: contain; transform: rotate(-8deg); pointer-events: none;
-    filter: drop-shadow(0 3px 0 rgb(255 255 255 / .5));
-  }
-  #flow-ages button:nth-child(2) .age-illustration { transform: rotate(7deg); }
-  #flow-ages .age-label {
-    position: relative; font-size: clamp(19px, 20cqw, 27px);
-    line-height: 1.4; white-space: nowrap;
-  }
-  /* 矢印は、お困りごとの丸と同じ「白い丸の中の矢印」にそろえる（2026-11-09。docs/22 第1章 一貫性） */
-  #flow-ages .age-arrow { box-sizing: content-box; width: 16%; height: auto; padding: 4px 9px; color: var(--menu-ink); background: #ffffff; border-radius: 999px; box-shadow: 0 2px 0 #dc955a; flex: none; }
-  #flow-ages button[aria-pressed="true"] .age-arrow { box-shadow: none; }
-  #flow-ages .age-check {
-    display: none; position: absolute; right: 3%; top: 3%;
-    width: 26px; height: 26px; border: 2px solid var(--accent);
-    border-radius: 50%; background: white; color: var(--accent);
-    font-size: 19px; line-height: 22px; text-align: center;
-  }
-  #flow-ages button[aria-pressed="true"] {
-    background: var(--accent); color: white; transform: translateY(5px);
-    box-shadow: 0 2px 0 var(--accent), 0 3px 6px rgb(0 0 0 / .12);
-  }
-  #flow-ages button[aria-pressed="true"] .age-check { display: block; }
-  #flow-ages button:active {
-    transform: translateY(6px); box-shadow: 0 1px 0 #dc955a;
-  }
-  #flow-ages button:focus-visible { outline: 3px solid var(--menu-ink); outline-offset: 4px; }
-  @media (prefers-reduced-motion: no-preference) {
-    #flow-ages button { transition: transform .15s ease, box-shadow .15s ease; }
-  }
-
-  /* 2026-11-09 ユーザー「キユーピーみたいに背景をうすピンクに」: ページの地をうすいピンクに。白い面やカードは白のまま。
-     うすいピンクの上で小さいオレンジの字が 4.5 対 1 に届くよう、--ink を少し濃く（#b8571a → #ad5118） */
-  :root { --bg: #fff4f6; --ink: #ad5118; }
-  body { background: var(--bg); }
-
-  /* 年齢の丸の絵を全身にした（縦長）ので、大きさと位置を合わせる（2026-11-09） */
-  #flow-ages { padding-top: 64px; }
-  #flow-ages .age-illustration { width: 66%; height: 80%; top: -50%; left: 17%; transform: none; filter: none; }
-  #flow-ages button:nth-child(2) .age-illustration { transform: none; }
-
-  /* ===== 2026-11-10 ユーザー「シンプルに王道のデザインで」「お困りごとはクリックするのが分かりにくい」「写真のところも見にくい」 =====
-     飾りの丸をやめて、スマホのアプリでよく見る形にする。色・丸ゴシック・くまは残す */
-  .panel { border-radius: 20px; padding: 20px 16px 22px; box-shadow: 0 2px 10px rgb(0 0 0 / 0.06); }
-  .search-label { display: block; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--text); margin: 0 0 8px; }
-  .hero input[type="search"] { border: 2px solid #d9d9d9; border-radius: 12px; box-shadow: none; font-size: 18px; padding: 14px 14px; min-height: 56px; }
-  .hero input[type="search"]::placeholder { color: #8a8a8a; }
-  .search-help { margin: 8px 2px 0; font-size: 15px; color: var(--muted); }
-  .hero .worry-title { justify-content: flex-start; font-size: 20px; margin: 28px 0 12px; letter-spacing: 0; color: var(--text); }
-  .worry-title::before, .worry-title::after { content: none; display: none; }
-
-  /* お困りごと: 横長のボタン（左に絵、まん中に言葉、右に ›） */
-  .worry { grid-template-columns: 1fr; gap: 10px; max-width: none; padding: 0; }
-  .worry button, .worry button:nth-child(2), .worry button:nth-child(3), .worry button:nth-child(4) {
-    --c: #ffffff; aspect-ratio: auto; min-height: 68px; container-type: normal; isolation: auto;
-    flex-direction: row; justify-content: flex-start; align-items: center; gap: 14px;
-    padding: 10px 44px 10px 14px; border-radius: 16px; border: 1.5px solid #e6e1dc; background: #ffffff; color: var(--text);
-    text-align: left; box-shadow: 0 2px 0 #ece6e0; animation: none; transform: none; position: relative; }
-  .worry button::before { content: none; display: none; }
-  .worry button::after { content: "›"; display: block; position: absolute; right: 16px; top: 50%; transform: translateY(-52%);
-    font-size: 30px; line-height: 1; color: var(--ink); font-family: var(--font-display); }
-  .worry .ic, .worry button:nth-child(even) .ic { position: static; transform: none; width: 44px; height: 44px; flex: none; filter: none;
-    background: var(--taste-bg); border-radius: 12px; padding: 5px; box-sizing: border-box; }
-  .worry .lbl { font-size: 18px; line-height: 1.4; }
-  .worry .lbl br { display: none; }
-  .worry .arrow { display: none; }
-  .worry button:active { transform: translateY(1px); background: var(--taste-bg); box-shadow: none; }
-  .worry button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-
-  /* 年齢を選ぶ: 絵をカードの中に収め、下に年齢。選んだカードは青い枠 */
-  #flow-ages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; max-width: 480px; margin: 0 0 18px; padding: 4px 0 8px; }
-  #flow-ages button { aspect-ratio: auto; container-type: normal; min-height: 120px; border-radius: 16px; border: 2px solid #e6e1dc;
-    background: #ffffff; color: var(--text); box-shadow: 0 2px 0 #ece6e0; padding: 10px 6px 10px; gap: 6px; transform: none; justify-content: flex-start; }
-  #flow-ages button::before { content: none; display: none; }
-  #flow-ages .age-illustration, #flow-ages button:nth-child(2) .age-illustration { position: static; width: auto; height: 72px; max-width: 100%; transform: none; filter: none; }
-  #flow-ages .age-label { font-size: 18px; line-height: 1.3; }
-  #flow-ages .age-arrow { display: none; }
-  #flow-ages button[aria-pressed="true"] { background: #eaf3fb; border: 3px solid var(--accent); color: var(--text); transform: none; box-shadow: none; }
-  #flow-ages button[aria-pressed="true"] .age-check { top: 6px; right: 6px; }
-  #flow-ages button:active { transform: translateY(1px); box-shadow: none; }
-
-  /* 2026-11-10 ユーザー「欄をもう少しかわいく」（薬の一覧の画面の検索欄もそろえる）: カプセル形、うすいオレンジの枠、左に虫めがね、押すとやわらかく光る */
-  .hero input[type="search"], #list-page input[type="search"] {
-    border: 2.5px solid var(--kids-orange); border-radius: 999px; background-color: #fffaf6;
-    padding: 14px 18px 14px 50px; min-height: 58px; font-size: 18px; box-shadow: 0 3px 0 #f6dcc7;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ad5118' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 20 20'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: 18px 50%; background-size: 22px 22px; }
-  .hero input[type="search"]:focus, #list-page input[type="search"]:focus { outline: none; border-color: #e8893a; box-shadow: 0 0 0 5px rgb(245 183 131 / 0.45); background-color: #ffffff; }
-  .hero input[type="search"]::placeholder, #list-page input[type="search"]::placeholder { color: #7d6c61; opacity: 1; }
-  .search-help { padding-left: 18px; }
-  .search-help .nw { display: inline-block; }
-  /* やり方を開いたときの絵（2026-11-10） */
-  .howto summary .method-thumb { flex: none; width: 60px; height: 60px; object-fit: contain; border-radius: 12px; background: #fff; }
-  .howto summary .method-name { flex: 1; text-align: left; }
-  .howto summary:has(.method-thumb) { justify-content: flex-start; gap: 12px; padding: 10px 0; }
-  .howto .method-pic { display:block; width:100%; height:auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; margin: 2px 0 12px; background: #fff; }
 </style>
 </head>
 <body>
