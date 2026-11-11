@@ -15,8 +15,9 @@ const LIVE_URL = "https://koshihara-pharm.github.io/boot_camp/data.js";
 // 対応表で、出どころを一目で分かるように出すときの短い呼び名（data.js の FACT_REFS の名前は長いので）。無いときは長い名前のまま
 const SHORT = {
   obihiro: "帯広 2024", iizuka: "飯塚 2016", ncchd: "成育 2018", kurumiMix: "くるみ薬局 2018",
+  hokushin: "北信 2021", sawacillinIF: "インタビューフォーム",
   mucosolvanLabel: "添付文書", allelockLabel: "添付文書", clarisLabel: "添付文書",
-  pmdaQ8: "PMDA Q8", handbook: "本（服用介助ハンドブック）",
+  pmdaQ8: "PMDA Q8", handbook: "本（服用介助ハンドブック）", pharmacist: "薬剤師（ユーザー）",
 };
 
 // data.js の why（[資料のキー, 印や言葉] の並び）を、短い名前・URL つきにする
