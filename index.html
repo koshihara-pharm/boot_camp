@@ -136,6 +136,13 @@
   button.list-link { margin: 14px 0 0 18px; padding: 0; border: 0; background: none; text-decoration: underline; }
   .worry-hint { margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; background: var(--orange-soft); color: var(--ink); font-size: 15px; font-weight: 700; }
   .worry-hint:empty { display: none; }
+  /* 「この薬を足してほしいと伝える」（docs/18 の 17-2）。形は「薬の一覧を見る」と同じ下線のリンク。親指で押せる高さにする */
+  .request-link { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 44px; font-size: 15px; color: var(--accent); text-underline-offset: 4px; }
+  .request-link .nowrap { white-space: nowrap; }
+  .empty .request-link { display: flex; }
+  .list .prep .request-link { grid-column: 1 / -1; }
+  .request-bottom { margin: 4px 0 0 18px; }
+  #list-page .request-bottom { margin: 16px 0 0 4px; }
 
   /* ---- 押せるもの: 白い面に枠と下の影。右に丸い印 ---- */
   .worry { display: grid; gap: 10px; }
@@ -330,6 +337,8 @@
         </div>
         <p class="recent-note">この端末の中だけに残ります。</p>
       </div>
+      <!-- サイトにない薬や要望も送れるように、トップの一番下にもフォームへのリンクを置く（2026-11-11 ユーザーの指示。docs/18 の 17-2）。中身は下の script で入れる -->
+      <p class="request-bottom" data-request-bottom hidden></p>
     </div>
   </section>
 
@@ -357,6 +366,8 @@
     <p class="lead">あいうえお順です。「準備中」の薬は、味と混ぜていい食べ物をこれから載せます。</p>
     <input id="q2" type="search" placeholder="一覧から探す" autocomplete="off" aria-label="一覧から探す">
     <ul id="all-list" class="list"></ul>
+    <!-- 一覧にない薬も送れるように、一覧の一番下にフォームへのリンクを置く（2026-11-11 ユーザーの指示） -->
+    <p class="request-bottom" data-request-bottom hidden></p>
     <p class="source">準備中の薬は、厚生労働省「NDB オープンデータ」（2023年度の処方）で、0〜9歳によく出ている粉薬から選びました。</p>
   </section>
 
@@ -617,6 +628,24 @@
   // トップ: 名前を入れたときだけ出す（トップは困りごとのボタンから始める）。一般名は、先発品とは別の行にする（開く画面は先発品と同じ）
   // 一覧: あいうえお順で全部。入っている薬に印はつけず、まだの薬だけ「準備中」（2026-11-03 ユーザーと決定）
   // 一覧で何も入れていないときは、製品名の行だけを並べる（2026-11-07 ユーザーの判断。前は一般名の行も並べていた）。一般名で探したときは、トップと同じく一般名の行を出す
+  // 足してほしい薬を受け付けるフォーム（docs/18 の 17-2）。空のあいだはリンクを出さない
+  // 薬の名前は URL に入れない（開いただけで外に送られるため）。名前は、親がフォームに自分で書いて送る
+  const REQUEST_FORM_URL = "https://forms.gle/JKRdDqQm42yJHnuJ8";
+  function requestLink() {
+    if (!REQUEST_FORM_URL) return null;
+    // 外のサイトが開くことを書いておく（押した結果が分かるように。docs/22 の第4章）
+    return el("a", { class: "request-link", href: REQUEST_FORM_URL, target: "_blank", rel: "noopener" },
+      ["この薬を足してほしいと伝える", el("span", { class: "nowrap", text: "（Google フォーム）" })]);
+  }
+  // トップと一覧の一番下のリンク。サイトにない薬や要望も送れるので、言葉を「足してほしい薬・ご要望」にする
+  if (REQUEST_FORM_URL) {
+    document.querySelectorAll("[data-request-bottom]").forEach((p) => {
+      p.append(el("a", { class: "request-link", href: REQUEST_FORM_URL, target: "_blank", rel: "noopener" },
+        ["足してほしい薬・ご要望を伝える", el("span", { class: "nowrap", text: "（Google フォーム）" })]));
+      p.hidden = false;
+    });
+  }
+
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -661,6 +690,7 @@
             : kampoYomi(prep) ? el("span", { class: "drug-meta", text: kampoYomi(prep) }) : null,
           el("span", { class: "prep-tag", text: "準備中" }),
           all ? null : el("span", { class: "prep-note", text: "味と混ぜていい食べ物は、まだ載せていません。薬局で薬剤師に聞いてください。" }),
+          all ? null : requestLink(),
         ].filter(Boolean))]));
         continue;
       }
@@ -668,7 +698,7 @@
     }
     target.replaceChildren(...items);
     if (query !== "" && hits.length === 0) {
-      target.append(el("li", { class: "empty", text: "見つかりませんでした。この薬はまだ入っていません。" }));
+      target.append(el("li", { class: "empty" }, ["見つかりませんでした。この薬はまだ入っていません。", requestLink()].filter(Boolean)));
     }
   }
 
