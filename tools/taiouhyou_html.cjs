@@ -48,7 +48,10 @@ async function liveNames() {
   const rows = [];
   for (const m of md.matchAll(/^\| (\d+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]*) \|$/gm)) {
     const [rank, name, ing, cat, src, status, memo] = m.slice(1).map((x) => x.trim());
-    rows.push({ id: "d" + parseInt(rank, 10), rank: parseInt(rank, 10), name, ing, cat, src, status, memo });
+    // 同じ順位の行（同じ成分の別の製品）があっても、図の名前が重ならないように、2つ目からは -2, -3 をつける
+    let id = "d" + parseInt(rank, 10);
+    for (let k = 2; rows.some((x) => x.id === id); k++) id = "d" + parseInt(rank, 10) + "-" + k;
+    rows.push({ id, rank: parseInt(rank, 10), name, ing, cat, src, status, memo });
   }
   // ランク外（処方の上位60の外で、病院の表にある薬）。1つ目のマスが「外（61位）」「外（順位は未確認）」の行。ページでは欄を分けて出す（2026-11-11 ユーザーの指示）
   let outNo = 0;
