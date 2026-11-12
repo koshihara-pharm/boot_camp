@@ -48,7 +48,13 @@ async function liveNames() {
   const rows = [];
   for (const m of md.matchAll(/^\| (\d+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]*) \|$/gm)) {
     const [rank, name, ing, cat, src, status, memo] = m.slice(1).map((x) => x.trim());
-    rows.push({ rank: parseInt(rank, 10), name, ing, cat, src, status, memo });
+    rows.push({ id: "d" + parseInt(rank, 10), rank: parseInt(rank, 10), name, ing, cat, src, status, memo });
+  }
+  // ランク外（処方の上位60の外で、病院の表にある薬）。1つ目のマスが「外（61位）」「外（順位は未確認）」の行。ページでは欄を分けて出す（2026-11-11 ユーザーの指示）
+  let outNo = 0;
+  for (const m of md.matchAll(/^\| 外（([^）|]*)） \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]*) \|$/gm)) {
+    const [rankLabel, name, ing, cat, src, status, memo] = m.slice(1).map((x) => x.trim());
+    rows.push({ id: "x" + (++outNo), rank: null, out: true, rankLabel, name, ing, cat, src, status, memo });
   }
 
   const cards = {};
@@ -88,6 +94,8 @@ async function liveNames() {
         tips: f.tips || [],
         refs: f.refs.map((k) => data.FACT_REFS[k]).filter(Boolean),
         live: live ? live.has(r.name) : null,
+        // サイトでの見え方の図（薬ごとの保存用の画像。card/make.cjs が data.js から作る）。画像があるときだけ出す
+        img: fs.existsSync(path.join(ROOT, "card", "drug", r.name + ".png")),
       };
     }
   }
@@ -99,9 +107,13 @@ async function liveNames() {
 
   const page = fs.readFileSync(path.join(ROOT, "tools", "taiouhyou_template.html"), "utf8")
     .replace("__DATA__", () => dump(rows))
-    .replace("__COUNT__", String(rows.length));
+    .replace("__COUNT__", String(rows.filter((r) => !r.out).length));
   fs.writeFileSync(OUT, page);
   const onSite = rows.filter((r) => r.site);
+  // Artifact に出すときは、図を「zu/d順位.png」の名前で一緒に送る（Artifact からは ../card/ が読めないため）。その対応を書き出す
+  const zu = Object.fromEntries(onSite.filter((r) => r.site.img).map((r) => ["zu/" + r.id + ".png", "card/drug/" + r.name + ".png"]));
+  console.log("Artifact に一緒に送る図:", JSON.stringify(zu));
+  console.log("ランク外:", rows.filter((r) => r.out).length);
   console.log("wrote", OUT, rows.length, "rows,", rows.filter((r) => Object.keys(r.card).length).length, "cards,",
     onSite.length, "on site (公開中:", live ? onSite.filter((r) => r.site.live).length : "確かめられず", ")");
 })();

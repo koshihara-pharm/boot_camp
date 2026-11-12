@@ -97,6 +97,13 @@
   dd.empty { color: var(--muted); }
   dd a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
   .memo { font-size: 0.82rem; color: var(--muted); }
+  /* ランク外の欄。上の一覧と区切って出す（2026-11-11） */
+  .out-sec { display: grid; gap: 8px; border-top: 3px dashed var(--line); padding-top: 16px; margin-top: 8px; }
+  .out-sec[hidden] { display: none; }
+  .out-sec h2 { font-family: var(--font-display); font-size: 1.2rem; margin: 0; }
+  .out-sec .lead { margin: 0; }
+  .rank.out { color: var(--s-hold); }
+  .tag.none { background: var(--s-todo-bg); color: var(--s-todo); }
   /* サイトに足した薬: いちばん上に「サイトに出ている内容」。data.js から作る（2026-11-10） */
   .site { border: 2px solid var(--s-done-bg); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
   .site h3 { margin: 0; font-size: 0.95rem; font-family: var(--font-display); }
@@ -117,6 +124,10 @@
   .src-tag b { color: var(--accent); }
   .src-none { font-size: 0.78rem; color: var(--s-draft); font-weight: 700; }
   .src-note, .src-legend { font-size: 0.76rem; color: var(--muted); margin: 0; }
+  /* サイトでの見え方の図（薬ごとの保存用の画像）。閉じられる（2026-11-11 ユーザーの指示） */
+  details.zu > summary { cursor: pointer; font-size: 0.86rem; font-weight: 700; padding: 4px 0; }
+  details.zu img { display: block; width: 100%; max-width: 330px; height: auto; margin: 6px auto 0; border: 1px solid var(--line); border-radius: 12px; }
+  details.zu p { font-size: 0.76rem; color: var(--muted); margin: 4px 0 0; }
   .site ul { margin: 0; padding-left: 1.1em; }
   .site li + li { margin-top: 2px; }
   .check { font-size: 0.86rem; background: var(--s-draft-bg); border-radius: 10px; padding: 8px 10px; }
@@ -133,7 +144,7 @@
 <main>
   <header>
     <h1>準備中の薬の対応表</h1>
-    <p class="lead">サイトで「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。上から順に調べて足していきます。元の表は docs/24_junbichu_taiouhyou.md（ここは見るためのページ）。</p>
+    <p class="lead">サイトで「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。上から順に調べて足していきます。下のほうに、ランク外（処方の上位60の外）で病院の表にある薬も、欄を分けて並べています。元の表は docs/24_junbichu_taiouhyou.md（ここは見るためのページ）。</p>
   </header>
 
   <section class="progress" aria-label="進み具合">
@@ -158,11 +169,19 @@
 
   <section class="list" id="list" aria-label="薬の一覧"></section>
 
+  <section class="out-sec" id="out-sec" aria-label="ランク外の薬" hidden>
+    <h2>ランク外（処方の上位60の外）</h2>
+    <p class="lead">処方は少ないけれど、病院の表に載っている薬です。上の数（反映した薬 ○ / 41）には入れていません。サイトに足すかどうかは、まだ決めていません。</p>
+    <div class="count" id="count-out" role="status"></div>
+    <div class="list" id="list-out"></div>
+  </section>
+
   <p class="note">順位は成分の処方の順位（厚生労働省「第10回 NDB オープンデータ」、2023年度、院外、0〜9歳）。同じ成分のほかの製品（先発品など）も、その成分の順位で並べています。カードを押すと、書いた中身が開きます。</p>
 </main>
 
 <script>
   const ROWS = __DATA__;
+  const RANKED = ROWS.filter((r) => !r.out);
   const STATUSES = ["未着手", "資料さがし", "下書きあり", "確認済み", "反映した", "保留"];
   const STATUS_VAR = { "未着手": "--s-todo", "資料さがし": "--s-search", "下書きあり": "--s-draft", "確認済み": "--s-checked", "反映した": "--s-done-bg", "保留": "--s-hold" };
   const NEXT = {
@@ -222,12 +241,12 @@
   }
 
   function renderProgress() {
-    const counts = Object.fromEntries(STATUSES.map((s) => [s, ROWS.filter((r) => r.status === s).length]));
+    const counts = Object.fromEntries(STATUSES.map((s) => [s, RANKED.filter((r) => r.status === s).length]));
     document.getElementById("done-count").textContent = counts["反映した"];
     const onSite = ROWS.filter((r) => r.site);
     if (onSite.length > 0) document.getElementById("live-count").textContent = "（うち公開中のサイトに出ている薬 " + onSite.filter((r) => r.site.live).length + "）";
     document.getElementById("bar").replaceChildren(...STATUSES.filter((s) => counts[s] > 0).map((s) =>
-      el("span", { style: `width:${100 * counts[s] / ROWS.length}%;background:var(${STATUS_VAR[s]})`, title: s + " " + counts[s] })));
+      el("span", { style: `width:${100 * counts[s] / RANKED.length}%;background:var(${STATUS_VAR[s]})`, title: s + " " + counts[s] })));
     document.getElementById("legend").replaceChildren(...STATUSES.map((s) =>
       el("span", {}, [el("i", { style: `background:var(${STATUS_VAR[s]})` }), document.createTextNode(s + " " + counts[s])])));
   }
@@ -237,10 +256,12 @@
     const d = el("details", { class: "drug" });
     const tags = el("div", { class: "tags" }, [
       el("span", { class: "tag", text: r.cat }),
-      r.src && r.src !== "未確認" ? el("span", { class: "tag src", text: "資料: " + r.src }) : null,
+      r.src === "表に無し" ? el("span", { class: "tag none", text: "病院の表に無し" })
+        : r.src && r.src !== "未確認" ? el("span", { class: "tag src", text: "資料: " + r.src }) : null,
     ]);
     d.append(el("summary", {}, [
-      el("div", { class: "rank" }, [document.createTextNode(String(r.rank)), el("small", { text: "位" })]),
+      r.out ? el("div", { class: "rank out" }, [document.createTextNode("外"), el("small", { text: /^\d/.test(r.rankLabel) ? r.rankLabel : "" })])
+        : el("div", { class: "rank" }, [document.createTextNode(String(r.rank)), el("small", { text: "位" })]),
       el("div", { class: "nm" }, [el("b", { text: r.name }), el("span", { text: r.ing }), tags]),
       el("span", { class: "pill st-" + r.status, text: r.status }),
     ]));
@@ -253,7 +274,7 @@
     if (r.site) {
       // サイトに足した薬: サイトに出ている内容 → 確かめること → 調べたときの下書き（閉じておく）
       d.append(el("div", { class: "body" }, [
-        siteBlock(r.site, r.why),
+        siteBlock(r.site, r.why, r.name, r.id),
         el("div", { class: "check" }, [el("b", { text: "確かめること: " }), document.createTextNode(r.memo || "なし")]),
         c["薬剤師の確認（日付）"] ? el("p", { class: "memo", text: "薬剤師の確認: " + c["薬剤師の確認（日付）"] }) : null,
         el("details", { class: "draft" }, [el("summary", { text: "調べたときの下書き（AI のメモ）を開く" }), dl]),
@@ -282,8 +303,19 @@
     return el("div", { class: "src-line" }, [el("span", { class: "what", text }), el("span", { class: "arrow", text: "←" }), srcTags(list)]);
   }
 
+  // サイトでの見え方の図。リポジトリや GitHub Pages では ../card/drug/薬の名前.png、Artifact では一緒に送った zu/d順位.png を読む
+  function zuBlock(name, rank) {
+    const img = el("img", { alt: name + "の、サイトでの見え方（保存用の画像）", loading: "lazy" });
+    const srcs = ["../card/drug/" + encodeURIComponent(name) + ".png", "zu/" + rank + ".png"];
+    const note = el("p", { text: "サイトの薬の画面と同じ中身で作った、保存用の画像です。どの薬にも出るコツ（混ぜるのは飲ませる直前に）と、参考にした資料は、この図には入りません。" });
+    let i = 0;
+    img.addEventListener("error", () => { i++; if (i < srcs.length) img.src = srcs[i]; else { img.remove(); note.textContent = "図を読みこめませんでした。"; } });
+    img.src = srcs[0];
+    return el("details", { class: "zu", open: "" }, [el("summary", { text: "サイトでの見え方（図）" }), img, note]);
+  }
+
   // サイトの薬の画面と同じ中身（data.js から作った）。中身の1つずつに、出どころを並べる（2026-11-10 ユーザーの指示）
-  function siteBlock(s, why) {
+  function siteBlock(s, why, name, rank) {
     const w = why || { taste: [], point: [], foods: {}, tips: [] };
     const dl = el("dl");
     const add = (k, nodes) => dl.append(el("dt", { text: k }), el("dd", {}, nodes));
@@ -303,6 +335,7 @@
     return el("section", { class: "site", "aria-label": "サイトに出ている内容" }, [
       el("h3", { text: "サイトに出ている内容" }),
       el("div", { class: "live " + live[0], text: live[1] }),
+      s.img ? zuBlock(name, rank) : null,
       el("p", { class: "src-legend", text: "← のあとが出どころ（資料と、その資料の印）。印: 帯広 ○飲みやすい △ふつう ×飲みにくい ／ 飯塚 ○問題なし ×飲みにくくなる ／ 成育 ●飲みやすい ▲変わらない ×飲みにくい ／ くるみ薬局 ○のみやすくなる・問題ない ／ 北信は印がなく、言葉（飲みやすい・飲みにくい）" }),
       dl,
     ]);
@@ -314,8 +347,12 @@
       (statusSel === "すべて" || r.status === statusSel) &&
       (catSel === "すべて" || group(r.cat) === catSel) &&
       (q === "" || (r.name + r.ing).includes(q)));
-    document.getElementById("list").replaceChildren(...shown.map(card));
-    document.getElementById("count").textContent = shown.length + " 件";
+    const ranked = shown.filter((r) => !r.out), outs = shown.filter((r) => r.out);
+    document.getElementById("list").replaceChildren(...ranked.map(card));
+    document.getElementById("count").textContent = ranked.length + " 件";
+    document.getElementById("list-out").replaceChildren(...outs.map(card));
+    document.getElementById("count-out").textContent = outs.length + " 件";
+    document.getElementById("out-sec").hidden = outs.length === 0;
     chips(document.getElementById("status-chips"), ["すべて", ...STATUSES.filter((s) => ROWS.some((r) => r.status === s))], statusSel, (v) => { statusSel = v; render(); });
     chips(document.getElementById("cat-chips"), ["すべて", ...GROUPS.filter((g) => ROWS.some((r) => group(r.cat) === g))], catSel, (v) => { catSel = v; render(); });
   }
