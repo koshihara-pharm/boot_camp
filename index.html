@@ -231,13 +231,16 @@
   #flow-ages button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); }
   #flow-ages button[aria-pressed="true"] .age-check { display: block; }
 
-  /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下。おすすめ → なぜ → 気をつけること の順。2026-11-13） ---- */
+  /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下。おすすめ → なぜ？ の順。2026-11-13） ---- */
   .flow-note { padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
   .water-note { margin: 0 0 12px; padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 15px; }
   .water-main { display: flex; align-items: flex-start; font-size: 17px; font-weight: 700; line-height: 1.5; }
   .water-main .nw { display: inline-block; }
   .water-main img.mi { flex: none; margin-right: 8px; }
   .water-label { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .water-note ul { margin: 2px 0 0; padding-left: 1.2em; }
+  .water-note li + li { margin-top: 6px; }
+  .water-note li::marker { color: var(--ink); }
 
   /* ---- 飲ませ方: やり方とコツ（押すと開く） ---- */
   .howto { display: grid; gap: 10px; }
@@ -925,15 +928,13 @@
     return d;
   }
 
-  // 「まずは水で」の説明。おすすめ → なぜ → 気をつけること の順に、短い見出しをつけて出す（2026-11-13 ユーザーの指示）
+  // 「まずは水で」の説明。おすすめ → なぜ？（理由を箇条書き）の順に出す（2026-11-13 ユーザーの指示。「気をつけること」は「なぜ？」にまとめた）
   function waterNote(w) {
     return el("div", { class: "water-note" }, [
       // 1行に入らないときは、「、」のところで折り返す
       el("p", { class: "water-main" }, [ico("💧", "mi"), el("span", {}, w.main.split(/(?<=、)/).map((t) => el("span", { class: "nw", text: t })))]),
       el("p", { class: "water-label", text: "なぜ？" }),
-      el("p", { text: w.why }),
-      el("p", { class: "water-label", text: "気をつけること" }),
-      el("p", { text: w.care }),
+      el("ul", {}, w.why.map((t) => el("li", { text: t }))),
     ]);
   }
 
