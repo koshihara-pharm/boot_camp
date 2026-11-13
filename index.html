@@ -234,10 +234,11 @@
   /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下。おすすめ → なぜ？ の順。2026-11-13） ---- */
   .flow-note { padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
   .water-note { margin: 0 0 12px; padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 15px; }
-  .water-main { display: flex; align-items: flex-start; font-size: 17px; font-weight: 700; line-height: 1.5; }
-  .water-main .nw { display: inline-block; }
-  .water-main img.mi { flex: none; margin-right: 8px; }
-  .water-label { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .flow-before { margin: 26px 0 0; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .flow-before + .flow-group { margin-top: 0; }
+  .flow-group { text-wrap: balance; }
+  .flow-sub { margin: -6px 0 10px; font-size: 15px; color: var(--muted); }
+  .water-label { font-size: 13px; font-weight: 700; color: var(--ink); }
   .water-note ul { margin: 2px 0 0; padding-left: 1.2em; }
   .water-note li + li { margin-top: 6px; }
   .water-note li::marker { color: var(--ink); }
@@ -928,11 +929,9 @@
     return d;
   }
 
-  // 「まずは水で」の説明。おすすめ → なぜ？（理由を箇条書き）の順に出す（2026-11-13 ユーザーの指示。「気をつけること」は「なぜ？」にまとめた）
+  // 「まずは水で」の理由。見出しのすぐ下に「なぜ？」と、理由の箇条書きを出す（2026-11-13 ユーザーの指示。「気をつけること」は「なぜ？」にまとめた）
   function waterNote(w) {
     return el("div", { class: "water-note" }, [
-      // 1行に入らないときは、「、」のところで折り返す
-      el("p", { class: "water-main" }, [ico("💧", "mi"), el("span", {}, w.main.split(/(?<=、)/).map((t) => el("span", { class: "nw", text: t })))]),
       el("p", { class: "water-label", text: "なぜ？" }),
       el("ul", {}, w.why.map((t) => el("li", { text: t }))),
     ]);
@@ -970,7 +969,10 @@
       el("p", { class: "flow-note", text: f.note }),
       // 「まずは水で」の文は、いちばん上のやり方のまとまりの見出しのすぐ下に出す（2026-11-13 ユーザーの指示。前は、時期の特徴のすぐ下）
       ...f.groups.flatMap((g, gi) => [
+        // いちばん上のまとまり: 小さい前置き（混ぜる前に）→ 見出し（まずは水で）→ 小さく「やり方は3つ」→ なぜ？ → やり方（2026-11-13 ユーザーと決定）
+        gi === 0 ? el("p", { class: "flow-before", text: (f.water || WATER_NOTE).before }) : null,
         el("p", { class: "flow-group", text: g.label }),
+        g.sub ? el("p", { class: "flow-sub", text: g.sub }) : null,
         gi === 0 ? waterNote(f.water || WATER_NOTE) : null,
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
       ]).filter(Boolean),
