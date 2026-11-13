@@ -231,9 +231,13 @@
   #flow-ages button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); }
   #flow-ages button[aria-pressed="true"] .age-check { display: block; }
 
-  /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下の説明。2026-11-13 に動かした） ---- */
+  /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下。おすすめ → なぜ → 気をつけること の順。2026-11-13） ---- */
   .flow-note { padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
-  .water-note { margin: 0 0 12px; font-size: 15px; }
+  .water-note { margin: 0 0 12px; padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 15px; }
+  .water-main { display: flex; align-items: flex-start; font-size: 17px; font-weight: 700; line-height: 1.5; }
+  .water-main .nw { display: inline-block; }
+  .water-main img.mi { flex: none; margin-right: 8px; }
+  .water-label { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--ink); }
 
   /* ---- 飲ませ方: やり方とコツ（押すと開く） ---- */
   .howto { display: grid; gap: 10px; }
@@ -921,6 +925,18 @@
     return d;
   }
 
+  // 「まずは水で」の説明。おすすめ → なぜ → 気をつけること の順に、短い見出しをつけて出す（2026-11-13 ユーザーの指示）
+  function waterNote(w) {
+    return el("div", { class: "water-note" }, [
+      // 1行に入らないときは、「、」のところで折り返す
+      el("p", { class: "water-main" }, [ico("💧", "mi"), el("span", {}, w.main.split(/(?<=、)/).map((t) => el("span", { class: "nw", text: t })))]),
+      el("p", { class: "water-label", text: "なぜ？" }),
+      el("p", { text: w.why }),
+      el("p", { class: "water-label", text: "気をつけること" }),
+      el("p", { text: w.care }),
+    ]);
+  }
+
   function renderSteps() {
     document.getElementById("flow-ages").replaceChildren(...AGE_FLOWS.map((f) => {
       // 年齢ごとの全身の絵（img/age。このサイトで描いた。2026-11-09 ユーザー「全身をうつして、年齢を表現して」）
@@ -954,7 +970,7 @@
       // 「まずは水で」の文は、いちばん上のやり方のまとまりの見出しのすぐ下に出す（2026-11-13 ユーザーの指示。前は、時期の特徴のすぐ下）
       ...f.groups.flatMap((g, gi) => [
         el("p", { class: "flow-group", text: g.label }),
-        gi === 0 ? el("p", { class: "water-note", text: f.water || WATER_NOTE }) : null,
+        gi === 0 ? waterNote(f.water || WATER_NOTE) : null,
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
       ]).filter(Boolean),
       el("p", { class: "flow-group", text: "コツ" }),
