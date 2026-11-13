@@ -231,9 +231,9 @@
   #flow-ages button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); }
   #flow-ages button[aria-pressed="true"] .age-check { display: block; }
 
-  /* ---- 飲ませ方: 時期の特徴と「まずは水で」（押せない情報。2つを1つの面にまとめる） ---- */
-  .flow-note { padding: 14px 16px 6px; border-radius: 16px 16px 0 0; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
-  .water-note { padding: 0 16px 14px; border-radius: 0 0 16px 16px; background: var(--orange-soft); font-size: 15px; }
+  /* ---- 飲ませ方: 時期の特徴（押せない情報の面）と、「まずは水で」（やり方の見出しの下の説明。2026-11-13 に動かした） ---- */
+  .flow-note { padding: 14px 16px; border-radius: 16px; background: var(--orange-soft); font-size: 17px; font-weight: 700; line-height: 1.6; }
+  .water-note { margin: 0 0 12px; font-size: 15px; }
 
   /* ---- 飲ませ方: やり方とコツ（押すと開く） ---- */
   .howto { display: grid; gap: 10px; }
@@ -951,11 +951,12 @@
     const f = AGE_FLOWS.find((x) => x.age === flowSel);
     document.getElementById("age-flow").replaceChildren(...(f ? [
       el("p", { class: "flow-note", text: f.note }),
-      el("p", { class: "water-note", text: f.water || WATER_NOTE }),
-      ...f.groups.flatMap((g) => [
+      // 「まずは水で」の文は、いちばん上のやり方のまとまりの見出しのすぐ下に出す（2026-11-13 ユーザーの指示。前は、時期の特徴のすぐ下）
+      ...f.groups.flatMap((g, gi) => [
         el("p", { class: "flow-group", text: g.label }),
+        gi === 0 ? el("p", { class: "water-note", text: f.water || WATER_NOTE }) : null,
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
-      ]),
+      ]).filter(Boolean),
       el("p", { class: "flow-group", text: "コツ" }),
       // やり方ごとのコツ（METHODS の tips）は、保存用の画像にだけ出す。サイトでは見にくかった（2026-11-04 ユーザーの判断）
       el("div", { class: "howto" }, HOWTO.filter((h) => h.ages.includes(f.age) || h.ages.includes("all")).map(howtoItem)),
