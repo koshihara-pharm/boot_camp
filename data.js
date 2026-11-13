@@ -237,7 +237,8 @@ const AGE_FLOWS = [
     age: "baby", label: "0〜1歳",
     note: "わりと素直に飲んでくれる時期です。",
     water: WATER_NOTE_BABY,
-    groups: [{ label: "おすすめの飲ませ方（3つ）", items: ["spoit", "nipple", "dango"] }],
+    // 見出しは、ほかの年齢と同じ「まずは、少しの水で」にする（2026-11-13 ユーザー「おすすめの飲ませ方3つが、水なのが分かりにくい。まずは水、のニュアンスに」。前は「おすすめの飲ませ方（3つ）」、その前は「どれでも」）
+    groups: [{ label: "まずは、少しの水で（やり方は3つ）", items: ["spoit", "nipple", "dango"] }],
   },
   {
     age: "toddler", label: "1〜3歳",
