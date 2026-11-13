@@ -237,7 +237,7 @@
   .flow-before { margin: 26px 0 0; font-size: 15px; font-weight: 700; color: var(--ink); }
   .flow-before + .flow-group { margin-top: 0; }
   .flow-group { text-wrap: balance; }
-  .flow-sub { margin: -6px 0 10px; font-size: 15px; color: var(--muted); }
+  .flow-sub { margin: 16px 0 8px; font-size: 15px; font-weight: 700; color: var(--text); }
   .water-label { font-size: 13px; font-weight: 700; color: var(--ink); }
   .water-note ul { margin: 2px 0 0; padding-left: 1.2em; }
   .water-note li + li { margin-top: 6px; }
@@ -969,11 +969,11 @@
       el("p", { class: "flow-note", text: f.note }),
       // 「まずは水で」の文は、いちばん上のやり方のまとまりの見出しのすぐ下に出す（2026-11-13 ユーザーの指示。前は、時期の特徴のすぐ下）
       ...f.groups.flatMap((g, gi) => [
-        // いちばん上のまとまり: 小さい前置き（混ぜる前に）→ 見出し（まずは水で）→ 小さく「やり方は3つ」→ なぜ？ → やり方（2026-11-13 ユーザーと決定）
+        // いちばん上のまとまり: 小さい前置き（混ぜる前に）→ 見出し（まずは水で）→ なぜ？ → 「やり方は3つ」→ やり方（2026-11-13 ユーザーと決定。「やり方は3つ」は、見出しの下だと違和感があるとユーザー。やり方のすぐ上に動かした）
         gi === 0 ? el("p", { class: "flow-before", text: (f.water || WATER_NOTE).before }) : null,
         el("p", { class: "flow-group", text: g.label }),
-        g.sub ? el("p", { class: "flow-sub", text: g.sub }) : null,
         gi === 0 ? waterNote(f.water || WATER_NOTE) : null,
+        g.sub ? el("p", { class: "flow-sub", text: g.sub }) : null,
         el("div", { class: "howto" }, g.items.map((key) => flowItem(key, false))),
       ]).filter(Boolean),
       el("p", { class: "flow-group", text: "コツ" }),
