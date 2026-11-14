@@ -876,7 +876,13 @@
     "kid-water": "video/kid-water-usagi.mp4?v=20261113",
     "kid-fukuro": "video/kid-fukuro-usagi.mp4?v=20261113",
     "kid-otona": "video/kid-otona-usagi.mp4?v=20261113",
+    // 0〜1歳（2026-11-14 から。赤ちゃんの絵は、抱き方とスポイトの向きを薬剤師が見てから公開する）
+    "baby-spoit": "video/baby-spoit-usagi.mp4?v=20261114",
+    "baby-nipple": "video/baby-nipple-usagi.mp4?v=20261114",
+    "baby-dango": "video/baby-dango-usagi.mp4?v=20261114",
   };
+  // 動画の長さ（ボタンに「約◯秒」と出す）。書いていない動画は約40秒（最初の6本は 37〜43秒、0〜1歳のお薬だんごは 40秒）
+  const VIDEO_SEC = { "baby-spoit": 50, "baby-nipple": 50 };
   // 動画のサムネイル（表紙の絵）。動画と同じく video/ の中に置き、GitHub に上げない（2026-11-13）
   const videoThumb = (name) => `video/thumb/${name}.jpg?v=20261113`;
   function openVideo(title, src, label, poster) {
@@ -931,9 +937,10 @@
         // サムネイルの絵は、動画の最初の画面（子ども・うさぎ・題名。video/thumb/年齢-やり方.jpg。動画から1コマ切り出した）。
         // 同じ日のユーザーの指示「サムネはこれにしてほしい」。はじめは、やり方の絵（img/howto）をサムネイルにしていた。絵が読めないときは、やり方の絵に戻す
         const pic = el("img", { class: "video-thumb", src: videoThumb(`${flowSel}-${key}`), alt: "", loading: "lazy", width: "720", height: "1280" });
-        // 横長のボタン: 左に小さなサムネイル、まん中に言葉と長さ、右に「›」。6本とも 37〜43秒なので「約40秒」
-        const thumb = el("button", { type: "button", class: "method-video", "aria-label": "この飲ませ方を動画で見る（約40秒）" },
-          [pic, el("span", { class: "play-text", "aria-hidden": "true" }, [el("b", {}, ["▶ 動画で見る"]), el("small", { text: "約40秒" })])]);
+        // 横長のボタン: 左に小さなサムネイル、まん中に言葉と長さ、右に「›」。長さは動画ごと（VIDEO_SEC。書いていなければ約40秒）
+        const sec = `約${VIDEO_SEC[`${flowSel}-${key}`] || 40}秒`;
+        const thumb = el("button", { type: "button", class: "method-video", "aria-label": `この飲ませ方を動画で見る（${sec}）` },
+          [pic, el("span", { class: "play-text", "aria-hidden": "true" }, [el("b", {}, ["▶ 動画で見る"]), el("small", { text: sec })])]);
         pic.addEventListener("error", () => { pic.src = howto; pic.style.objectPosition = "50% 50%"; }, { once: true });
         thumb.addEventListener("click", playVideo);
         parts.push(thumb);
