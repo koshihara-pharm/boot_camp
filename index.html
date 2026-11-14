@@ -294,6 +294,15 @@
     .panel, .card { padding-inline: 12px; }
     #flow-ages .age-label { font-size: 15px; }
   }
+  /* 動画のサムネイル（2026-11-13。動画は手元（localhost）でだけ出る）: 押せるものの決まり（白い面・枠・下の影・右の丸い「›」）に合わせた横長のボタン。
+     左に小さな絵（動画の最初の画面）、まん中に言葉と長さ。はじめは絵を大きく出したが、手順の文が見えなくなるので小さくした（ユーザー「サムネでかすぎ、文字が見えないのは微妙」） */
+  .howto .method-video { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; margin: 2px 0 14px; padding: 10px 54px 10px 10px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--line); box-shadow: var(--row-shadow); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+  .howto .method-video::after { content: ""; position: absolute; right: 14px; top: 50%; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; background: var(--orange-soft) var(--chevron) center / 11px no-repeat; }
+  .howto .method-video:active { transform: translateY(2px); box-shadow: none; }
+  .howto .method-video .video-thumb { display: block; flex: none; width: 104px; height: auto; aspect-ratio: 720 / 825; object-fit: cover; object-position: 50% 42%; border-radius: 10px; margin: 0; background: #fff; }
+  .howto .method-video .play-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .howto .method-video .play-text b { font-size: 17px; font-weight: 700; color: var(--text); }
+  .howto .method-video .play-text small { font-size: 15px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -405,7 +414,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-13f"></script>
+<script src="data.js?v=2026-11-14a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -858,21 +867,25 @@
   // まだ公開しない（2026-11-10 ユーザーの判断）。動画は GitHub に上げず（.gitignore の video/）、ボタンも手元（localhost）で開いたときだけ出す
   // 画像と同じ画面に出す。自動では始めず、▶ を押すと始まる。閉じると止まる
   // ?v= は動画を差しかえたら変える（ブラウザが前の動画を覚えたまま出さないように）
+  // 2026-11-13 に、うさぎが丸い枠で解説するもの（名前-usagi.mp4。docs/28 の「うさぎの解説つき」）に差しかえた（ユーザーの判断）。もとの動画（名前.mp4）は残してある
   const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
   const VIDEOS = !LOCAL ? {} : {
-    "toddler-water": "video/toddler-water.mp4?v=20261110",
-    "toddler-fukuro": "video/toddler-fukuro.mp4?v=20261110",
-    "toddler-dango": "video/toddler-dango.mp4?v=20261110",
-    "kid-water": "video/kid-water.mp4?v=20261110",
-    "kid-fukuro": "video/kid-fukuro.mp4?v=20261110",
-    "kid-otona": "video/kid-otona.mp4?v=20261110",
+    "toddler-water": "video/toddler-water-usagi.mp4?v=20261113",
+    "toddler-fukuro": "video/toddler-fukuro-usagi.mp4?v=20261113",
+    "toddler-dango": "video/toddler-dango-usagi.mp4?v=20261113",
+    "kid-water": "video/kid-water-usagi.mp4?v=20261113",
+    "kid-fukuro": "video/kid-fukuro-usagi.mp4?v=20261113",
+    "kid-otona": "video/kid-otona-usagi.mp4?v=20261113",
   };
-  function openVideo(title, src, label) {
+  // 動画のサムネイル（表紙の絵）。動画と同じく video/ の中に置き、GitHub に上げない（2026-11-13）
+  const videoThumb = (name) => `video/thumb/${name}.jpg?v=20261113`;
+  function openVideo(title, src, label, poster) {
     const dlg = document.getElementById("card-view");
     dlg.querySelector(".card-title").textContent = title;
     dlg.querySelector(".card-hint").textContent = "音を出さなくても、画面の文で分かります";
     dlg.querySelector("img").hidden = true;
     const v = dlg.querySelector("video");
+    v.poster = poster || "";   // 再生する前に、サムネイルの絵を出す（前は黒い箱だった）
     if (!v.src.endsWith(src)) v.src = src;
     v.setAttribute("aria-label", label);
     v.hidden = false;
@@ -904,7 +917,28 @@
         : [ico(m.icon, "mi"), m.title]),
     ];
     // 開いたときに出す、やり方の絵（img/howto。Codex で作った。2026-11-10 ユーザーの指示）
-    if (METHOD_PICS[key]) parts.push(el("img", { class: "method-pic", src: `img/howto/${key}.webp`, alt: METHOD_PICS[key], loading: "lazy", width: "800", height: "600" }));
+    // 動画があるやり方は、この絵を動画のサムネイル（表紙）にする。絵を押すと、動画の画面が出る（2026-11-13 ユーザーの指示。
+    // 持ち主が「動画がどこにあるか分からない」。手順の下にあった文字のボタンは、同じことが2つにならないよう外した）
+    const video = VIDEOS[`${flowSel}-${key}`];
+    const playVideo = () => {
+      const f = AGE_FLOWS.find((x) => x.age === flowSel);
+      const name = m.title.replace("おすすめの飲ませ方: ", "");
+      openVideo(`${f.label}・${name}`, video, `${f.label}の粉薬の飲ませ方「${name}」の動画`, videoThumb(`${flowSel}-${key}`));
+    };
+    if (METHOD_PICS[key]) {
+      const howto = `img/howto/${key}.webp`;
+      if (video) {
+        // サムネイルの絵は、動画の最初の画面（子ども・うさぎ・題名。video/thumb/年齢-やり方.jpg。動画から1コマ切り出した）。
+        // 同じ日のユーザーの指示「サムネはこれにしてほしい」。はじめは、やり方の絵（img/howto）をサムネイルにしていた。絵が読めないときは、やり方の絵に戻す
+        const pic = el("img", { class: "video-thumb", src: videoThumb(`${flowSel}-${key}`), alt: "", loading: "lazy", width: "720", height: "1280" });
+        // 横長のボタン: 左に小さなサムネイル、まん中に言葉と長さ、右に「›」。6本とも 37〜43秒なので「約40秒」
+        const thumb = el("button", { type: "button", class: "method-video", "aria-label": "この飲ませ方を動画で見る（約40秒）" },
+          [pic, el("span", { class: "play-text", "aria-hidden": "true" }, [el("b", {}, ["▶ 動画で見る"]), el("small", { text: "約40秒" })])]);
+        pic.addEventListener("error", () => { pic.src = howto; pic.style.objectPosition = "50% 50%"; }, { once: true });
+        thumb.addEventListener("click", playVideo);
+        parts.push(thumb);
+      } else parts.push(el("img", { class: "method-pic", src: howto, alt: METHOD_PICS[key], loading: "lazy", width: "800", height: "600" }));
+    }
     parts.push(el("ol", {}, m.steps.map((s) => el("li", { text: s }))));
     if (m.to === "mix") {
       const b = el("button", { type: "button", class: "step-next", text: "薬の名前で、混ぜていい食べ物を探す" });
@@ -913,12 +947,9 @@
     }
     // 保存用の画像（card/年齢-やり方.png。card/make.cjs で作る）を大きく出すボタン（2026-11-04 ユーザーと決定。docs/18 の 7-1）
     // 主役は「混ぜていい食べ物を探す」なので、控えめな形（link-button）を使い回す
-    const video = VIDEOS[`${flowSel}-${key}`];
-    if (video) {
-      const f = AGE_FLOWS.find((x) => x.age === flowSel);
-      const name = m.title.replace("おすすめの飲ませ方: ", "");
+    if (video && !METHOD_PICS[key]) {   // 絵のないやり方に動画があるときだけ、文字のボタンで出す（今は無い）
       const play = el("button", { type: "button", class: "link-button save-card" }, [el("span", { "aria-hidden": "true", text: "▶ " }), "この飲ませ方を動画で見る"]);
-      play.addEventListener("click", () => openVideo(`${f.label}・${name}`, video, `${f.label}の粉薬の飲ませ方「${name}」の動画`));
+      play.addEventListener("click", playVideo);
       parts.push(play);
     }
     const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この飲ませ方の画像を保存"]);
