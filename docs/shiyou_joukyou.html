@@ -23,6 +23,8 @@
     --down: #b3412f;
     --warn: #8a6400; --warn-bg: #fff2c4;
     --idea: #2a5d9f; --idea-bg: #e4ecf8;
+    /* グラフの2色（dataviz の基準の1番目と2番目。色の見分けの検査に通した） */
+    --s1: #2a78d6; --s2: #eb6834; --grid: #e3ebe9;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
@@ -31,6 +33,7 @@
       --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
       --bar: #6cc7b9; --bar-bg: #26302e; --up: #8fd6a9; --down: #f0a090;
       --warn: #f2c14e; --warn-bg: #3a3120; --idea: #9cc0f0; --idea-bg: #1f2b3d;
+      --s1: #3987e5; --s2: #d95926; --grid: #2a3b38;
       color-scheme: dark;
     }
   }
@@ -38,9 +41,27 @@
     --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
     --bar: #6cc7b9; --bar-bg: #26302e; --up: #8fd6a9; --down: #f0a090;
     --warn: #f2c14e; --warn-bg: #3a3120; --idea: #9cc0f0; --idea-bg: #1f2b3d;
+    --s1: #3987e5; --s2: #d95926; --grid: #2a3b38;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
+  /* 日ごとのグラフ */
+  .chart-card { position: relative; }
+  .legend { display: flex; gap: 16px; font-size: 13px; margin: 2px 0 6px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart .col { cursor: pointer; }
+  .chart .axis { fill: var(--muted); font-size: 11px; }
+  .chart .total { fill: var(--text); font-size: 11px; font-weight: 700; }
+  .chart .col:hover .hl, .chart .col:focus .hl { fill: var(--accent-soft); }
+  .chart .col:focus { outline: none; }
+  .tip { position: absolute; pointer-events: none; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 12px; line-height: 1.6; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; display: none; z-index: 2; }
+  .tip b { font-family: var(--font-display); }
+  .tip i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+  .chart-note { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+  details.table-view { margin-top: 8px; font-size: 13px; }
+  details.table-view summary { cursor: pointer; color: var(--accent); font-weight: 700; }
+  details.table-view table { margin-top: 6px; }
   body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.7; }
   main { max-width: 760px; margin: 0 auto; padding: 20px 16px 48px; }
   h1, h2, h3 { font-family: var(--font-display); line-height: 1.4; margin: 0; }
@@ -103,6 +124,15 @@
     <a href="https://analytics.google.com/analytics/web/#/a414238281p561741887/reports/intelligenthome" target="_blank" rel="noopener">GA4 ホーム</a>
   </nav>
 
+  <h2>日ごとの回数（Clarity の録画）</h2>
+  <div class="card chart-card">
+    <div class="legend"><span><i style="background:var(--s1)"></i>スマホ</span><span><i style="background:var(--s2)"></i>スマホ以外（PC・タブレットなど）</span></div>
+    <div class="chart" id="daily-chart"></div>
+    <div class="tip" id="daily-tip" role="status"></div>
+    <p class="chart-note" id="daily-note"></p>
+    <details class="table-view"><summary>表で見る</summary><div class="table-wrap" id="daily-table"></div></details>
+  </div>
+
   <div id="latest"></div>
 
   <h2>推移</h2>
@@ -127,13 +157,253 @@
 */
 const RECORDS = [
   {
+    date: "2026-11-13",
+    clarity: {
+      period: "11/11〜11/13（3日）",
+      sessions: 14, users: 7,
+      device: { "スマホ": 8, "PC": 6 },
+      source: { "直接": 10, "X": 4 },
+      rage: 0
+    },
+    ga4: {
+      period: "今回は見られなかった（Chrome の拡張につながらなかった）"
+    },
+    clicksPeriod: "11/11 昼〜11/13 朝の録画 13回（手元の確認1回を除く）",
+    clicks: [
+      ["年齢のボタン", 29],
+      ["戻る（3種類）", 14],
+      ["やり方を開く（スポイト・哺乳びん・お薬だんごなど）", 10],
+      ["薬を選ぶ（検索・一覧から）", 6],
+      ["飲ませ方が分からない", 5],
+      ["薬の一覧を見る", 4],
+      ["このサイトをQRコードで教える", 3],
+      ["混ぜていい？", 2],
+      ["コツを開く（口直し）", 1]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "X から来た人が、飲ませ方を読みこんでいる",
+        body: "11/13 の朝7時、スマホで X の投稿（?from=x）から来た人が2分20秒、年齢を切りかえながら飲ませ方（スポイト・哺乳びん・お薬だんご・少しの水）を開き、一覧から薬を2つ（アスベリン・酸化マグネシウム）見て、QR も出していた。11/11 の夜22時台にも、X から来た人が16分、飲ませ方とコツを見ている。自分で X の投稿から開いた可能性もあるが、そうでなければ、外の人が主な機能を使った初めての記録になる。" },
+      { kind: "kadai", title: "X の投稿のリンクが「?from」で切れているかもしれない",
+        body: "11/11〜12 に X から来た3回は、URL が「?from=x」ではなく「?from」だけだった。投稿のリンクが途中で切れているか、別の書き方になっている。このままだと印で数えられない（今回は来た元の t.co で数え直した）。11/13 の1回は「?from=x」だった。" },
+      { kind: "mada", title: "X から来て、8〜9秒で閉じた人が2回",
+        body: "11/11 の23時台と11/12 の0時台。どちらも何も押していない。" },
+      { kind: "kadai", title: "準備中の薬を押しても、何も起きない（4回目）",
+        body: "11/12 の朝、スマホで一覧の「準備中」を押して、何も起きなかった。11/5、11/9 の夕方、11/9 の夜に続いて4回目。この3日で反応しなかったクリックは、これ1回だけ。" },
+      { kind: "mada", title: "見出しを押す動きは、この3日は無かった",
+        body: "前回いちばん多かった、見出しのサイト名を押して何も起きない動きは、この3日は0回。数が少ないので、まだ判断できない。" },
+      { kind: "mada", title: "GA4 は見られなかった",
+        body: "Chrome の拡張につながらず、GA4 の数字はとれなかった。次に見るときに、2回分まとめて見る。" }
+    ],
+    next: [
+      "X の投稿のリンクが「?from=x」になっているか確かめる（なっていなければ直す）",
+      "準備中の薬を押したときにどうするか決める（4回目。持ち越し）",
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。持ち越し）"
+    ],
+    questions: [
+      "X の投稿を見て開いたとき、最初に何を知りたかったですか？",
+      "飲ませ方の画面で、年齢を何度も切りかえたのはなぜですか？（自分の子の年齢がどれか迷った、など）"
+    ]
+  },
+  {
+    date: "2026-11-11",
+    clarity: {
+      period: "11/9〜11/11（3日）",
+      sessions: 32, users: 14,
+      device: { "スマホ": 19, "PC": 13 },
+      source: { "直接": 32 },
+      rage: 0
+    },
+    ga4: {
+      period: "11/4〜11/10（7日）",
+      users: 38, views: 150, events: 423,
+      avgTime: "1分04秒",
+      source: { "直接": 74, "X": 19, "GitHub": 4 }
+    },
+    clicksPeriod: "11/9 夜〜11/10 夜の録画 14回（11/11 はまだ0回）",
+    clicks: [
+      ["年齢のボタン", 7],
+      ["おすすめの飲ませ方（やり方を開く）", 5],
+      ["このサイトについて", 3],
+      ["飲ませ方が分からない", 2],
+      ["コツを開く（口直し・ほめる）", 2],
+      ["飲ませ方の絵・説明の文", 2],
+      ["薬を選ぶ", 1],
+      ["この飲ませ方の画像を保存", 1],
+      ["準備中の案内の文", 1]
+    ],
+    notes: [
+      { kind: "kadai", title: "見出しのサイト名を押しても、何も起きない（形が変わっても続いている）",
+        body: "新しいデザインの見出し「子どものお薬サポート」を押して何も起きなかった録画が4回（スマホ1・PC3）。11/3〜5 のくまのときと同じ動きで、見た目が変わっても「押すとトップに戻る」と思われている。今いちばん多く出ている、押しても反応しない場所。" },
+      { kind: "kadai", title: "準備中の薬に、また触れている（3回目）",
+        body: "11/9 夜、スマホで準備中の薬の「まだ載せていません」の文を押している。11/5・11/9 に続いて3回目。" },
+      { kind: "kasetsu", title: "新しい飲ませ方の画面は、開いて使われている",
+        body: "11/10 の夕方、スマホでやり方を開いたり閉じたりし（少しの水で溶かす・薬の袋の中で混ぜる）、絵も押していた。コツを開いた回もある。どれもデザインを変えた日なので、自分の確認とみられる。" },
+      { kind: "mada", title: "X からの訪問が、GA4 で12→19 に増えた",
+        body: "X から来た訪問（t.co）が7回増えた。ただ、X から最初に来た人は3人のままで、同じ人が X のリンクから何度か開いている形に見える。Clarity の録画では、X から来た印は見えなかった。" },
+      { kind: "mada", title: "数の増え方の大部分は、作業中の確認",
+        body: "GA4 の表示回数は118→150 に増えたが、11/10 の夕方〜夜はデザインの作業中で、確認用の URL（?v=check）や手元のサイトの録画もある。スマホで薬の画面（#drug-7）を1秒だけ開いた録画が3回あり、開いたままのタブがよみがえったものとみられる。" }
+    ],
+    next: [
+      "見出しのサイト名を押したらトップへ戻るようにするか決める（11/5 から持ち越し。同じ動きが続いている）",
+      "準備中の薬を押したときにどうするか決める（持ち越し）",
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。持ち越し）"
+    ],
+    questions: [
+      "サイトの名前（見出し）を押したとき、どうなると思いましたか？",
+      "X で見かけて開いた方は、何を見て閉じましたか？"
+    ]
+  },
+  {
+    date: "2026-11-09",
+    clarity: {
+      period: "11/7〜11/9（3日）",
+      sessions: 29, users: 13,
+      device: { "スマホ": 15, "PC": 14 },
+      source: { "直接": 29 },
+      rage: 0
+    },
+    ga4: {
+      period: "11/2〜11/8（7日）",
+      users: 38, views: 118, events: 387,
+      avgTime: "1分11秒",
+      source: { "直接": 66, "X": 12, "GitHub": 3 }
+    },
+    clicksPeriod: "11/7 昼〜11/9 夜の録画 22回（PC の長い確認を含む）",
+    clicks: [
+      ["戻る（3種類）", 11],
+      ["薬を選ぶ（一覧・検索から）", 10],
+      ["年齢のボタン", 9],
+      ["薬の一覧を見る", 7],
+      ["このサイトについて", 5],
+      ["飲ませ方が分からない", 5],
+      ["見出しのくま", 4],
+      ["この薬をブックマーク", 1],
+      ["この飲ませ方の画像を保存", 1]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "11/9 の朝、短い訪問がまとまって来た",
+        body: "9時半〜12時に9回（スマホ5・PC4）。1回ずつは数秒〜6分と短い。「このサイトについて」を開いた回が多く（この3日で5回。前は1週間で6回）、サイトが何を記録しているかを確かめた人がいる。印のないリンクなので、どこから来たかは分からない。" },
+      { kind: "kadai", title: "準備中の薬を押しても、何も起きないと感じている",
+        body: "11/9 に、準備中の黄耆建中湯（漢方）を3回続けて押して、何も起きなかった記録がある。11/5 のケフラール細粒に続いて2回目。どちらも自分の確認とみられる録画の中だが、作った本人でも押せそうに感じる見た目になっている。同じことが2回出たので、docs/22 の画面ルールに足すかを決める。" },
+      { kind: "mada", title: "PC の長い録画は、作業中の自分の確認とみられる",
+        body: "11/7 の PC の録画4回（30〜41分。ブックマークなど新しい機能を順に押している）と、11/9 夕方の7時間半の録画。直近3日の PC 14回の多くはこれで、スマホとほぼ半々になったのはこのため。" },
+      { kind: "mada", title: "スマホで、1つの薬の画面を19分",
+        body: "11/8 の夜、スマホで薬の画面を開いたまま19分。読んでいたのか、開いたまま置いたのかは分からない。" },
+      { kind: "mada", title: "前回の「次にやること」",
+        body: "QR → 前回のあと ?from=qr の訪問は0回。LINE で送る → ?from=line は0回のまま。くま → まだ決めていない（連打は0回）。GA4 で X からの訪問が10→12 に増えた。" }
+    ],
+    next: [
+      "準備中の薬を押したときにどうするか決める（何か出す／押せない見た目にする）",
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。持ち越し）",
+      "自分の確認を数から外す設定が、Clarity と GA4 にあるか調べる"
+    ],
+    questions: [
+      "準備中の薬を押したとき、何が出てほしいですか？（いつごろ載るか、似た薬、薬剤師に聞く案内など）",
+      "「このサイトについて」を開いたのは、何が気になったからですか？"
+    ]
+  },
+  {
+    date: "2026-11-07",
+    clarity: {
+      period: "11/5〜11/7（3日）",
+      sessions: 20, users: 10,
+      device: { "スマホ": 15, "PC": 2, "タブレット": 1, "その他": 2 },
+      source: { "直接": 20 },
+      rage: 0
+    },
+    ga4: {
+      period: "10/31〜11/6（7日）",
+      users: 40, views: 108, events: 366,
+      avgTime: "1分09秒",
+      source: { "直接": 57, "X": 10, "GitHub": 4 }
+    },
+    clicksPeriod: "11/6 昼〜11/7 朝の録画 7回（押した記録があるのは1回だけで、自分の確認とみられる）",
+    clicks: [
+      ["年齢のボタン", 5],
+      ["このサイトをQRコードで教える", 2],
+      ["薬を選ぶ（一覧・検索から）", 2],
+      ["飲ませ方が分からない", 1],
+      ["おすすめの飲ませ方", 1],
+      ["食べ物に混ぜる → 混ぜていい食べ物を探す", 1],
+      ["この薬の情報を保存", 1]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "QR から3回開かれ、どれも3〜4秒で閉じている",
+        body: "11/6 の18時台・21時台と、11/7 の5時台。どれもスマホで、何も押していない。自分で読み取りを試したのか、だれかに見せて開いてもらったがすぐ閉じたのかは、データでは分からない。人に見せたのなら、最初の画面で何をすればいいかが伝わっていない可能性がある。" },
+      { kind: "mada", title: "一覧の画面を開いたまま、押さない録画が3回",
+        body: "スマホで「薬の一覧」（#list）を開き、1〜7分いて何も押していない。一覧を眺めて閉じた人か、自分のスマホで開いたままのタブがよみがえったものかは分からない。" },
+      { kind: "kasetsu", title: "11/6 夜の長い録画は、自分の確認とみられる",
+        body: "23時台からの4時間の録画で、QR を2回出し、飲ませ方・混ぜていい食べ物・保存ボタンを順に押している。この期間に押した記録があるのはこの1回だけ。" },
+      { kind: "mada", title: "人数は少しずつ減り、スマホの割合が増えた",
+        body: "Clarity の直近3日は10人（前回14人）で、スマホが4分の3。GA4 の7日の人数は40人（前回38人）だが、期間が1日ずれただけで、新しく来た人が増えたとは言えない。" },
+      { kind: "mada", title: "前回の「次にやること」",
+        body: "LINE で親に送る → ?from=line の訪問はまだ0回。くまを押したらトップへ戻るか → まだ決めていない（連打は0回）。" }
+    ],
+    next: [
+      "QR をだれかに見せたなら、開いたあと何をしたか（何秒で閉じたか）を聞く",
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。持ち越し）",
+      "くまを押したらトップへ戻るようにするか決める（持ち越し）"
+    ],
+    questions: [
+      "QR で開いた人が数秒で閉じるのは、最初の画面で何をすればいいか分からないからでしょうか？",
+      "知り合いの親にサイトを教えるとき、QR と LINE のリンクでは、どちらが開いてもらいやすいですか？"
+    ]
+  },
+  {
+    date: "2026-11-06",
+    clarity: {
+      period: "11/4〜11/6（3日）",
+      sessions: 21, users: 14,
+      device: { "スマホ": 10, "PC": 7, "タブレット": 2, "その他": 2 },
+      source: { "直接": 20, "X": 1 },
+      rage: 0
+    },
+    ga4: {
+      period: "10/30〜11/5（7日）",
+      users: 38, views: 95, events: 334,
+      avgTime: "1分11秒",
+      source: { "直接": 47, "X": 10, "GitHub": 4 }
+    },
+    clicksPeriod: "11/5 夜〜11/6 の録画 6回（うち3回は公開直後の自分の確認とみられる）",
+    clicks: [
+      ["この薬の情報を保存", 2],
+      ["✕ 閉じる（画像の画面）", 2],
+      ["年齢のボタン", 2],
+      ["飲ませ方が分からない", 1],
+      ["この飲ませ方を保存", 1],
+      ["このサイトをQRコードで教える", 1],
+      ["薬の一覧を見る", 1]
+    ],
+    notes: [
+      { kind: "mada", title: "前回から、新しい人の利用はほとんど無い",
+        body: "11/5 夜からの録画は6回だけ。3回は、公開した直後（11/5 22時半ごろ）に新しい保存ボタンと QR を順に押していて、自分の確認とみられる。残りは0〜1秒の訪問が2回と、3時間開いたままの1回。GA4 の7日の人数が31→38 に増えたのは、期間が1日ずれて11/5 が入ったためで、自分の確認も含む。" },
+      { kind: "kadai", title: "?from=qr の数は、今は自分の確認だけ",
+        body: "QR から開いた記録が2回ある。1回は公開直後で、新しい機能を試した流れの中にあり、自分で読んだものとみられる。もう1回は11/6 の昼に1秒だけで、だれかは分からない。人に QR を見せ始めたら、この2回を引いて数える。" },
+      { kind: "mada", title: "0秒の訪問は、リンクのプレビューかもしれない",
+        body: "GA4 に「Mozilla Compatible Agent」が2人（使った時間 0秒）。Clarity にも、薬の画面（#drug-6）を0秒で開いた記録が2回ある。リンクを貼ったときに LINE や Slack が中身を取りに来た可能性がある。人の数としては多めに出ている。" },
+      { kind: "kasetsu", title: "保存した画像を、指で押している",
+        body: "薬の画像の画面で、画像そのものを押して何も起きなかった記録が1回（反応しないクリック）。保存は長押しで、下に案内は出ている。自分の確認の録画なので、ほかの人でも起きるかを見る。" },
+      { kind: "mada", title: "前回の「次にやること」",
+        body: "LINE で親に送る → ?from=line の訪問はまだ無い。くまを押したらトップへ戻るか → まだ決めていない（この3日の連打は0回）。" }
+    ],
+    next: [
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。前回から持ち越し）",
+      "くまを押したらトップへ戻るようにするか決める（持ち越し）",
+      "次に見るときは、自分の確認の録画を引いて数える"
+    ],
+    questions: [
+      "保存ボタンの画像を、長押しで写真に入れられましたか？ 押しても保存できないと思いませんでしたか？",
+      "QR コードを見せたとき、相手はカメラで読めましたか？"
+    ]
+  },
+  {
     date: "2026-11-05",
     clarity: {
       period: "11/3〜11/5（3日）",
       sessions: 24, users: 17,
       device: { "PC": 14, "スマホ": 8, "タブレット": 2 },
       source: { "直接": 22, "X": 1, "GitHub": 1 },
-      rage: 5
+      rage: null // 3日の数は取っていない（7日分の録画では5回。考察を見る）
     },
     ga4: {
       period: "10/29〜11/4（7日）",
@@ -175,13 +445,37 @@ const RECORDS = [
   }
 ];
 
+/* ===== 日ごとの回数 =====
+   Clarity の録画の一覧（コネクタ）を、日本時間の日ごとに数えたもの。手元の確認（localhost）は除く。自分のスマホ・PC の確認は含む
+   all: 回数 / mobile: そのうちスマホ / x・qr・line: そのうち ?from= の印つきリンクから来た回数（x は、来た元が X（t.co）の回も入れる。11/13 から）
+   見るたびに、録画が残っている日（30日）を数え直して、まるごと入れかえる */
+const DAILY_UPDATED = "2026-11-13";
+const DAILY = [
+  { d: "2026-10-30", all: 2,  mobile: 1,  x: 0, qr: 0, line: 0 },
+  { d: "2026-10-31", all: 9,  mobile: 6,  x: 4, qr: 0, line: 0 },
+  { d: "2026-11-01", all: 2,  mobile: 2,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-02", all: 19, mobile: 16, x: 0, qr: 0, line: 0 },
+  { d: "2026-11-03", all: 4,  mobile: 2,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-04", all: 13, mobile: 4,  x: 2, qr: 0, line: 0 },
+  { d: "2026-11-05", all: 7,  mobile: 4,  x: 0, qr: 1, line: 0 },
+  { d: "2026-11-06", all: 7,  mobile: 6,  x: 0, qr: 3, line: 0 },
+  { d: "2026-11-07", all: 10, mobile: 4,  x: 0, qr: 1, line: 0 },
+  { d: "2026-11-08", all: 2,  mobile: 2,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-09", all: 18, mobile: 9,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-10", all: 9,  mobile: 6,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-11", all: 7,  mobile: 3,  x: 2, qr: 0, line: 0 },
+  { d: "2026-11-12", all: 5,  mobile: 4,  x: 1, qr: 0, line: 0 },
+  { d: "2026-11-13", all: 1,  mobile: 1,  x: 1, qr: 0, line: 0 }
+];
+
 /* ===== 表示 ===== */
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const sum = o => Object.values(o || {}).reduce((a, b) => a + b, 0);
 const mobileRate = c => { const t = sum(c.device); return t ? Math.round(((c.device["スマホ"] || 0) / t) * 100) : null; };
 
 function delta(now, prev) {
-  if (prev == null || now == null) return '<span class="delta first">前回なし</span>';
+  if (now == null) return '<span class="delta first">今回は数字なし</span>';
+  if (prev == null) return '<span class="delta first">前回なし</span>';
   const d = now - prev;
   if (d === 0) return '<span class="delta same">前回と同じ</span>';
   return d > 0 ? `<span class="delta up">▲ ${d}（前回 ${prev}）</span>` : `<span class="delta down">▼ ${-d}（前回 ${prev}）</span>`;
@@ -228,6 +522,73 @@ function tiles(r, p) {
   </div>`;
 }
 
+/* 日ごとの積み上げ棒グラフ。下がスマホ、上がスマホ以外。棒の上に合計。棒の列を押す・なぞると、くわしい数が出る */
+function renderDaily() {
+  // 画面の幅のまま描く（縮めると文字が小さくなるため）。日が増えて混んだら、日付は何日かおきに出す
+  const box = document.getElementById("daily-chart");
+  const W = Math.max(300, Math.round(box.clientWidth || 640)), H = W < 500 ? 210 : 240, L = 28, R = 8, T = 18, B = 26;
+  const n = DAILY.length, max = Math.max(1, ...DAILY.map(r => r.all));
+  const step = Math.max(5, Math.ceil(max / 4 / 5) * 5), top = Math.ceil(max / step) * step;
+  const y = v => T + (H - T - B) * (1 - v / top);
+  const colW = (W - L - R) / n, barW = Math.min(36, colW * 0.62);
+  const md = s => { const [, m, d] = s.split("-"); return `${+m}/${+d}`; };
+  const every = Math.max(1, Math.ceil(36 / colW));
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="日ごとの回数の棒グラフ。くわしい数は下の表で見られます">`;
+  for (let v = 0; v <= top; v += step) {
+    svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/>`;
+    svg += `<text class="axis" x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  }
+  DAILY.forEach((r, i) => {
+    const cx = L + colW * i + colW / 2, x = cx - barW / 2, other = r.all - r.mobile;
+    const yMob = y(r.mobile), yAll = y(r.all), base = y(0);
+    const seg = (y1, y2, color, roundTop) => {
+      const h = Math.max(0, y2 - y1); if (h <= 0) return "";
+      const rr = roundTop ? Math.min(4, h) : 0;
+      return `<path d="M${x},${y2} V${y1 + rr} Q${x},${y1} ${x + rr},${y1} H${x + barW - rr} Q${x + barW},${y1} ${x + barW},${y1 + rr} V${y2} Z" fill="${color}"/>`;
+    };
+    svg += `<g class="col" tabindex="0" data-i="${i}" aria-label="${md(r.d)}: ${r.all}回、スマホ ${r.mobile}回">`;
+    svg += `<rect class="hl" x="${L + colW * i + 1}" y="${T - 14}" width="${colW - 2}" height="${H - T - B + 14}" rx="6" fill="transparent"/>`;
+    svg += seg(yMob, base, "var(--s1)", other === 0);
+    if (other > 0) svg += seg(yAll, yMob - (r.mobile > 0 ? 2 : 0), "var(--s2)", true);
+    svg += `<text class="total" x="${cx}" y="${yAll - 5}" text-anchor="middle">${r.all}</text>`;
+    if ((n - 1 - i) % every === 0) svg += `<text class="axis" x="${cx}" y="${H - 8}" text-anchor="middle">${md(r.d)}</text>`;
+    svg += "</g>";
+  });
+  svg += "</svg>";
+  box.innerHTML = svg;
+
+  const tip = document.getElementById("daily-tip"), card = box.closest(".chart-card");
+  const show = g => {
+    const r = DAILY[+g.dataset.i], marks = [["X", r.x], ["QR", r.qr], ["LINE", r.line]].filter(m => m[1] > 0);
+    tip.innerHTML = `<b>${md(r.d)}　${r.all}回</b><br><i style="background:var(--s1)"></i>スマホ ${r.mobile}回<br><i style="background:var(--s2)"></i>スマホ以外 ${r.all - r.mobile}回` +
+      (marks.length ? `<br>印つきリンク: ${marks.map(m => `${m[0]} ${m[1]}回`).join("・")}` : "");
+    tip.style.display = "block";
+    const gb = g.getBoundingClientRect(), cb = card.getBoundingClientRect();
+    let left = gb.left - cb.left + gb.width / 2 - tip.offsetWidth / 2;
+    left = Math.max(8, Math.min(left, cb.width - tip.offsetWidth - 8));
+    tip.style.left = left + "px";
+    tip.style.top = (gb.top - cb.top - tip.offsetHeight + 8) + "px";
+  };
+  box.querySelectorAll(".col").forEach(g => {
+    g.addEventListener("mouseenter", () => show(g));
+    g.addEventListener("focus", () => show(g));
+    g.addEventListener("click", () => show(g));
+    g.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+    g.addEventListener("blur", () => { tip.style.display = "none"; });
+  });
+
+  const sumAll = DAILY.reduce((a, r) => a + r.all, 0), sumMob = DAILY.reduce((a, r) => a + r.mobile, 0);
+  document.getElementById("daily-note").textContent =
+    `${md(DAILY[0].d)}〜${md(DAILY[n - 1].d)} の合計 ${sumAll}回（スマホ ${sumMob}回）。${DAILY_UPDATED} に数えた。手元の確認（localhost）は除き、自分のスマホ・PC の確認は含む。最後の日は途中まで。`;
+  document.getElementById("daily-table").innerHTML =
+    `<table><thead><tr><th>日</th><th>回数</th><th>スマホ</th><th>スマホ以外</th><th>X</th><th>QR</th><th>LINE</th></tr></thead><tbody>` +
+    DAILY.map(r => `<tr><td>${md(r.d)}</td><td>${r.all}</td><td>${r.mobile}</td><td>${r.all - r.mobile}</td><td>${r.x}</td><td>${r.qr}</td><td>${r.line}</td></tr>`).join("") +
+    "</tbody></table>";
+}
+renderDaily();
+let dailyTimer;
+window.addEventListener("resize", () => { clearTimeout(dailyTimer); dailyTimer = setTimeout(renderDaily, 150); });
+
 const latest = RECORDS[0];
 document.getElementById("latest").innerHTML = latest
   ? `<h2>いちばん新しい記録 <span class="date">${esc(latest.date)}</span></h2>${tiles(latest, RECORDS[1])}${body(latest)}`
@@ -237,7 +598,7 @@ const rows = [
   ["Clarity 人数（3日）", r => r.clarity?.users],
   ["Clarity 回数（3日）", r => r.clarity?.sessions],
   ["Clarity スマホの割合", r => { const m = r.clarity ? mobileRate(r.clarity) : null; return m == null ? null : m + "%"; }],
-  ["Clarity 連打", r => r.clarity?.rage],
+  ["Clarity 連打（3日）", r => r.clarity?.rage],
   ["GA4 人数（7日）", r => r.ga4?.users],
   ["GA4 表示回数（7日）", r => r.ga4?.views],
   ["GA4 X からの訪問", r => r.ga4?.source?.["X"]],
