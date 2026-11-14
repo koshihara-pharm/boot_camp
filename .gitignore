@@ -7,3 +7,6 @@ docs/_local/
 # 動画づくりの作業場所と、できた動画（大きいので GitHub に上げない。作り方は docs/28）
 tools/douga/work/
 video/
+
+# 週報の下書きなど（本名が入るので GitHub に上げない）
+private/
