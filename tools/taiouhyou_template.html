@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>準備中の薬の対応表</title>
+<title>薬の対応表</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
@@ -143,12 +143,12 @@
 <body>
 <main>
   <header>
-    <h1>準備中の薬の対応表</h1>
-    <p class="lead">サイトで「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。上から順に調べて足していきます。下のほうに、ランク外（処方の上位60の外）で病院の表にある薬も、欄を分けて並べています。元の表は docs/24_junbichu_taiouhyou.md（ここは見るためのページ）。</p>
+    <h1>薬の対応表（サイトの薬と、準備中の薬）</h1>
+    <p class="lead">サイトに出ている薬のすべてと、「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。サイトに出ている薬（状態が「反映した」）は、カードを押すと、サイトに出ている内容と図が見られます。準備中の薬は、上から順に調べて足していきます。下のほうに、ランク外（処方の上位60の外）の薬も、欄を分けて並べています。元の表は docs/24_junbichu_taiouhyou.md、サイトの中身は data.js（ここは見るためのページ）。</p>
   </header>
 
   <section class="progress" aria-label="進み具合">
-    <div class="big">サイトに反映した薬 <b id="done-count">0</b> / __COUNT__<span id="live-count" class="lead"></span></div>
+    <div class="big">サイトに出ている薬 <b id="done-count">0</b><span id="live-count" class="lead"></span></div>
     <div class="bar" id="bar" role="img" aria-label="状態ごとの数"></div>
     <div class="legend" id="legend"></div>
     <div class="flow" aria-label="進め方">
@@ -171,7 +171,7 @@
 
   <section class="out-sec" id="out-sec" aria-label="ランク外の薬" hidden>
     <h2>ランク外（処方の上位60の外）</h2>
-    <p class="lead">処方は少ないけれど、病院の表に載っている薬です。上の数（反映した薬 ○ / 41）には入れていません。サイトに足すかどうかは、まだ決めていません。</p>
+    <p class="lead">処方の上位60の外の薬です。状態が「反映した」の薬は、サイトに出ています。ほかは、病院の表に載っている薬で、サイトに足すかどうかは、まだ決めていません。上の色の棒（状態ごとの数）には入れていません。</p>
     <div class="count" id="count-out" role="status"></div>
     <div class="list" id="list-out"></div>
   </section>
@@ -242,9 +242,10 @@
 
   function renderProgress() {
     const counts = Object.fromEntries(STATUSES.map((s) => [s, RANKED.filter((r) => r.status === s).length]));
-    document.getElementById("done-count").textContent = counts["反映した"];
     const onSite = ROWS.filter((r) => r.site);
-    if (onSite.length > 0) document.getElementById("live-count").textContent = "（うち公開中のサイトに出ている薬 " + onSite.filter((r) => r.site.live).length + "）";
+    document.getElementById("done-count").textContent = onSite.length;
+    document.getElementById("live-count").textContent = "（うち、公開中のサイトで確かめた薬 " + onSite.filter((r) => r.site.live).length
+      + "。ランク外の " + onSite.filter((r) => r.out).length + " を含む）　準備中の薬 " + ROWS.filter((r) => !r.site).length;
     document.getElementById("bar").replaceChildren(...STATUSES.filter((s) => counts[s] > 0).map((s) =>
       el("span", { style: `width:${100 * counts[s] / RANKED.length}%;background:var(${STATUS_VAR[s]})`, title: s + " " + counts[s] })));
     document.getElementById("legend").replaceChildren(...STATUSES.map((s) =>
@@ -277,7 +278,7 @@
         siteBlock(r.site, r.why, r.name, r.id),
         el("div", { class: "check" }, [el("b", { text: "確かめること: " }), document.createTextNode(r.memo || "なし")]),
         c["薬剤師の確認（日付）"] ? el("p", { class: "memo", text: "薬剤師の確認: " + c["薬剤師の確認（日付）"] }) : null,
-        el("details", { class: "draft" }, [el("summary", { text: "調べたときの下書き（AI のメモ）を開く" }), dl]),
+        Object.keys(c).length ? el("details", { class: "draft" }, [el("summary", { text: "調べたときの下書き（AI のメモ）を開く" }), dl]) : null,
       ]));
       return d;
     }
@@ -319,13 +320,15 @@
     const w = why || { taste: [], point: [], foods: {}, tips: [] };
     const dl = el("dl");
     const add = (k, nodes) => dl.append(el("dt", { text: k }), el("dd", {}, nodes));
-    add("味", [srcLine(s.taste.split("・").join("、"), w.taste)]);
-    if (s.point) add("画面の一文", [srcLine(s.point, w.point)]);
-    const foodRows = (foods) => foods.length ? foods.map((x) => srcLine(x, w.foods[x])) : [document.createTextNode("なし")];
+    // はじめからサイトにある薬の多くは、中身ごとの出どころをまだ書いていない（w.none）。そのときは中身だけを並べる
+    const line = (text, list) => w.none ? el("div", { class: "src-line" }, [el("span", { class: "what", text })]) : srcLine(text, list);
+    add("味", [line(s.taste.split("・").join("、"), w.taste)]);
+    if (s.point) add("画面の一文", [line(s.point, w.point)]);
+    const foodRows = (foods) => foods.length ? foods.map((x) => line(x, w.foods[x])) : [document.createTextNode("なし")];
     add("◎ 混ぜると飲みやすい", foodRows(s.easy));
     add("○ 混ぜても大丈夫", foodRows(s.good));
     add("× 混ぜないほうがいい", foodRows(s.avoid));
-    add("コツ", s.tips.length ? s.tips.map((t, i) => srcLine(t, w.tips[i])) : [document.createTextNode("なし")]);
+    add("コツ", s.tips.length ? s.tips.map((t, i) => line(t, w.tips[i])) : [document.createTextNode("なし")]);
     if (w.note) dl.append(el("dd", { class: "src-note", text: "※ " + w.note }));
     dl.append(el("dt", { text: "参考にした資料" }), el("dd", {}, [el("ul", {}, s.refs.map((x) =>
       el("li", {}, [x.url ? el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.name }) : document.createTextNode(x.name + "（本。URL なし）")])))]));
@@ -336,6 +339,7 @@
       el("h3", { text: "サイトに出ている内容" }),
       el("div", { class: "live " + live[0], text: live[1] }),
       s.img ? zuBlock(name, rank) : null,
+      w.none ? el("p", { class: "src-legend", text: "この薬は、中身の1つずつの出どころを、まだ書いていません。下の「参考にした資料」をもとにまとめた内容です。" }) :
       el("p", { class: "src-legend", text: "← のあとが出どころ（資料と、その資料の印）。印: 帯広 ○飲みやすい △ふつう ×飲みにくい ／ 飯塚 ○問題なし ×飲みにくくなる ／ 成育 ●飲みやすい ▲変わらない ×飲みにくい ／ くるみ薬局 ○のみやすくなる・問題ない ／ 北信は印がなく、言葉（飲みやすい・飲みにくい）" }),
       dl,
     ]);

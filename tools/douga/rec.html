@@ -23,8 +23,10 @@ function pic(name, x, y, s, zoom, alpha = 1) {
   g.restore();
 }
 function steps(n) {
-  for (let i = 1; i <= 3; i++) {
-    const x = 360 + (i - 2) * 130, on = i === n, done = i < n;
+  // 手順の丸の数は、ふつう3つ。2つだけの動画（食べ物に混ぜる）は、cfg に "steps": 2 と書く
+  const N = (CFG && CFG.steps) || 3;
+  for (let i = 1; i <= N; i++) {
+    const x = 360 + (i - (N + 1) / 2) * 130, on = i === n, done = i < n;
     g.fillStyle = on ? C.gold : done ? "#9cc7bf" : "#e3ddd0";
     g.beginPath(); g.arc(x, 100, on ? 46 : 28, 0, Math.PI * 2); g.fill();
     if (on || done) text(done ? "✓" : String(i), x, 103, on ? 50 : 28, "#fff");

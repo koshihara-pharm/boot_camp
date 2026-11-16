@@ -18,6 +18,9 @@ const SHORT = {
   hokushin: "北信 2021", sawacillinIF: "インタビューフォーム",
   mucosolvanLabel: "添付文書", allelockLabel: "添付文書", clarisLabel: "添付文書",
   pmdaQ8: "PMDA Q8", handbook: "本（服用介助ハンドブック）", pharmacist: "薬剤師（ユーザー）",
+  movicolLabel: "添付文書", movicolEA: "EAファーマ", movicolMochida: "持田製薬",
+  levoMitoyo: "三豊総合病院の論文 2025", towaFex: "東和薬品 2018", marugameFex: "丸亀市薬剤師会 2020", chantoFex: "CHANTO 2020",
+  shinchidai: "新知台耳鼻咽喉科 2020",
 };
 
 // data.js の why（[資料のキー, 印や言葉] の並び）を、短い名前・URL つきにする
@@ -60,6 +63,13 @@ async function liveNames() {
     rows.push({ id: "x" + (++outNo), rank: null, out: true, rankLabel, name, ing, cat, src, status, memo });
   }
 
+  // 2026-11-14: はじめからサイトにある薬の行は、文書の下のほうにある。図の名前（id）を決めたあとで、順位の順に並べ直す。
+  // ランク外は、サイトに出ている薬を先にする
+  const order = new Map(rows.map((r, i) => [r, i]));
+  rows.sort((a, b) => (a.out ? 1 : 0) - (b.out ? 1 : 0)
+    || (a.out ? (a.status === "反映した" ? 0 : 1) - (b.status === "反映した" ? 0 : 1) : a.rank - b.rank)
+    || order.get(a) - order.get(b));
+
   const cards = {};
   for (const m of md.matchAll(/^### (.+?)\n([\s\S]*?)(?=^### |(?![\s\S]))/gm)) {
     const fields = {};
@@ -80,8 +90,9 @@ async function liveNames() {
       const foods = [...(f.easy ? f.easy.foods : []), ...(f.good ? f.good.foods : []), ...(f.avoid ? f.avoid.foods : [])];
       const missing = foods.filter((x) => !(w.foods && w.foods[x]));
       if (!w.taste) missing.unshift("味");
-      if (missing.length) console.log(`出どころ（why）が無い: ${r.name}: ${missing.join("、")}`);
+      if (f.why && missing.length) console.log(`出どころ（why）が無い: ${r.name}: ${missing.join("、")}`);
       r.why = {
+        none: !f.why,
         note: w.note || "",
         taste: src(w.taste, R),
         point: src(w.point, R),
@@ -113,6 +124,10 @@ async function liveNames() {
     .replace("__COUNT__", String(rows.filter((r) => !r.out).length));
   fs.writeFileSync(OUT, page);
   const onSite = rows.filter((r) => r.site);
+  const noWhy = onSite.filter((r) => r.why.none).map((r) => r.name);
+  console.log("中身ごとの出どころ（why）をまだ書いていない薬:", noWhy.length, noWhy.join("、"));
+  const noRow = data.DRUGS.filter((d) => !rows.some((r) => r.name === d.name)).map((d) => d.name);
+  if (noRow.length) console.log("！ サイトにあるのに、docs/24 に行が無い薬:", noRow.join("、"));
   // Artifact に出すときは、図を「zu/d順位.png」の名前で一緒に送る（Artifact からは ../card/ が読めないため）。その対応を書き出す
   const zu = Object.fromEntries(onSite.filter((r) => r.site.img).map((r) => ["zu/" + r.id + ".png", "card/drug/" + r.name + ".png"]));
   console.log("Artifact に一緒に送る図:", JSON.stringify(zu));

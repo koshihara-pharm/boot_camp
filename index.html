@@ -864,27 +864,30 @@
   }
 
   // 飲ませ方の動画（video/年齢-やり方.mp4。作り方は docs/28、道具は tools/douga）。1〜3歳と4歳からの6本（2026-11-06〜10）
-  // まだ公開しない（2026-11-10 ユーザーの判断）。動画は GitHub に上げず（.gitignore の video/）、ボタンも手元（localhost）で開いたときだけ出す
+  // 2026-11-16 に公開した（ユーザーの指示「本番に出してほしい」。11-10 の「まだ公開しない」から変えた）。前は、ボタンを手元（localhost）でだけ出していた
+  // GitHub に上げるのは、サイトに出す動画（video/名前-usagi.mp4）とサムネイル（video/thumb）だけ。ほかの動画は上げない（.gitignore）
   // 画像と同じ画面に出す。自動では始めず、▶ を押すと始まる。閉じると止まる
   // ?v= は動画を差しかえたら変える（ブラウザが前の動画を覚えたまま出さないように）
-  // 2026-11-13 に、うさぎが丸い枠で解説するもの（名前-usagi.mp4。docs/28 の「うさぎの解説つき」）に差しかえた（ユーザーの判断）。もとの動画（名前.mp4）は残してある
-  const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
-  const VIDEOS = !LOCAL ? {} : {
-    "toddler-water": "video/toddler-water-usagi.mp4?v=20261113",
-    "toddler-fukuro": "video/toddler-fukuro-usagi.mp4?v=20261113",
-    "toddler-dango": "video/toddler-dango-usagi.mp4?v=20261113",
-    "kid-water": "video/kid-water-usagi.mp4?v=20261113",
-    "kid-fukuro": "video/kid-fukuro-usagi.mp4?v=20261113",
-    "kid-otona": "video/kid-otona-usagi.mp4?v=20261113",
-    // 0〜1歳（2026-11-14 から。赤ちゃんの絵は、抱き方とスポイトの向きを薬剤師が見てから公開する）
-    "baby-spoit": "video/baby-spoit-usagi.mp4?v=20261114",
-    "baby-nipple": "video/baby-nipple-usagi.mp4?v=20261114",
-    "baby-dango": "video/baby-dango-usagi.mp4?v=20261114",
+  // 2026-11-13 に、うさぎが丸い枠で解説するもの（名前-usagi.mp4。docs/28 の「うさぎの解説つき」）に差しかえた（ユーザーの判断）。もとの動画（名前.mp4）は手元に残してある
+  const VIDEOS = {
+    "toddler-water": "video/toddler-water-usagi.mp4?v=20261116",
+    "toddler-fukuro": "video/toddler-fukuro-usagi.mp4?v=20261116",
+    "toddler-dango": "video/toddler-dango-usagi.mp4?v=20261116",
+    "kid-water": "video/kid-water-usagi.mp4?v=20261116",
+    "kid-fukuro": "video/kid-fukuro-usagi.mp4?v=20261116",
+    "kid-otona": "video/kid-otona-usagi.mp4?v=20261116",
+    // 0〜1歳（2026-11-14 から）
+    "baby-spoit": "video/baby-spoit-usagi.mp4?v=20261116",
+    "baby-nipple": "video/baby-nipple-usagi.mp4?v=20261116",
+    "baby-dango": "video/baby-dango-usagi.mp4?v=20261116",
+    // 食べ物に混ぜる（1〜3歳と4歳からで、同じ動画。絵は手だけ。混ぜる食べ物は薬ごとに違うので、食べ物と薬の組み合わせは言わない）
+    "toddler-mix": "video/mix-usagi.mp4?v=20261116",
+    "kid-mix": "video/mix-usagi.mp4?v=20261116",
   };
   // 動画の長さ（ボタンに「約◯秒」と出す）。書いていない動画は約40秒（最初の6本は 37〜43秒、0〜1歳のお薬だんごは 40秒）
-  const VIDEO_SEC = { "baby-spoit": 50, "baby-nipple": 50 };
-  // 動画のサムネイル（表紙の絵）。動画と同じく video/ の中に置き、GitHub に上げない（2026-11-13）
-  const videoThumb = (name) => `video/thumb/${name}.jpg?v=20261113`;
+  const VIDEO_SEC = { "baby-spoit": 50, "baby-nipple": 50, "toddler-mix": 35, "kid-mix": 35 };
+  // 動画のサムネイル（表紙の絵。video/thumb。動画から1コマ切り出したもの）
+  const videoThumb = (name) => `video/thumb/${name}.jpg?v=20261116`;
   function openVideo(title, src, label, poster) {
     const dlg = document.getElementById("card-view");
     dlg.querySelector(".card-title").textContent = title;
