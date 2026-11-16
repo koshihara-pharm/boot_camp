@@ -348,7 +348,8 @@ const FOOD_IMG = { "飲むヨーグルト": "nomu-yogurt", "コーンスープ":
 const FACT_REFS = {
   pmdaQ8: { name: "PMDA くすりQ&A「Q8 赤ちゃんに医師から処方された粉薬を飲ませるよい方法を教えてください。」", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
   clarisLabel: { name: "クラリスドライシロップ10%小児用 添付文書（大正製薬、2026年3月改訂 第6版）", url: "https://www.pmda.go.jp/PmdaSearch/iyakuDetail/400059_6149003F1031_1_39" },
-  iizuka: { name: "飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」（2016年7月改訂）", url: "https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf" },
+  // 2026-11-16: 元の URL（https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf）が開けなくなったので、リンクを外して名前だけを出す（ユーザーの指示）。表の画像はユーザーの手元にあり、対応表（Artifact）で見られる
+  iizuka: { name: "飯塚病院 薬剤部「散剤と飲食物の飲み合わせ（味）一覧」（2016年7月改訂）" },
   ncchd: { name: "国立成育医療研究センター 薬剤部「粉薬と服薬補助食品の飲み合わせ」（2018年）", url: "https://www.ncchd.go.jp/hospital/about/section/medicine/nomiawase.pdf" },
   kurumiMix: { name: "くるみ薬局「粉薬と食品の味ののみ合わせ一覧」（薬剤師の記事。2018-08-08）", url: "https://kurumi-pharmacy.jp/2018/08/08/%e7%b2%89%e8%96%ac%e3%81%a8%e9%a3%9f%e5%93%81%e3%81%ae%e5%91%b3%e3%81%ae%e3%81%ae%e3%81%bf%e5%90%88%e3%82%8f%e3%81%9b%e4%b8%80%e8%a6%a7/" },
   // 2026-11-09 に足した。帯広の表の記号: ○ 飲みやすい、△ ふつう・変わらない、× 飲みにくい（成育の ●▲× と同じ意味なので、○ を easy、△ を good にした）
@@ -1194,9 +1195,9 @@ const FACTS = {
     checked: "2026-10-31 に1つの病院の資料をもとにまとめました（資料は1つだけ。薬剤師の確認待ち）",
     // 中身ごとの出どころ（2026-11-16 に、飯塚（2026-10-13 に見比べた版）・成育（2018年の PDF）・くるみ薬局（2018-08-08）の表と照らし合わせて書いた。サイトの画面には出さない）
     why: {
-      note: "飯塚の表の「重質酸化マグネシウム」の行をもとにした（2026-10-31。コミット b276d5b）。飯塚の表の PDF は、2026-11-16 に元の URL が開けなくなっていて、この行は見直せていない",
-      taste: [["iizuka", "重質酸化マグネシウムの行。無味"]],
-      point: [["iizuka", "重質酸化マグネシウムの行。無味"]],
+      note: "飯塚の表の「重質酸化マグネシウム」の行をもとにした（2026-10-31）。2026-11-16 に、ユーザーがくれた表の画像で、味（無味・無香料）と12の飲食物すべて ○ を見直した",
+      taste: [["iizuka", "重質酸化マグネシウムの行。無味・無香料"]],
+      point: [["iizuka", "重質酸化マグネシウムの行。無味・無香料"]],
       foods: {
         "アイスクリーム": [["iizuka", "○（重質酸化マグネシウムの行）"]],
         "プリン": [["iizuka", "○（重質酸化マグネシウムの行）"]],

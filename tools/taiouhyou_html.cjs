@@ -23,9 +23,15 @@ const SHORT = {
   shinchidai: "新知台耳鼻咽喉科 2020",
 };
 
+// サイトではリンクを外したが、対応表（Artifact）では手元の写しを見られる資料。Artifact に shiryou/ のファイルを一緒に送る
+// 2026-11-16: 飯塚の表の元の URL が開けなくなった。ユーザーがくれた表の画像のページ（shiryou/iizuka.html）へ行く
+const LOCAL = { iizuka: "shiryou/iizuka.html" };
+const IIZUKA_OLD = "https://aih-net.com/yakuzaibu/kusurinomame/pdf/tekihihtou.pdf";
+const urlOf = (k, refs) => (refs[k] && refs[k].url) || LOCAL[k] || "";
+
 // data.js の why（[資料のキー, 印や言葉] の並び）を、短い名前・URL つきにする
 function src(list, refs) {
-  return (list || []).map(([k, mark]) => ({ short: SHORT[k] || (refs[k] ? refs[k].name : k), url: refs[k] ? refs[k].url || "" : "", mark: mark || "" }));
+  return (list || []).map(([k, mark]) => ({ short: SHORT[k] || (refs[k] ? refs[k].name : k), url: urlOf(k, refs), mark: mark || "" }));
 }
 
 // data.js の中の DRUGS・FACTS・FACT_REFS を取り出す
@@ -46,7 +52,8 @@ async function liveNames() {
 }
 
 (async () => {
-  const md = fs.readFileSync(SRC, "utf8").replace(/\r\n?/g, "\n");
+  // カードに書いた飯塚の表の古い URL も、手元の写しのページへ向ける
+  const md = fs.readFileSync(SRC, "utf8").replace(/\r\n?/g, "\n").split(IIZUKA_OLD).join(LOCAL.iizuka);
 
   const rows = [];
   for (const m of md.matchAll(/^\| (\d+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]+) \| ([^|]*) \|$/gm)) {
@@ -106,7 +113,7 @@ async function liveNames() {
         good: f.good ? f.good.foods : [],
         avoid: f.avoid ? f.avoid.foods : [],
         tips: f.tips || [],
-        refs: f.refs.map((k) => data.FACT_REFS[k]).filter(Boolean),
+        refs: f.refs.filter((k) => data.FACT_REFS[k]).map((k) => ({ ...data.FACT_REFS[k], url: urlOf(k, data.FACT_REFS) })),
         live: live ? live.has(r.name) : null,
         // サイトでの見え方の図（薬ごとの保存用の画像。card/make.cjs が data.js から作る）。画像があるときだけ出す
         img: fs.existsSync(path.join(ROOT, "card", "drug", r.name + ".png")),
