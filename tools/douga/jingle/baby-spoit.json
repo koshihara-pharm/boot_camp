@@ -1,0 +1,1650 @@
+{
+ "format": "jinglescript/1",
+ "title": "飲ませ方の動画の曲（baby-spoit）",
+ "tempo": 120,
+ "length": {
+  "seconds": 53.97
+ },
+ "seed": 1,
+ "master": {
+  "reverb": "room",
+  "loudness": -14,
+  "fadeOut": 2
+ },
+ "cues": {
+  "title": {
+   "seconds": 0.1
+  },
+  "step1": {
+   "seconds": 6.6
+  },
+  "step2": {
+   "seconds": 25.5
+  },
+  "step3": {
+   "seconds": 35.2
+  },
+  "praise": {
+   "seconds": 46.25
+  },
+  "end": {
+   "seconds": 50.75
+  }
+ },
+ "tracks": [
+  {
+   "instrument": "ukulele",
+   "name": "和音",
+   "gain": -3,
+   "notes": [
+    {
+     "at": 0,
+     "chord": "C",
+     "strum": "D---D---",
+     "vel": 0.6
+    },
+    {
+     "at": 4,
+     "chord": "G",
+     "strum": "D---D---",
+     "vel": 0.6
+    },
+    {
+     "at": 8,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 12,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 16,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 20,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 24,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 28,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 32,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 36,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 40,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 44,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 48,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 52,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 56,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 60,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 64,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 68,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 72,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 76,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 80,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 84,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 88,
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 92,
+     "chord": "F",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 96,
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 100,
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.6
+    },
+    {
+     "at": 104,
+     "chord": "C",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.8
+    }
+   ]
+  },
+  {
+   "instrument": "marimba",
+   "name": "ベース",
+   "gain": -4,
+   "notes": [
+    {
+     "at": 0,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 2,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 4,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 6,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 8,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 10,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 12,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 14,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 16,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 18,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 20,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 22,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 24,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 26,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 28,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 30,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 32,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 34,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 36,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 38,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 40,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 42,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 44,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 46,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 48,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 50,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 52,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 54,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 56,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 58,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 60,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 62,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 64,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 66,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 68,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 70,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 72,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 74,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 76,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 78,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 80,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 82,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 84,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 86,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 88,
+     "pitch": "A2",
+     "vel": 0.7
+    },
+    {
+     "at": 90,
+     "pitch": "E3",
+     "vel": 0.55
+    },
+    {
+     "at": 92,
+     "pitch": "F2",
+     "vel": 0.7
+    },
+    {
+     "at": 94,
+     "pitch": "C3",
+     "vel": 0.55
+    },
+    {
+     "at": 96,
+     "pitch": "C3",
+     "vel": 0.7
+    },
+    {
+     "at": 98,
+     "pitch": "G3",
+     "vel": 0.55
+    },
+    {
+     "at": 100,
+     "pitch": "G2",
+     "vel": 0.7
+    },
+    {
+     "at": 102,
+     "pitch": "D3",
+     "vel": 0.55
+    },
+    {
+     "at": 104,
+     "pitch": "C3",
+     "vel": 0.7
+    }
+   ]
+  },
+  {
+   "instrument": "marimba",
+   "name": "メロディー",
+   "gain": 0,
+   "notes": [
+    {
+     "at": 8,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 8.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 9,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 10,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 10.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 11,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 11.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 12,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 13,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 13.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 14,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 15,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 15.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 16,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 16.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 17,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 18,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 18.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 19,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 20,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 20.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 21,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 22,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 22.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 23,
+     "pitch": "G3",
+     "vel": 0.8
+    },
+    {
+     "at": 24,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 24.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 25,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 26,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 26.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 27,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 27.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 28,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 29,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 29.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 30,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 31,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 31.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 32,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 32.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 33,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 34,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 34.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 35,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 36,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 36.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 37,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 38,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 38.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 39,
+     "pitch": "G3",
+     "vel": 0.8
+    },
+    {
+     "at": 40,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 40.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 41,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 42,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 42.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 43,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 43.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 44,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 45,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 45.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 46,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 47,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 47.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 48,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 48.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 49,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 50,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 50.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 51,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 52,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 52.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 53,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 54,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 54.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 55,
+     "pitch": "G3",
+     "vel": 0.8
+    },
+    {
+     "at": 56,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 56.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 57,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 58,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 58.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 59,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 59.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 60,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 61,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 61.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 62,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 63,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 63.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 64,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 64.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 65,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 66,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 66.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 67,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 68,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 68.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 69,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 70,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 70.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 71,
+     "pitch": "G3",
+     "vel": 0.8
+    },
+    {
+     "at": 72,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 72.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 73,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 74,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 74.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 75,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 75.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 76,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 77,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 77.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 78,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 79,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 79.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 80,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 80.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 81,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 82,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 82.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 83,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 84,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 84.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 85,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 86,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 86.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 87,
+     "pitch": "G3",
+     "vel": 0.8
+    },
+    {
+     "at": 88,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 88.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 89,
+     "pitch": "A4",
+     "vel": 0.8
+    },
+    {
+     "at": 90,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 90.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 91,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 91.5,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 92,
+     "pitch": "F4",
+     "vel": 0.8
+    },
+    {
+     "at": 93,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 93.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 94,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 95,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 95.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 96,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 96.5,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 97,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 98,
+     "pitch": "E4",
+     "vel": 0.8
+    },
+    {
+     "at": 98.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 99,
+     "pitch": "C4",
+     "vel": 0.8
+    },
+    {
+     "at": 100,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 100.5,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 101,
+     "pitch": "G4",
+     "vel": 0.8
+    },
+    {
+     "at": 102,
+     "pitch": "D4",
+     "vel": 0.8
+    },
+    {
+     "at": 102.5,
+     "pitch": "B3",
+     "vel": 0.8
+    },
+    {
+     "at": 103,
+     "pitch": "G3",
+     "vel": 0.8
+    }
+   ]
+  },
+  {
+   "instrument": "glockenspiel",
+   "name": "きらきら",
+   "gain": -9,
+   "notes": [
+    {
+     "at": 11.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 15.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 19,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 23,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 27.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 31.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 35,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 39,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 43.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 47.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 51,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 55,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 59.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 63.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 67,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 71,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 75.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 79.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 83,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 87,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 91.5,
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": 95.5,
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": 99,
+     "pitch": "C5",
+     "vel": 0.5
+    },
+    {
+     "at": 103,
+     "pitch": "G4",
+     "vel": 0.5
+    },
+    {
+     "at": 104,
+     "pitch": "C6",
+     "vel": 0.6
+    }
+   ]
+  },
+  {
+   "instrument": "clap",
+   "name": "手拍子",
+   "gain": -12,
+   "notes": [
+    {
+     "at": 9,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 11,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 13,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 15,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 17,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 19,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 21,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 23,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 25,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 27,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 29,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 31,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 33,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 35,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 37,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 39,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 41,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 43,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 45,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 47,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 49,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 51,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 53,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 55,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 57,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 59,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 61,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 63,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 65,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 67,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 69,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 71,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 73,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 75,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 77,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 79,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 81,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 83,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 85,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 87,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 89,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 91,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 93,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 95,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 97,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 99,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 101,
+     "vel": 0.5,
+     "variant": "hands"
+    },
+    {
+     "at": 103,
+     "vel": 0.5,
+     "variant": "hands"
+    }
+   ]
+  },
+  {
+   "instrument": "pop",
+   "name": "手順の頭",
+   "gain": -3,
+   "reverb": false,
+   "notes": [
+    {
+     "at": "step1",
+     "pitch": "E6",
+     "vel": 0.8
+    },
+    {
+     "at": "step2",
+     "pitch": "G6",
+     "vel": 0.8
+    },
+    {
+     "at": "step3",
+     "pitch": "C7",
+     "vel": 0.8
+    }
+   ]
+  },
+  {
+   "instrument": "applause",
+   "name": "ほめる",
+   "gain": -8,
+   "notes": [
+    {
+     "at": "praise+1",
+     "vel": 0.7
+    }
+   ]
+  }
+ ]
+}
