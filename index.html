@@ -369,8 +369,6 @@
     <h2 class="section-title">どの薬でも気をつけること</h2>
     <ul class="tips">
       <li>混ぜたら、すぐに飲ませる。時間がたつと苦くなる薬があります</li>
-      <li>熱いものには混ぜない</li>
-      <li>酸っぱいもの（オレンジジュース、スポーツ飲料、乳酸菌飲料、ヨーグルトなど）は、苦くなったり効き目が弱まる薬があります</li>
       <li>1歳未満の赤ちゃんに、ハチミツは使えません</li>
       <li>出どころ: <a href="https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" target="_blank" rel="noopener">PMDA くすりQ&amp;A</a></li>
     </ul>
@@ -413,7 +411,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-16b"></script>
+<script src="data.js?v=2026-11-17a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -570,6 +568,7 @@
     } else if (all) {
       button.append(el("span", { class: "drug-name", text: d.name }));
       if (ownGenericRow(d)) button.append(el("span", { class: "drug-meta", text: d.generic }));
+      else if (kampoYomi(d)) button.append(el("span", { class: "drug-meta", text: kampoYomi(d) }));
     } else {
       button.append(el("span", { class: "drug-name", text: d.name }), el("span", { class: "drug-meta", text: "味: " + (FACTS[d.name].taste || d.taste) }));
     }
