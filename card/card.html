@@ -129,7 +129,8 @@
     // 絵文字のかわりに、サイトと同じ平らな絵で出す（2026-11-07）
     const ICON_FILE = { "🍼": "baby-bottle", "🥄": "spoon", "✂️": "scissors", "☝️": "index-pointing-up", "💧": "droplet", "🍮": "custard", "🥛": "glass-of-milk",
       "🍨": "ice-cream", "☕": "hot-beverage", "🍵": "teacup", "🥣": "bowl-with-spoon", "🍧": "shaved-ice", "🍎": "red-apple", "🍊": "tangerine",
-      "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box" };
+      "🥤": "cup-with-straw", "🍫": "chocolate-bar", "🧃": "beverage-box",
+      "🍙": "rice-ball", "🫘": "beans", "🍓": "strawberry", "🍁": "maple-leaf" };
     const icon = (e) => ICON_FILE[e] ? `<img class="ic" src="../img/fluent/${ICON_FILE[e]}.svg" alt="">` : (e ? e + " " : "");
     const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
     const way = (key, hard) => {
@@ -154,6 +155,8 @@
       "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
       "お茶": "🍵", "ヨーグルト": "🥣", "ゼリー": "🍧", "りんごジュース": "🍎", "オレンジジュース": "🍊",
       "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
+      // 2026-11-17: ヨクイニンのランキングの食べ物（サイトの index.html と同じ）
+      "のりの佃煮": "🍙", "はとむぎきなこ": "🫘", "いちごジャム": "🍓", "メープルシロップ": "🍁",
     };
     const chips = (foods) => `<div class="chips">${foods.map((x) => `<span>${FOOD_IMG[x] ? `<img class="ic" src="../img/food/${FOOD_IMG[x]}.png" alt="">` : icon(FOOD_EMOJI[x] || "・")}${esc(x)}</span>`).join("")}</div>`;
     const grp = (title, cls, g) => g ? `<div class="grp ${cls}"><h3>${title}</h3>${chips(g.foods)}${g.text ? `<p>${esc(g.text)}</p>` : ""}</div>` : "";

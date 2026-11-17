@@ -225,11 +225,18 @@
     while ((m = re.exec(text))) {
       if (m.index > last) out.push(document.createTextNode(text.slice(last, m.index)));
       const url = m[2] || m[3];
-      out.push(el("a", { href: url, target: "_blank", rel: "noopener", text: m[1] || url }));
+      out.push(el("a", { href: url, target: "_blank", rel: "noopener", text: m[1] || (url.startsWith("shiryou/") ? "表の画像" : url) }));
       last = re.lastIndex;
     }
     if (last < text.length) out.push(document.createTextNode(text.slice(last)));
-    return out;
+    return out.flatMap((n) => n.nodeType === 3 ? iizukaLinks(n.textContent) : [n]);
+  }
+
+  // 飯塚病院の表は元の URL が開けなくなったので、文の中の「飯塚」を押すと、手元の表の画像（shiryou/iizuka.html）が開くようにする（2026-11-17 ユーザーの指示）
+  function iizukaLinks(text) {
+    return text.split(/(飯塚(?:病院)?)/).filter((t) => t !== "").map((t) => /^飯塚/.test(t)
+      ? el("a", { href: "shiryou/iizuka.html", target: "_blank", rel: "noopener", text: t })
+      : document.createTextNode(t));
   }
 
   function chips(target, values, current, onPick) {
@@ -258,7 +265,7 @@
     const tags = el("div", { class: "tags" }, [
       el("span", { class: "tag", text: r.cat }),
       r.src === "表に無し" ? el("span", { class: "tag none", text: "病院の表に無し" })
-        : r.src && r.src !== "未確認" ? el("span", { class: "tag src", text: "資料: " + r.src }) : null,
+        : r.src && r.src !== "未確認" ? el("span", { class: "tag src" }, iizukaLinks("資料: " + r.src)) : null,
     ]);
     d.append(el("summary", {}, [
       r.out ? el("div", { class: "rank out" }, [document.createTextNode("外"), el("small", { text: /^\d/.test(r.rankLabel) ? r.rankLabel : "" })])
@@ -329,7 +336,7 @@
     add("○ 混ぜても大丈夫", foodRows(s.good));
     add("× 混ぜないほうがいい", foodRows(s.avoid));
     add("コツ", s.tips.length ? s.tips.map((t, i) => line(t, w.tips[i])) : [document.createTextNode("なし")]);
-    if (w.note) dl.append(el("dd", { class: "src-note", text: "※ " + w.note }));
+    if (w.note) dl.append(el("dd", { class: "src-note" }, iizukaLinks("※ " + w.note)));
     dl.append(el("dt", { text: "参考にした資料" }), el("dd", {}, [el("ul", {}, s.refs.map((x) =>
       el("li", {}, [x.url ? el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.name }) : document.createTextNode(x.name + "（URL なし）")])))]));
     const live = s.live === true ? ["yes", "公開中のサイトに出ています"]
