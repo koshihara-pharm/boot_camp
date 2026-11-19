@@ -152,6 +152,10 @@
   .iz-body figcaption { font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
   .iz-scroll { overflow-x: auto; }
   .iz-scroll img { display: block; width: 100%; min-width: 640px; height: auto; background: #fff; border-radius: 6px; }
+  /* 取りこぼしの対応表へのリンク（2026-11-19） */
+  .jump { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+  .jump a { display: inline-block; font-weight: 700; color: var(--card); background: var(--accent); border-radius: 999px; padding: 7px 16px; text-decoration: none; }
+  .jump-note { font-size: 0.8rem; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -159,6 +163,8 @@
   <header>
     <h1>薬の対応表（サイトの薬と、準備中の薬）</h1>
     <p class="lead">サイトに出ている薬のすべてと、「準備中」の薬を、子ども（0〜9歳）の処方の多い順に並べています。サイトに出ている薬（状態が「反映した」）は、カードを押すと、サイトに出ている内容と図が見られます。準備中の薬は、上から順に調べて足していきます。下のほうに、ランク外（処方の上位60の外）の薬も、欄を分けて並べています。元の表は docs/24_junbichu_taiouhyou.md、サイトの中身は data.js（ここは見るためのページ）。</p>
+    <!-- 2026-11-19: 公開中の薬の取りこぼし（資料の印との食い違いなど）を1件ずつ決めるページ。別の Artifact（ユーザーの指示「対応表からはリンクでとべるように」） -->
+    <p class="jump"><a href="https://claude.ai/artifact/A3TmvMMFF7LBEKF3W5hraB" target="_blank" rel="noopener">取りこぼしの対応表を開く<span aria-hidden="true"> →</span></a><span class="jump-note">公開中の薬と、資料の印との食い違いを、1件ずつ決めるページ</span></p>
   </header>
 
   <section class="progress" aria-label="進み具合">
