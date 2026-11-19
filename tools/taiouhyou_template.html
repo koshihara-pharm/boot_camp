@@ -23,6 +23,7 @@
     --s-checked: #2f7d4f;   --s-checked-bg: #e3f3e8;
     --s-done: #ffffff;      --s-done-bg: #1f7a70;
     --s-hold: #7a3d9c;      --s-hold-bg: #f2e7f8;
+    --s-study: #8a4b12;     --s-study-bg: #fbe9d7;
     --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
     --font-body: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
   }
@@ -30,14 +31,14 @@
     :root:not([data-theme="light"]) {
       --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
       --s-todo: #b9c4c1; --s-todo-bg: #26302e; --s-search: #9cc0f0; --s-search-bg: #1f2b3d; --s-draft: #f2c14e; --s-draft-bg: #3a3120;
-      --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f;
+      --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f; --s-study: #f0b07a; --s-study-bg: #3a2a1c;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936;
     --s-todo: #b9c4c1; --s-todo-bg: #26302e; --s-search: #9cc0f0; --s-search-bg: #1f2b3d; --s-draft: #f2c14e; --s-draft-bg: #3a3120;
-    --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f;
+    --s-checked: #8fd6a9; --s-checked-bg: #1d3a2a; --s-done: #0f1a19; --s-done-bg: #6cc7b9; --s-hold: #d4a9ef; --s-hold-bg: #35263f; --s-study: #f0b07a; --s-study-bg: #3a2a1c;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
@@ -88,6 +89,7 @@
   .st-確認済み { color: var(--s-checked); background: var(--s-checked-bg); }
   .st-反映した { color: var(--s-done); background: var(--s-done-bg); }
   .st-保留 { color: var(--s-hold); background: var(--s-hold-bg); }
+  .st-調査中 { color: var(--s-study); background: var(--s-study-bg); }
   .body { padding: 0 12px 12px; display: grid; gap: 6px; }
   .next { font-size: 0.82rem; background: var(--bg); border-radius: 10px; padding: 7px 10px; }
   .next b { color: var(--accent); }
@@ -194,14 +196,16 @@
 <script>
   const ROWS = __DATA__;
   const RANKED = ROWS.filter((r) => !r.out);
-  const STATUSES = ["未着手", "資料さがし", "下書きあり", "確認済み", "反映した", "保留"];
-  const STATUS_VAR = { "未着手": "--s-todo", "資料さがし": "--s-search", "下書きあり": "--s-draft", "確認済み": "--s-checked", "反映した": "--s-done-bg", "保留": "--s-hold" };
+  const STATUSES = ["未着手", "資料さがし", "下書きあり", "確認済み", "反映した", "調査中", "保留"];
+  const STATUS_VAR = { "未着手": "--s-todo", "資料さがし": "--s-search", "下書きあり": "--s-draft", "確認済み": "--s-checked", "反映した": "--s-done-bg", "調査中": "--s-study", "保留": "--s-hold" };
   const NEXT = {
     "未着手": "AI が資料（病院の表、くるみ薬局の一覧、添付文書）に載っているかを見る",
     "資料さがし": "AI が資料をさがしている。開けない資料は薬剤師に見てもらう",
     "下書きあり": "薬剤師が下書きを確かめる",
     "確認済み": "AI がサイト（data.js）に足して、スマホで確かめる",
     "反映した": "サイトに出ている",
+    // 2026-11-19 に足した（ユーザーの指示「タベジールは、調査中にステータスかえておいて」）
+    "調査中": "薬剤師が調べている。分かったら、薬剤師が AI に伝える",
     "保留": "見直す時期をメモに書く",
   };
   const FIELDS = ["味", "混ぜると飲みやすい（◎）", "混ぜても大丈夫（○）", "混ぜないほうがいい（×）と理由", "コツ", "資料（名前と年）", "薬剤師の確認（日付）"];
