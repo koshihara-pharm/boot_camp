@@ -1,0 +1,202 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>紙のコマ撮り風の飲ませ方（1〜3歳・少しの水で溶かす）</title>
+<style>
+  @font-face { font-family: "Zen"; font-weight: 900; src: url("../zero/fonts/ZenMaruGothic-Black.ttf"); }
+  @font-face { font-family: "Zen"; font-weight: 700; src: url("../zero/fonts/ZenMaruGothic-Bold.ttf"); }
+  @font-face { font-family: "Zen"; font-weight: 500; src: url("../zero/fonts/ZenMaruGothic-Medium.ttf"); }
+  html, body { margin: 0; background: #000; }
+  canvas { display: block; }
+</style>
+<canvas id="c" width="720" height="1280"></canvas>
+<script>
+// 飲ませ方の動画「1〜3歳・少しの水で溶かす」を、紙のコマ撮り風で（2026-11-17。boot_camp の docs/28）
+// 場面の時刻・字幕・読み上げは、今の動画（tools/douga/cfg/toddler-water.json）と同じ。絵と動きだけが違う
+// setup(tl) に場面の表（始まりの時刻、長さ、字幕、手順の番号）を渡し、seek(t) で t 秒の1コマを描く
+const W = 720, H = 1280, c = document.getElementById("c"), g = c.getContext("2d");
+const DIR = "../../boot_camp/tools/douga/work/";
+const L = {}; let TL = null;
+const COL = { ink: "#3b2a20", green: "#1f7a70", gray: "#6b5d52", paper: "#fff8e8", gold: "#f2a93b", teal: "#8fd0c4", pale: "#efe6d2" };
+
+// 緑の無地を消す（page.html と同じ。地の色は、絵の上のはしから取る）
+function keyOut(img) {
+  const w = img.naturalWidth, h = img.naturalHeight, cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+  const x = cv.getContext("2d"); x.drawImage(img, 0, 0);
+  const im = x.getImageData(0, 0, w, h), d = im.data, n = w * h;
+  const pts = [0.02, 0.18, 0.34, 0.5, 0.66, 0.82, 0.98].map((f) => (4 * w + Math.min(w - 1, Math.round(f * w))) * 4);
+  const med = (o) => pts.map((i) => d[i + o]).sort((a, b) => a - b)[3];
+  const br = med(0), bg = med(1), bb = med(2);
+  const dist = new Uint8Array(n);
+  for (let i = 0; i < n; i++) dist[i] = Math.min(255, Math.max(Math.abs(d[i * 4] - br), Math.abs(d[i * 4 + 1] - bg), Math.abs(d[i * 4 + 2] - bb)));
+  const out = new Uint8Array(n), st = [];
+  const push = (i) => { if (!out[i] && dist[i] <= 60) { out[i] = 1; st.push(i); } };
+  for (let px = 0; px < w; px++) { push(px); push((h - 1) * w + px); }
+  for (let py = 0; py < h; py++) { push(py * w); push(py * w + w - 1); }
+  while (st.length) { const i = st.pop(), px = i % w; if (px > 0) push(i - 1); if (px < w - 1) push(i + 1); if (i >= w) push(i - w); if (i < n - w) push(i + w); }
+  for (let i = 0; i < n; i++) if (dist[i] <= 22) out[i] = 1;
+  for (let i = 0; i < n; i++) {
+    if (out[i]) { d[i * 4 + 3] = 0; continue; }
+    const px = i % w, near = (px > 0 && out[i - 1]) || (px < w - 1 && out[i + 1]) || (i >= w && out[i - w]) || (i < n - w && out[i + w]);
+    const r = d[i * 4], gg = d[i * 4 + 1], b = d[i * 4 + 2], spill = gg - Math.max(r, b);
+    if (near) d[i * 4 + 3] = 150;
+    if (spill > 6) { d[i * 4 + 1] = Math.max(r, b) + Math.round(spill * 0.12); if (spill > 45) d[i * 4 + 3] = Math.min(d[i * 4 + 3], 120); }
+  }
+  x.putImageData(im, 0, 0);
+  let x0 = w, y0 = h, x1 = 0, y1 = 0;
+  for (let i = 0; i < n; i++) if (d[i * 4 + 3] > 40) { const px = i % w, py = (i / w) | 0; if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py; }
+  return { cv, w, h, box: [x0, y0, x1 - x0 + 1, y1 - y0 + 1] };
+}
+const load = (name) => new Promise((ok, ng) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ng(new Error("読めない: " + name)); im.src = DIR + name + ".png"; });
+const CUT = ["kp_a", "kp_b", "kp_c", "kp_star", "kn_mama", "kn_mama2", "kn_mizu", "kn_cup0", "kn_cup1", "kn_cup2", "kn_fukuro", "kn_fukuro2", "kn_spoon", "kn_tsukue"];
+async function setup(tl) {
+  TL = tl;
+  const bg = await load("kn_heya"); L.bg = { cv: bg, w: bg.naturalWidth, h: bg.naturalHeight };
+  for (const n of CUT) L[n] = keyOut(await load(n));
+  for (const w of [900, 700, 500]) await document.fonts.load(w + ' 40px "Zen"');
+  return Object.fromEntries(Object.entries(L).map(([k, v]) => [k, [v.w, v.h, ...(v.box || [])].join(",")]));
+}
+
+const rnd = (i, s) => { const v = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return v - Math.floor(v); };
+const ease = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
+const seg = (t, a, b) => ease((t - a) / (b - a));
+const lerp = (a, b, k) => a + (b - a) * k;
+let F12 = 0;   // 今のコマの番号（1秒12コマ）。置き直しのずれに使う
+
+// 切り抜いた絵を置く。x, y = 足もと（下のまん中）、h = 高さ（px）。ref = 大きさと位置の基準にする絵（ポーズ違いをそろえるため）
+function put(name, x, y, h, o = {}) {
+  const l = L[name], R = L[o.ref || name].box, sc = h / R[3], ax = R[0] + R[2] / 2, ay = R[1] + R[3], s = o.seed ?? name.length;
+  const jx = o.still ? 0 : (rnd(F12, s) - 0.5) * 2.2, jy = o.still ? 0 : (rnd(F12, s + 1) - 0.5) * 1.8, jr = o.still ? 0 : (rnd(F12, s + 2) - 0.5) * 0.012;
+  g.save(); g.globalAlpha *= o.alpha ?? 1; g.translate(x + jx, y + jy); g.rotate((o.rot || 0) + jr); g.scale(sc * (o.sx || 1) * (o.flip ? -1 : 1), sc * (o.sy || 1));
+  if (o.pivotY) g.translate(0, 0);
+  g.shadowColor = "rgba(60,40,20,.38)"; g.shadowBlur = 16; g.shadowOffsetY = 9; g.shadowOffsetX = 4;
+  g.drawImage(l.cv, -ax, -ay); g.restore();
+}
+function shadowOn(x, y, rx, a = 0.22) { g.save(); g.fillStyle = `rgba(70,45,20,${a})`; g.beginPath(); g.ellipse(x, y, rx, rx * 0.15, 0, 0, Math.PI * 2); g.fill(); g.restore(); }
+function paperStar(x, y, r, rot, a, col = "#ffd766") {
+  if (a <= 0) return; g.save(); g.globalAlpha *= a; g.translate(x, y); g.rotate(rot);
+  g.shadowColor = "rgba(60,40,10,.35)"; g.shadowBlur = 5; g.shadowOffsetY = 3; g.fillStyle = col; g.beginPath();
+  for (let i = 0; i < 8; i++) { const rr = i % 2 ? r * 0.38 : r, an = (i * Math.PI) / 4; g.lineTo(Math.sin(an) * rr, -Math.cos(an) * rr); }
+  g.closePath(); g.fill(); g.restore();
+}
+function paperDot(x, y, r, col, a = 1) { g.save(); g.globalAlpha *= a; g.shadowColor = "rgba(60,40,10,.3)"; g.shadowBlur = 3; g.shadowOffsetY = 2; g.fillStyle = col; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); g.restore(); }
+function paperDrop(x, y, r, a = 1) {   // 紙の水のしずく
+  g.save(); g.globalAlpha *= a; g.translate(x, y); g.shadowColor = "rgba(20,40,80,.35)"; g.shadowBlur = 4; g.shadowOffsetY = 3; g.fillStyle = "#8fcdf2";
+  g.beginPath(); g.moveTo(0, -r * 1.7); g.bezierCurveTo(r * 1.2, -r * 0.3, r, r, 0, r); g.bezierCurveTo(-r, r, -r * 1.2, -r * 0.3, 0, -r * 1.7); g.fill(); g.restore();
+}
+function rr(x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function text(s, x, y, size, color, w = 700) { g.fillStyle = color; g.font = `${w} ${size}px "Zen"`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(s, x, y); }
+const fit = (str, size, w, max = 590) => { g.font = `${w} ${size}px "Zen"`; while (g.measureText(str).width > max && size > 20) { size -= 2; g.font = `${w} ${size}px "Zen"`; } return size; };
+
+// カメラ: 場面ごとに、寄る強さと、寄るまん中を変える。奥（背景）は少ししか動かない
+function cam(depth, z, cx, cy, draw) { const k = 1 + (z - 1) * depth; g.save(); g.translate(cx, cy); g.scale(k, k); g.translate(-cx, -cy); draw(); g.restore(); }
+function cover(l, extra) { const s = Math.max(W / l.w, H / l.h) * extra, w = l.w * s, h = l.h * s; g.drawImage(l.cv, (W - w) / 2, (H - h) / 2, w, h); }
+
+// 机と、机の上の道具
+const TABLE_Y = 800;   // 道具の足もと（机の上の面）
+function table() { const l = L.kn_tsukue, w = 980, h = w * (l.h / l.w), top = l.box[1] / l.h; g.save(); g.shadowColor = "rgba(60,40,20,.35)"; g.shadowBlur = 18; g.shadowOffsetY = -4; g.drawImage(l.cv, (W - w) / 2, TABLE_Y - 38 - top * h, w, h); g.restore(); }
+const pop = (tau, t0) => { const k = (tau - t0) / 0.22; return k <= 0 ? 0 : k >= 1 ? 1 : 1 + 0.25 * Math.sin(k * Math.PI) - (1 - k) * 0.4; };   // ぽんと出る
+
+// 場面ごとの絵。tau = 場面の頭からの秒（12コマに切ってある）、D = 場面の長さ
+const SCENES = {
+  title(tau) {
+    const bob = -5 * Math.abs(Math.sin(tau * 3.2));
+    shadowOn(505, 962, 165); put("kn_mama", 505, 955, 620, { seed: 31 });
+    shadowOn(232, 962, 110); put("kp_a", 232, 955 + bob, 400, { seed: 11 });
+  },
+  youi(tau) {   // 手順1: 粉を用意する。コップと袋が、ぽんと出る
+    table();
+    const a = pop(tau, 0.5), b = pop(tau, 1.5);
+    if (a > 0) { shadowOn(420, TABLE_Y + 4, 70 * a, 0.18); put("kn_cup0", 420, TABLE_Y, 210, { sx: a, sy: a, seed: 41 }); }
+    if (b > 0) { shadowOn(225, TABLE_Y + 4, 60 * b, 0.18); put("kn_fukuro", 225, TABLE_Y, 235, { sx: b, sy: b, seed: 51, rot: tau > 3 ? 0.05 * Math.sin(tau * 5) : 0 }); }
+    if (tau > 2.2) [[150, 610], [300, 560], [215, 520]].forEach(([x, y], i) => paperStar(x, y + (tau - 2.2) * -8, 13 + i * 3, tau * 2 + i, Math.sin(Math.min(1, (tau - 2.2 - i * 0.2) / 1.4) * Math.PI)));
+  },
+  tokasu(tau, D) {   // 手順1: 粉をコップに入れる → 水をぽたぽた → くるくる混ぜる
+    table();
+    const cup = tau < 1.7 ? "kn_cup0" : tau < 5.0 ? "kn_cup1" : "kn_cup2";
+    const drawCup = () => { shadowOn(420, TABLE_Y + 4, 70, 0.18); put(cup, 420, TABLE_Y, 210, { ref: "kn_cup0", seed: 41 }); };
+    // 混ぜる所では、スプーンを先に描いて、その上にコップを描く（スプーンの先が、コップの中に入って見える）
+    if (tau >= 6.3) { const stir = seg(tau, 6.3, 6.9), sw = tau >= 6.9 ? Math.sin(tau * 9) : 0; put("kn_spoon", lerp(505, 528, stir) + sw * 14, lerp(640, 692, stir) + Math.abs(sw) * -5, 150, { seed: 61, rot: lerp(-0.12, -0.62, stir) + sw * 0.09 }); }
+    drawCup();
+    // 袋: 持ち上がって、コップの上でかたむく → 粉が落ちる → もとの所にもどる
+    const up = seg(tau, 0, 0.8), back = seg(tau, 2.7, 3.4), k = up * (1 - back);
+    const fx = lerp(225, 330, k), fy = lerp(TABLE_Y, 640, k);
+    if (tau >= 0.8 && tau < 2.7) put("kn_fukuro2", fx, fy, 235, { seed: 52 }); else { shadowOn(225, TABLE_Y + 4, 60 * (1 - k), 0.18 * (1 - k)); put("kn_fukuro", fx, fy, 235, { seed: 51, rot: 0.25 * k }); }
+    if (tau >= 0.9 && tau < 2.5) for (let i = 0; i < 9; i++) { const ph = ((tau - 0.9) * 2.2 + i * 0.13) % 1; paperDot(lerp(392, 418, ph) + (rnd(i, 7) - 0.5) * 16, lerp(655, 770, ph * ph), 4 + (i % 3), "#fffdf6", ph < 0.92 ? 1 : 0); }
+    // スプーン: 右から入って、水を3回落とす → コップに入れて混ぜる
+    if (tau >= 3.3) {
+      const inn = seg(tau, 3.3, 4.0);
+      if (tau < 6.3) put("kn_spoon", lerp(790, 505, inn), lerp(560, 640, inn), 150, { seed: 61, rot: lerp(0.2, -0.12, seg(tau, 4.0, 4.3)) });
+      [4.2, 4.9, 5.6].forEach((t0) => { const p = (tau - t0) / 0.5; if (p >= 0 && p < 1) paperDrop(412, lerp(650, 765, p * p), 11); });
+      if (tau >= 6.9) [[330, 640], [520, 610], [445, 560]].forEach(([x, y], i) => paperStar(x, y, 12 + i * 3, tau * 3 + i, 0.5 + 0.5 * Math.sin(tau * 4 + i * 2)));
+    }
+  },
+  nomu(tau) {   // 手順2: 溶かした薬を飲ませる
+    const drink = tau >= 1.2, since = tau - 1.2, k = drink ? Math.max(0, 1 - since / 0.25) : 0;
+    shadowOn(505, 962, 165); put("kn_mama", 505, 955 - 3 * Math.abs(Math.sin(tau * 2.4)), 620, { seed: 31 });
+    shadowOn(232, 962, 110);
+    put(drink ? "kp_b" : "kp_a", 232, 955 + (drink ? -3 * Math.sin(Math.min(1, since / 1.2) * Math.PI) : -4 * Math.abs(Math.sin(tau * 3.4))), 400, { ref: "kp_a", seed: 11, sy: drink ? 1 + 0.07 * k : tau > 0.9 ? 0.95 : 1, sx: drink ? 1 - 0.04 * k : tau > 0.9 ? 1.04 : 1, rot: drink ? -0.03 * Math.min(1, since / 0.5) : 0 });
+    if (drink) [[110, 640], [370, 600], [150, 760]].forEach(([x, y], i) => paperStar(x, y - since * 16, 13 + i * 3, tau * 2 + i, Math.sin(Math.min(1, Math.max(0, since - i * 0.18) / 1.3) * Math.PI)));
+  },
+  nomimono(tau) {   // 手順3: 飲み終わったら、飲み物を飲ませる
+    shadowOn(505, 962, 165); put("kn_mama", 505, 955 - 3 * Math.abs(Math.sin(tau * 2.4)), 620, { seed: 31 });
+    shadowOn(232, 962, 110); put("kn_mizu", 232, 955, 400, { seed: 12, rot: -0.035 * (0.5 + 0.5 * Math.sin(tau * 2.6)) });
+    // 顔の近くに水のしずくを出すと、汗や涙に見えたので、出さない。かわりに、コップの横に小さな星
+    [[95, 700], [360, 660]].forEach(([x, y], i) => paperStar(x, y, 11 + i * 3, tau * 2 + i, 0.5 + 0.5 * Math.sin(tau * 2.4 + i * 2)));
+  },
+  homeru(tau) {   // 飲めたら、笑顔でほめる
+    const h = (tau % 0.66) / 0.66, jump = tau < 2.0, dy = jump ? -46 * 4 * h * (1 - h) : 0, land = jump && h < 0.12;
+    shadowOn(505, 962, 165); put("kn_mama2", 505, 955 - 6 * Math.abs(Math.sin(tau * 6)), 620, { ref: "kn_mama", seed: 32 });
+    shadowOn(232, 962, 110 * (1 + dy / 300)); put("kp_c", 232, 955 + dy, 400, { ref: "kp_a", seed: 13, sy: land ? 0.93 : 1, sx: land ? 1.06 : 1 });
+    for (let i = 0; i < 11; i++) { const an = (i / 11) * Math.PI * 2 + 0.3, k = seg(tau, i * 0.03, 0.6 + i * 0.03); paperStar(330 + Math.cos(an) * (130 + 190 * k), 640 + Math.sin(an) * (110 + 170 * k), 13 + (i % 3) * 7, tau * 2.5 + i, k * (1 - seg(tau, 2.6, 3.4)), i % 2 ? "#ffd766" : "#ffb38a"); }
+  },
+  owari(tau) {
+    shadowOn(505, 962, 165); put("kn_mama", 505, 955, 620, { seed: 31 });
+    shadowOn(232, 962, 110); put("kp_c", 232, 955 - 5 * Math.abs(Math.sin(tau * 3.2)), 400, { ref: "kp_a", seed: 13 });
+  },
+};
+
+function badges(step) {   // 手順の丸（紙の丸）
+  for (let i = 1; i <= 3; i++) {
+    const x = 360 + (i - 2) * 118, on = i === step, done = i < step, r = on ? 44 : 27;
+    g.save(); g.shadowColor = "rgba(60,40,20,.35)"; g.shadowBlur = 8; g.shadowOffsetY = 5; g.fillStyle = on ? COL.gold : done ? COL.teal : COL.pale;
+    g.beginPath(); g.arc(x + (rnd(F12, i) - 0.5) * 1.2, 104, r, 0, Math.PI * 2); g.fill(); g.restore();
+    if (on || done) text(done ? "✓" : String(i), x, 107, on ? 50 : 28, "#fff", 900);
+  }
+}
+function caption(lines, big, a) {   // 字幕（紙の札）
+  if (!lines || a <= 0) return;
+  g.save(); g.globalAlpha = a; g.translate(360, 1128); g.rotate(-0.006);
+  g.shadowColor = "rgba(60,40,20,.38)"; g.shadowBlur = 18; g.shadowOffsetY = 9; rr(-330, -116, 660, 232, 26); g.fillStyle = COL.paper; g.fill(); g.shadowColor = "transparent";
+  if (big) { text(lines[0], 0, -42, fit(lines[0], 44, 500), COL.gray, 500); text(lines[1], 0, 40, fit(lines[1], 62, 900), COL.green, 900); }
+  else if (lines.length === 1) text(lines[0], 0, 0, fit(lines[0], 48, 700), COL.ink);
+  else if (lines.length === 2) { text(lines[0], 0, -42, fit(lines[0], 44, 700), COL.ink); text(lines[1], 0, 42, fit(lines[1], 44, 700), COL.green); }
+  else lines.forEach((l, i) => text(l, 0, -68 + i * 68, fit(l, 40, 700), i ? COL.green : COL.ink));
+  g.restore();
+}
+
+function seek(t) {
+  F12 = Math.floor(t * 12);
+  const tq = F12 / 12, total = TL.total;
+  let i = 0; while (i + 1 < TL.scenes.length && tq >= TL.scenes[i + 1].start) i++;
+  const sc = TL.scenes[i], tau = Math.max(0, tq - sc.start), D = sc.dur, a = Math.min(seg(t - sc.start, 0, 0.3), 1 - seg(t - sc.start, D - 0.28, D));
+  const close = sc.kind === "youi" || sc.kind === "tokasu";            // 机の場面は、手もとに寄る
+  const z = (close ? 1.2 : 1.0) + 0.05 * ease((t - sc.start) / D), cx = close ? 360 : 360, cy = close ? 730 : 760;
+  g.clearRect(0, 0, W, H);
+  cam(0.45, z, cx, cy, () => cover(L.bg, 1.08));
+  // 上のすみで、ひもにつるした紙の星がゆれる
+  cam(0.7, z, cx, cy, () => [[84, 150, 34, 0.0], [640, 205, 40, 1.9]].forEach(([x, len, r, ph], k) => {
+    g.save(); g.translate(x, -20); g.rotate(0.1 * Math.sin(tq * 2.2 + ph) + (rnd(F12, 70 + k) - 0.5) * 0.02);
+    g.strokeStyle = "rgba(120,90,60,.55)"; g.lineWidth = 2; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, len + 20); g.stroke();
+    g.shadowColor = "rgba(60,40,20,.4)"; g.shadowBlur = 8; g.shadowOffsetY = 5; const b = L.kp_star.box; g.translate(0, len + 20 + r * 0.8); g.rotate(0.25 * Math.sin(tq * 1.7 + ph));
+    g.drawImage(L.kp_star.cv, b[0], b[1], b[2], b[3], -r, -r, r * 2, r * 2 * (b[3] / b[2])); g.restore();
+  }));
+  cam(1.0, z, cx, cy, () => { g.save(); g.globalAlpha = a; SCENES[sc.kind](tau, D); g.restore(); });
+  if (sc.step) badges(sc.step);
+  if (sc.kind === "owari") {   // 最後の画面: サイトの名前の札
+    g.save(); g.globalAlpha = a; g.translate(360, 330); g.rotate(-0.012); g.shadowColor = "rgba(60,40,20,.4)"; g.shadowBlur = 20; g.shadowOffsetY = 10; rr(-300, -110, 600, 220, 28); g.fillStyle = COL.paper; g.fill(); g.shadowColor = "transparent";
+    text("子どものお薬サポート", 0, -30, 50, COL.green, 900); text("koshihara-pharm.github.io/boot_camp/", 0, 46, 27, COL.gray, 500); g.restore();
+  } else caption(sc.cap, sc.big, a);
+  // 進み具合の線
+  g.fillStyle = "rgba(255,248,232,.85)"; g.fillRect(0, 1270, W, 10); g.fillStyle = COL.green; g.fillRect(0, 1270, W * Math.min(1, t / total), 10);
+}
+</script>

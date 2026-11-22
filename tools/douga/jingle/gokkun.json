@@ -1,0 +1,1192 @@
+{
+ "format": "jinglescript/1",
+ "title": "ごっくん できるかな？",
+ "tempo": 100,
+ "length": {
+  "seconds": 72.9
+ },
+ "seed": 1,
+ "master": {
+  "reverb": "room",
+  "loudness": -18,
+  "fadeOut": 1
+ },
+ "cues": {
+  "go": {
+   "seconds": 0.5
+  }
+ },
+ "tracks": [
+  {
+   "instrument": "ukulele",
+   "name": "ウクレレ",
+   "gain": -8,
+   "notes": [
+    {
+     "at": "go",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+4",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+8",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+12",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+16",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+20",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+24",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+28",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+32",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+36",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+40",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+44",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+48",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+52",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+56",
+     "chord": "Am",
+     "strum": "D-DU-UDU",
+     "vel": 0.35
+    },
+    {
+     "at": "go+60",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.35
+    },
+    {
+     "at": "go+64",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+68",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+76",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+80",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+84",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+88",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+92",
+     "chord": "G",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+96",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+100",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+104",
+     "chord": "F",
+     "strum": {
+      "pattern": "down",
+      "spread": 25
+     },
+     "vel": 0.5
+    },
+    {
+     "at": "go+108",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+112",
+     "chord": "C",
+     "strum": "D-DU-UDU",
+     "vel": 0.45
+    },
+    {
+     "at": "go+116",
+     "chord": "C",
+     "strum": {
+      "pattern": "down",
+      "spread": 30
+     },
+     "vel": 0.6
+    },
+    {
+     "at": "go+119",
+     "chord": "C",
+     "strum": {
+      "pattern": "down",
+      "spread": 40
+     },
+     "vel": 0.7
+    }
+   ]
+  },
+  {
+   "instrument": "marimba",
+   "name": "ベース",
+   "gain": -5,
+   "notes": [
+    {
+     "at": "go",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+2",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+4",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+6",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+8",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+10",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+12",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+14",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+16",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+20",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+22",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+24",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+26",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+28",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+30",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+32",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+36",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+38",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+40",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+42",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+44",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+46",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+48",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+52",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+54",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+56",
+     "pitch": "A2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+58",
+     "pitch": "E3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+60",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+62",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+64",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+66",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+68",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+72",
+     "pitch": "C4",
+     "vel": 0.3
+    },
+    {
+     "at": "go+73",
+     "pitch": "C4",
+     "vel": 0.3
+    },
+    {
+     "at": "go+74",
+     "pitch": "C4",
+     "vel": 0.3
+    },
+    {
+     "at": "go+75",
+     "pitch": "C4",
+     "vel": 0.3
+    },
+    {
+     "at": "go+76",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+78",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+80",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+82",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+84",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+86",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+88",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+90",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+92",
+     "pitch": "G2",
+     "vel": 0.65
+    },
+    {
+     "at": "go+94",
+     "pitch": "D3",
+     "vel": 0.5
+    },
+    {
+     "at": "go+96",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+100",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+104",
+     "pitch": "F2",
+     "vel": 0.75
+    },
+    {
+     "at": "go+108",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+110",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+112",
+     "pitch": "C3",
+     "vel": 0.65
+    },
+    {
+     "at": "go+114",
+     "pitch": "G2",
+     "vel": 0.5
+    },
+    {
+     "at": "go+116",
+     "pitch": "C3",
+     "vel": 0.6
+    },
+    {
+     "at": "go+119",
+     "pitch": "C2",
+     "vel": 0.6
+    }
+   ]
+  },
+  {
+   "instrument": "glockenspiel",
+   "name": "リード（glockenspiel）",
+   "gain": -3,
+   "notes": [
+    {
+     "at": "go",
+     "pitch": "G5",
+     "vel": 0.7
+    },
+    {
+     "at": "go+0.5",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+1",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+6",
+     "pitch": "D6",
+     "vel": 0.6
+    },
+    {
+     "at": "go+6.5",
+     "pitch": "E6",
+     "vel": 0.6
+    },
+    {
+     "at": "go+7",
+     "pitch": "G6",
+     "vel": 0.6
+    },
+    {
+     "at": "go+10",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+10.5",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+11",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+14",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+14.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+15",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+15.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+17",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+17.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+18",
+     "pitch": "F5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+62",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+62.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+63",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+63.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+66",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+66.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+67",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+67.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+69",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+69.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+70",
+     "pitch": "F5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+80",
+     "pitch": "G5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+81",
+     "pitch": "E5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+84",
+     "pitch": "E5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+85",
+     "pitch": "C5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+90",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+90.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+91",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+91.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+94",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+94.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+95",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+95.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+97",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+97.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+98",
+     "pitch": "F5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+112",
+     "pitch": "E5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+113",
+     "pitch": "C5",
+     "vel": 0.55
+    }
+   ]
+  },
+  {
+   "instrument": "droplet",
+   "name": "水の音",
+   "gain": -2,
+   "reverb": false,
+   "notes": [
+    {
+     "at": "go+16.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+32.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+48.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+68.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+96.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+100.25",
+     "vel": 0.9
+    },
+    {
+     "at": "go+104.25",
+     "vel": 0.9
+    }
+   ]
+  },
+  {
+   "instrument": "glockenspiel",
+   "name": "きらきら",
+   "gain": -3,
+   "notes": [
+    {
+     "at": "go+20",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+20.25",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+20.5",
+     "pitch": "G6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+20.75",
+     "pitch": "C7",
+     "vel": 0.7
+    },
+    {
+     "at": "go+36",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+36.25",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+36.5",
+     "pitch": "G6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+36.75",
+     "pitch": "C7",
+     "vel": 0.7
+    },
+    {
+     "at": "go+52",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+52.25",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+52.5",
+     "pitch": "G6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+52.75",
+     "pitch": "C7",
+     "vel": 0.7
+    },
+    {
+     "at": "go+76",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+76.25",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+76.5",
+     "pitch": "G6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+76.75",
+     "pitch": "C7",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108",
+     "pitch": "C6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108.25",
+     "pitch": "E6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108.5",
+     "pitch": "G6",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108.75",
+     "pitch": "C7",
+     "vel": 0.7
+    }
+   ]
+  },
+  {
+   "instrument": "ding",
+   "name": "ベル",
+   "gain": -6,
+   "notes": [
+    {
+     "at": "go+20",
+     "vel": 0.7
+    },
+    {
+     "at": "go+36",
+     "vel": 0.7
+    },
+    {
+     "at": "go+52",
+     "vel": 0.7
+    },
+    {
+     "at": "go+76",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108",
+     "vel": 0.7
+    }
+   ]
+  },
+  {
+   "instrument": "clap",
+   "name": "手をたたく",
+   "gain": -1,
+   "notes": [
+    {
+     "at": "go+21",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+22",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+23",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+37",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+38",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+39",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+53",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+54",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+55",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+77",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+78",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+79",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+109",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+110",
+     "vel": 0.6,
+     "variant": "hands"
+    },
+    {
+     "at": "go+111",
+     "vel": 0.6,
+     "variant": "hands"
+    }
+   ]
+  },
+  {
+   "instrument": "marimba",
+   "name": "リード（marimba）",
+   "gain": -2,
+   "notes": [
+    {
+     "at": "go+26",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+26.5",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+27",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+30",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+30.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+31",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+31.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+33",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+33.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+34",
+     "pitch": "F5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+101",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+101.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+102",
+     "pitch": "F5",
+     "vel": 0.55
+    }
+   ]
+  },
+  {
+   "instrument": "xylophone",
+   "name": "リード（xylophone）",
+   "gain": -3,
+   "notes": [
+    {
+     "at": "go+42",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+42.5",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+43",
+     "pitch": "E5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+46",
+     "pitch": "G5",
+     "vel": 0.5
+    },
+    {
+     "at": "go+46.5",
+     "pitch": "A5",
+     "vel": 0.58
+    },
+    {
+     "at": "go+47",
+     "pitch": "B5",
+     "vel": 0.66
+    },
+    {
+     "at": "go+47.5",
+     "pitch": "D6",
+     "vel": 0.74
+    },
+    {
+     "at": "go+49",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+49.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+50",
+     "pitch": "F5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+105",
+     "pitch": "C6",
+     "vel": 0.55
+    },
+    {
+     "at": "go+105.5",
+     "pitch": "A5",
+     "vel": 0.55
+    },
+    {
+     "at": "go+106",
+     "pitch": "F5",
+     "vel": 0.55
+    }
+   ]
+  },
+  {
+   "instrument": "applause",
+   "name": "拍手",
+   "gain": -8,
+   "notes": [
+    {
+     "at": "go+76.5",
+     "vel": 0.7
+    },
+    {
+     "at": "go+108.5",
+     "vel": 0.7
+    }
+   ]
+  },
+  {
+   "instrument": "musicbox",
+   "name": "サイトの音の目印",
+   "gain": -3,
+   "notes": [
+    {
+     "at": "go+116",
+     "pitch": "E4",
+     "vel": 0.75
+    },
+    {
+     "at": "go+116.5",
+     "pitch": "G4",
+     "vel": 0.75
+    },
+    {
+     "at": "go+117",
+     "pitch": "C5",
+     "vel": 0.75
+    },
+    {
+     "at": "go+118",
+     "pitch": "G4",
+     "vel": 0.75
+    },
+    {
+     "at": "go+118.5",
+     "pitch": "C5",
+     "vel": 0.75
+    },
+    {
+     "at": "go+119",
+     "pitch": "E5",
+     "vel": 0.9
+    }
+   ]
+  }
+ ]
+}

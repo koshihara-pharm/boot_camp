@@ -1,0 +1,226 @@
+{
+ "story": true,
+ "scenes": [
+  {
+   "voice": "gk_title.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "ごっくん",
+    "できるかな？"
+   ],
+   "imgs": [
+    "g0"
+   ]
+  },
+  {
+   "voice": "gk_ka.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "こうさぎちゃん",
+    "せーの"
+   ],
+   "imgs": [
+    "gk1"
+   ]
+  },
+  {
+   "voice": "gk_kb.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gk2"
+   ]
+  },
+  {
+   "voice": "gk_kc.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "できた！"
+   ],
+   "imgs": [
+    "gk3"
+   ]
+  },
+  {
+   "voice": "gk_da.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "だんごちゃん",
+    "せーの"
+   ],
+   "imgs": [
+    "gd1"
+   ]
+  },
+  {
+   "voice": "gk_db.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gd2"
+   ]
+  },
+  {
+   "voice": "gk_dc.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "すごい！"
+   ],
+   "imgs": [
+    "gd3"
+   ]
+  },
+  {
+   "voice": "gk_ha.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "はかせ",
+    "せーの"
+   ],
+   "imgs": [
+    "gh1"
+   ]
+  },
+  {
+   "voice": "gk_hb.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gh2"
+   ]
+  },
+  {
+   "voice": "gk_hc.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "やったね！"
+   ],
+   "imgs": [
+    "gh3"
+   ]
+  },
+  {
+   "voice": "gk_ta.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "つぎは",
+    "きみの ばん"
+   ],
+   "imgs": [
+    "g0"
+   ]
+  },
+  {
+   "voice": "gk_tb.wav",
+   "kid": true,
+   "dur": 7.2,
+   "cap": [
+    "せーの",
+    "ごっくん"
+   ],
+   "imgs": [
+    "gt"
+   ]
+  },
+  {
+   "voice": "gk_tc.wav",
+   "kid": true,
+   "dur": 7.2,
+   "cap": [
+    "できた！",
+    "おしまい ばいばい"
+   ],
+   "imgs": [
+    "ge"
+   ]
+  },
+  {
+   "voice": "gk_ea.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "もういっかい！"
+   ],
+   "imgs": [
+    "g0"
+   ]
+  },
+  {
+   "voice": "gk_eb.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "せーの"
+   ],
+   "imgs": [
+    "gt"
+   ]
+  },
+  {
+   "voice": "gk_ec1.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gk2"
+   ]
+  },
+  {
+   "voice": "gk_ec2.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gd2"
+   ]
+  },
+  {
+   "voice": "gk_ec3.wav",
+   "kid": true,
+   "dur": 2.4,
+   "cap": [
+    "ごっくん"
+   ],
+   "imgs": [
+    "gh2"
+   ]
+  },
+  {
+   "voice": "gk_ed.wav",
+   "kid": true,
+   "dur": 4.8,
+   "cap": [
+    "できた！",
+    "ばいばい"
+   ],
+   "imgs": [
+    "ge"
+   ]
+  },
+  {
+   "end": true,
+   "img": "ge"
+  }
+ ]
+}
