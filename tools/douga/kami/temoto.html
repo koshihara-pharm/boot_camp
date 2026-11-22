@@ -1,0 +1,89 @@
+<!doctype html>
+<meta charset="utf-8">
+<!-- 親に見せる「手元の動画」: 手元の絵を画面いっぱいに出し、なめらかに寄る。番号つきの字幕。飾りは入れない（boot_camp の docs/31） -->
+<style>
+  @font-face { font-family: "Zen"; font-weight: 900; src: url("../zero/fonts/ZenMaruGothic-Black.ttf"); }
+  @font-face { font-family: "Zen"; font-weight: 700; src: url("../zero/fonts/ZenMaruGothic-Bold.ttf"); }
+  @font-face { font-family: "Zen"; font-weight: 500; src: url("../zero/fonts/ZenMaruGothic-Medium.ttf"); }
+  html, body { margin: 0; background: #000; } canvas { display: block; }
+</style>
+<canvas id="c" width="720" height="1280"></canvas>
+<script>
+const W = 720, H = 1280, WORK = "file:///C:/Users/y0u33/Downloads/boot_camp/tools/douga/work/";
+const g = document.getElementById("c").getContext("2d");
+const C = { ink: "#3b2a20", sub: "#6b5a4e", orange: "#ee7b1a", white: "#ffffff" };
+const FADE = 0.45;           // 絵の入れかわり（秒）
+let TL = null; const IM = {};
+const ease = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
+
+async function setup(tl) {
+  TL = tl;
+  for (const w of [900, 700, 500]) await document.fonts.load(w + ' 40px "Zen"');
+  const names = [...new Set(tl.shots.map((s) => s.img))];
+  await Promise.all(names.map((n) => new Promise((ok, ng) => { const im = new Image(); im.onload = () => { IM[n] = im; ok(); }; im.onerror = () => ng(new Error("絵がない: " + n)); im.src = WORK + n + ".png"; })));
+  return Object.fromEntries(names.map((n) => [n, IM[n].width + "x" + IM[n].height]));
+}
+
+// 絵を画面いっぱいに出す。focus = 絵の中の、画面のまん中に置く点（0〜1）
+function cover(sh, t, alpha) {
+  const im = IM[sh.img], p = ease((t - sh.start) / Math.max(0.1, sh.len));
+  const z = sh.z0 + (sh.z1 - sh.z0) * p, s = Math.max(W / im.width, H / im.height) * z, dw = im.width * s, dh = im.height * s;
+  const x = Math.min(0, Math.max(W - dw, W / 2 - sh.focus[0] * dw)), y = Math.min(0, Math.max(H - dh, H / 2 - sh.focus[1] * dh));
+  g.globalAlpha = alpha;
+  if (sh.flip) { g.save(); g.translate(W, 0); g.scale(-1, 1); g.drawImage(im, x, y, dw, dh); g.restore(); }   // 左右を逆にする（うさぎの丸い枠と重ならないように）
+  else g.drawImage(im, x, y, dw, dh);
+  g.globalAlpha = 1;
+  return { x, y, s };
+}
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function text(s, x, y, size, color, wt = 700, align = "center") { g.fillStyle = color; g.font = `${wt} ${size}px "Zen"`; g.textAlign = align; g.textBaseline = "middle"; g.fillText(s, x, y); }
+function fit(s, size, wt, max) { g.font = `${wt} ${size}px "Zen"`; while (g.measureText(s).width > max && size > 20) { size -= 1; g.font = `${wt} ${size}px "Zen"`; } return size; }
+
+// 見てほしい所の印（オレンジの輪）。絵の中の位置で指定する
+function mark(sh, tr, t) {
+  if (!sh.mark) return;
+  const a = ease((t - sh.start - 0.7) / 0.35); if (a <= 0) return;
+  const im = IM[sh.img], cx = tr.x + sh.mark[0] * im.width * tr.s, cy = tr.y + sh.mark[1] * im.height * tr.s, r = sh.mark[2] * im.width * tr.s * (1.35 - 0.35 * a);
+  g.globalAlpha = a; g.lineWidth = 12; g.strokeStyle = C.white; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.stroke();
+  g.lineWidth = 7; g.strokeStyle = C.orange; g.beginPath(); g.arc(cx, cy, r, 0, 7); g.stroke(); g.globalAlpha = 1;
+}
+
+// 手順の番号（上）と、字幕（下の白い札）
+function stepPill(step, n, a) {
+  if (!step) return;
+  g.globalAlpha = a; g.shadowColor = "rgba(0,0,0,.25)"; g.shadowBlur = 14; g.shadowOffsetY = 3;
+  rr(40, 56, 214, 76, 38); g.fillStyle = C.white; g.fill(); g.shadowColor = "transparent";
+  g.beginPath(); g.arc(78, 94, 30, 0, 7); g.fillStyle = C.orange; g.fill();
+  text(String(step), 78, 96, 38, C.white, 900); text("手順", 148, 95, 28, C.sub, 700); text(step + "/" + n, 212, 95, 28, C.ink, 700);
+  g.globalAlpha = 1;
+}
+function caption(sc, a) {
+  if (!sc.cap || a <= 0) return;
+  const rows = sc.cap.map((s) => { const sub = s.startsWith("（"); const base = sc.big ? (sub ? 34 : 52) : (sub ? 31 : 42), wt = sub ? 500 : 700; return { s, sub, wt, size: fit(s, base, wt, 600) }; });
+  if (sc.big) { rows[0].size = fit(rows[0].s, 36, 700, 600); rows[0].small = true; }
+  const lh = rows.map((r) => r.size * 1.42), hh = lh.reduce((p, q) => p + q, 0) + 52 + (sc.label ? 58 : 0), y0 = 1190 - hh;
+  g.globalAlpha = a; g.shadowColor = "rgba(0,0,0,.28)"; g.shadowBlur = 18; g.shadowOffsetY = 4;
+  rr(32, y0 + (1 - a) * 16, 656, hh, 30); g.fillStyle = "rgba(255,255,255,.95)"; g.fill(); g.shadowColor = "transparent";
+  let y = y0 + 26 + (1 - a) * 16;
+  if (sc.label) { g.font = '700 28px "Zen"'; const w = g.measureText(sc.label).width + 44; rr(360 - w / 2, y, w, 46, 23); g.fillStyle = C.orange; g.fill(); text(sc.label, 360, y + 24, 28, C.white, 700); y += 58; }
+  rows.forEach((r, i) => { text(r.s, 360, y + lh[i] / 2, r.size, r.sub || r.small ? C.sub : C.ink, r.wt); y += lh[i]; });
+  g.globalAlpha = 1;
+}
+
+function seek(t) {
+  g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+  const i = Math.max(0, TL.shots.findLastIndex((s) => s.start <= t)), sh = TL.shots[i], prev = TL.shots[i - 1];
+  const f = prev ? ease((t - sh.start) / FADE) : 1;
+  if (prev && f < 1) cover(prev, t, 1);
+  const tr = cover(sh, t, f); if (f >= 1) mark(sh, tr, t);
+  const sc = TL.scenes.findLast((s) => s.start <= t) || TL.scenes[0], u = t - sc.start;
+  if (sc.kind === "end") {
+    const a = ease(u / 0.5); g.globalAlpha = 0.86 * a; g.fillStyle = "#fffaf3"; g.fillRect(0, 0, W, H); g.globalAlpha = a;
+    text("子どものお薬サポート", 360, 590, 54, C.orange, 900); text("koshihara-pharm.github.io/boot_camp/", 360, 672, 30, C.sub, 500);
+    text("この動画の絵は、AIで作ったものです", 360, 1200, 24, C.sub, 500); g.globalAlpha = 1; return;
+  }
+  const a = Math.min(ease((u - 0.1) / 0.3), ease((sc.dur - u) / 0.25));
+  stepPill(sc.step, TL.steps, sc.step === (TL.scenes[TL.scenes.indexOf(sc) - 1] || {}).step ? 1 : ease((u - 0.1) / 0.3));
+  caption(sc, a);
+}
+</script>

@@ -888,7 +888,26 @@
   // 動画の長さ（ボタンに「約◯秒」と出す）。書いていない動画は約40秒（最初の6本は 37〜43秒、0〜1歳のお薬だんごは 40秒）
   const VIDEO_SEC = { "baby-spoit": 55, "baby-nipple": 50, "toddler-mix": 35, "kid-mix": 35 };
   // 動画のサムネイル（表紙の絵。video/thumb。動画から1コマ切り出したもの）
-  const videoThumb = (name) => `video/thumb/${name}.jpg?v=20261116`;
+  // 手元の絵（写真のように見える絵）＋うさぎの解説の、新しい7本（docs/28 の「手元の動画を、7本そろえた」。調べは docs/31）。
+  // **まだ本番に出さない**（2026-11-22 ユーザー「本番にださなくていい」。薬剤師の確認待ち）。手元（localhost）で開いたときだけ、上の10本のかわりに出す。
+  // 動画とサムネイル（video/temoto-やり方-usagi.mp4、video/thumb/temoto-やり方.jpg）は GitHub に上げていない（.gitignore）。作ったパソコンにだけある。
+  // 字幕と読み上げが年齢で同じ3つ（水で溶かす・袋の中で混ぜる・お薬だんご）は、年齢で分けずに1本（ユーザー「被っている内容は、年齢ごとに分ける必要ない」）。
+  // 本番に出すとき: .gitignore の temoto の2行を消して動画とサムネイルを上げ、下の TEMOTO を true にする
+  const TEMOTO = ["localhost", "127.0.0.1"].includes(location.hostname);
+  if (TEMOTO) {
+    const t = (n) => `video/temoto-${n}-usagi.mp4?v=20261120`;
+    Object.assign(VIDEOS, {
+      "toddler-water": t("water"), "kid-water": t("water"), "toddler-fukuro": t("fukuro"), "kid-fukuro": t("fukuro"),
+      "toddler-dango": t("dango"), "baby-dango": t("dango"), "kid-otona": t("otona"),
+      "baby-spoit": t("spoit"), "baby-nipple": t("nipple"), "toddler-mix": t("mix"), "kid-mix": t("mix"),
+    });
+    Object.keys(VIDEO_SEC).forEach((k) => delete VIDEO_SEC[k]);
+    Object.assign(VIDEO_SEC, { "baby-spoit": 55, "baby-nipple": 50, "toddler-fukuro": 35, "kid-fukuro": 35, "toddler-mix": 35, "kid-mix": 35 });
+  }
+  // サムネイルの名前: 前の10本は「年齢-やり方」、新しい7本は動画の名前（temoto-やり方）
+  const videoThumb = (name) => TEMOTO
+    ? `video/thumb/${VIDEOS[name].match(/video\/(.+)-usagi\.mp4/)[1]}.jpg?v=20261120`
+    : `video/thumb/${name}.jpg?v=20261116`;
   function openVideo(title, src, label, poster) {
     const dlg = document.getElementById("card-view");
     dlg.querySelector(".card-title").textContent = title;
@@ -941,6 +960,7 @@
         // サムネイルの絵は、動画の最初の画面（子ども・うさぎ・題名。video/thumb/年齢-やり方.jpg。動画から1コマ切り出した）。
         // 同じ日のユーザーの指示「サムネはこれにしてほしい」。はじめは、やり方の絵（img/howto）をサムネイルにしていた。絵が読めないときは、やり方の絵に戻す
         const pic = el("img", { class: "video-thumb", src: videoThumb(`${flowSel}-${key}`), alt: "", loading: "lazy", width: "720", height: "1280" });
+        if (TEMOTO) pic.style.objectPosition = "50% 10%";   // 新しい7本のサムネイルは、うさぎと道具の所を切り取って出す
         // 横長のボタン: 左に小さなサムネイル、まん中に言葉と長さ、右に「›」。長さは動画ごと（VIDEO_SEC。書いていなければ約40秒）
         const sec = `約${VIDEO_SEC[`${flowSel}-${key}`] || 40}秒`;
         const thumb = el("button", { type: "button", class: "method-video", "aria-label": `この飲ませ方を動画で見る（${sec}）` },
