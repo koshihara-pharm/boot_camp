@@ -12,3 +12,7 @@ tools/douga/work/
 video/*
 !video/*-usagi.mp4
 !video/thumb/
+
+# インスタを見る道具（tools/insta）は、フォルダごと GitHub に上げない（2026-11-19 ユーザーの指示）
+# ログインの状態（Cookie）、見た画面の写し、道具そのものがここに入る。調べた結果は docs/_local/32_insta_buzz_chousa.md
+tools/insta/
