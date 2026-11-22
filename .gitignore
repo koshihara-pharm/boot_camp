@@ -21,3 +21,6 @@ tools/insta/
 # 本番に出すときに、この2行を消す
 video/temoto-*-usagi.mp4
 video/thumb/temoto-*.jpg
+
+# インスタに出す画像と投稿の文の下書き（投稿ごとのフォルダ。2026-11-22 ユーザーの指示）。GitHub に上げない
+insta_toukou/
