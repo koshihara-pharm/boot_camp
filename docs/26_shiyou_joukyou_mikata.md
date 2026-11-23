@@ -84,6 +84,11 @@ GA4 の「参照元」では、LINE や QR から来た人は `(direct)` にま�
 | X に貼る | https://koshihara-pharm.github.io/boot_camp/?from=x |
 | LINE で送る | https://koshihara-pharm.github.io/boot_camp/?from=line |
 | 親に見せる QR コード（[card/qr_site.png](../card/qr_site.png)。紙でも、スマホの画面でも、サイトの QR の欄でも、この1枚を使う。2026-11-05 ユーザーの判断） | https://koshihara-pharm.github.io/boot_camp/?from=qr |
+| インスタのプロフィールのリンク（2026-11-23 ユーザーの指示） | https://koshihara-pharm.github.io/boot_camp/?from=insta |
+| Threads のプロフィールのリンクと、投稿に貼るリンク（同日） | https://koshihara-pharm.github.io/boot_camp/?from=threads |
+
+- インスタは、リンクを開くと、インスタが自分で `utm_source=ig` などの印を後ろに足す。`?from=insta` をつけておくと、インスタの印が消えたときも数えられる
+- Threads は、印をつけないと「来た元」（`l.threads.com`）だけが頼りで、アプリの中で開くと消えて「直接」に数えられることがある（2026-11-22 の録画で、Threads から来た4回は、どれも印のない URL だった）
 
 - 新しい配り方を始めるときは、`?from=` の後ろに短い英字の印を決めて、この表に1行足す。同じ配り方には、いつも同じ印を使う
 - 印は、画面を切り替えても URL に残る（Clarity の録画で `?from=x#` のように残っているのを、2026-11-05 に確かめた）

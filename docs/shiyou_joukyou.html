@@ -157,6 +157,105 @@
 */
 const RECORDS = [
   {
+    date: "2026-11-23",
+    clarity: {
+      period: "11/21〜11/23（3日）",
+      sessions: 13, users: 10,
+      device: { "スマホ": 9, "PC": 4 },
+      source: { "直接": 5, "Threads": 4, "インスタ": 3, "Facebook": 1 },
+      rage: 0
+    },
+    ga4: {
+      period: "11/16〜11/22（7日）",
+      users: 26, views: 73, events: 201,
+      source: { "直接": 17, "X": 6, "Facebook": 5, "インスタ": 4, "Threads": 4, "GitHub": 2 }
+    },
+    clicksPeriod: "11/17 夜〜11/22 夜の録画 16回（11/19〜11/21 は0回）",
+    clicks: [
+      ["年齢のボタン", 6],
+      ["やり方を開く（スポイト・お薬だんご・哺乳びん・少しの水）", 6],
+      ["飲ませ方が分からない", 5],
+      ["薬を選ぶ（タミフル・クラリス）", 5],
+      ["薬を選び直す", 3],
+      ["おすすめの飲ませ方", 2],
+      ["参考にした資料を開く", 2],
+      ["混ぜていい？・薬の味", 2],
+      ["▶ 動画で見る", 1]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "インスタと Threads から、初めて人が来た",
+        body: "11/22（インスタの最初の投稿の日）に13回。インスタのプロフィールのリンクから3回、Threads から4回、Facebook から1回。その前の3日（11/19〜21）は0回だった。インスタのリンクには、インスタが自分で印（utm_source=ig、link_in_bio）をつけるので、来た数を数えられる。" },
+      { kind: "kasetsu", title: "インスタから来た人が、投稿と同じ「お薬だんご」を開いた",
+        body: "13時台に、インスタのプロフィールのリンクから来た人が、1〜3歳の「お薬だんご」を開いている。最初の投稿もお薬だんご（1〜3歳）なので、投稿とサイトの入り口がつながっている。" },
+      { kind: "kasetsu", title: "Threads から来た人が、サイトの中まで使っている",
+        body: "22時台、スマホで Threads から来た人が3分半、「少しの水で溶かす」を開いて動画も見て、そのあと食べ物に混ぜる → クラリスまで見ている。21時台にも、Threads から来た人がタミフルを探して開いた。17時台の PC の29分（タミフル、参考にした資料まで開く）は、自分の確認かもしれない。" },
+      { kind: "mada", title: "すぐ閉じた人も多い",
+        body: "11/22 の13回のうち、7回は1分未満で、何も押していない。インスタのリンクから来て15秒で閉じた人もいる。" },
+      { kind: "kadai", title: "見出しのサイト名を押す動きが、また出た",
+        body: "11/17 と11/22 に、見出しの「子どものお薬サポート」を押して何も起きなかった記録が計3回。検索の欄の名前「粉薬の名前で探す」を押した記録も1回ある。" },
+      { kind: "mada", title: "GA4 の外国の人は、リンクの確かめかもしれない",
+        body: "GA4 の26人のうち、アメリカが5人、スウェーデンが2人。Facebook やインスタは、リンクを貼ったときに、外国のサーバーから中身を確かめに来ることがある（facebook.com・lm.facebook.com から5回）。人の数としては多めに出ている可能性がある。" }
+    ],
+    next: [
+      "インスタの2つ目の投稿を出したら、次の日にまた見る（どの投稿から何人来て、何を開いたか）",
+      "インスタから来てすぐ閉じる人のために、投稿と同じやり方にすぐ行けるかを確かめる",
+      "見出しのサイト名を押したらトップへ戻るようにするか決める（11/5 から持ち越し）"
+    ],
+    questions: [
+      "インスタの投稿を見てサイトを開いたとき、何を探しましたか？",
+      "サイトを開いてすぐ閉じたのは、なぜですか？（思っていたものと違った、など）"
+    ]
+  },
+  {
+    date: "2026-11-17",
+    clarity: {
+      period: "11/15〜11/17（3日）",
+      sessions: 15, users: 8,
+      device: { "スマホ": 10, "PC": 5 },
+      source: { "直接": 14, "X": 1, "GitHub": 1 },
+      rage: 0
+    },
+    ga4: {
+      period: "11/10〜11/16（7日）",
+      users: 25, views: 125, events: 308,
+      source: { "直接": 41, "X": 16, "GitHub": 1 }
+    },
+    clicksPeriod: "11/13 昼〜11/16 夜の録画 20回（手元の確認2回を除く）",
+    clicks: [
+      ["やり方を開く（スポイト・お薬だんご・少しの水など）", 29],
+      ["年齢のボタン", 20],
+      ["薬を選ぶ（一覧・検索から）", 12],
+      ["飲ませ方が分からない", 11],
+      ["▶ 動画で見る", 6],
+      ["動画を閉じる", 6],
+      ["薬の一覧を見る", 4],
+      ["混ぜていい？", 3]
+    ],
+    notes: [
+      { kind: "kasetsu", title: "公開した動画は、押して見られている",
+        body: "11/14 に飲ませ方の動画10本を公開してから、「▶ 動画で見る」が6回押された。いちばん開かれたやり方は「スポイトで少しずつ」（11回）。ただ、動画を押した録画は、ほとんどが11/16 の昼〜夕方の作業中で、自分の確認とみられる。" },
+      { kind: "kadai", title: "動画の画面で、何も起きない所を何度も押している",
+        body: "11/16 の昼、動画を開いたあとに、反応しないクリックが2回の録画で15回ほど続いた（文字のない所）。止めたい、大きくしたいなど、押して何かが起きると思われている可能性がある。この3日の反応しないクリック25回の大半はこれ。自分の確認の録画だが、作った本人でも迷っている。" },
+      { kind: "kadai", title: "混ぜていい食べ物の名前を押している",
+        body: "11/15 の朝、スマホで薬の画面の食べ物（アイスクリーム・プリン・お茶・牛乳・ヨーグルト・オレンジジュース）を続けて押し、何も起きなかった。別の録画でもオレンジジュースを押している。食べ物を押すと、理由やくわしいことが出ると思われているのかもしれない。" },
+      { kind: "kadai", title: "準備中の薬を押しても、何も起きない（5回目）",
+        body: "11/16 に、準備中のアイピーディドライシロップを押して何も起きなかった。漢方の読みがな（よくかんさんかちんぴはんげ）を押した記録もある。" },
+      { kind: "mada", title: "X から初めて来た人が、3人から5人に",
+        body: "GA4 で、X から最初に来た人が5人（前回3人）。X からの訪問は16回。Clarity では、X から来た録画が2回（11/14 の朝に4秒、11/16 の PC）。" },
+      { kind: "mada", title: "人数は減った",
+        body: "GA4 の7日の人数は38人→25人。作業中の確認が少し減ったのと、外から新しく来る人が増えていないため。GA4 の平均の時間は、今回は読みとれなかった。" }
+    ],
+    next: [
+      "動画の画面で、押すと何が起きるか（止める・大きくする）を見直すか決める",
+      "食べ物の名前を押したときにどうするか決める（今のまま／理由を出す）",
+      "周りの、子どもが薬を飲んでいる親に、LINE で直接送る（?from=line つき。持ち越し）"
+    ],
+    questions: [
+      "動画を見ているとき、画面のどこを押しましたか？ 何が起きてほしかったですか？",
+      "混ぜていい食べ物の名前を押したとき、何が出ると思いましたか？"
+    ]
+  },
+  {
     date: "2026-11-13",
     clarity: {
       period: "11/11〜11/13（3日）",
@@ -448,8 +547,9 @@ const RECORDS = [
 /* ===== 日ごとの回数 =====
    Clarity の録画の一覧（コネクタ）を、日本時間の日ごとに数えたもの。手元の確認（localhost）は除く。自分のスマホ・PC の確認は含む
    all: 回数 / mobile: そのうちスマホ / x・qr・line: そのうち ?from= の印つきリンクから来た回数（x は、来た元が X（t.co）の回も入れる。11/13 から）
+   ig: インスタから（?from=insta、来た元が l.instagram.com、utm_source=ig のどれか）、th: Threads から（?from=threads か、来た元が l.threads.com）。11/23 から
    見るたびに、録画が残っている日（30日）を数え直して、まるごと入れかえる */
-const DAILY_UPDATED = "2026-11-13";
+const DAILY_UPDATED = "2026-11-23";
 const DAILY = [
   { d: "2026-10-30", all: 2,  mobile: 1,  x: 0, qr: 0, line: 0 },
   { d: "2026-10-31", all: 9,  mobile: 6,  x: 4, qr: 0, line: 0 },
@@ -465,7 +565,17 @@ const DAILY = [
   { d: "2026-11-10", all: 9,  mobile: 6,  x: 0, qr: 0, line: 0 },
   { d: "2026-11-11", all: 7,  mobile: 3,  x: 2, qr: 0, line: 0 },
   { d: "2026-11-12", all: 5,  mobile: 4,  x: 1, qr: 0, line: 0 },
-  { d: "2026-11-13", all: 1,  mobile: 1,  x: 1, qr: 0, line: 0 }
+  { d: "2026-11-13", all: 2,  mobile: 2,  x: 1, qr: 0, line: 0 },
+  { d: "2026-11-14", all: 4,  mobile: 3,  x: 1, qr: 0, line: 0 },
+  { d: "2026-11-15", all: 6,  mobile: 5,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-16", all: 8,  mobile: 4,  x: 1, qr: 0, line: 0 },
+  { d: "2026-11-17", all: 1,  mobile: 0,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-18", all: 1,  mobile: 0,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-19", all: 0,  mobile: 0,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-20", all: 0,  mobile: 0,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-21", all: 0,  mobile: 0,  x: 0, qr: 0, line: 0 },
+  { d: "2026-11-22", all: 13, mobile: 9,  x: 0, qr: 0, line: 0, ig: 3, th: 4 },
+  { d: "2026-11-23", all: 0,  mobile: 0,  x: 0, qr: 0, line: 0 }
 ];
 
 /* ===== 表示 ===== */
@@ -512,13 +622,19 @@ function body(r) {
     </div>`;
 }
 
-function tiles(r, p) {
-  const c = r.clarity || {}, g = r.ga4 || {}, pc = (p && p.clarity) || {}, pg = (p && p.ga4) || {};
+// 前回の数は、この記録より前で、その数がある記録から取る（GA4 が見られなかった日を飛ばすため）
+function prevValue(r, get) {
+  const i = RECORDS.indexOf(r);
+  for (const q of RECORDS.slice(i + 1)) { const v = get(q); if (v != null) return v; }
+  return null;
+}
+function tiles(r) {
+  const c = r.clarity || {}, g = r.ga4 || {};
   return `<div class="tiles">
-    ${tile("Clarity 人数", c.users, "人", c.period || "", p ? pc.users : null)}
-    ${tile("Clarity 回数", c.sessions, "回", c.period || "", p ? pc.sessions : null)}
-    ${tile("GA4 人数", g.users, "人", g.period || "", p ? pg.users : null)}
-    ${tile("GA4 表示回数", g.views, "回", g.period || "", p ? pg.views : null)}
+    ${tile("Clarity 人数", c.users, "人", c.period || "", prevValue(r, q => q.clarity?.users))}
+    ${tile("Clarity 回数", c.sessions, "回", c.period || "", prevValue(r, q => q.clarity?.sessions))}
+    ${tile("GA4 人数", g.users, "人", g.period || "", prevValue(r, q => q.ga4?.users))}
+    ${tile("GA4 表示回数", g.views, "回", g.period || "", prevValue(r, q => q.ga4?.views))}
   </div>`;
 }
 
@@ -559,7 +675,7 @@ function renderDaily() {
 
   const tip = document.getElementById("daily-tip"), card = box.closest(".chart-card");
   const show = g => {
-    const r = DAILY[+g.dataset.i], marks = [["X", r.x], ["QR", r.qr], ["LINE", r.line]].filter(m => m[1] > 0);
+    const r = DAILY[+g.dataset.i], marks = [["X", r.x], ["QR", r.qr], ["LINE", r.line], ["インスタ", r.ig], ["Threads", r.th]].filter(m => m[1] > 0);
     tip.innerHTML = `<b>${md(r.d)}　${r.all}回</b><br><i style="background:var(--s1)"></i>スマホ ${r.mobile}回<br><i style="background:var(--s2)"></i>スマホ以外 ${r.all - r.mobile}回` +
       (marks.length ? `<br>印つきリンク: ${marks.map(m => `${m[0]} ${m[1]}回`).join("・")}` : "");
     tip.style.display = "block";
@@ -581,8 +697,8 @@ function renderDaily() {
   document.getElementById("daily-note").textContent =
     `${md(DAILY[0].d)}〜${md(DAILY[n - 1].d)} の合計 ${sumAll}回（スマホ ${sumMob}回）。${DAILY_UPDATED} に数えた。手元の確認（localhost）は除き、自分のスマホ・PC の確認は含む。最後の日は途中まで。`;
   document.getElementById("daily-table").innerHTML =
-    `<table><thead><tr><th>日</th><th>回数</th><th>スマホ</th><th>スマホ以外</th><th>X</th><th>QR</th><th>LINE</th></tr></thead><tbody>` +
-    DAILY.map(r => `<tr><td>${md(r.d)}</td><td>${r.all}</td><td>${r.mobile}</td><td>${r.all - r.mobile}</td><td>${r.x}</td><td>${r.qr}</td><td>${r.line}</td></tr>`).join("") +
+    `<table><thead><tr><th>日</th><th>回数</th><th>スマホ</th><th>スマホ以外</th><th>X</th><th>QR</th><th>LINE</th><th>インスタ</th><th>Threads</th></tr></thead><tbody>` +
+    DAILY.map(r => `<tr><td>${md(r.d)}</td><td>${r.all}</td><td>${r.mobile}</td><td>${r.all - r.mobile}</td><td>${r.x}</td><td>${r.qr}</td><td>${r.line}</td><td>${r.ig || 0}</td><td>${r.th || 0}</td></tr>`).join("") +
     "</tbody></table>";
 }
 renderDaily();
@@ -602,6 +718,7 @@ const rows = [
   ["GA4 人数（7日）", r => r.ga4?.users],
   ["GA4 表示回数（7日）", r => r.ga4?.views],
   ["GA4 X からの訪問", r => r.ga4?.source?.["X"]],
+  ["GA4 インスタ・Threads からの訪問", r => r.ga4?.source ? (r.ga4.source["インスタ"] || 0) + (r.ga4.source["Threads"] || 0) : null],
   ["GA4 平均の時間", r => r.ga4?.avgTime]
 ];
 document.getElementById("trend").innerHTML =
