@@ -1,5 +1,5 @@
 // 嫌がられやすい薬の表（docs/iyagaru_taiouhyou.html）のもとのデータ。2026-11-23 に、ネットの資料と手元の病院の表で調べた下調べ。
-// 文で読むまとめは docs/33_iyagaru_kusuri_list.md。ここを書きかえたら `node tools/iyagaru_html.cjs` でページを作り直す。
+// 文で読むまとめは docs/34_iyagaru_kusuri_list.md。ここを書きかえたら `node tools/iyagaru_html.cjs` でページを作り直す。
 // 決まり: 資料の文は写さず、自分の言葉で書く。サイトに使う前に、薬剤師が元のページを見る。
 //
 // 判定（tier）: A 嫌がられやすい / B 条件つき / C 資料で分かれる・資料が弱い / D 飲みやすいとされている / E 資料が見つからない

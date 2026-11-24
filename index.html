@@ -298,7 +298,7 @@
   .howto .method-video { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; margin: 2px 0 14px; padding: 10px 54px 10px 10px; border-radius: 16px; background: var(--card); border: 1.5px solid var(--line); box-shadow: var(--row-shadow); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
   .howto .method-video::after { content: ""; position: absolute; right: 14px; top: 50%; width: 28px; height: 28px; margin-top: -14px; border-radius: 50%; background: var(--orange-soft) var(--chevron) center / 11px no-repeat; }
   .howto .method-video:active { transform: translateY(2px); box-shadow: none; }
-  .howto .method-video .video-thumb { display: block; flex: none; width: 104px; height: auto; aspect-ratio: 720 / 825; object-fit: cover; object-position: 50% 42%; border-radius: 10px; margin: 0; background: #fff; }
+  .howto .method-video .video-thumb { display: block; flex: none; width: 104px; height: auto; aspect-ratio: 720 / 825; object-fit: cover; object-position: 50% 10%; border-radius: 10px; margin: 0; background: #fff; }
   .howto .method-video .play-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .howto .method-video .play-text b { font-size: 17px; font-weight: 700; color: var(--text); }
   .howto .method-video .play-text small { font-size: 15px; color: var(--muted); }
@@ -411,7 +411,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-22a"></script>
+<script src="data.js?v=2026-11-24a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -735,6 +735,8 @@
     "アイスクリーム": "🍨", "水": "💧", "コーヒー牛乳": "☕", "プリン": "🍮", "牛乳": "🥛", "シロップ": "🥄",
     "お茶": "🍵", "ヨーグルト": "🥣", "ゼリー": "🍧", "りんごジュース": "🍎", "オレンジジュース": "🍊",
     "スポーツ飲料": "🥤", "ココア": "🍫", "乳酸菌飲料": "🧃",
+    // 2026-11-23: タミフルに足した食べ物（薬剤師の判断）
+    "チョコレートアイス": "🍨", "いちご味ヨーグルト": "🥣", "ピーチジュース": "🧃",
     // 2026-11-17: ヨクイニンのランキングの食べ物
     "のりの佃煮": "🍙", "はとむぎきなこ": "🫘", "いちごジャム": "🍓", "メープルシロップ": "🍁",
   };
@@ -864,50 +866,27 @@
     dlg.showModal();
   }
 
-  // 飲ませ方の動画（video/年齢-やり方.mp4。作り方は docs/28、道具は tools/douga）。1〜3歳と4歳からの6本（2026-11-06〜10）
-  // 2026-11-16 に公開した（ユーザーの指示「本番に出してほしい」。11-10 の「まだ公開しない」から変えた）。前は、ボタンを手元（localhost）でだけ出していた
-  // GitHub に上げるのは、サイトに出す動画（video/名前-usagi.mp4）とサムネイル（video/thumb）だけ。ほかの動画は上げない（.gitignore）
-  // 画像と同じ画面に出す。自動では始めず、▶ を押すと始まる。閉じると止まる
+  // 飲ませ方の動画（作り方は docs/28、道具は tools/douga）。画像と同じ画面に出す。自動では始めず、▶ を押すと始まる。閉じると止まる
+  // 2026-11-23 に、手元の絵＋うさぎの解説の7本（video/temoto-やり方-usagi.mp4。docs/28 の「手元の動画を、7本そろえた」。調べは docs/31）に入れかえて、本番に出した
+  // （ユーザー（薬剤師）が見て「これでいいです。本番にだしましょう」）。前の10本（video/年齢-やり方-usagi.mp4。2026-11-16 に公開）は、ファイルだけ残してある
+  // 字幕と読み上げが年齢で同じ3つ（水で溶かす・袋の中で混ぜる・お薬だんご）と「食べ物に混ぜる」は、年齢で分けずに1本（ユーザー「被っている内容は、年齢ごとに分ける必要ない」）
+  // GitHub に上げるのは、サイトに出す動画とサムネイル（video/thumb）だけ。ほかの動画は上げない（.gitignore）
   // ?v= は動画を差しかえたら変える（ブラウザが前の動画を覚えたまま出さないように）
-  // 2026-11-13 に、うさぎが丸い枠で解説するもの（名前-usagi.mp4。docs/28 の「うさぎの解説つき」）に差しかえた（ユーザーの判断）。もとの動画（名前.mp4）は手元に残してある
+  const VIDEO_V = "20261123";
+  const temoto = (n) => `video/temoto-${n}-usagi.mp4?v=${VIDEO_V}`;
   const VIDEOS = {
-    "toddler-water": "video/toddler-water-usagi.mp4?v=20261116",
-    "toddler-fukuro": "video/toddler-fukuro-usagi.mp4?v=20261116",
-    "toddler-dango": "video/toddler-dango-usagi.mp4?v=20261116",
-    "kid-water": "video/kid-water-usagi.mp4?v=20261116",
-    "kid-fukuro": "video/kid-fukuro-usagi.mp4?v=20261116",
-    "kid-otona": "video/kid-otona-usagi.mp4?v=20261116",
-    // 0〜1歳（2026-11-14 から）
-    "baby-spoit": "video/baby-spoit-usagi.mp4?v=20261116b",
-    "baby-nipple": "video/baby-nipple-usagi.mp4?v=20261116b",
-    "baby-dango": "video/baby-dango-usagi.mp4?v=20261116",
-    // 食べ物に混ぜる（1〜3歳と4歳からで、同じ動画。絵は手だけ。混ぜる食べ物は薬ごとに違うので、食べ物と薬の組み合わせは言わない）
-    "toddler-mix": "video/mix-usagi.mp4?v=20261116",
-    "kid-mix": "video/mix-usagi.mp4?v=20261116",
+    "toddler-water": temoto("water"), "kid-water": temoto("water"),
+    "toddler-fukuro": temoto("fukuro"), "kid-fukuro": temoto("fukuro"),
+    "toddler-dango": temoto("dango"), "baby-dango": temoto("dango"),
+    "kid-otona": temoto("otona"),
+    "baby-spoit": temoto("spoit"), "baby-nipple": temoto("nipple"),
+    // 食べ物に混ぜる（絵は手だけ。混ぜる食べ物は薬ごとに違うので、食べ物と薬の組み合わせは言わない）
+    "toddler-mix": temoto("mix"), "kid-mix": temoto("mix"),
   };
-  // 動画の長さ（ボタンに「約◯秒」と出す）。書いていない動画は約40秒（最初の6本は 37〜43秒、0〜1歳のお薬だんごは 40秒）
-  const VIDEO_SEC = { "baby-spoit": 55, "baby-nipple": 50, "toddler-mix": 35, "kid-mix": 35 };
-  // 動画のサムネイル（表紙の絵。video/thumb。動画から1コマ切り出したもの）
-  // 手元の絵（写真のように見える絵）＋うさぎの解説の、新しい7本（docs/28 の「手元の動画を、7本そろえた」。調べは docs/31）。
-  // **まだ本番に出さない**（2026-11-22 ユーザー「本番にださなくていい」。薬剤師の確認待ち）。手元（localhost）で開いたときだけ、上の10本のかわりに出す。
-  // 動画とサムネイル（video/temoto-やり方-usagi.mp4、video/thumb/temoto-やり方.jpg）は GitHub に上げていない（.gitignore）。作ったパソコンにだけある。
-  // 字幕と読み上げが年齢で同じ3つ（水で溶かす・袋の中で混ぜる・お薬だんご）は、年齢で分けずに1本（ユーザー「被っている内容は、年齢ごとに分ける必要ない」）。
-  // 本番に出すとき: .gitignore の temoto の2行を消して動画とサムネイルを上げ、下の TEMOTO を true にする
-  const TEMOTO = ["localhost", "127.0.0.1"].includes(location.hostname);
-  if (TEMOTO) {
-    const t = (n) => `video/temoto-${n}-usagi.mp4?v=20261120`;
-    Object.assign(VIDEOS, {
-      "toddler-water": t("water"), "kid-water": t("water"), "toddler-fukuro": t("fukuro"), "kid-fukuro": t("fukuro"),
-      "toddler-dango": t("dango"), "baby-dango": t("dango"), "kid-otona": t("otona"),
-      "baby-spoit": t("spoit"), "baby-nipple": t("nipple"), "toddler-mix": t("mix"), "kid-mix": t("mix"),
-    });
-    Object.keys(VIDEO_SEC).forEach((k) => delete VIDEO_SEC[k]);
-    Object.assign(VIDEO_SEC, { "baby-spoit": 55, "baby-nipple": 50, "toddler-fukuro": 35, "kid-fukuro": 35, "toddler-mix": 35, "kid-mix": 35 });
-  }
-  // サムネイルの名前: 前の10本は「年齢-やり方」、新しい7本は動画の名前（temoto-やり方）
-  const videoThumb = (name) => TEMOTO
-    ? `video/thumb/${VIDEOS[name].match(/video\/(.+)-usagi\.mp4/)[1]}.jpg?v=20261120`
-    : `video/thumb/${name}.jpg?v=20261116`;
+  // 動画の長さ（ボタンに「約◯秒」と出す）。書いていない動画は約40秒（水で溶かす・お薬だんご・おとな飲みは 39〜41秒）
+  const VIDEO_SEC = { "baby-spoit": 55, "baby-nipple": 50, "toddler-fukuro": 35, "kid-fukuro": 35, "toddler-mix": 35, "kid-mix": 35 };
+  // 動画のサムネイル（表紙の絵。動画から1コマ切り出したもの）。名前は動画と同じ（video/thumb/temoto-やり方.jpg）
+  const videoThumb = (name) => `video/thumb/${VIDEOS[name].match(/video\/(.+)-usagi\.mp4/)[1]}.jpg?v=${VIDEO_V}`;
   function openVideo(title, src, label, poster) {
     const dlg = document.getElementById("card-view");
     dlg.querySelector(".card-title").textContent = title;
@@ -960,7 +939,6 @@
         // サムネイルの絵は、動画の最初の画面（子ども・うさぎ・題名。video/thumb/年齢-やり方.jpg。動画から1コマ切り出した）。
         // 同じ日のユーザーの指示「サムネはこれにしてほしい」。はじめは、やり方の絵（img/howto）をサムネイルにしていた。絵が読めないときは、やり方の絵に戻す
         const pic = el("img", { class: "video-thumb", src: videoThumb(`${flowSel}-${key}`), alt: "", loading: "lazy", width: "720", height: "1280" });
-        if (TEMOTO) pic.style.objectPosition = "50% 10%";   // 新しい7本のサムネイルは、うさぎと道具の所を切り取って出す
         // 横長のボタン: 左に小さなサムネイル、まん中に言葉と長さ、右に「›」。長さは動画ごと（VIDEO_SEC。書いていなければ約40秒）
         const sec = `約${VIDEO_SEC[`${flowSel}-${key}`] || 40}秒`;
         const thumb = el("button", { type: "button", class: "method-video", "aria-label": `この飲ませ方を動画で見る（${sec}）` },
