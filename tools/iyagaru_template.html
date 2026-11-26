@@ -1,0 +1,363 @@
+<title>嫌がられやすい薬の表</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+  /* 並べ方: 上に「調べた範囲」と進み具合、判定ごとの数（押すと絞りこむ）。その下に、薬のカードを判定の順に。カードを開くと、理由・味・資料にあった飲ませ方・資料と、決めるボタン。薬の対応表・取りこぼしの対応表と同じ青緑と字 */
+  :root {
+    --bg: #eef6f4; --card: #ffffff; --text: #1f2d2b; --muted: #5d6e6b; --line: #d3e3df; --accent: #1f7a70; --accent-soft: #d9efeb; --on-accent: #ffffff; --stamp: #e8a317;
+    --neg: #a5321f; --neg-bg: #fbe6e1; --soft: #8a5a00; --soft-bg: #fbefd2; --pos: #1d6b3a; --pos-bg: #e2f3e7; --neu: #4d5c59; --neu-bg: #e9efed;
+    --font: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+    --font-display: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936; --on-accent: #0f1a19; --stamp: #f2c14e;
+      --neg: #ffab99; --neg-bg: #47241d; --soft: #f2c14e; --soft-bg: #3a3120; --pos: #8fd6a9; --pos-bg: #1d3a2a; --neu: #b9c4c1; --neu-bg: #26302e; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg: #142120; --card: #1d2c2a; --text: #e8f1ef; --muted: #a3b5b1; --line: #2f4340; --accent: #6cc7b9; --accent-soft: #1f3936; --on-accent: #0f1a19; --stamp: #f2c14e;
+    --neg: #ffab99; --neg-bg: #47241d; --soft: #f2c14e; --soft-bg: #3a3120; --pos: #8fd6a9; --pos-bg: #1d3a2a; --neu: #b9c4c1; --neu-bg: #26302e; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.65; padding-block: 20px 60px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  main { max-width: 760px; margin: 0 auto; display: grid; gap: 14px; }
+  h1 { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; margin: 0; text-wrap: balance; }
+  h2 { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.4; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  .lead { color: var(--muted); font-size: 0.86rem; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: grid; gap: 10px; }
+
+  .scope { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .scope div { background: var(--bg); border-radius: 12px; padding: 8px 10px; font-size: 0.76rem; color: var(--muted); display: grid; }
+  .scope b { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.2; color: var(--text); font-variant-numeric: tabular-nums; }
+  ul.plain { margin: 0; padding-left: 1.2em; font-size: 0.86rem; display: grid; gap: 4px; }
+  ul.plain.muted { color: var(--muted); font-size: 0.84rem; }
+  details.more > summary { cursor: pointer; font-family: var(--font-display); font-weight: 700; }
+  details.more > ul { margin-top: 8px; }
+
+  /* 判定ごとの数（押すと絞りこむ） */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; }
+  .tile { font: inherit; text-align: left; border: 2px solid transparent; border-radius: 12px; padding: 8px 10px; cursor: pointer; display: grid; gap: 1px; color: var(--text); min-width: 0; }
+  .tile b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .tile span { font-size: 0.8rem; font-weight: 700; } .tile small { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+  .tile.t-neg { background: var(--neg-bg); } .tile.t-neg b, .tile.t-neg span { color: var(--neg); }
+  .tile.t-soft { background: var(--soft-bg); } .tile.t-soft b, .tile.t-soft span { color: var(--soft); }
+  .tile.t-pos { background: var(--pos-bg); } .tile.t-pos b, .tile.t-pos span { color: var(--pos); }
+  .tile.t-neu { background: var(--neu-bg); } .tile.t-neu b, .tile.t-neu span { color: var(--neu); }
+  .tile[aria-pressed="true"] { border-color: var(--accent); }
+
+  .prog { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; }
+  .ring { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--accent) calc(var(--ap, 0) * 1%), var(--stamp) 0 calc((var(--ap, 0) + var(--de, 0)) * 1%), var(--neu-bg) 0); }
+  .ring > div { width: 68px; height: 68px; border-radius: 50%; background: var(--card); display: grid; place-items: center; text-align: center; font-size: 0.68rem; color: var(--muted); line-height: 1.2; }
+  .ring b { display: block; font-family: var(--font-display); font-size: 1.35rem; color: var(--text); font-variant-numeric: tabular-nums; }
+  .prog .big { font-family: var(--font-display); font-size: 1rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 0.78rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; }
+  .state { font-size: 0.8rem; color: var(--muted); } .state.warn { color: var(--neg); font-weight: 700; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font: inherit; font-size: 0.82rem; padding: 4px 11px; min-height: 36px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+  .row-label { font-size: 0.76rem; color: var(--muted); margin-bottom: -4px; }
+  input[type="search"] { width: 100%; font: inherit; font-size: 16px; padding: 10px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); color: var(--text); }
+
+  /* 薬のカード */
+  #list { display: grid; gap: 8px; }
+  details.drug { background: var(--card); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+  details.drug.s-done { border-color: var(--accent); }
+  details.drug.s-wait { border-color: var(--stamp); }
+  details.drug > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 2.6em 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; }
+  details.drug > summary::-webkit-details-marker { display: none; }
+  .rank { font-family: var(--font-display); font-variant-numeric: tabular-nums; text-align: center; font-weight: 700; color: var(--accent); font-size: 1.15rem; line-height: 1.05; }
+  .rank small { display: block; font-size: 0.6rem; color: var(--muted); font-weight: 400; }
+  .rank.out { color: var(--neu); }
+  .nm { min-width: 0; display: grid; gap: 4px; }
+  .nm b { font-family: var(--font-display); font-size: 1.02rem; line-height: 1.35; overflow-wrap: anywhere; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { font-size: 0.7rem; border-radius: 999px; padding: 1px 8px; background: var(--neu-bg); color: var(--neu); font-weight: 700; }
+  .tag.cat { background: transparent; border: 1px solid var(--line); color: var(--muted); font-weight: 400; }
+  .tag.live { background: var(--accent-soft); color: var(--accent); }
+  .tag.gap { background: var(--soft-bg); color: var(--soft); }
+  .tag.dec { background: var(--accent); color: var(--on-accent); }
+  .tag.dec.wait { background: var(--stamp); color: #2b1f00; }
+  .pill { font-size: 0.74rem; font-weight: 700; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .pill.t-neg { background: var(--neg-bg); color: var(--neg); } .pill.t-soft { background: var(--soft-bg); color: var(--soft); }
+  .pill.t-pos { background: var(--pos-bg); color: var(--pos); } .pill.t-neu { background: var(--neu-bg); color: var(--neu); }
+  .body { padding: 0 12px 12px; display: grid; gap: 10px; }
+  .sec { display: grid; gap: 5px; min-width: 0; }
+  .sec h3 { margin: 0; font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .sec h3 a { font-weight: 400; }
+  .now { background: var(--bg); border-radius: 12px; padding: 10px 12px; font-size: 0.88rem; }
+  .now .taste { font-weight: 700; overflow-wrap: anywhere; }
+  .gapbox { background: var(--soft-bg); color: var(--soft); border-radius: 10px; padding: 7px 10px; font-size: 0.84rem; font-weight: 700; }
+  .kufuu { border: 1px dashed var(--line); border-radius: 12px; padding: 10px 12px; }
+  .kufuu .warn { font-size: 0.74rem; color: var(--muted); }
+  /* 資料: 1行に1つ。左に資料の名前（リンク）、右に種類と確かめ方 */
+  .srcs { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); min-width: 0; }
+  .srcs li { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; padding: 6px 2px; border-bottom: 1px solid var(--line); font-size: 0.84rem; }
+  .srcs li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+  .how { font-size: 0.72rem; white-space: nowrap; color: var(--muted); }
+  .how b { font-weight: 700; border-radius: 999px; padding: 0 7px; margin-left: 4px; }
+  .how .h-gen { background: var(--pos-bg); color: var(--pos); } .how .h-open { background: var(--neu-bg); color: var(--neu); } .how .h-part { background: var(--soft-bg); color: var(--soft); }
+  .none { color: var(--muted); font-size: 0.84rem; }
+
+  .decide { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 7px; }
+  .result { font-size: 0.88rem; font-weight: 700; border-radius: 10px; padding: 6px 10px; border: 2px dashed var(--line); color: var(--muted); }
+  .result.s-wait { border-style: solid; border-color: var(--stamp); background: var(--soft-bg); color: var(--soft); }
+  .result.s-done { border-style: solid; border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pick button { font: inherit; font-size: 0.86rem; font-weight: 700; min-height: 42px; padding: 6px 14px; border-radius: 10px; border: 2px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .pick button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  .pick button:disabled { opacity: 0.55; cursor: default; }
+  details.note > summary { cursor: pointer; font-size: 0.8rem; color: var(--muted); padding: 2px 0; }
+  textarea { width: 100%; min-height: 56px; font: inherit; font-size: 16px; padding: 8px 10px; border-radius: 10px; border: 2px solid var(--line); background: var(--card); color: var(--text); margin-top: 4px; }
+  .err { font-size: 0.8rem; color: var(--neg); font-weight: 700; }
+  button:focus-visible, summary:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 420px) { .scope b { font-size: 1.2rem; } .prog { grid-template-columns: 1fr; justify-items: start; } }
+</style>
+<main>
+  <header style="display:grid;gap:6px">
+    <h1>嫌がられやすい薬の表</h1>
+    <p class="lead">薬の画面に「ワンポイント」（気をつけたいこと、飲めない子への現場の飲ませ方）を入れるための下調べ（__DATE__）。サイトの薬と、準備中・下書きの薬のすべてを、ネットの資料と手元の病院の表で見て、嫌がられやすさで分けた。1つずつボタンで決めると、ここに残る。決めたものは、Claude がハンドブックと照らしてサイトに入れる。</p>
+    <p class="lead"><a href="https://claude.ai/artifact/3a219wSiFYhmBmNKUrLL38" target="_blank" rel="noopener">← 薬の対応表へ</a></p>
+  </header>
+
+  <section class="box" aria-label="調べた範囲">
+    <h2>調べた範囲</h2>
+    <div class="scope">
+      <div><b id="n-total">0</b>個の薬（対応表にあるすべて）</div>
+      <div><b id="n-live">0</b>個は、サイトに出ている薬</div>
+      <div><b id="n-prep">0</b>個は、準備中・下書きの薬</div>
+    </div>
+    <details class="more"><summary>先に分かったこと（4つ）</summary>
+      <ul class="plain">
+        <li>クラリスとタミフルは、論文の実験と現場の声が食い違う。水にといてすぐなら、実験では苦くない。苦くなるのは、酸っぱいものに混ぜる、置いておく、口に残る、のとき。</li>
+        <li>混ぜる組み合わせで苦くなる。クラリスやジスロマックを、ムコダインのドライシロップやタミフルと一緒にとかすと、強く苦くなる。</li>
+        <li>薬によって、合う食べ物が逆になる。タミフルはバニラアイスが合わず、チョコアイスが合う。バナンは水がいちばん苦く、ジュースが合う。</li>
+        <li>嫌がる理由は、苦味だけではない。ざらつき、塩味、量とにおい、辛味や酸味がある。</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="box" aria-label="進み具合">
+    <div class="prog">
+      <div class="ring" id="ring" role="img" aria-label="進み具合"><div><span><b id="n-decided">0</b>／<span id="n-all">0</span>個</span></div></div>
+      <div style="display:grid;gap:6px;min-width:0">
+        <div class="big">済み <span id="n-done">0</span>個・サイトに入れる前 <span id="n-wait">0</span>個・まだ <span id="n-todo">0</span>個</div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>済み（サイトに入れた・入れないと決めた）</span><span><i style="background:var(--stamp)"></i>入れると決めたが、サイトにまだ入れていない</span><span><i style="background:var(--neu-bg)"></i>まだ決めていない</span></div>
+        <p class="state" id="state" role="status">決めたことを読みこんでいます…</p>
+      </div>
+    </div>
+    <div class="tiles" id="tiles" role="group" aria-label="判定で絞りこむ"></div>
+  </section>
+
+  <section class="box" aria-label="絞りこみ">
+    <input id="q" type="search" placeholder="薬の名前で探す" autocomplete="off" aria-label="薬の名前で探す">
+    <p class="row-label">サイトに出ているか</p>
+    <div class="chips" id="f-live" role="group" aria-label="サイトに出ているか"></div>
+    <p class="row-label">決めたか</p>
+    <div class="chips" id="f-status" role="group" aria-label="決めたか"></div>
+    <p class="row-label">並べ方</p>
+    <div class="chips" id="f-sort" role="group" aria-label="並べ方"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+      <p class="state" id="count" role="status"></p>
+      <button type="button" class="chip" id="toggle-all" aria-pressed="false">すべて開く</button>
+    </div>
+  </section>
+
+  <div id="list"></div>
+
+  <section class="box">
+    <h2>見方</h2>
+    <ul class="plain muted">
+      <li>判定: A 嫌がられやすい（複数の資料が、薬の名前を挙げて書いている）／B 条件つき（後味、混ぜるもの、置いておく、ざらつきなどで飲みにくくなる）／C 資料で分かれる・資料が弱い／D 飲みやすいとされている／E 資料が見つからない。</li>
+      <li>資料の右の印は、確かめ方。「原文」は資料そのものを読んだもの。「開いた」はページを開いて、道具の要約で確かめたもの（言い回しの細部がずれることがある）。「一部」は、抄録・途中まで・目次だけ。</li>
+      <li>「資料にあった飲ませ方」は、ネットの資料のメモ。ハンドブックと照らす前で、まだ確かめていない。サイトに出すかは、薬剤師が決める。</li>
+      <li>後発品は、会社ごとに味がちがう。ここの話は、多くが先発品か、特定の会社の製品のもの。</li>
+      <li>ボタンをもう一度押すと、決めたことを取り消せる。メモは、欄の外を押すと残る。</li>
+    </ul>
+  </section>
+</main>
+<script>
+(function () {
+  const D = __DATA__;
+  const DRUGS = D.drugs, TIERS = D.tiers;
+  const SITE = "https://koshihara-pharm.github.io/boot_camp/";
+  const $ = (id) => document.getElementById(id);
+  function el(tag, attrs, children) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) { if (k === "text") n.textContent = v; else n.setAttribute(k, v); }
+    for (const c of children || []) if (c) n.append(c);
+    return n;
+  }
+  const tierOf = {}; for (const t of TIERS) tierOf[t.key] = t;
+  const CHOICES = [["add", "ワンポイントを入れる"], ["skip", "入れない"]];
+  const HOW = { "原文": "h-gen", "開いた": "h-open", "一部": "h-part", "抜粋": "h-part" };
+
+  let decisions = {};            // 薬の id → { choice, note, applied }（db の kime）
+  let db = null, canWrite = false;
+  const cards = new Map();       // 薬 → カードの部品
+  const filter = { tier: "all", live: "all", status: "all", q: "", sort: "tier" };
+  const statusOf = (d) => { const k = decisions[d.id]; return k && k.choice ? (k.choice === "skip" || k.applied ? "done" : "wait") : "todo"; };
+
+  function drugCard(d) {
+    const t = tierOf[d.tier];
+    const decTag = el("span", { class: "tag dec", hidden: "" });
+    const result = el("p", { class: "result" });
+    const buttons = CHOICES.map(([v, text]) => {
+      const b = el("button", { type: "button", "aria-pressed": "false", text });
+      b.addEventListener("click", () => choose(d, v));
+      return b;
+    });
+    const ta = el("textarea", { id: "note-" + d.id, "aria-label": "メモ", placeholder: "入れたいこと、理由のメモ（なくてもよい）" });
+    ta.addEventListener("change", () => save(d, { note: ta.value.trim() }));
+    const noteBox = el("details", { class: "note" }, [el("summary", { text: "メモを書く" }), ta]);
+    const err = el("p", { class: "err", hidden: "" });
+    const body = el("div", { class: "body" }, [
+      el("div", { class: "sec" }, [
+        el("h3", { text: t.reasonHead }),
+        el("ul", { class: "plain" }, d.reason.map((r) => el("li", { text: r }))),
+      ]),
+      el("div", { class: "sec now" }, [
+        el("h3", {}, [document.createTextNode(d.live ? "サイトの今の味" : "手元の表の味（まだサイトに出していない）"),
+          d.live ? el("a", { href: SITE + "#drug-" + d.index, target: "_blank", rel: "noopener", text: "本番で開く" }) : null]),
+        el("p", { class: "taste", text: d.taste || "まだ書いていない" }),
+        d.gap ? el("p", { class: "gapbox", text: "ずれ: " + d.gap }) : null,
+      ]),
+      d.kufuu.length ? el("div", { class: "sec kufuu" }, [
+        el("h3", { text: "資料にあった飲ませ方" }),
+        el("ul", { class: "plain" }, d.kufuu.map((r) => el("li", { text: r }))),
+        el("p", { class: "warn", text: "ネットの資料のメモ。まだ確かめていない" }),
+      ]) : null,
+      el("div", { class: "sec" }, [
+        el("h3", { text: "資料" }),
+        d.src.length ? el("ul", { class: "srcs" }, d.src.map((s) => el("li", {}, [
+          el("span", {}, [s.url ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.name }) : document.createTextNode(s.name)]),
+          el("span", { class: "how" }, [document.createTextNode(s.kind), el("b", { class: HOW[s.how] || "h-open", text: s.how })]),
+        ]))) : el("p", { class: "none", text: "資料なし" }),
+      ]),
+      el("div", { class: "decide" }, [result, el("div", { class: "pick", role: "group", "aria-label": "決める" }, buttons), noteBox, err]),
+    ]);
+    const root = el("details", { class: "drug" }, [
+      el("summary", {}, [
+        d.rank ? el("div", { class: "rank" }, [document.createTextNode(String(d.rank)), el("small", { text: "位" })])
+          : el("div", { class: "rank out" }, [document.createTextNode("外"), el("small", { text: "ランク外" })]),
+        el("div", { class: "nm" }, [el("b", { text: d.name }), el("div", { class: "tags" }, [
+          el("span", { class: "tag " + (d.live ? "live" : ""), text: d.live ? "公開中" : d.status }),
+          d.cat ? el("span", { class: "tag cat", text: d.cat }) : null,
+          d.gap ? el("span", { class: "tag gap", text: "味のずれ" }) : null,
+          decTag,
+        ])]),
+        el("span", { class: "pill t-" + t.tone, text: d.tier + " " + t.short }),
+      ]),
+      body,
+    ]);
+    cards.set(d, { root, decTag, result, buttons, ta, noteBox, err, busy: false });
+    return root;
+  }
+
+  function paint(d) {
+    const c = cards.get(d), k = decisions[d.id] || {}, s = statusOf(d);
+    CHOICES.forEach(([v], i) => { c.buttons[i].setAttribute("aria-pressed", String(k.choice === v)); c.buttons[i].disabled = !canWrite || c.busy; });
+    const words = s === "todo" ? "まだ決めていない" : k.choice === "skip" ? "✓ 入れないと決めた（済み）" : k.applied ? "✓ ワンポイントを、サイトに入れた" : "ワンポイントを入れると決めた（サイトには、まだ）";
+    c.result.textContent = words; c.result.className = "result s-" + s;
+    c.root.classList.toggle("s-done", s === "done"); c.root.classList.toggle("s-wait", s === "wait");
+    c.decTag.hidden = s === "todo";
+    c.decTag.textContent = k.choice === "skip" ? "入れない" : k.applied ? "入れた" : "入れる";
+    c.decTag.className = "tag dec" + (s === "wait" ? " wait" : "");
+    if (document.activeElement !== c.ta) { c.ta.value = k.note || ""; if (k.note) c.noteBox.open = true; }
+    c.ta.disabled = !canWrite;
+  }
+
+  function progress() {
+    let de = 0, ap = 0;
+    for (const d of DRUGS) { const s = statusOf(d); if (s === "wait") de++; else if (s === "done") ap++; }
+    $("n-decided").textContent = de + ap; $("n-done").textContent = ap; $("n-wait").textContent = de; $("n-todo").textContent = DRUGS.length - de - ap; $("n-all").textContent = DRUGS.length;
+    $("ring").style.setProperty("--ap", ap / DRUGS.length * 100); $("ring").style.setProperty("--de", de / DRUGS.length * 100);
+  }
+
+  async function save(d, patch) {
+    const c = cards.get(d);
+    if (!db || !canWrite || c.busy) return;
+    const cur = decisions[d.id] || {};
+    const next = { choice: cur.choice || "", note: cur.note || "", applied: !!cur.applied, drug: d.name, tier: d.tier, label: "", ...patch };
+    if ("choice" in patch && patch.choice !== cur.choice) next.applied = false; // 決め直したら、反映はやり直し
+    next.label = (CHOICES.find((x) => x[0] === next.choice) || [])[1] || "";
+    next.at = new Date().toISOString();
+    if (next.choice === (cur.choice || "") && next.note === (cur.note || "") && next.applied === !!cur.applied) return;
+    c.busy = true; c.err.hidden = true; decisions[d.id] = next; paint(d); progress();
+    try { await db.collection("kime").doc(d.id).set(next); }
+    catch (e) {
+      decisions[d.id] = cur; c.err.hidden = false;
+      c.err.textContent = e && e.code === "invalid_argument" ? "このページでは、書きこめる人だけが決められます。" : "残せませんでした。少し待って、もう一度押してください。";
+    }
+    c.busy = false; paint(d); progress(); applyFilter();
+  }
+  const choose = (d, v) => save(d, { choice: (decisions[d.id] || {}).choice === v ? "" : v });
+
+  const rankKey = (d) => d.rank || 1000 + d.order;
+  function applyFilter() {
+    let shown = 0;
+    const order = [...DRUGS].sort(filter.sort === "tier" ? (a, b) => a.tier.localeCompare(b.tier) || rankKey(a) - rankKey(b) : (a, b) => rankKey(a) - rankKey(b));
+    order.forEach((d, i) => { cards.get(d).root.style.order = i; });
+    for (const d of DRUGS) {
+      const ok = (filter.tier === "all" || filter.tier === d.tier) && (filter.live === "all" || (filter.live === "live") === d.live) &&
+        (filter.status === "all" || filter.status === statusOf(d)) && (!filter.q || d.name.toLowerCase().includes(filter.q));
+      cards.get(d).root.hidden = !ok; if (ok) shown++;
+    }
+    $("count").textContent = shown + "個の薬を出しています";
+  }
+
+  function chips(target, values, key) {
+    target.replaceChildren(...values.map(([v, text]) => {
+      const b = el("button", { type: "button", class: "chip", "aria-pressed": String(filter[key] === v), text });
+      b.addEventListener("click", () => { filter[key] = v; chips(target, values, key); applyFilter(); });
+      return b;
+    }));
+  }
+  function tiles() {
+    $("tiles").replaceChildren(...TIERS.map((t) => {
+      const n = DRUGS.filter((d) => d.tier === t.key).length;
+      const b = el("button", { type: "button", class: "tile t-" + t.tone, "aria-pressed": String(filter.tier === t.key) }, [el("b", { text: String(n) }), el("span", { text: t.key + " " + t.short }), el("small", { text: t.title })]);
+      b.addEventListener("click", () => { filter.tier = filter.tier === t.key ? "all" : t.key; tiles(); applyFilter(); });
+      return b;
+    }));
+  }
+
+  $("n-total").textContent = DRUGS.length;
+  $("n-live").textContent = DRUGS.filter((d) => d.live).length;
+  $("n-prep").textContent = DRUGS.filter((d) => !d.live).length;
+  $("list").replaceChildren(...DRUGS.map(drugCard));
+  chips($("f-live"), [["all", "すべて"], ["live", "公開中"], ["prep", "準備中・下書き"]], "live");
+  chips($("f-status"), [["all", "すべて"], ["todo", "まだ決めていない"], ["wait", "サイトに入れる前"], ["done", "済み"]], "status");
+  chips($("f-sort"), [["tier", "判定の順（A から）"], ["rank", "ランキング順"]], "sort");
+  tiles();
+  $("q").addEventListener("input", (e) => { filter.q = e.target.value.trim().toLowerCase(); applyFilter(); });
+  $("toggle-all").addEventListener("click", (e) => {
+    const open = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", String(open)); e.currentTarget.textContent = open ? "すべて閉じる" : "すべて開く";
+    for (const { root } of cards.values()) root.open = open;
+  });
+  for (const d of DRUGS) paint(d);
+  progress(); applyFilter();
+
+  // db につなぐ（つながらないときは、読むだけ）
+  const state = $("state");
+  const offline = (msg) => { state.textContent = msg; state.classList.add("warn"); };
+  const boot = window.claude && window.claude.use ? window.claude.use("db") : Promise.resolve(null);
+  boot.then((got) => {
+    if (!got) { offline("このページの開き方では、決めたことを残せません。Claude のアプリか claude.ai で開いてください（読むことはできます）。"); return; }
+    db = got; canWrite = true;
+    for (const d of DRUGS) paint(d);
+    const timer = setTimeout(() => { state.textContent = "決めたことを、まだ読みこめていません。前に決めたものが出ていないかもしれません。"; state.classList.add("warn"); }, 10000);
+    db.collection("kime").onSnapshot((snap) => {
+      const next = {};
+      for (const x of snap.docs) next[x.id] = x.data();
+      for (const [d, c] of cards) if (c.busy && decisions[d.id]) next[d.id] = decisions[d.id]; // 書いている途中のものは上書きしない
+      decisions = next;
+      for (const d of DRUGS) paint(d);
+      progress(); applyFilter();
+      if (!snap.metadata.fromCache) { clearTimeout(timer); state.classList.remove("warn"); state.textContent = "薬のカードを開いて、ボタンを押すと、決めたことがここに残ります。"; }
+    }, () => { clearTimeout(timer); canWrite = false; for (const d of DRUGS) paint(d); offline("決めたことを読みこめませんでした。あとで開き直してください。"); });
+  }).catch(() => offline("決めたことを残す仕組みにつながりませんでした（読むことはできます）。"));
+})();
+</script>

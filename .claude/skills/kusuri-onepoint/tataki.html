@@ -1,0 +1,161 @@
+<title>モビコールの叩き</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+<style>
+  /* 叩き（2026-11-24、3つ目の形）: モビコールの薬の画面。ユーザー「情報はいいが見にくい。シンプルに。情報は削らない」。
+     直したこと: 吹き出しは、いちばん上の1つだけ（気をつけたいこと → おすすめ を、ここで言い切る）。
+     その下は、今のサイトの薬の画面と同じ部品だけ（◎○× の箱、食べ物の札、コツの箇条書き）。目もりの棒・箱の中の箱・絵つきのコツの札は、やめた。
+     色・字・形は、サイト（index.html）の決まりのまま。スマホのダークモードでも明るい色で出す。 */
+  :root {
+    color-scheme: light;
+    --bg: #fff4f6; --card: #ffffff; --text: #3d2f28; --muted: #6f5f56; --line: #eadfd8; --hair: #f1e8e2; --info: #f8f3ef;
+    --title: #c4611a; --ink: #ad5118; --orange: #f5b783; --orange-soft: #fdf1e6;
+    --accent: #2a6fa3; --good: #2b7d2b; --good-bg: #ebf5e9; --bad: #b33a2e; --bad-bg: #fbe8e5;
+    --stamp: #e8a317; --stamp-soft: #fff4dc;
+    --font: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --sheet-shadow: 0 1px 2px rgb(61 47 40 / 0.04), 0 6px 20px rgb(61 47 40 / 0.06);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 17px; font-weight: 500; line-height: 1.7; letter-spacing: 0.02em; }
+  main { max-width: 560px; margin: 0 auto; padding-block: 16px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.4; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* ---- サイトと同じ部品 ---- */
+  .brandbar { margin: -16px -16px 22px; padding: 12px 20px 11px; background: var(--card); border-top: 6px solid transparent; border-image: linear-gradient(90deg, var(--orange) 0 70%, #4b97c8 70% 100%) 6; box-shadow: 0 1px 0 var(--hair); font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: 0.06em; }
+  .back { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; color: var(--accent); font-size: 15px; font-weight: 700; text-decoration: none; }
+  .card { margin-top: 12px; background: var(--card); border-radius: 20px; padding: 20px 16px; box-shadow: var(--sheet-shadow); }
+  .card h1 { font-size: 24px; color: var(--title); line-height: 1.35; letter-spacing: 0.03em; }
+  .taste { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; font-size: 15px; }
+  .taste b { margin-right: 2px; font-size: 13px; color: var(--muted); }
+  .taste span { padding: 2px 12px; border-radius: 999px; background: var(--orange-soft); }
+  .section-title { margin: 24px 0 10px; padding-top: 20px; border-top: 1px solid var(--hair); font-size: 19px; color: var(--text); }
+  .group { margin-top: 10px; padding: 14px 12px; border-radius: 16px; background: var(--tone-bg); --tone: var(--muted); --tone-bg: var(--info); }
+  .group h3 { margin: 0 0 10px; font-size: 16px; color: var(--tone); }
+  .group p { margin: 0 0 10px; font-size: 14px; color: var(--text); }
+  .g-ok { --tone: var(--good); --tone-bg: var(--good-bg); }
+  .g-bad { --tone: var(--bad); --tone-bg: var(--bad-bg); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px 5px 8px; border-radius: 999px; background: var(--card); font-size: 16px; }
+  .chip img { flex: none; width: 26px; height: 26px; }
+  .src-head { margin: 22px 0 6px; font-size: 16px; color: var(--text); }
+  .notes { margin: 0 0 14px; padding-left: 1.2em; }
+  .notes li { margin-bottom: 6px; }
+  .refs { font-size: 14px; color: var(--muted); }
+  .refs summary { padding-block: 12px; cursor: pointer; }
+  .refs ul { margin: 0 0 8px; padding-left: 1.2em; }
+  .refs li a { display: inline-block; padding-block: 10px; }
+  .refs p { margin: 0 0 8px; }
+
+  /* ---- 箱の中の小見出し（「甘いもの」「温かいもの」など）。字だけ。線や箱は足さない ---- */
+  .group h4 { margin: 16px 0 8px; font-size: 15px; color: var(--text); }
+  .group h3 + h4 { margin-top: 0; }
+  .group .chips + p { margin: 8px 0 0; }
+
+  /* ---- 新しく足したもの: うさぎ薬剤師の一言（この画面に1つだけ） ----
+     押せない情報なので、うすい色の面だけ。顔の丸は、トップのスタンプと同じ黄色の輪 */
+  .usagi { margin-top: 18px; padding: 14px 16px 16px; border-radius: 16px; background: var(--orange-soft); }
+  .usagi-who { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .usagi-who img { width: 48px; height: 48px; border: 2px solid var(--stamp); border-radius: 50%; background: var(--stamp-soft); }
+  .usagi dl { margin: 10px 0 0; }
+  .usagi dt { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .usagi dt:first-child { margin-top: 0; }
+  .usagi dd { margin: 0; font-size: 17px; line-height: 1.65; }
+  .ask { margin-top: 6px; padding: 14px 16px; border-radius: 16px; background: var(--info); font-size: 15px; }
+  .ask strong { display: block; margin-bottom: 2px; font-size: 16px; }
+</style>
+
+<main>
+  <div class="brandbar">子どものお薬サポート</div>
+  <a class="back" href="https://koshihara-pharm.github.io/boot_camp/">← 薬を選び直す</a>
+
+  <article class="card">
+    <h1>モビコール配合内用剤</h1>
+    <div class="taste"><b>薬の味</b><span>わずかに塩味</span><span>においなし</span></div>
+
+    <!-- うさぎ薬剤師の一言: 気をつけたいこと → おすすめ -->
+    <div class="usagi">
+      <div class="usagi-who"><img src="img/usagi_oyako.webp" alt="">うさぎ薬剤師から</div>
+      <dl>
+        <dt>気をつけたいこと</dt>
+        <dd>水に溶かすと、少ししょっぱくなります。この味で、嫌がるお子さんもいます。</dd>
+        <dt>おすすめ</dt>
+        <dd>甘い飲み物か、温かいものに溶かすと、しょっぱさが目立たなくなります。</dd>
+      </dl>
+    </div>
+
+    <h2 class="section-title">溶かす飲み物</h2>
+
+    <div class="group g-ok">
+      <h3>◎ 混ぜると飲みやすい</h3>
+      <h4>甘いもの</h4>
+      <div class="chips">
+        <span class="chip"><img src="img/fluent/red-apple.svg" alt="">りんごジュース</span>
+        <span class="chip"><img src="img/fluent/cup-with-straw.svg" alt="">スポーツ飲料</span>
+        <span class="chip"><img src="img/fluent/beverage-box.svg" alt="">乳酸菌飲料</span>
+        <span class="chip"><img src="img/fluent/tangerine.svg" alt="">オレンジジュース</span>
+        <span class="chip"><img src="img/food/nomu-yogurt.png" alt="">飲むヨーグルト</span>
+      </div>
+      <p>とくに、りんごジュース・スポーツ飲料・乳酸菌飲料は、しょっぱさを感じにくいとされています。</p>
+      <h4>温かいもの</h4>
+      <div class="chips">
+        <span class="chip"><img src="img/fluent/chocolate-bar.svg" alt="">ココア</span>
+        <span class="chip"><img src="img/food/corn-soup.png" alt="">コーンスープ</span>
+        <span class="chip"><img src="img/food/miso-soup.png" alt="">みそ汁</span>
+        <span class="chip"><img src="img/food/osuimono.png" alt="">お吸い物</span>
+        <span class="chip"><img src="img/food/kobucha.png" alt="">昆布茶</span>
+      </div>
+      <p>熱いままではなく、人肌くらい（30〜40℃）に冷ましてから溶かします。</p>
+    </div>
+
+    <div class="group g-ok">
+      <h3>○ 混ぜても大丈夫</h3>
+      <div class="chips"><span class="chip"><img src="img/fluent/glass-of-milk.svg" alt="">牛乳</span></div>
+      <p>しょっぱさを、少し感じます。</p>
+    </div>
+
+    <div class="group g-bad">
+      <h3>× 混ぜないほうがいい</h3>
+      <h4>甘くない飲み物</h4>
+      <div class="chips">
+        <span class="chip"><img src="img/fluent/teacup.svg" alt="">お茶</span>
+        <span class="chip"><img src="img/fluent/teacup.svg" alt="">紅茶</span>
+        <span class="chip"><img src="img/fluent/hot-beverage.svg" alt="">コーヒー</span>
+      </div>
+      <p>しょっぱさが残ります。カフェインの入った飲み物は、子どもには、なるべく避けます。</p>
+      <h4>固まった食べ物</h4>
+      <div class="chips">
+        <span class="chip"><img src="img/fluent/ice-cream.svg" alt="">アイスクリーム</span>
+        <span class="chip"><img src="img/fluent/bowl-with-spoon.svg" alt="">ヨーグルト</span>
+        <span class="chip"><img src="img/fluent/shaved-ice.svg" alt="">ゼリー</span>
+      </div>
+      <p>水分といっしょに飲む薬なので、固まった食べ物には混ぜません。</p>
+    </div>
+
+    <h4 class="src-head">溶かすときのコツ</h4>
+    <ul class="notes">
+      <li>味の濃いジュースは、薄めながら飲ませてもかまいません（2歳以上のお子さん向けの案内です）。</li>
+      <li>早く溶かしたいときは、ふたのある容器（シェーカー）に入れて振ります。</li>
+    </ul>
+
+    <div class="ask">
+      <strong>味を変えても飲めないとき</strong>
+      味の好みは、お子さんによって違います。飲めないときや、飲む量・回数のことは、医師・薬剤師に相談してください。
+    </div>
+
+    <details class="refs">
+      <summary>参考にした資料</summary>
+      <ul>
+        <li><a href="https://shinokubonijiirooyakoclinic.com/howtotakemobi/" target="_blank" rel="noopener">にじいろおやこクリニック「モビコールの飲み方」（2022年9月公開、2024年1月更新）</a></li>
+        <li><a href="https://www.pmda.go.jp/PmdaSearch/iyakuDetail/111890_2359110B2025_1_02" target="_blank" rel="noopener">モビコール配合内用剤LD・HD 添付文書（EAファーマ、2026年9月改訂 第2版）</a></li>
+        <li><a href="https://www.eapharma.co.jp/patient/movicol/how-to-dissolve" target="_blank" rel="noopener">EAファーマ「モビコールの溶かし方」（患者さん向けのページ。2026年11月に確認）</a></li>
+        <li><a href="https://med.mochida.co.jp/qa/mvc_ld-h.html" target="_blank" rel="noopener">持田製薬 製品Q&amp;A「モビコール配合内用剤LD・HD」（2021年12月改訂）</a></li>
+      </ul>
+      <p>飲み物・食べ物の例の一部は、このサイトの薬剤師が確かめた内容です。</p>
+    </details>
+  </article>
+</main>
