@@ -200,6 +200,17 @@
   .save-msg:empty { display: none; }
   .card .section-title { margin: 22px 0 10px; padding-top: 20px; border-top: 1px solid var(--hair); }
   .fact-point { margin: 0 0 12px; }
+  /* うさぎ薬剤師の一言（2026-11-26）: 押せない情報なので、うすい色の面だけ。顔の丸は、トップのスタンプと同じ黄色の輪 */
+  .usagi { margin: 0 0 12px; padding: 14px 16px 16px; border-radius: 16px; background: var(--orange-soft); }
+  .usagi-who { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .usagi-who img { width: 48px; height: 48px; border: 2px solid var(--stamp); border-radius: 50%; background: var(--stamp-soft); }
+  .usagi dl { margin: 10px 0 0; }
+  .usagi dt { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .usagi dt:first-child { margin-top: 0; }
+  .usagi dd { margin: 0; font-size: 17px; line-height: 1.65; }
+  /* 相談の案内: 押せない情報の面。折りたたまない */
+  .consult { margin: 6px 0 4px; padding: 14px 16px; border-radius: 16px; background: var(--info); font-size: 15px; }
+  .consult strong { display: block; margin-bottom: 2px; font-size: 16px; }
   /* 混ぜていい・混ぜないほうがいい: 情報なので、色のついた面だけ */
   .group { margin-top: 10px; padding: 14px 12px; border-radius: 16px; background: var(--tone-bg); --tone: var(--muted); --tone-bg: var(--info); }
   .group h3 { margin: 0 0 10px; font-size: 16px; color: var(--tone); }
@@ -411,7 +422,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-26j"></script>
+<script src="data.js?v=2026-11-26k"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -775,7 +786,16 @@
   // 自分の言葉でまとめたカード（FACTS にある薬だけ）
   function factBlock(f) {
     const parts = [];
-    if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
+    // うさぎ薬剤師の一言（気をつけたいこと → おすすめ）がある薬は、ひとこと（point）のかわりに出す。画面に1つだけ（2026-11-26。最初はプレドニゾロン散。スキル kusuri-onepoint）
+    if (f.onepoint) {
+      parts.push(el("div", { class: "usagi" }, [
+        el("div", { class: "usagi-who" }, [el("img", { src: "img/usagi_oyako.webp", alt: "", width: "48", height: "48" }), "うさぎ薬剤師から"]),
+        el("dl", {}, [
+          el("dt", { text: "気をつけたいこと" }), el("dd", { text: f.onepoint.care }),
+          el("dt", { text: "おすすめ" }), el("dd", { text: f.onepoint.recommend }),
+        ]),
+      ]));
+    } else if (f.point) parts.push(el("p", { class: "fact-point", text: f.point }));
     // 「○○の資料で、〜とされています」の決まった文は出さない（2026-10-27 ユーザーの判断）。薬ごとに text を書いたときだけ出す
     // ◎ と ○ に分ける（2026-10-27 ユーザー（薬剤師）と決定。決まりは data.js の FACT_REFS の上）
     if (f.easy) parts.push(chipBox("◎ 混ぜると飲みやすい", "g-ok", f.easy.text, f.easy.foods.map(foodChip)));
@@ -785,6 +805,8 @@
       parts.push(el("h4", { class: "src-head", text: "混ぜるときのコツ" }));
       parts.push(el("ul", { class: "notes" }, f.tips.map((t) => el("li", { text: t }))));
     }
+    // 相談の案内（薬の形を変えるなど、医療上の判断は医師・薬剤師へ）。折りたたまない
+    if (f.consult) parts.push(el("div", { class: "consult" }, [el("strong", { text: f.consult.title }), f.consult.text]));
     parts.push(refsBox(f.refs.map((k) => FACT_REFS[k])));
     return parts;
   }
