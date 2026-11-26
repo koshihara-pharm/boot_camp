@@ -161,7 +161,7 @@
       "のりの佃煮": "🍙", "はとむぎきなこ": "🫘", "いちごジャム": "🍓", "メープルシロップ": "🍁",
     };
     const chips = (foods) => `<div class="chips">${foods.map((x) => `<span>${FOOD_IMG[x] ? `<img class="ic" src="../img/food/${FOOD_IMG[x]}.png" alt="">` : icon(FOOD_EMOJI[x] || "・")}${esc(x)}</span>`).join("")}</div>`;
-    const grp = (title, cls, g) => g ? `<div class="grp ${cls}"><h3>${title}</h3>${chips(g.foods)}${g.text ? `<p>${esc(g.text)}</p>` : ""}</div>` : "";
+    const grp = (title, cls, g) => g ? `<div class="grp ${cls}"><h3>${title}</h3>${chips(g.foods)}${g.text || g.note ? `<p>${esc(g.text || g.note)}</p>` : ""}</div>` : "";
     if (drugNo !== null) {
       const d = DRUGS[Number(drugNo)];
       const fa = FACTS[d.name];
