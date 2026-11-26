@@ -355,8 +355,8 @@ const HOWTO = [
 //   easy（◎ 混ぜると飲みやすい）: 成育で ●（飲みやすくなる）か、飯塚でメーカー推奨
 //   good（○ 混ぜても大丈夫）: ◎ ではないが、どれか1つの資料で大丈夫（飯塚 ○、成育 ▲、くるみ薬局 ○）
 //   avoid（×）は前と同じ: 大丈夫という資料がなく、病院の表がすべて ×。くるみ薬局の △ は「分かれる」として数えない
-// Fluent Emoji に絵が無い食べ物の、アイコンの絵（img/food/名前.png。Codex で作った。2026-11-11）。サイトの画面（index.html）と保存用の画像（card/card.html）の両方で使う
-const FOOD_IMG = { "飲むヨーグルト": "nomu-yogurt", "コーンスープ": "corn-soup", "みそ汁": "miso-soup", "お吸い物": "osuimono", "昆布茶": "kobucha" };
+// Fluent Emoji に絵が無い食べ物の、アイコンの絵（img/food/名前.png。Codex で作った。2026-11-11。ゼリーは 2026-11-26 に足した。前は Fluent Emoji のかき氷が出ていた）。サイトの画面（index.html）と保存用の画像（card/card.html）の両方で使う
+const FOOD_IMG = { "飲むヨーグルト": "nomu-yogurt", "コーンスープ": "corn-soup", "みそ汁": "miso-soup", "お吸い物": "osuimono", "昆布茶": "kobucha", "ゼリー": "jelly" };
 
 const FACT_REFS = {
   pmdaQ8: { name: "PMDA くすりQ&A「Q8 赤ちゃんに医師から処方された粉薬を飲ませるよい方法を教えてください。」", url: "https://www.pmda.go.jp/safety/consultation-for-patients/on-drugs/qa/0008.html" },
