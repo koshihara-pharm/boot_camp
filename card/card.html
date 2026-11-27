@@ -166,14 +166,15 @@
       const d = DRUGS[Number(drugNo)];
       const fa = FACTS[d.name];
       // どの薬にも言える一般的なコツ（「混ぜるのは、飲ませる直前に…」）は出さない。その薬だけのことを出す（2026-11-05 ユーザーの指示）
-      const ownTips = fa.tips.filter((t) => !t.startsWith("混ぜるのは、飲ませる直前に"));
+      // 「このページの下の…」のように、サイトの画面を指すコツも出さない（画像には、その下が無いため。2026-11-27）
+      const ownTips = fa.tips.filter((t) => !t.startsWith("混ぜるのは、飲ませる直前に") && !t.includes("このページ"));
       card.classList.add("one");
       card.innerHTML = `
         <div class="stamp" aria-hidden="true">🐻</div>
         <p class="eyebrow">子どものお薬サポート<br>薬の味と、混ぜていい食べ物</p>
         <h1>${esc(d.name)}</h1>
         <div class="taste"><b>味</b>${(fa.taste || d.taste).split("・").map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-        ${fa.point ? `<p class="point">${esc(fa.point)}</p>` : ""}
+        ${fa.onepoint ? `<p class="point">${esc(fa.onepoint.care + fa.onepoint.recommend)}</p>` : fa.point ? `<p class="point">${esc(fa.point)}</p>` : ""}
         ${grp("◎ 混ぜると飲みやすい", "", fa.easy)}${grp("○ 混ぜても大丈夫", "", fa.good)}${grp("× 混ぜないほうがいい", "bad", fa.avoid)}
         ${ownTips.length ? `<h2>混ぜるときのコツ</h2><ul class="tips">${ownTips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         <div class="foot">koshihara-pharm.github.io/boot_camp/</div>`;
