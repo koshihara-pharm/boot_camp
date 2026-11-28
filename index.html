@@ -211,6 +211,7 @@
   .usagi dt { margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--ink); }
   .usagi dt:first-child { margin-top: 0; }
   .usagi dd { margin: 0; font-size: 17px; line-height: 1.65; }
+  .taste + .taste { margin-top: 6px; }
   /* 相談の案内: 押せない情報の面。折りたたまない */
   .consult { margin: 6px 0 4px; padding: 14px 16px; border-radius: 16px; background: var(--info); font-size: 15px; }
   .consult strong { display: block; margin-bottom: 2px; font-size: 16px; }
@@ -431,7 +432,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-26m"></script>
+<script src="data.js?v=2026-11-27b"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -831,10 +832,11 @@
   }
 
   // 自分の言葉でまとめたカード（FACTS にある薬だけ）
-  function factBlock(f) {
+  // viaGeneric: 一般名で開いたとき。うさぎ薬剤師の一言は製品ごとの話なので出さず、ひとこと（point）を出す（2026-11-27）
+  function factBlock(f, viaGeneric) {
     const parts = [];
     // うさぎ薬剤師の一言（気をつけたいこと → おすすめ）がある薬は、ひとこと（point）のかわりに出す。画面に1つだけ（2026-11-26。最初はプレドニゾロン散。スキル kusuri-onepoint）
-    if (f.onepoint) {
+    if (f.onepoint && !viaGeneric) {
       parts.push(el("div", { class: "usagi" }, [
         el("div", { class: "usagi-who" }, [el("img", { src: "img/usagi_oyako.webp", alt: "", width: "48", height: "48" }), "うさぎ薬剤師から"]),
         el("dl", {}, [
@@ -888,11 +890,13 @@
       el("h2", { text: drug.name }),
       el("div", { class: "taste" }, [el("b", { text: "味" }), ...taste.split("・").map((t) => el("span", { text: t }))]),
     ];
+    // 粉の色（2026-11-27。最初はワイドシリン細粒。親は「ピンクの粉」と色で覚えていることがある）。製品ごとの話なので、一般名で開いたときは出さない
+    if (fact.powder && !viaGeneric) parts.push(el("div", { class: "taste" }, [el("b", { text: "粉の色" }), ...fact.powder.map((t) => el("span", { text: t }))]));
 
     parts.push(saveButton(drug, viaGeneric));
     parts.push(el("h3", { class: "section-title", text: "家にある食べ物と、混ぜていい？" }));
 
-    parts.push(...factBlock(fact));
+    parts.push(...factBlock(fact, viaGeneric));
     // 薬ごとの画像（card/drug/薬の名前.png。card/make.cjs で作る）を出すボタン。コツの下、参考にした資料の上に置く（2026-11-05 ユーザーと決定）
     // 一般名で開いたときも、同じ薬の画像を出す
     const save = el("button", { type: "button", class: "link-button save-card" }, [ico("📥", "bi"), "この薬の画像を保存"]);
