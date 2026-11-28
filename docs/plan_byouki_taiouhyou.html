@@ -1926,7 +1926,7 @@ data -> gamen : 出す
 
     <doc-claim>
       <p>薬の種類（抗生物質など）は、添付文書の薬効分類で決める。</p>
-      <doc-code src="data.js" lines="120-123" wrap caption="今の KINDS。どの薬をどの種類に入れたかは Claude の下書き。1つずつ添付文書で確かめる。" file="data.js" start="120" sha="f4b2b19+wt"><script type="text/plain">const KINDS = {
+      <doc-code src="data.js" lines="120-123" wrap caption="今の KINDS。どの薬をどの種類に入れたかは Claude の下書き。1つずつ添付文書で確かめる。" file="data.js" start="120" sha="daaf49f+wt"><script type="text/plain">const KINDS = {
   kousei: { label: "抗生物質（細菌をおさえる薬）", drugs: ["エリスロシンドライシロップ", "オゼックス細粒", "オラペネム細粒", "クラバモックスドライシロップ", "クラリスドライシロップ", "サワシリン細粒", "ジスロマック細粒", "セファクロル細粒", "セフゾン細粒", "フロモックス細粒", "ホスミシンドライシロップ", "メイアクトMS細粒", "ワイドシリン細粒"] },
   seki: { label: "せき・たんの薬", drugs: ["アスベリンドライシロップ", "アスベリン散", "カルボシステインドライシロップ", "ムコダインドライシロップ", "小児用ムコソルバンドライシロップ", "麦門冬湯（漢方）"] },
   kikan: { label: "気管支を広げる薬（ゼーゼーするとき）", drugs: ["ホクナリンドライシロップ", "メプチンドライシロップ"] },</script></doc-code>
@@ -1982,7 +1982,7 @@ data -> gamen : 出す
     </doc-schema>
     <doc-claim at="data.js:136">
       <p><b>data.js:136</b> · DISEASES</p>
-      <doc-code src="data.js" lines="136-140" wrap file="data.js" start="136" sha="f4b2b19+wt"><script type="text/plain">const DISEASES = [
+      <doc-code src="data.js" lines="136-140" wrap file="data.js" start="136" sha="daaf49f+wt"><script type="text/plain">const DISEASES = [
   { name: "かぜ", words: ["かぜ", "風邪", "感冒"], kinds: ["seki", "hana", "netsu"] },
   { name: "中耳炎", words: ["中耳炎", "ちゅうじえん"], kinds: ["kousei", "hana", "netsu"] },
   { name: "副鼻腔炎（ちくのう）", words: ["副鼻腔炎", "ふくびくうえん", "蓄膿", "ちくのう"], kinds: ["kousei", "seki", "hana"] },
@@ -2019,13 +2019,12 @@ data -> gamen : 出す
     <doc-mock frame="none" w="340" caption="薬の行の下に、うすい色の面で一文を足す。ほかは今の画面のまま。">
 <template>
 <div class="scr">
-  <div class="lbl">粉薬の名前・病気の名前で探す</div>
+  <div class="lbl">粉薬の名前か、病気の名前で探す</div>
   <div class="inp">中耳炎</div>
   <div class="dh">「中耳炎」でよく出る粉薬</div>
-  <div class="dn">どの薬が出るかは、お子さんの様子で医師が決めます。薬袋の名前とくらべて選んでください。</div>
   <div class="kh">抗生物質（細菌をおさえる薬）</div>
-  <div class="row"><b>（確かめた薬）</b><small>味: 甘い・ストロベリー味</small></div>
-  <div class="row"><b>（確かめた薬）</b><small>味: 甘い・オレンジ味</small></div>
+  <div class="row"><b>（確かめた薬）</b></div>
+  <div class="row"><b>（確かめた薬）</b></div>
   <div class="more">…</div>
   <div class="src" data-ref="src">薬の並びは、それぞれの薬の添付文書（効能・効果）をもとに、このサイトの薬剤師が確かめました（確かめた日）。</div>
 </div>
@@ -2034,18 +2033,17 @@ data -> gamen : 出す
     </doc-mock>
     <doc-claim at="index.html:693">
       <p><b>index.html:693</b> · diseaseItems()</p>
-      <doc-code src="index.html" lines="693-708" wrap file="index.html" start="693" sha="f4b2b19+wt"><script type="text/plain">  function diseaseItems(diseases) {
+      <doc-code src="index.html" lines="693-707" wrap file="index.html" start="693" sha="daaf49f+wt"><script type="text/plain">  function diseaseItems(diseases) {
     const items = [];
     for (const x of diseases) {
       // 病気の名前は、Clarity の録画では隠す（病気は個人の情報になりうるので）
       items.push(el("li", { class: "disease-head", "data-clarity-mask": "true", text: "「" + x.name + "」でよく出る粉薬" }));
-      items.push(el("li", { class: "disease-note", text: "どの薬が出るかは、お子さんの様子で医師が決めます。薬袋の名前とくらべて選んでください。" }));
       for (const k of x.kinds) {
         const kind = KINDS[k];
         const rows = kind.drugs.map((n) => DRUGS.findIndex((d) => d.name === n)).filter((i) => i >= 0);
         if (rows.length === 0) continue;
         items.push(el("li", { class: "kind-head", text: kind.label }));
-        rows.forEach((i) => items.push(el("li", {}, [drugButton(DRUGS[i], i, false, false)])));
+        rows.forEach((i) => items.push(el("li", {}, [drugButton(DRUGS[i], i, false, false, true)])));
       }
     }
     return items;
@@ -2074,7 +2072,7 @@ data -> gamen : 出す
     <ul>
       <li>薬の名前で探す検索と、薬の画面（味・混ぜていい食べ物）は変えない。</li>
       <li>薬剤師が確かめるまで、本番（main）には出さない。今はブランチ <code>claude/byouki-kensaku</code> と手元の画面だけ。</li>
-      <li>サイトは「この病気にはこの薬」と決めない。親が薬袋の名前とくらべて選ぶ、今の一文を残す。</li>
+      <li>サイトは「この病気にはこの薬」と決めない。見出しは「よく出る粉薬」のままにする。見出しの下の一文（医師が決める・薬袋とくらべる）と、薬の行の味は、2026-11-28 にあなたの指示で外した。</li>
       <li>どの種類にも入れなかった6つの薬（エレンタール2つ、プレドニゾロン散、黄耆建中湯、十全大補湯、六君子湯）は、名前だけで探す。</li>
       <li>添付文書の文や表は写さない。「効能・効果にその病気があるか」の事実だけを使う。</li>
     </ul>
