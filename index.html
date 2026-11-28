@@ -700,7 +700,13 @@
         const rows = kind.drugs.map((n) => DRUGS.findIndex((d) => d.name === n)).filter((i) => i >= 0);
         if (rows.length === 0) continue;
         items.push(el("li", { class: "kind-head", text: kind.label }));
-        rows.forEach((i) => items.push(el("li", {}, [drugButton(DRUGS[i], i, false, false, true)])));
+        // 漢方は読みにくいので、名前の下に読みがなをひらがなで小さく出す（一覧の画面と同じ形。2026-11-28 ユーザーの指示）
+        rows.forEach((i) => {
+          const button = drugButton(DRUGS[i], i, false, false, true);
+          const yomi = kampoYomi(DRUGS[i]);
+          if (yomi) button.append(el("span", { class: "drug-meta", text: yomi }));
+          items.push(el("li", {}, [button]));
+        });
       }
     }
     return items;
