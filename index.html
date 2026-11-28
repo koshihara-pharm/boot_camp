@@ -337,8 +337,9 @@
       <div class="search-wrap">
       <!-- よくある入力欄の形: 上に名前、中に例、下に短い説明（2026-11-10 ユーザー「シンプルに、分かりやすく」。前はトップに長い説明文） -->
       <!-- 病気の名前でも探せるようにした（2026-11-27 ユーザーの指示「親は薬の名前を知らない人がほとんど」） -->
-      <label class="search-label" for="q">粉薬の名前・病気の名前で探す</label>
-      <input id="q" type="search" placeholder="例: クラリス、中耳炎" autocomplete="off" aria-describedby="q-help">
+      <!-- 「・」と「、」で並べると、両方入れるように読める（2026-11-28 ユーザーの指摘）。どちらか片方でよいと分かるように「か」にした。例は、幅 340px でも切れない長さにする -->
+      <label class="search-label" for="q">粉薬の名前か、病気の名前で探す</label>
+      <input id="q" type="search" placeholder="例: クラリス か 中耳炎" autocomplete="off" aria-describedby="q-help">
       <p class="search-help" id="q-help"><span class="nw">薬の味と、</span><span class="nw">混ぜていい食べ物が分かります</span></p>
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
