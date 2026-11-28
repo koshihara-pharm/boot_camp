@@ -169,6 +169,9 @@
   .list .drug-meta { display: block; font-size: 13px; line-height: 1.5; color: var(--muted); }
   .kana { padding: 12px 4px 0; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; }
   .empty { padding: 12px 4px; color: var(--muted); }
+  /* 病気の名前で探したときの見出し（2026-11-27）。押せない情報なので、枠も影もつけない。題はオレンジにしない（オレンジの題は1画面に1つ） */
+  .disease-head { padding: 14px 4px 0; font-size: 19px; font-weight: 700; color: var(--text); }
+  .kind-head { padding: 10px 4px 0; font-size: 15px; font-weight: 700; color: var(--muted); }
   /* 準備中の薬は押しても開かない。押せる行より目立たないように、枠も影もない面にする */
   .list .prep { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; padding: 12px 16px; border-radius: 16px; background: var(--info); }
   .list .prep .drug-name { color: var(--muted); font-weight: 500; }
@@ -333,8 +336,10 @@
       <!-- 薬の名前はいちばん最初に入れられるようにする（2026-10-29 ユーザーの指示）。探した結果もすぐ下に出す -->
       <div class="search-wrap">
       <!-- よくある入力欄の形: 上に名前、中に例、下に短い説明（2026-11-10 ユーザー「シンプルに、分かりやすく」。前はトップに長い説明文） -->
-      <label class="search-label" for="q">粉薬の名前で探す</label>
-      <input id="q" type="search" placeholder="例: クラリス" autocomplete="off" aria-describedby="q-help">
+      <!-- 病気の名前でも探せるようにした（2026-11-27 ユーザーの指示「親は薬の名前を知らない人がほとんど」） -->
+      <!-- 「・」と「、」で並べると、両方入れるように読める（2026-11-28 ユーザーの指摘）。どちらか片方でよいと分かるように「か」にした。例は、幅 340px でも切れない長さにする -->
+      <label class="search-label" for="q">粉薬の名前か、病気の名前で探す</label>
+      <input id="q" type="search" placeholder="例: クラリス か 中耳炎" autocomplete="off" aria-describedby="q-help">
       <p class="search-help" id="q-help"><span class="nw">薬の味と、</span><span class="nw">混ぜていい食べ物が分かります</span></p>
       <!-- 名前を忘れたとき用。検索の欄のすぐ下に小さいリンクで置く（2026-11-03 ユーザーと決定。docs/17 の 8） -->
       <a class="list-link" href="#list">薬の一覧を見る（あいうえお順）</a>
@@ -427,7 +432,7 @@
 </dialog>
 
 <!-- data.js を直したら ?v= の日付も変える。古い data.js をブラウザが使い続けないようにするため -->
-<script src="data.js?v=2026-11-27b"></script>
+<script src="data.js?v=2026-11-28a"></script>
 <script>
 
   // ---- 小さな道具 ----
@@ -677,6 +682,37 @@
     });
   }
 
+  // 病気の名前に当たるか（2026-11-27）。病気の言葉が入っているか、言葉の頭を2文字以上入れたとき（例: 「中耳」）に当てる
+  function diseaseHits(query) {
+    if (query === "" || typeof DISEASES === "undefined") return [];
+    return DISEASES.filter((x) => x.words.some((w) => {
+      const word = normQuery(w);
+      return query.includes(word) || (query.length >= 2 && word.startsWith(query));
+    }));
+  }
+  // 病気ごとに、よく出る薬を種類ごとに並べる。行は薬の名前だけ（味の行は出さない）。見出しの下の一文（医師が決める・薬袋とくらべる）も外した（2026-11-28 ユーザー（薬剤師）の指示「この一文いらない」「文字が多いから」）
+  function diseaseItems(diseases) {
+    const items = [];
+    for (const x of diseases) {
+      // 病気の名前は、Clarity の録画では隠す（病気は個人の情報になりうるので）
+      items.push(el("li", { class: "disease-head", "data-clarity-mask": "true", text: "「" + x.name + "」でよく出る粉薬" }));
+      for (const k of x.kinds) {
+        const kind = KINDS[k];
+        const rows = kind.drugs.map((n) => DRUGS.findIndex((d) => d.name === n)).filter((i) => i >= 0);
+        if (rows.length === 0) continue;
+        items.push(el("li", { class: "kind-head", text: kind.label }));
+        // 漢方は読みにくいので、名前の下に読みがなをひらがなで小さく出す（一覧の画面と同じ形。2026-11-28 ユーザーの指示）
+        rows.forEach((i) => {
+          const button = drugButton(DRUGS[i], i, false, false, true);
+          const yomi = kampoYomi(DRUGS[i]);
+          if (yomi) button.append(el("span", { class: "drug-meta", text: yomi }));
+          items.push(el("li", {}, [button]));
+        });
+      }
+    }
+    return items;
+  }
+
   function fillList(target, query, all) {
     const hits = [];
     const showAll = all && query === "";
@@ -727,8 +763,9 @@
       }
       items.push(el("li", {}, [drugButton(d, i, viaGeneric, all)]));
     }
-    target.replaceChildren(...items);
-    if (query !== "" && hits.length === 0) {
+    const diseases = all ? [] : diseaseHits(query);
+    target.replaceChildren(...items, ...diseaseItems(diseases));
+    if (query !== "" && hits.length === 0 && diseases.length === 0) {
       target.append(el("li", { class: "empty" }, ["見つかりませんでした。この薬はまだ入っていません。", requestLink()].filter(Boolean)));
     }
   }
