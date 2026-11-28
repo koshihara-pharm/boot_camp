@@ -171,7 +171,6 @@
   .empty { padding: 12px 4px; color: var(--muted); }
   /* 病気の名前で探したときの見出し（2026-11-27）。押せない情報なので、枠も影もつけない。題はオレンジにしない（オレンジの題は1画面に1つ） */
   .disease-head { padding: 14px 4px 0; font-size: 19px; font-weight: 700; color: var(--text); }
-  .disease-note { padding: 2px 4px 4px; font-size: 15px; line-height: 1.6; color: var(--text); }
   .kind-head { padding: 10px 4px 0; font-size: 15px; font-weight: 700; color: var(--muted); }
   /* 準備中の薬は押しても開かない。押せる行より目立たないように、枠も影もない面にする */
   .list .prep { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; padding: 12px 16px; border-radius: 16px; background: var(--info); }
@@ -690,19 +689,18 @@
       return query.includes(word) || (query.length >= 2 && word.startsWith(query));
     }));
   }
-  // 病気ごとに、よく出る薬を種類ごとに並べる。どれが出るかは決めないので、薬袋の名前とくらべてもらう
+  // 病気ごとに、よく出る薬を種類ごとに並べる。行は薬の名前だけ（味の行は出さない）。見出しの下の一文（医師が決める・薬袋とくらべる）も外した（2026-11-28 ユーザー（薬剤師）の指示「この一文いらない」「文字が多いから」）
   function diseaseItems(diseases) {
     const items = [];
     for (const x of diseases) {
       // 病気の名前は、Clarity の録画では隠す（病気は個人の情報になりうるので）
       items.push(el("li", { class: "disease-head", "data-clarity-mask": "true", text: "「" + x.name + "」でよく出る粉薬" }));
-      items.push(el("li", { class: "disease-note", text: "どの薬が出るかは、お子さんの様子で医師が決めます。薬袋の名前とくらべて選んでください。" }));
       for (const k of x.kinds) {
         const kind = KINDS[k];
         const rows = kind.drugs.map((n) => DRUGS.findIndex((d) => d.name === n)).filter((i) => i >= 0);
         if (rows.length === 0) continue;
         items.push(el("li", { class: "kind-head", text: kind.label }));
-        rows.forEach((i) => items.push(el("li", {}, [drugButton(DRUGS[i], i, false, false)])));
+        rows.forEach((i) => items.push(el("li", {}, [drugButton(DRUGS[i], i, false, false, true)])));
       }
     }
     return items;
